@@ -35,10 +35,16 @@ class MultiCameraListener(Node):
         self.bridge = CvBridge()
 
         # Directory to save images and transforms
-        t = self.get_clock().now().to_msg()
-        self.save_dir = '/home/yolo/slam_images/' + str(t.sec + t.nanosec / 1e9) + "/"
-        os.makedirs(self.save_dir, exist_ok=True)
-        os.chmod(self.save_dir, 0o777)
+        dataset_dir = '/home/yolo/datasets/'
+        dir_names = [d for d in os.listdir(dataset_dir) if os.path.isdir(os.path.join(dataset_dir, d))]
+        numeric_dirs = [int(d) for d in dir_names if d.isdigit()]
+        next_dataset_dir = str(max(numeric_dirs) + 1) if numeric_dirs else str(0)
+        self.save_dir = dataset_dir + next_dataset_dir + '/raw/'
+
+        for cam_pos in ['front', 'left', 'rear', 'right']:
+            cam_pos_dir = self.save_dir + cam_pos
+            os.makedirs(cam_pos_dir, exist_ok=True)
+            os.chmod(cam_pos_dir, 0o777)
 
         # Set timer to periodically query and save the transform
         self.timer = self.create_timer(0.05, self.save_transform)
@@ -113,7 +119,8 @@ class MultiCameraListener(Node):
             }
         }
 
-        path = self.save_dir + msg.header.frame_id.split('_')[0] + ".json"
+        cam_pos = msg.header.frame_id.split('_')[0]
+        path = self.save_dir + cam_pos + ".json"
 
         with open(path, 'w') as json_file:
             json.dump(camera_info_dict, json_file, indent=4)
@@ -134,7 +141,7 @@ class MultiCameraListener(Node):
                 depth_img_path = self.save_image(self.depth_img_msgs[cam_pos])
                 clr_image_path = self.save_image(self.color_img_msgs[cam_pos])
 
-                filename = os.path.join(self.save_dir, 'transforms.csv')
+                filename = os.path.join(self.save_dir, 'slam_moments.csv')
                 file_exists = os.path.isfile(filename)
 
                 with open(filename, 'a', newline='') as csvfile:

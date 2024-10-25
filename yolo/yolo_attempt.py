@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw
 import numpy as np
 from ultralytics import YOLO
-import math, csv, random, cv2
+import math, csv, random, cv2, os
 
 def read_robot_traj(csv_file):
     robot_path = []
@@ -174,9 +174,13 @@ def transform_obs_to_map_frame(cam_to_obj_x, cam_to_obj_y, cam_to_obj_z):
 
     return obs_coord
 
-slam_recording_dir = '/home/yolo/slam_images/0.0/'
+datasets_dir = '/home/yolo/datasets/'
+dir_names = [d for d in os.listdir(datasets_dir) if os.path.isdir(os.path.join(datasets_dir, d))]
+numeric_dirs = [int(d) for d in dir_names if d.isdigit()]
+dataset_dir = str(max(numeric_dirs)) if numeric_dirs else str(0)
+raw_data_dir = datasets_dir + dataset_dir + '/raw/'
 
-slam_moments = read_robot_traj(slam_recording_dir + 'transforms.csv')
+slam_moments = read_robot_traj(raw_data_dir + 'slam_moments.csv')
 
 obstacles_coords = []
 
@@ -196,7 +200,7 @@ for slam_moment in slam_moments:
 
         cam_to_obj_x, cam_to_obj_y, cam_to_obj_z, im = get_isolated_image_realworld_xyz(isolated_image, slam_moment['depth_image_path'])
 
-        iso_clr_image_filename = "/home/yolo/marked/" + cam + "/" + slam_moment['t'] + "_" + str(i) + ".png"
+        iso_clr_image_filename = datasets_dir + dataset_dir + "/isolated/" + cam + "/" + slam_moment['t'] + "_" + str(i) + ".png"
         im.save(iso_clr_image_filename)        
 
         obs_coord = transform_obs_to_map_frame(cam_to_obj_x, cam_to_obj_y, cam_to_obj_z)      
@@ -207,7 +211,7 @@ for slam_moment in slam_moments:
 
 
 
-save_file = '/home/yolo/obstacle_coords.csv'
+save_file = datasets_dir + dataset_dir + '/obstacle_coords.csv'
 with open(save_file, 'w') as file:
     writer = csv.writer(file)
 
