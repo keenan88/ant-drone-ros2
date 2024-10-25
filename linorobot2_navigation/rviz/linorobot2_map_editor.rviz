@@ -66,19 +66,13 @@ Visualization Manager:
       Frame Timeout: 10000
       Frames:
         All Enabled: false
-        base_link:
-          Value: true
-        map:
-          Value: true
       Marker Scale: 0.5
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        map:
-          base_link:
-            {}
+        {}
       Update Interval: 0
       Value: true
     - Alpha: 0.4000000059604645
@@ -162,7 +156,7 @@ Visualization Manager:
       Enabled: true
       Name: MarkerArray
       Namespaces:
-        "": true
+        {}
       Topic:
         Depth: 5
         Durability Policy: Volatile

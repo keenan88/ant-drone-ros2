@@ -1,8 +1,8 @@
 {
     "header": {
         "stamp": {
-            "sec": 1036,
-            "nanosec": 988913998
+            "sec": 1051,
+            "nanosec": 544469906
         },
         "frame_id": "left_rs_depth_optical_frame"
     },

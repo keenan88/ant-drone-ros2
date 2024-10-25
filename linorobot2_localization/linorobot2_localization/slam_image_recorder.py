@@ -125,7 +125,7 @@ class MultiCameraListener(Node):
         t = self.color_img_msgs[cam_pos].header.stamp
         t = t.sec + t.nanosec / 1e9
 
-        if len(self.tfs['t']) > 0 and t - self.last_save_t[cam_pos] > 0.2:
+        if len(self.tfs['t']) > 0 and t - self.last_save_t[cam_pos] > 0.25:
 
             nearest_tf_idx = min(range(len(self.tfs['t'])), key=lambda i: abs(self.tfs['t'][i] - t))
 
