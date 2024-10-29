@@ -9,6 +9,7 @@ services:
     tty: true
     environment:
       - DISPLAY=${DISPLAY}
+      - NVIDIA_VISIBLE_DEVICES=all
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ./linorobot2_navigation/slam_images/:/home/slam_images
@@ -18,4 +19,11 @@ services:
     network_mode: host
     ipc: host
     pid: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+    runtime: nvidia
 

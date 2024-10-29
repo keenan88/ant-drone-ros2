@@ -24,6 +24,21 @@ services:
     ipc: host
     pid: host
 
+  linorobot2-foxglove-bridge:
+    container_name: linorobot2-foxglove-bridge
+    build:
+      context: .
+      dockerfile: docker/linorobot2/dockerfiles/foxglove.dockerfile
+    stdin_open: true
+    tty: true
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    command: ros2 launch foxglove_bridge foxglove_bridge_launch.xml
+    # command: sleep infinity
+    network_mode: host
+    ipc: host
+    pid: host
+
   linorobot2-map-editor:
     container_name: linorobot2-map-editor
     build:

@@ -172,7 +172,7 @@ class MultiCameraListener(Node):
         # Save the image with a timestamp
         t = msg.header.stamp
         timestamp = str(t.sec + t.nanosec / 1e9)
-        img_filename = os.path.join(self.save_dir, f'{camera_name}_{msg.encoding}_{timestamp}')
+        img_filename = os.path.join(self.save_dir, f'{camera_name}/{msg.encoding}_{timestamp}')
         img_filename += '.tiff' if msg.encoding == '32FC1' else '.png'
         cv2.imwrite(img_filename, cv_image)
         os.chmod(img_filename, 0o777)

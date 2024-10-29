@@ -55,6 +55,6 @@ def generate_launch_description():
     ld.add_action(image_recorder)
     
     
-    ld.add_action(rviz)
+    # ld.add_action(rviz)
 
     return ld

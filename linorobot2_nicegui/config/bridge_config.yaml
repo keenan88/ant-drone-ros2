@@ -1,0 +1,3 @@
+rosbridge_websocket:
+  ros__parameters:
+    use_compression: true

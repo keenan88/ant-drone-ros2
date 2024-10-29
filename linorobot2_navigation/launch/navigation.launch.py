@@ -175,7 +175,7 @@ def generate_launch_description():
     ld.add_action(bt)
     ld.add_action(map_server)
     ld.add_action(lifecycle_manager)
-    ld.add_action(rviz)
+    # ld.add_action(rviz)
     ld.add_action(wheel_unraveller)
     ld.add_action(wheel_odometry)
     ld.add_action(amcl)

@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     mesa-utils \
     x11-xserver-utils \
     ros-humble-robot-localization \
+    ros-humble-rosbridge-server \
     && rm -rf /var/lib/apt/lists/*
     
 
