@@ -12,8 +12,8 @@
 
 ## IsaacSim (running robot in simulation)
 
-1. Complete steps in `Nvidia Setup`
-2. Run `docker compose -f docker-compose.isaacsim.yaml build`. This could take a few minutes the first time.
+1. (first time only) Complete steps in `Nvidia Setup`.
+2. (first time only) Run `docker compose -f docker-compose.isaacsim.yaml build`.
 3. Run `docker compose -f docker-compose.isaacsim.yaml up`. This can take 20-30s for IsaacSim server to start.
 
 5. Download the Nvidia [omniverse launcher](https://install.launcher.omniverse.nvidia.com/installers/omniverse-launcher-linux.AppImage).  
@@ -32,13 +32,33 @@
 
 ![image](https://github.com/user-attachments/assets/05cc0a20-a319-42a8-a21b-98e4a5914660)
 
-8. Run `docker compose -f docker-compose.teleop.yaml` and use the teleop terminal the move the robot. **Scale down velocity to approx 0.3 m/s and 0.6 rad/s, the simulated robot is unstable at faster velocities!**
+8. Optional: Plugin a Microsoft Xbox Controller (Model 1914) via USB. `X` button is deadman switch for rotation-only movement, `right bumper` is deadman switch for linear/rotational movement. `Right joystick` causes movement.
+   
+10. Run `docker compose -f docker-compose.teleop.yaml` and use the teleop terminal or xbox controller the move the robot. **Scale down velocity to approx 0.3 m/s and 0.6 rad/s, the simulated robot is unstable at faster velocities!**
 
 ![image](https://github.com/user-attachments/assets/1f1a7e7d-c77f-438c-a864-d243dbb46fc9)
 
 
 # SLAM (map generation)
 
+1. (first time only) Run `gitmodule init` from the repo root.
+2. (first time only) Run `docker compose -f docker-compose.slam.yaml build`
+3. Start Isaacsim simulation as detailed above. You do not need to start the teleop file.
+4. Run `docker compose -f docker-compose.slam.yaml up`.
+5. RVIZ2 will open a view of the robot, including its base frame, laser scans, and the map being generated.
+
+![image](https://github.com/user-attachments/assets/9cd74e48-2e57-49d6-a1e9-6bf72832615f)
+
+6. Drive the robot around with the teleop terminal or xbox controller.
+7. The map will expand as the robot drives around. The robot should stay well-localized to the map, and the scans should stay aligned to the map.
+
+![image](https://github.com/user-attachments/assets/aad7d61e-92ad-4c15-9a90-82a8ed1b8f70)
+
+8. When you are happy with your map, run `docker exec -it linorobot2-slam bash` and `ros2 run nav2_map_server map_saver_cli -t /nav2/map -f /home/humble_ws/src/linorobot2_navigation/maps/greenhouse`
+
+9. Be sure the robot is in the map bounds or the map will not save.
+
+10. You can view your map in the [map folder](/linorobot2_navigation/maps/)  
 
 
 
