@@ -10,9 +10,7 @@
 2. Run the IsaacSim container as detailed in the tutorial above. Close any other compute-intense applications before running the IsaacSim container for the first time, it can take a few minutes to loadup the first time. Close the IsaacSim container before you move on with the following instructions.
 3. Download the Omniverse Launcher (not SDK) from [Nvidia's website](https://www.nvidia.com/en-us/omniverse/download/). To run the .AppImage file, apt install `libfuse2`, **not** `fuse`.
 
-## Omniverse Content
-
-This is optional, but can be useful for adding objects to the world (boxes, crates, forklifts, etc).
+## Omniverse Content (Optional)
 
 1. Follow Nvidia Setup above
 2. Open omniverse launcher and go to the `Echange tab`
