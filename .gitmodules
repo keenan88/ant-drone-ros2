@@ -4,9 +4,3 @@
 [submodule "laser_filters"]
 	path = laser_filters
 	url = https://github.com/ros-perception/laser_filters
-[submodule "rmf_demos"]
-	path = rmf_demos
-	url = https://github.com/open-rmf/rmf_demos.git
-[submodule "rviz2-panel"]
-	path = rviz2-panel
-	url = https://github.com/BruceChanJianLe/rviz2-panel.git
