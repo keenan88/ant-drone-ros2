@@ -1,4 +1,4 @@
-# linorobot2
+# SLAM & Maps
 
 # SLAM (map generation)
 
