@@ -1,0 +1,21 @@
+services:
+
+  linorobot2-rmf:
+    container_name: linorobot2-rmf
+    build:
+      context: .
+      dockerfile: docker/linorobot2/dockerfiles/drone_rmf.dockerfile
+    stdin_open: true
+    tty: true
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ./linorobot2_rmf:/home/humble_ws/src/linorobot2_rmf
+      - ./docker/linorobot2/entry_scripts/rmf_traffic_editor.sh:/rmf_traffic_editor.sh
+    working_dir: /home/humble_ws
+    command: traffic-editor /home/humble_ws/src/linorobot2_rmf/maps/greenhouse/greenhouse.building.yaml
+    network_mode: host
+    ipc: host
+    pid: host
+
