@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/isaac-sim:4.0.0 
+FROM nvcr.io/nvidia/isaac-sim:4.2.0
 
 # ROS2 Install steps taken from: https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html
 RUN apt update &&  apt install locales -y
@@ -30,16 +30,14 @@ RUN apt install ros-humble-desktop -y
 RUN apt install ros-dev-tools -y
 
 # ros-humble-vision-msgs necessary for IsaacSim ROS2 bridge as per: https://docs.omniverse.nvidia.com/isaacsim/latest/installation/install_ros.html
-RUN apt install ros-humble-vision-msgs
+RUN apt install ros-humble-vision-msgs ros-humble-ackermann-msgs
 
 RUN apt install nano -y
 
-ENV RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-
-ENV isaac_sim_package_path=$HOME/.local/share/ov/pkg/isaac-sim-4.1.0
-ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$isaac_sim_package_path/exts/omni.isaac.ros2_bridge/humble/lib
-
 ENV FASTRTPS_DEFAULT_PROFILES_FILE=/root/.ros/fastdds.xml 
+ENV RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/isaac-sim/exts/omni.isaac.ros2_bridge/humble/lib
+
 
 WORKDIR /isaac-sim/humble_ws
 
