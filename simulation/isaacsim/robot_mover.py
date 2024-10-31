@@ -4,24 +4,18 @@ from omni.isaac.core.prims import XFormPrim
 import numpy as np
 
 def setup(db: og.Database):
-    pass
-    # prim = XFormPrim("/World/Cylinder")
-    # prim.set_local_pose(translation=np.array([1.0, 0.5, 0.0]), orientation=np.array([1., 0., 0., 0.]))
+    pass    
 
 def compute(db: og.Database):
 
     prim = XFormPrim("/World/Map/linorobot2_mecanum")
 
-    # Set the new position
+    desired_translation = db.inputs.desired_translation
+    desired_orientation = db.inputs.desired_orientation
 
-    desired_pos = db.inputs.desired_pos
+    if not np.array_equal(desired_orientation, [0., 0., 0., 0.]):
+        prim.set_local_pose(translation = desired_translation, orientation = desired_orientation)
 
-    prim.set_local_pose(translation=desired_pos, orientation=np.array([1., 0., 0., 0.]))
-
-    #return True
-
-    pass
-    
 
 def cleanup(db: og.Database):
     pass
