@@ -1,4 +1,4 @@
-# linorobot2
+# IsaacSim
 
 ## Nvidia Setup
 
@@ -9,6 +9,19 @@
  - Install the Nvidia container toolkit.
 2. Run the IsaacSim container as detailed in the tutorial above. Close any other compute-intense applications before running the IsaacSim container for the first time, it can take a few minutes to loadup the first time. Close the IsaacSim container before you move on with the following instructions.
 3. Download the Omniverse Launcher (not SDK) from [Nvidia's website](https://www.nvidia.com/en-us/omniverse/download/). To run the .AppImage file, apt install `libfuse2`, **not** `fuse`.
+
+## Omniverse Content (Optional)
+
+1. Follow Nvidia Setup above
+2. Open omniverse launcher and go to the `Echange tab`
+
+![image](https://github.com/user-attachments/assets/b69f20b2-0f75-48c1-9529-ee4849df4c8a)
+
+3. Filter for Content. There is a `Warehouse 3D Models Pack` and `Industrial 3D models pack`.
+
+![image](https://github.com/user-attachments/assets/6ed0422b-d54b-4fdc-9c3a-804e4e2321e1)
+
+4. Copy and unzip downloaded content to [simulation/models](simulation/models). The models will be available in IsaacSim when you launch the container (launch instructions below).
 
 ## IsaacSim (running robot in simulation)
 
@@ -37,5 +50,6 @@
 10. Run `docker compose -f docker-compose.teleop.yaml` and use the teleop terminal or xbox controller the move the robot. **Scale down velocity to approx 0.3 m/s and 0.6 rad/s, the simulated robot is unstable at faster velocities!**
 
 ![image](https://github.com/user-attachments/assets/1f1a7e7d-c77f-438c-a864-d243dbb46fc9)
+
 
 
