@@ -1,0 +1,137 @@
+services:
+
+  linorobot2-slam:
+    container_name: linorobot2-slam
+    build:
+      context: .
+      dockerfile: docker/linorobot2/dockerfiles/slam.dockerfile
+    stdin_open: true
+    tty: true
+    environment:
+      - DISPLAY=${DISPLAY}
+      - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
+      - WHEEL_ODOMETRY=false
+    volumes:
+      - ./linorobot2_navigation:/home/humble_ws/src/linorobot2_navigation
+      - ./linorobot2_localization:/home/humble_ws/src/linorobot2_localization
+      - ./yolo:/home/yolo
+    
+    # command: sleep infinity
+    network_mode: host
+    ipc: host
+    pid: host
+
+  
+
+  # linorobot2-foxglove-bridge:
+  #   container_name: linorobot2-foxglove-bridge
+  #   build:
+  #     context: .
+  #     dockerfile: docker/linorobot2/dockerfiles/foxglove.dockerfile
+  #   environment:
+  #     - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
+  #   stdin_open: true
+  #   tty: true
+  #   volumes:
+  #     - /tmp/.X11-unix:/tmp/.X11-unix
+  #   command: ros2 launch foxglove_bridge foxglove_bridge_launch.xml
+  #   # command: sleep infinity
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
+
+  linorobot2-joytick:
+    container_name: linorobot2-joystick
+    build:
+      context: .
+      dockerfile: ./docker/linorobot2/dockerfiles/joystick.dockerfile
+    tty: true
+    stdin_open: true
+    environment:
+      - DRONE_ID=0
+      - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
+      - WHEELED_MOTION=false
+    volumes:
+      - ./linorobot2_joystick:/home/humble_ws/src/linorobot2_joystick:rw
+      - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup
+    privileged: true
+    # command: sleep infinity
+    network_mode: host
+    ipc: host
+    pid: host
+    
+  # linorobot2-pcl:
+  #   container_name: linorobot2-pcl
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/linorobot2/dockerfiles/pointcloud.dockerfile
+  #   tty: true
+  #   stdin_open: true
+  #   environment:
+  #     - USE_SIM=True
+  #     - NVIDIA_VISIBLE_DEVICES=all
+  #     - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
+  #   volumes:
+  #     - ./linorobot2_pcl:/home/humble_ws/src/linorobot2_pcl:rw
+  #     - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup:rw
+  #     - ./perception_pcl:/home/humble_ws/src/perception_pcl
+  #     # - /dev/dri/card0:/dev/dri/card0
+  #   # privileged: true
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             capabilities: [gpu]
+  #   runtime: nvidia
+    
+  # antdrone_depth_to_laserscan:
+  #   container_name: antdrone-depth-to-laserscan
+  #   build:
+  #     context: .
+  #     dockerfile: docker/linorobot2/dockerfiles/depth_to_laserscan.Dockerfile
+  #   network_mode: host
+  #   volumes:
+  #     - ./antdrone_depth_to_laserscan:/home/humble_ws/src/antdrone_depth_to_laserscan
+  #     # - /dev/dri/card0:/dev/dri/card0
+  #   environment:
+  #     - DISPLAY=${DISPLAY}
+  #     - NVIDIA_VISIBLE_DEVICES=all
+  #     - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
+  #   # command: sleep infinity
+  #   stdin_open: true
+  #   tty: true
+  #   ipc: host
+  #   pid: host
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             capabilities: [gpu]
+  #   runtime: nvidia
+  
+
+  # linorobot2-rmf:
+  #   container_name: linorobot2-rmf
+  #   build:
+  #     context: .
+  #     dockerfile: docker/linorobot2/dockerfiles/drone_rmf.dockerfile
+  #   stdin_open: true
+  #   tty: true
+  #   environment:
+  #     - DISPLAY=${DISPLAY}
+  #     - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
+  #   volumes:
+  #     - /tmp/.X11-unix:/tmp/.X11-unix
+  #     - ./linorobot2_rmf:/home/humble_ws/src/linorobot2_rmf
+  #     - ./linorobot2_rmf_client:/home/humble_ws/src/linorobot2_rmf_client
+  #   working_dir: /home/humble_ws
+  #   command: sleep infinity
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
+

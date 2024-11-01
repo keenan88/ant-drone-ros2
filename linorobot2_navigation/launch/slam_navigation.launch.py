@@ -54,31 +54,6 @@ def generate_launch_description():
         ]
     )
 
-    wheel_odometry = Node(
-        package='linorobot2_localization',
-        executable='wheel_odometry', 
-        parameters=[
-            {
-                'use_sim_time' : True
-            }
-        ]
-    )
-
-    wheel_odometry = Node(
-        package='linorobot2_localization',
-        executable='wheel_odometry',
-        parameters=[
-            {'use_sim_time': True}
-        ]
-    )
-
-    wheel_unraveller = Node(
-        package='linorobot2_localization',
-        executable='wheel_unraveller',
-        parameters=[
-            {'use_sim_time': True}
-        ]
-    )
 
     ld = LaunchDescription()
 
@@ -87,8 +62,6 @@ def generate_launch_description():
     ld.add_action(behaviors)
     ld.add_action(bt)
     ld.add_action(lifecycle_manager)
-    ld.add_action(wheel_unraveller)
-    ld.add_action(wheel_odometry)
 
 
 

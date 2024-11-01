@@ -25,10 +25,15 @@ RUN pip install setuptools==58.2.0
 
 WORKDIR /home/humble_ws
 
+COPY ./linorobot2_pcl /home/humble_ws/src/linorobot2_pcl
 COPY ./perception_pcl /home/humble_ws/src/perception_pcl
-RUN source /opt/ros/humble/setup.bash && \
-    colcon build --symlink-install --packages-select pcl_conversions pcl_ros perception_pcl && \
-    source install/setup.bash
 
-RUN echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
-RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+# Build the workspace and source the setup files
+RUN source /opt/ros/humble/setup.bash && \
+    colcon build --symlink-install && \
+    source install/setup.bash && \
+    echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
+    echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
+
+CMD bash -c "source /home/humble_ws/install/setup.bash && \
+            ros2 launch linorobot2_pcl pointcloud.launch.py"

@@ -9,8 +9,6 @@ services:
     tty: true
     environment:
       - DISPLAY=${DISPLAY}
-      - SLAM_OR_NAV=${SLAM_OR_NAV}
-      - LINOROBOT2_BASE=${LINOROBOT2_BASE}
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ./linorobot2_navigation:/home/humble_ws/src/linorobot2_navigation
@@ -52,7 +50,6 @@ services:
   #     - /tmp/.X11-unix:/tmp/.X11-unix
   #     - ./linorobot2_navigation:/home/humble_ws/src/linorobot2_navigation
   #     - ./linorobot2_localization:/home/humble_ws/src/linorobot2_localization
-  #     - ./rviz2-panel:/home/humble_ws/src/rviz2-panel    
   #     - ./yolo:/home/yolo
   #     # - ./docker/linorobot2/entry_scripts/slam_nav_entrypoint.sh:/slam_nav_entrypoint.sh
   #   working_dir: /home/humble_ws

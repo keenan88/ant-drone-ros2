@@ -7,4 +7,4 @@ yolo/yolov8n-seg.pt
 yolo/marked
 yolo/slam_images
 yolo/new_dir
-yolo/datasets
+yolo/datasets/*
