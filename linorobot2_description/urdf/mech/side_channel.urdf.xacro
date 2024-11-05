@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="linorobot2_mecanum" xmlns:xacro="http://ros.org/wiki/xacro">
+
   <xacro:macro name="side_channel" params="side pos_y">
     
     <link name="${side}_channel">
@@ -36,6 +37,8 @@
       <origin xyz="0 ${pos_y} 0" rpy="0 0 0" />
 
     </joint>
+
+    
 
   </xacro:macro>
 </robot>

@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<robot name="linorobot2_mecanum" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="camera" params="camera_pos x y z r_rs p_rs yaw_rs">
+
+    <gazebo reference="${camera_pos}_gazebo_camera_frame">
+      <sensor type="depth" name="${camera_pos}_camera">
+        <update_rate>30.0</update_rate>
+        <depth_camera name="${camera_pos}_camera">
+          <horizontal_fov>2.96</horizontal_fov>
+          <image>
+            <width>480</width>
+            <height>270</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>3</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </depth_camera>
+        <plugin name="${camera_pos}_camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>${camera_pos}_camera</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>right_rs_depth_optical_frame</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <link name="${camera_pos}_rs_depth_optical_frame">
+    </link>
+
+    <!-- This is the position that a realsense camera would be mounted on the robot -->
+    <joint
+      name="base_link_to_${camera_pos}_rs" type="fixed">
+      <origin
+        xyz="${x} ${y} ${z}"
+        rpy="${r_rs} ${p_rs} ${yaw_rs}" />
+      <parent link="base_link" />
+      <child link="${camera_pos}_rs_depth_optical_frame" />
+    </joint>
+
+    <link name="${camera_pos}_gazebo_camera_frame">
+    </link>
+
+    <!-- Gazebo camera has different frame than realsense camera, need a transform to get from realsense to gazebo camera -->
+    <joint
+      name="${camera_pos}_rs_depth_optical_frame_to_${camera_pos}_gazebo_camera_frame" type="fixed">
+      <origin
+        xyz="0 0 0"
+        rpy="1.57 -1.57 0" />
+      <parent link="${camera_pos}_rs_depth_optical_frame" />
+      <child link="${camera_pos}_gazebo_camera_frame" />
+    </joint>
+
+    
+
+
+    
+
+  </xacro:macro>
+</robot>
