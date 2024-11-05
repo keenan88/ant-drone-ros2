@@ -1,25 +1,52 @@
 services:
 
-  linorobot2-slam:
-    container_name: linorobot2-slam
+  linorobot2-gz:
+    container_name: linorobot2-gz
     build:
       context: .
-      dockerfile: docker/linorobot2/dockerfiles/slam.dockerfile
+      dockerfile: docker/linorobot2/dockerfiles/gz.dockerfile
     stdin_open: true
     tty: true
     environment:
       - DISPLAY=${DISPLAY}
       - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
-      - WHEEL_ODOMETRY=false
     volumes:
-      - ./linorobot2_navigation:/home/humble_ws/src/linorobot2_navigation
-      - ./linorobot2_localization:/home/humble_ws/src/linorobot2_localization
-      - ./yolo:/home/yolo
+      - ./simulation:/home/humble_ws/src/simulation
+      - ./linorobot2_description:/home/humble_ws/src/linorobot2_description
+    working_dir: /home/humble_ws/src/simulation/gazebo
     
     # command: sleep infinity
     network_mode: host
     ipc: host
     pid: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+    runtime: nvidia
+
+  # linorobot2-slam:
+  #   container_name: linorobot2-slam
+  #   build:
+  #     context: .
+  #     dockerfile: docker/linorobot2/dockerfiles/slam.dockerfile
+  #   stdin_open: true
+  #   tty: true
+  #   environment:
+  #     - DISPLAY=${DISPLAY}
+  #     - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
+  #     - WHEEL_ODOMETRY=false
+  #   volumes:
+  #     - ./linorobot2_navigation:/home/humble_ws/src/linorobot2_navigation
+  #     - ./linorobot2_localization:/home/humble_ws/src/linorobot2_localization
+  #     - ./yolo:/home/yolo
+    
+  #   # command: sleep infinity
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
 
   
 
@@ -40,25 +67,25 @@ services:
   #   ipc: host
   #   pid: host
 
-  linorobot2-joytick:
-    container_name: linorobot2-joystick
-    build:
-      context: .
-      dockerfile: ./docker/linorobot2/dockerfiles/joystick.dockerfile
-    tty: true
-    stdin_open: true
-    environment:
-      - DRONE_ID=0
-      - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
-      - WHEELED_MOTION=false
-    volumes:
-      - ./linorobot2_joystick:/home/humble_ws/src/linorobot2_joystick:rw
-      - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup
-    privileged: true
-    # command: sleep infinity
-    network_mode: host
-    ipc: host
-    pid: host
+  # linorobot2-joytick:
+  #   container_name: linorobot2-joystick
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/linorobot2/dockerfiles/joystick.dockerfile
+  #   tty: true
+  #   stdin_open: true
+  #   environment:
+  #     - DRONE_ID=0
+  #     - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
+  #     - WHEELED_MOTION=false
+  #   volumes:
+  #     - ./linorobot2_joystick:/home/humble_ws/src/linorobot2_joystick:rw
+  #     - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup
+  #   privileged: true
+  #   # command: sleep infinity
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
     
   # linorobot2-pcl:
   #   container_name: linorobot2-pcl

@@ -65,28 +65,10 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        back_channel:
-          Value: false
-        base_footprint:
-          Value: true
         base_link:
           Value: true
-        front_channel:
-          Value: false
-        front_rs_depth_optical_frame:
-          Value: false
-        left_channel:
-          Value: false
-        left_rs_depth_optical_frame:
-          Value: false
         odom:
           Value: true
-        rear_rs_depth_optical_frame:
-          Value: false
-        right_channel:
-          Value: false
-        right_rs_depth_optical_frame:
-          Value: false
       Marker Scale: 0.5
       Name: TF
       Show Arrows: true
@@ -94,24 +76,8 @@ Visualization Manager:
       Show Names: true
       Tree:
         odom:
-          base_footprint:
-            base_link:
-              back_channel:
-                {}
-              front_channel:
-                {}
-              front_rs_depth_optical_frame:
-                {}
-              left_channel:
-                {}
-              left_rs_depth_optical_frame:
-                {}
-              rear_rs_depth_optical_frame:
-                {}
-              right_channel:
-                {}
-              right_rs_depth_optical_frame:
-                {}
+          base_link:
+            {}
       Update Interval: 0
       Value: true
     - Alpha: 0.4000000059604645
@@ -632,25 +598,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/XYOrbit
-      Distance: 5.482396125793457
+      Distance: 2.5093839168548584
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.18048477172851562
-        Y: -1.4367690086364746
+        X: -0.6718898415565491
+        Y: 0.5357835292816162
         Z: 0
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.2447960376739502
+      Pitch: 1.1297967433929443
       Target Frame: base_link
       Value: XYOrbit (rviz_default_plugins)
-      Yaw: 4.68239164352417
+      Yaw: 1.6242109537124634
     Saved: ~
 Window Geometry:
   Displays:

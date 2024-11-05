@@ -44,16 +44,14 @@ class VelocityIntegratorNode(Node):
         self.prev_time = self.get_clock().now()
 
     def clock_callback(self, msg: Clock):
-        if msg.clock.sec < 1 and not self.is_robot_pose_reset: # Reset robot pose at the start of the simulation
-            self.x = 0
-            self.y = 0
-            self.yaw = 0
+        if msg.clock.sec < 1: # Reset robot pose at the start of the simulation
+            self.x = 0.0
+            self.y = 0.0
+            self.yaw = 0.0
 
             self.get_logger().info('Reset robot pose')
 
             self.update_robot_pose(0, 0, 0)
-
-            self.is_robot_pose_reset = True
     
     def cmd_vel_callback(self, msg: Twist):
 
@@ -71,13 +69,15 @@ class VelocityIntegratorNode(Node):
         dt = (current_time - self.prev_time).nanoseconds * 1e-9
         self.prev_time = current_time
 
-        delta_x = (vx * math.cos(vtheta) - vy * math.sin(vtheta)) * dt
-        delta_y = (vx * math.sin(vtheta) + vy * math.cos(vtheta)) * dt
-        delta_theta = vtheta * dt
+        delta_x = round((vx * math.cos(self.yaw) - vy * math.sin(self.yaw)) * dt, 10)
+        delta_y = round((vx * math.sin(self.yaw) + vy * math.cos(self.yaw)) * dt, 10)
+        delta_theta = round(vtheta * dt, 10)
 
         self.x += delta_x
         self.y += delta_y
         self.yaw += delta_theta
+
+        self.get_logger().info(f'dx: {delta_x}, dy: {delta_y}, dth: {delta_theta}')
         
         # Create and publish the Transform message
         transform_msg = TransformStamped()
@@ -88,7 +88,7 @@ class VelocityIntegratorNode(Node):
         # Set translation (position) values
         transform_msg.transform.translation.x = self.x
         transform_msg.transform.translation.y = self.y
-        transform_msg.transform.translation.z = 0.0
+        transform_msg.transform.translation.z = 0.2
 
         # Set rotation (orientation) values
         transform_msg.transform.rotation.x = 0.0
@@ -96,7 +96,7 @@ class VelocityIntegratorNode(Node):
         transform_msg.transform.rotation.z = math.sin(self.yaw / 2)
         transform_msg.transform.rotation.w = math.cos(self.yaw / 2)
 
-        self.is_robot_pose_reset = False
+        
         
         self.publisher.publish(transform_msg)
 

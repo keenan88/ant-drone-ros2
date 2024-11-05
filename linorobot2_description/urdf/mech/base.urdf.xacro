@@ -8,7 +8,6 @@
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <box size="${length} ${width} ${height}"/>
-          <!-- <mesh filename="" scale="0.001 0.001 0.001"/> -->
         </geometry>
         <material name="gray_base">
           <color rgba="0.8 0.8 0.83 1.0"/>
@@ -24,7 +23,8 @@
 
       <inertial>
         <origin xyz="0 0 0" rpy="0 0 0"/>
-        <mass value="${mass}"/>
+        <mass value="0"/>
+        <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
       </inertial>
     </link>
 

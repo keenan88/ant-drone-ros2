@@ -5,10 +5,10 @@
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/base.urdf.xacro" />
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/mecanum_wheel_left.urdf.xacro" />
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/mecanum_wheel_right.urdf.xacro" />
-  <xacro:include filename="$(find linorobot2_description)/urdf/sensors/imu.urdf.xacro" />
-  <xacro:include filename="$(find linorobot2_description)/urdf/sensors/generic_laser.urdf.xacro" />
-  <xacro:include filename="$(find linorobot2_description)/urdf/sensors/depth_sensor.urdf.xacro" />
-  <xacro:include filename="$(find linorobot2_description)/urdf/controllers/omni_drive.urdf.xacro" />
+  <!-- <xacro:include filename="$(find linorobot2_description)/urdf/sensors/imu.urdf.xacro" /> -->
+  <!-- <xacro:include filename="$(find linorobot2_description)/urdf/sensors/generic_laser.urdf.xacro" /> -->
+  <!-- <xacro:include filename="$(find linorobot2_description)/urdf/sensors/depth_sensor.urdf.xacro" /> -->
+  <!-- <xacro:include filename="$(find linorobot2_description)/urdf/controllers/omni_drive.urdf.xacro" /> -->
 
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/end_channel.urdf.xacro" />
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/side_channel.urdf.xacro" />
@@ -21,6 +21,8 @@
     wheel_radius="${wheel_radius}"
     wheel_pos_z="${wheel_pos_z}"
   />
+
+
 
   <xacro:end_channel 
     end="front"
@@ -99,22 +101,14 @@
     <child link="front_rs_depth_optical_frame" />
   </joint>
 
+  <link name="front_rs_depth_optical_frame">
+  </link>
+
 
   <link name="rear_rs_depth_optical_frame">
-    <inertial>
-      <mass value="0.025" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-    </collision>
   </link>
+
+  
 
   <!-- IsaacSim will likely not respect joint angles for realsense joints -->
   <joint
@@ -128,19 +122,6 @@
 
 
   <link name="left_rs_depth_optical_frame">
-    <inertial>
-      <mass value="0.025" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-    </collision>
   </link>
 
   <!-- IsaacSim will likely not respect joint angles for realsense joints -->
@@ -155,19 +136,6 @@
 
 
   <link name="right_rs_depth_optical_frame">
-    <inertial>
-      <mass value="0.025" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-    </collision>
   </link>
 
   <!-- IsaacSim will likely not respect joint angles for realsense joints -->
