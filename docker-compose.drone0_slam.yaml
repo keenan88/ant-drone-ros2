@@ -13,7 +13,7 @@ services:
     volumes:
       - ./simulation:/home/humble_ws/src/simulation
       - ./linorobot2_description:/home/humble_ws/src/linorobot2_description
-    working_dir: /home/humble_ws/src/simulation/gazebo
+    working_dir: /home/humble_ws/
     
     # command: sleep infinity
     network_mode: host
@@ -24,8 +24,8 @@ services:
         reservations:
           devices:
             - driver: nvidia
+              count: 1 # alternatively, use `count: all` for all GPUs
               capabilities: [gpu]
-    runtime: nvidia
 
   # linorobot2-slam:
   #   container_name: linorobot2-slam

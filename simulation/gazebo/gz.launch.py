@@ -21,7 +21,7 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument(
             name='world', 
-            default_value='./playground.world',
+            default_value='/home/humble_ws/src/simulation/gazebo/playground.world',
             description='Gazebo world'
         ),
 
@@ -78,7 +78,7 @@ def generate_launch_description():
        
 
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource('./description.launch.py'),
+            PythonLaunchDescriptionSource('/home/humble_ws/src/simulation/gazebo/description.launch.py'),
             launch_arguments={
                 'use_sim_time': str(use_sim_time),
                 'publish_joints': 'false',
