@@ -15,19 +15,23 @@
 
 
   <gazebo>
-  <plugin name="object_controller" filename="libgazebo_ros_planar_move.so">
-    <ros>
-      <remapping>odom:=odom/unfiltered</remapping>
-    </ros>
-    <command_topic>cmd_vel</command_topic>
-    <odometry_topic>odom/unfiltered</odometry_topic>
-    <odometry_frame>odom</odometry_frame>
-    <odometry_rate>20.0</odometry_rate>
-    <robot_base_frame>base_footprint</robot_base_frame>
-    <publish_odom>true</publish_odom>
-    <publish_odom_tf>true</publish_odom_tf>
-  </plugin>
-</gazebo>
+    <plugin name="mecanum_wheel_mimic" filename="libgazebo_ros_planar_move.so">
+      <ros>
+        <remapping>odom:=odom/unfiltered</remapping>
+      </ros>
+      <command_topic>cmd_vel</command_topic>
+      <odometry_topic>odom/unfiltered</odometry_topic>
+      <odometry_frame>odom</odometry_frame>
+      <odometry_rate>20.0</odometry_rate>
+      <robot_base_frame>base_footprint</robot_base_frame>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>true</publish_odom_tf>
+    </plugin>
+  </gazebo>
+
+
+  
+
 
   <xacro:base 
     length="${base_length}" 
@@ -148,7 +152,6 @@
     <child link="left_rs_depth_optical_frame" />
   </joint>
 
-
   <link name="right_rs_depth_optical_frame">
   </link>
 
@@ -161,5 +164,47 @@
     <parent link="base_link" />
     <child link="right_rs_depth_optical_frame" />
   </joint>
+
+  <gazebo reference="right_rs_depth_optical_frame">
+    <sensor type="depth" name="camera1">
+      <update_rate>30.0</update_rate>
+      <depth_camera name="head">
+        <horizontal_fov>2.96</horizontal_fov>
+        <image>
+          <width>480</width>
+          <height>270</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>3</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise is sampled independently per pixel on each frame.
+               That pixel's noise value is added to each of its color
+               channels, which at that point lie in the range [0,1]. -->
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </depth_camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>rrbot/camera1</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>right_rs_depth_optical_frame</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  
 
 </robot>
