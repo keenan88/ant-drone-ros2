@@ -10,7 +10,7 @@
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/side_channel.urdf.xacro" />
   <xacro:include filename="$(find linorobot2_description)/urdf/robots/camera.urdf.xacro" />
 
-  <xacro:camera camera_pos="front" x="0.410335" y="0" z="0.0892" 
+  <!-- <xacro:camera camera_pos="front" x="0.410335" y="0" z="0.0892" 
                                    r_rs="-1.57" p_rs="0" yaw_rs="-1.57" />
 
   <xacro:camera camera_pos="left" x="0.0" y="0.247" z="0.089" 
@@ -20,7 +20,7 @@
                                   r_rs="-1.57" p_rs="0" yaw_rs="1.57" />
 
   <xacro:camera camera_pos="right" x="0" y="-0.247" z="0.089" 
-                                  r_rs="-1.57" p_rs="0" yaw_rs="3.14"/>
+                                  r_rs="-1.57" p_rs="0" yaw_rs="3.14"/> -->
 
 
   <gazebo>
@@ -67,51 +67,34 @@
     pos_y="-0.23653"
   />
 
-  <xacro:mecanum_wheel_left 
+  <!-- <xacro:mecanum_wheel_left 
     side="left"
     end="front"
-    radius="${wheel_radius}" 
-    width="${wheel_width}" 
     pos_x="${wheel_pos_x}" 
     pos_y="${wheel_pos_y}" 
-    pos_z="${wheel_pos_z}" 
-    mass="${wheel_mass}"
   />
 
   <xacro:mecanum_wheel_right
     side="right"
     end="front"
-    radius="${wheel_radius}" 
-    width="${wheel_width}" 
     pos_x="${wheel_pos_x}" 
     pos_y="${-wheel_pos_y}" 
-    pos_z="${wheel_pos_z}" 
-    mass="${wheel_mass}"
   />
 
-  <!-- Back wheels mechanum style swapped (left mecanum wheel goes on right side of robot, and vice versa) -->
   <xacro:mecanum_wheel_right 
     side="left"
     end="rear"
-    radius="${wheel_radius}" 
-    width="${wheel_width}" 
     pos_x="${-wheel_pos_x}" 
     pos_y="${wheel_pos_y}" 
-    pos_z="${wheel_pos_z}" 
-    mass="${wheel_mass}"
   />
 
   
   <xacro:mecanum_wheel_left 
     side="right"
     end="rear"
-    radius="${wheel_radius}" 
-    width="${wheel_width}" 
     pos_x="${-wheel_pos_x}" 
     pos_y="${-wheel_pos_y}" 
-    pos_z="${wheel_pos_z}" 
-    mass="${wheel_mass}"
-  />
+  /> -->
 
   
 
