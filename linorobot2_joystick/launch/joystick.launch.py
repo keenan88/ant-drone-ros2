@@ -51,25 +51,25 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration('WHEELED_MOTION'))
     )  
 
-    robot_teleporter = Node(
-        package = 'linorobot2_joystick', 
-        executable = 'robot_teleporter',
-        parameters = [
-            {
-                'use_sim_time': True
-            }
-        ],
-        condition=UnlessCondition(LaunchConfiguration('WHEELED_MOTION'))
-    )    
+    # robot_teleporter = Node(
+    #     package = 'linorobot2_joystick', 
+    #     executable = 'robot_teleporter',
+    #     parameters = [
+    #         {
+    #             'use_sim_time': True
+    #         }
+    #     ],
+    #     condition=UnlessCondition(LaunchConfiguration('WHEELED_MOTION'))
+    # )    
 
-    reset_robot_pose = RegisterEventHandler(
-        OnShutdown(
-            on_shutdown=[LogInfo(
-                msg=['Launch was asked to shutdown: ',
-                    LocalSubstitution('event.reason')]
-            )]
-        )
-    )
+    # reset_robot_pose = RegisterEventHandler(
+    #     OnShutdown(
+    #         on_shutdown=[LogInfo(
+    #             msg=['Launch was asked to shutdown: ',
+    #                 LocalSubstitution('event.reason')]
+    #         )]
+    #     )
+    # )
 
     ld = LaunchDescription()
 
@@ -80,8 +80,8 @@ def generate_launch_description():
     ld.add_action(joystick_twist)
 
     ld.add_action(cmd_vel_to_motor_vel)
-    ld.add_action(robot_teleporter)
+    # ld.add_action(robot_teleporter)
 
-    ld.add_action(reset_robot_pose)
+    # ld.add_action(reset_robot_pose)
 
     return ld

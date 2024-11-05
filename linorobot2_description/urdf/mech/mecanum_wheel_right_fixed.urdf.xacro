@@ -42,11 +42,10 @@
       </collision>
     </link>
 
-    <joint name="base_link_to_${end}_${side}_wheel" type="continuous">
+    <joint name="base_link_to_${end}_${side}_wheel" type="fixed">
       <origin xyz="${pos_x} ${pos_y} 0"  rpy="0 0 0" />
       <parent link="base_link" />
       <child link="${end}_${side}_wheel" />
-      <axis xyz="0 1 0" />
     </joint>
 
     <link
@@ -250,7 +249,7 @@
     </link>
     <joint
       name="${end}_${side}_wheel_to_${end}_${side}_roller1"
-      type="continuous">
+      type="fixed">
       <origin
         xyz="0.0513105165568448 -0.0151129693198936 0.0444755356274741"
         rpy="-2.36778917303694 -0.95454994461673 -1.76416393166909" />
@@ -258,9 +257,6 @@
         link="${end}_${side}_wheel" />
       <child
         link="${end}_${side}_roller1" />
-      <axis
-        xyz="0 0 1" />
-      <dynamics friction="0.1"/>
     </joint>
     <link
       name="${end}_${side}_roller2">
@@ -304,7 +300,7 @@
     </link>
     <joint
       name="${end}_${side}_wheel_to_${end}_${side}_roller2"
-      type="continuous">
+      type="fixed">
       <origin
         xyz="0.0287846592696844 -0.0151129693198959 0.0615002908075162"
         rpy="-1.77439072812908 -0.775855866169197 -2.22324127737972" />
@@ -312,9 +308,6 @@
         link="${end}_${side}_wheel" />
       <child
         link="${end}_${side}_roller2" />
-      <axis
-        xyz="0 0 1" />
-      <dynamics friction="0.1"/>
     </joint>
     <link
       name="${end}_${side}_roller3">
@@ -358,7 +351,7 @@
     </link>
     <joint
       name="${end}_${side}_wheel_to_${end}_${side}_roller3"
-      type="continuous">
+      type="fixed">
       <origin
         xyz="0.00128167289437567 -0.0151129693198984 0.0678910869943366"
         rpy="-1.40103696999546 -0.48194994387805 -2.44694050545059" />
@@ -366,9 +359,6 @@
         link="${end}_${side}_wheel" />
       <child
         link="${end}_${side}_roller3" />
-      <axis
-        xyz="0 0 1" />
-      <dynamics friction="0.1"/>
     </joint>
     <link
       name="${end}_${side}_roller4">
@@ -413,7 +403,7 @@
 
     <joint
       name="${end}_${side}_wheel_to_${end}_${side}_roller4"
-      type="continuous">
+      type="fixed">
       <origin
         xyz="-0.0264429263680024 -0.0151129693199014 0.062542897468674"
         rpy="-1.13469826196558 -0.147073422491862 -2.53094960861872" />
@@ -421,9 +411,6 @@
         link="${end}_${side}_wheel" />
       <child
         link="${end}_${side}_roller4" />
-      <axis
-        xyz="0 0 1" />
-      <dynamics friction="0.1"/>
     </joint>
     <link
       name="${end}_${side}_roller5">
@@ -467,7 +454,7 @@
     </link>
     <joint
       name="${end}_${side}_wheel_to_${end}_${side}_roller5"
-      type="continuous">
+      type="fixed">
       <origin
         xyz="-0.0495953034349089 -0.0151129693199047 0.0463804727862918"
         rpy="-0.894575475762315 0.197031441859666 -2.52483292758441" />
@@ -475,9 +462,6 @@
         link="${end}_${side}_wheel" />
       <child
         link="${end}_${side}_roller5" />
-      <axis
-        xyz="0 0 1" />
-      <dynamics friction="0.1"/>
     </joint>
     <link
       name="${end}_${side}_roller6">
@@ -521,7 +505,7 @@
     </link>
     <joint
       name="${end}_${side}_wheel_to_${end}_${side}_roller6"
-      type="continuous">
+      type="fixed">
       <origin
         xyz="-0.0641722019787319 -0.0151129693199074 0.0221984430057918"
         rpy="-0.618670381864381 0.528470873009444 -2.42501713902796" />
@@ -529,9 +513,6 @@
         link="${end}_${side}_wheel" />
       <child
         link="${end}_${side}_roller6" />
-      <axis
-        xyz="0 0 1" />
-      <dynamics friction="0.1"/>
     </joint>
     <link
       name="${end}_${side}_roller7">
@@ -575,7 +556,7 @@
     </link>
     <joint
       name="${end}_${side}_wheel_to_${end}_${side}_roller7"
-      type="continuous">
+      type="fixed">
       <origin
         xyz="-0.0676531438142786 -0.0151129693199092 -0.0058218992369328"
         rpy="-0.22003525595071 0.81173834281584 -2.17291203984087" />
@@ -583,9 +564,6 @@
         link="${end}_${side}_wheel" />
       <child
         link="${end}_${side}_roller7" />
-      <axis
-        xyz="0 0 1" />
-      <dynamics friction="0.1"/>
     </joint>
     <link
       name="${end}_${side}_roller8">
@@ -629,7 +607,7 @@
     </link>
     <joint
       name="${end}_${side}_wheel_to_${end}_${side}_roller8"
-      type="continuous">
+      type="fixed">
       <origin
         xyz="-0.0594362424748194 -0.0151129693199101 -0.0328355822112983"
         rpy="0.408043134594723 0.963708851734786 -1.67797755478808" />
@@ -637,9 +615,6 @@
         link="${end}_${side}_wheel" />
       <child
         link="${end}_${side}_roller8" />
-      <axis
-        xyz="0 0 1" />
-      <dynamics friction="0.1"/>
     </joint>
     <link
       name="${end}_${side}_roller9">
@@ -683,7 +658,7 @@
     </link>
     <joint
       name="${end}_${side}_wheel_to_${end}_${side}_roller9"
-      type="continuous">
+      type="fixed">
       <origin
         xyz="-0.0409422748501527 -0.015112969319909 -0.0541716947194296"
         rpy="1.1026415771303 0.886919106568413 -1.11464531078552" />
@@ -691,9 +666,6 @@
         link="${end}_${side}_wheel" />
       <child
         link="${end}_${side}_roller9" />
-      <axis
-        xyz="0 0 1" />
-      <dynamics friction="0.1"/>
     </joint>
     <link
       name="${end}_${side}_roller10">
@@ -737,7 +709,7 @@
     </link>
     <joint
       name="${end}_${side}_wheel_to_${end}_${side}_roller10"
-      type="continuous">
+      type="fixed">
       <origin
         xyz="-0.0153690159550034 -0.0151129693199065 -0.0661410290761748"
         rpy="1.57421323203544 0.637163580624169 -0.783361608443036" />
@@ -745,9 +717,6 @@
         link="${end}_${side}_wheel" />
       <child
         link="${end}_${side}_roller10" />
-      <axis
-        xyz="0 0 1" />
-      <dynamics friction="0.1"/>
     </joint>
     <link
       name="${end}_${side}_roller11">
@@ -791,7 +760,7 @@
     </link>
     <joint
       name="${end}_${side}_wheel_to_${end}_${side}_roller11"
-      type="continuous">
+      type="fixed">
       <origin
         xyz="0.0128616854218928 -0.0151129693199038 -0.0666739786332639"
         rpy="1.88109068595424 0.317129294370825 -0.639722033593165" />
@@ -799,9 +768,6 @@
         link="${end}_${side}_wheel" />
       <child
         link="${end}_${side}_roller11" />
-      <axis
-        xyz="0 0 1" />
-      <dynamics friction="0.1"/>
     </joint>
     <link
       name="${end}_${side}_roller12">
@@ -845,7 +811,7 @@
     </link>
     <joint
       name="${end}_${side}_wheel_to_${end}_${side}_roller12"
-      type="continuous">
+      type="fixed">
       <origin
         xyz="0.0388684845445997 -0.0151129693199006 -0.0556783915705813"
         rpy="2.12643201705665 -0.025160050703084 -0.60332516970669" />
@@ -853,9 +819,6 @@
         link="${end}_${side}_wheel" />
       <child
         link="${end}_${side}_roller12" />
-      <axis
-        xyz="0 0 1" />
-      <dynamics friction="0.1"/>
     </joint>
     <link
       name="${end}_${side}_roller13">
@@ -899,7 +862,7 @@
     </link>
     <joint
       name="${end}_${side}_wheel_to_${end}_${side}_roller13"
-      type="continuous">
+      type="fixed">
       <origin
         xyz="0.0581545695804492 -0.0151129693198971 -0.0350555047830372"
         rpy="2.37615666037905 -0.365916365141497 -0.652805521545524" />
@@ -907,9 +870,6 @@
         link="${end}_${side}_wheel" />
       <child
         link="${end}_${side}_roller13" />
-      <axis
-        xyz="0 0 1" />
-      <dynamics friction="0.1"/>
     </joint>
     <link
       name="${end}_${side}_roller14">
@@ -953,7 +913,7 @@
     </link>
     <joint
       name="${end}_${side}_wheel_to_${end}_${side}_roller14"
-      type="continuous">
+      type="fixed">
       <origin
         xyz="0.0673852012181607 -0.0151129693198943 -0.00837120274924246"
         rpy="2.69941973817462 -0.67973266586857 -0.817294146739146" />
@@ -961,9 +921,6 @@
         link="${end}_${side}_wheel" />
       <child
         link="${end}_${side}_roller14" />
-      <axis
-        xyz="0 0 1" />
-      <dynamics friction="0.1"/>
     </joint>
     <link
       name="${end}_${side}_roller15">
@@ -1007,7 +964,7 @@
     </link>
     <joint
       name="${end}_${side}_wheel_to_${end}_${side}_roller15"
-      type="continuous">
+      type="fixed">
       <origin
         xyz="0.0649643193899178 -0.0151129693198934 0.0197605562898849"
         rpy="-3.077965161563 -0.911914057233449 -1.18487158274901" />
@@ -1015,9 +972,6 @@
         link="${end}_${side}_wheel" />
       <child
         link="${end}_${side}_roller15" />
-      <axis
-        xyz="0 0 1" />
-      <dynamics friction="0.1"/>
     </joint>
 
   </xacro:macro>

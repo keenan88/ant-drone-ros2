@@ -24,7 +24,7 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     robot_base = os.getenv('LINOROBOT2_BASE')
 
-    urdf_path = '/home/humble_ws/src/linorobot2_description/urdf/robots/mecanum.urdf.xacro'
+    urdf_path = '/home/humble_ws/src/linorobot2_description/urdf/robots/mecanum_libplanar.urdf.xacro'
 
 
     return LaunchDescription([
