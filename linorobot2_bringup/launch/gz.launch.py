@@ -19,7 +19,7 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument(
             name='world', 
-            default_value='/home/humble_ws/src/simulation/gazebo/playground.world',
+            default_value='/home/simulation/gazebo/playground.world',
             description='Gazebo world'
         ),
 

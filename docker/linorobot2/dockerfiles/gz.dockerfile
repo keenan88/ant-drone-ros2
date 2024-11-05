@@ -25,7 +25,7 @@ RUN source /opt/ros/humble/setup.bash && \
     echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
-ENV GAZEBO_MODEL_PATH=/home/humble_ws/src/
+ENV GAZEBO_MODEL_PATH=/home/humble_ws/src/:/home/simulation/models
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
             ros2 launch linorobot2_bringup gz.launch.py"

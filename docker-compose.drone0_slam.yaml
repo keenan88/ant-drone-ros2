@@ -13,7 +13,8 @@ services:
     volumes:
       - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup
       - ./linorobot2_description:/home/humble_ws/src/linorobot2_description
-      - ./simulation/gazebo:/home/humble_ws/src/simulation/gazebo
+      - ./simulation/gazebo:/home/simulation/gazebo
+      - ./simulation/models:/home/simulation/models
     working_dir: /home/humble_ws/
     network_mode: host
     ipc: host
