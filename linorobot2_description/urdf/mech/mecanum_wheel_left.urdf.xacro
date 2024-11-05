@@ -16,7 +16,7 @@
           iyy="7.10123305553507E-05"
           iyz="-1.66085499471637E-18"
           izz="3.76577202480009E-05" />
-    </inertial>
+      </inertial>
       <visual>
         <origin
           xyz="0 0 0"
@@ -48,7 +48,7 @@
       <parent link="base_link" />
       <child link="${end}_${side}_wheel" />
       <axis xyz="0 1 0" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
 
     <link
@@ -66,7 +66,7 @@
           iyy="4.21627753206922E-05"
           iyz="4.06169630282727E-21"
           izz="8.39719993847474E-05" />
-    </inertial>
+      </inertial>
       <visual>
         <origin
           xyz="0 0 0"
@@ -119,7 +119,7 @@
           iyy="4.21627753206923E-05"
           iyz="2.75305456980319E-21"
           izz="8.39719993847476E-05" />
-    </inertial>
+      </inertial>
       <visual>
         <origin
           xyz="0 0 0"
@@ -173,7 +173,7 @@
           iyy="8.9991994924288E-07"
           iyz="-8.0163727523739E-19"
           izz="3.31951561004127E-07" />
-    </inertial>
+      </inertial>
       <visual>
         <origin
           xyz="0 0 0"
@@ -211,10 +211,10 @@
         link="${end}_${side}_roller1" />
       <axis
         xyz="0 0 1" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
 
-
+     
     <link
       name="${end}_${side}_roller2">
       <inertial>
@@ -230,7 +230,7 @@
           iyy="8.9991994924288E-07"
           iyz="-8.0163727523739E-19"
           izz="3.31951561004127E-07" />
-    </inertial>
+     </inertial>
       <visual>
         <origin
           xyz="0 0 0"
@@ -267,8 +267,9 @@
         link="${end}_${side}_roller2" />
       <axis
         xyz="0 0 1" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
+    
     <link
       name="${end}_${side}_roller3">
       <inertial>
@@ -321,7 +322,7 @@
         link="${end}_${side}_roller3" />
       <axis
         xyz="0 0 1" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
     <link
       name="${end}_${side}_roller4">
@@ -375,7 +376,7 @@
         link="${end}_${side}_roller4" />
       <axis
         xyz="0 0 1" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
     <link
       name="${end}_${side}_roller5">
@@ -429,7 +430,7 @@
         link="${end}_${side}_roller5" />
       <axis
         xyz="0 0 1" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
     <link
       name="${end}_${side}_roller6">
@@ -483,7 +484,7 @@
         link="${end}_${side}_roller6" />
       <axis
         xyz="0 0 1" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
     <link
       name="${end}_${side}_roller7">
@@ -537,7 +538,7 @@
         link="${end}_${side}_roller7" />
       <axis
         xyz="0 0 1" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
     <link
       name="${end}_${side}_roller8">
@@ -591,7 +592,7 @@
         link="${end}_${side}_roller8" />
       <axis
         xyz="0 0 1" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
     <link
       name="${end}_${side}_roller9">
@@ -645,7 +646,7 @@
         link="${end}_${side}_roller9" />
       <axis
         xyz="0 0 1" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
     <link
       name="${end}_${side}_roller10">
@@ -699,7 +700,7 @@
         link="${end}_${side}_roller10" />
       <axis
         xyz="0 0 1" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
     <link
       name="${end}_${side}_roller11">
@@ -753,7 +754,7 @@
         link="${end}_${side}_roller11" />
       <axis
         xyz="0 0 1" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
     <link
       name="${end}_${side}_roller12">
@@ -807,7 +808,7 @@
         link="${end}_${side}_roller12" />
       <axis
         xyz="0 0 1" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
     <link
       name="${end}_${side}_roller13">
@@ -861,7 +862,7 @@
         link="${end}_${side}_roller13" />
       <axis
         xyz="0 0 1" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
     <link
       name="${end}_${side}_roller14">
@@ -915,7 +916,7 @@
         link="${end}_${side}_roller14" />
       <axis
         xyz="0 0 1" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
     <link
       name="${end}_${side}_roller15">
@@ -969,7 +970,7 @@
         link="${end}_${side}_roller15" />
       <axis
         xyz="0 0 1" />
-      <dynamics damping="0.1" friction="0.01"/>
+      <!--<dynamics damping="0.1" friction="0.01"/>-->
     </joint>
 
   </xacro:macro>

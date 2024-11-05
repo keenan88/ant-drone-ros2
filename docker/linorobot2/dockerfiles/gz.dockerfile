@@ -14,3 +14,4 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 #RUN source /opt/ros/humble/setup.bash && colcon build --symlink-install --packages-select antworker_bringup antworker_pcl
 
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+RUN echo "export GAZEBO_MODEL_PATH=/home/humble_ws/src/"
