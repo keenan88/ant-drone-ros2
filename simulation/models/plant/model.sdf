@@ -7,7 +7,7 @@
         <geometry>
           <mesh>
             <scale>0.01 0.01 0.01</scale>
-            <uri>model://plant/meshes/plant.obj</uri>
+            <uri>model://plant/meshes/plant.STL</uri>
           </mesh>
         </geometry>
       </visual>
