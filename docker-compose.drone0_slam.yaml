@@ -11,11 +11,10 @@ services:
       - DISPLAY=${DISPLAY}
       - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
     volumes:
-      - ./simulation:/home/humble_ws/src/simulation
+      - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup
       - ./linorobot2_description:/home/humble_ws/src/linorobot2_description
+      - ./simulation/gazebo:/home/humble_ws/src/simulation/gazebo
     working_dir: /home/humble_ws/
-    
-    # command: sleep infinity
     network_mode: host
     ipc: host
     pid: host

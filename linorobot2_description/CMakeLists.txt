@@ -29,4 +29,9 @@ install(DIRECTORY mecanum_wheel_right/meshes
   FILES_MATCHING PATTERN "*.STL"
 )
 
+install(DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
+)
+
+
 ament_package()

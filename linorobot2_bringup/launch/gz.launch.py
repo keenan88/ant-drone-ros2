@@ -1,22 +1,20 @@
 import os
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription
-from launch.substitutions import LaunchConfiguration, Command, PathJoinSubstitution
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess
+from launch.substitutions import LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
-from launch_ros.substitutions import FindPackageShare
-from launch_ros.actions import ComposableNodeContainer
-from launch_ros.descriptions import ComposableNode
+from ament_index_python.packages import get_package_share_directory
+
+
 
 
 def generate_launch_description():
     use_sim_time = True
-
-    # world_path = PathJoinSubstitution(
-    #     [FindPackageShare("linorobot2_gazebo"), "worlds", "playground.world"]
-    # )
-
     
+    description_launch_path = os.path.join(get_package_share_directory('linorobot2_description'), 'launch', 'description.launch.py')
+
+    print(description_launch_path)
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -54,6 +52,8 @@ def generate_launch_description():
             output='screen'
         ),
 
+        
+
         Node(
             package='gazebo_ros',
             executable='spawn_entity.py',
@@ -67,26 +67,12 @@ def generate_launch_description():
                 '-z', LaunchConfiguration('spawn_z'),
                 '-Y', LaunchConfiguration('spawn_yaw'),
             ]
-        ),
-
-        # Node(
-        #     package='linorobot2_gazebo',
-        #     executable='command_timeout.py',
-        #     name='command_timeout'
-        # ),
-
-       
+        ),       
 
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource('/home/humble_ws/src/simulation/gazebo/description.launch.py'),
+            PythonLaunchDescriptionSource(description_launch_path),
             launch_arguments={
                 'use_sim_time': str(use_sim_time),
-                'publish_joints': 'false',
             }.items()
         )
     ])
-
-#sources: 
-#https://navigation.ros.org/setup_guides/index.html#
-#https://answers.ros.org/question/374976/ros2-launch-gazebolaunchpy-from-my-own-launch-file/
-#https://github.com/ros2/rclcpp/issues/940

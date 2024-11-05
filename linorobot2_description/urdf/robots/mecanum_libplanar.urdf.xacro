@@ -5,10 +5,6 @@
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/base.urdf.xacro" />
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/mecanum_wheel_left_fixed.urdf.xacro" />
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/mecanum_wheel_right_fixed.urdf.xacro" />
-  <!-- <xacro:include filename="$(find linorobot2_description)/urdf/sensors/imu.urdf.xacro" /> -->
-  <!-- <xacro:include filename="$(find linorobot2_description)/urdf/sensors/generic_laser.urdf.xacro" /> -->
-  <!-- <xacro:include filename="$(find linorobot2_description)/urdf/sensors/depth_sensor.urdf.xacro" /> -->
-  <!-- <xacro:include filename="$(find linorobot2_description)/urdf/controllers/omni_drive.urdf.xacro" /> -->
 
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/end_channel.urdf.xacro" />
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/side_channel.urdf.xacro" />
@@ -41,10 +37,6 @@
       <publish_odom_tf>true</publish_odom_tf>
     </plugin>
   </gazebo>
-
-
-  
-
 
   <xacro:base 
     length="${base_length}" 
@@ -98,7 +90,6 @@
   />
 
   <!-- Back wheels mechanum style swapped (left mecanum wheel goes on right side of robot, and vice versa) -->
-
   <xacro:mecanum_wheel_right 
     side="left"
     end="rear"
