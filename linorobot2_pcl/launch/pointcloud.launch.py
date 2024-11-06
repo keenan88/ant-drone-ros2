@@ -10,7 +10,7 @@ def generate_launch_description():
 
     ld = launch.LaunchDescription()
 
-    for realsense_placement in ["front_rs", "rear_rs", "left_rs", "right_rs"]:
+    for realsense_placement in ["front_rs"]: #  "rear_rs", "left_rs", "right_rs"
 
         pointcloud_cropper = Node(
             package='pcl_ros',
@@ -21,12 +21,13 @@ def generate_launch_description():
                 '/home/humble_ws/src/linorobot2_pcl/config/' + realsense_placement + '_filter_crop_box.yaml',
                 {
                     'use_sim_time' : use_sim,
-                    "input_frame": realsense_placement + '_depth_optical_frame',
-                    "output_frame": realsense_placement + '_depth_optical_frame'
+                    "input_frame": 'front_rs_depth_optical_frame',
+                    "output_frame": 'base_link'
                 },
             ],
             remappings=[
-                ('input', '/' + realsense_placement + '/' + realsense_placement + '/depth/color/points'),
+                # ('input', '/' + realsense_placement + '/' + realsense_placement + '/depth/color/points'),
+                ('input', 'front_camera/frame_fixed/points'), 
                 ('output', realsense_placement + '/pointcloud_cropped')
             ]
         )

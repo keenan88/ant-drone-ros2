@@ -17,7 +17,7 @@ services:
       - ./simulation/models:/home/simulation/models
     working_dir: /home/humble_ws/
     network_mode: host
-    # command: sleep infinity
+    command: sleep infinity
     ipc: host
     pid: host
     deploy:
@@ -88,33 +88,34 @@ services:
     ipc: host
     pid: host
     
-  # linorobot2-pcl:
-  #   container_name: linorobot2-pcl
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/linorobot2/dockerfiles/pointcloud.dockerfile
-  #   tty: true
-  #   stdin_open: true
-  #   environment:
-  #     - USE_SIM=True
-  #     - NVIDIA_VISIBLE_DEVICES=all
-  #     - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
-  #   volumes:
-  #     - ./linorobot2_pcl:/home/humble_ws/src/linorobot2_pcl:rw
-  #     - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup:rw
-  #     - ./perception_pcl:/home/humble_ws/src/perception_pcl
-  #     # - /dev/dri/card0:/dev/dri/card0
-  #   # privileged: true
-  #   network_mode: host
-  #   ipc: host
-  #   pid: host
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #           - driver: nvidia
-  #             capabilities: [gpu]
-  #   runtime: nvidia
+  linorobot2-pcl:
+    container_name: linorobot2-pcl
+    build:
+      context: .
+      dockerfile: ./docker/linorobot2/dockerfiles/pointcloud.dockerfile
+    tty: true
+    stdin_open: true
+    environment:
+      - USE_SIM=True
+      - NVIDIA_VISIBLE_DEVICES=all
+      - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
+    volumes:
+      - ./linorobot2_pcl:/home/humble_ws/src/linorobot2_pcl:rw
+      - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup:rw
+      - ./perception_pcl:/home/humble_ws/src/perception_pcl
+      # - /dev/dri/card0:/dev/dri/card0
+    # privileged: true
+    network_mode: host
+    ipc: host
+    pid: host
+    command: sleep infinity
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+    runtime: nvidia
     
   # antdrone_depth_to_laserscan:
   #   container_name: antdrone-depth-to-laserscan

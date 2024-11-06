@@ -29,7 +29,7 @@
           <cameraName>${camera_pos}_camera</cameraName>
           <imageTopicName>image_raw</imageTopicName>
           <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-          <frameName>right_rs_depth_optical_frame</frameName>
+          <frameName>/front_rs_gazebo_camera_frame</frameName>
           <hackBaseline>0.07</hackBaseline>
           <distortionK1>0.0</distortionK1>
           <distortionK2>0.0</distortionK2>
@@ -42,6 +42,7 @@
 
     <link name="${camera_pos}_rs_depth_optical_frame">
     </link>
+
 
     <!-- This is the position that a realsense camera would be mounted on the robot -->
     <joint
@@ -56,13 +57,12 @@
     <link name="${camera_pos}_gazebo_camera_frame">
     </link>
 
-    <!-- Gazebo camera has different frame than realsense camera, need a transform to get from realsense to gazebo camera -->
     <joint
-      name="${camera_pos}_rs_depth_optical_frame_to_${camera_pos}_gazebo_camera_frame" type="fixed">
+      name="base_link_to_${camera_pos}_gazebo_camera_frame" type="fixed">
       <origin
-        xyz="0 0 0"
-        rpy="1.57 -1.57 0" />
-      <parent link="${camera_pos}_rs_depth_optical_frame" />
+        xyz="0.3 0 0"
+        rpy="0 0 0" />
+      <parent link="base_link" />
       <child link="${camera_pos}_gazebo_camera_frame" />
     </joint>
 

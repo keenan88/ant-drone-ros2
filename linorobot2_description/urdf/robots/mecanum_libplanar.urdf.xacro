@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="linorobot2_mecanum" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="linorobot2" xmlns:xacro="http://ros.org/wiki/xacro">
 
   <xacro:include filename="$(find linorobot2_description)/urdf/mecanum_properties.urdf.xacro" />
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/base.urdf.xacro" />
@@ -10,20 +10,25 @@
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/side_channel.urdf.xacro" />
   <xacro:include filename="$(find linorobot2_description)/urdf/robots/camera.urdf.xacro" />
 
-  <xacro:camera camera_pos="front" x="0.410335" y="0" z="0.0892" 
-                                   r_rs="-1.57" p_rs="0" yaw_rs="-1.57" />
+  <!-- 0.0892 -->
 
-  <xacro:camera camera_pos="left" x="0.0" y="0.247" z="0.089" 
+  <link name="base_link">
+  </link>
+
+  <xacro:camera camera_pos="front" x="0.410335" y="0" z="0.3" 
+                                   r_rs= "-1.57" p_rs="0" yaw_rs="-1.57" />
+
+  <!-- <xacro:camera camera_pos="left" x="0.0" y="0.247" z="0.089" 
                                   r_rs="-1.57" p_rs="0.0" yaw_rs="0"/>
 
   <xacro:camera camera_pos="rear" x="-0.41" y="0.0" z="0.089" 
                                   r_rs="-1.57" p_rs="0" yaw_rs="1.57" />
 
   <xacro:camera camera_pos="right" x="0" y="-0.247" z="0.089" 
-                                  r_rs="-1.57" p_rs="0" yaw_rs="3.14"/>
+                                  r_rs="-1.57" p_rs="0" yaw_rs="3.14"/> -->
 
 
-  <gazebo>
+  <!-- <gazebo>
     <plugin name="mecanum_wheel_mimic" filename="libgazebo_ros_planar_move.so">
       <ros>
         <remapping>odom:=odom/unfiltered</remapping>
@@ -36,18 +41,18 @@
       <publish_odom>true</publish_odom>
       <publish_odom_tf>true</publish_odom_tf>
     </plugin>
-  </gazebo>
+  </gazebo> -->
 
-  <xacro:base 
+  <!-- <xacro:base 
     length="${base_length}" 
     width="${base_width}" 
     height="${base_height}" 
     mass="${base_mass}"
     wheel_radius="${wheel_radius}"
     wheel_pos_z="${wheel_pos_z}"
-  />
+  /> -->
 
-  <xacro:end_channel 
+  <!-- <xacro:end_channel 
     end="front"
     pos_x="0.383345"
   />
@@ -55,7 +60,7 @@
   <xacro:end_channel 
     end="back"
     pos_x="-0.383345"
-  />
+  /> -->
 
   <xacro:side_channel 
     side="left"

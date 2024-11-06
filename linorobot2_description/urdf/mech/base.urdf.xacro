@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:macro name="base" params="length width height mass wheel_radius wheel_pos_z">
-    <link name="base_footprint"/>
+    <link name="base_footprint2"/>
     
     <link name="base_link">
       <visual>
@@ -9,9 +9,6 @@
         <geometry>
           <box size="${length} ${width} ${height}"/>
         </geometry>
-        <material name="gray_base">
-          <color rgba="0.8 0.8 0.83 1.0"/>
-        </material>
       </visual>
       
       <collision>
@@ -28,19 +25,8 @@
       </inertial>
     </link>
 
-    <gazebo reference="base_link">  
-      <visual>  
-        <material>
-          <ambient>0.8392 0.6314 0.0 1.0</ambient>  
-          <diffuse>0.8392 0.6314 0.0 1.0</diffuse>  
-          <specular>0.99 0.99 0.99 1.0</specular>  
-          <emissive>0.0 0.0 0.0 0.0</emissive>  
-        </material>
-      </visual> 
-    </gazebo>
-
     <joint name="base_to_footprint" type="fixed">
-      <parent link="base_footprint"/>
+      <parent link="base_footprint2"/>
       <child link="base_link"/>
       <origin xyz="0 0 ${wheel_radius - wheel_pos_z}" rpy="0 0 0"/>
     </joint>
