@@ -59,10 +59,10 @@
     pos_x="0.383345"
   />
 
-  <!-- <xacro:end_channel 
+  <xacro:end_channel 
     end="back"
     pos_x="-0.383345"
-  /> -->
+  />
 
   <xacro:side_channel 
     side="left"

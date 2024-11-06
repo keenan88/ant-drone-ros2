@@ -83,7 +83,6 @@ services:
       - ./linorobot2_joystick:/home/humble_ws/src/linorobot2_joystick:rw
       - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup
     privileged: true
-    # command: sleep infinity
     network_mode: host
     ipc: host
     pid: host
@@ -103,12 +102,9 @@ services:
       - ./linorobot2_pcl:/home/humble_ws/src/linorobot2_pcl:rw
       - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup:rw
       - ./perception_pcl:/home/humble_ws/src/perception_pcl
-      # - /dev/dri/card0:/dev/dri/card0
-    # privileged: true
     network_mode: host
     ipc: host
     pid: host
-    command: sleep infinity
     deploy:
       resources:
         reservations:
@@ -117,31 +113,30 @@ services:
               capabilities: [gpu]
     runtime: nvidia
     
-  # antdrone_depth_to_laserscan:
-  #   container_name: antdrone-depth-to-laserscan
-  #   build:
-  #     context: .
-  #     dockerfile: docker/linorobot2/dockerfiles/depth_to_laserscan.Dockerfile
-  #   network_mode: host
-  #   volumes:
-  #     - ./antdrone_depth_to_laserscan:/home/humble_ws/src/antdrone_depth_to_laserscan
-  #     # - /dev/dri/card0:/dev/dri/card0
-  #   environment:
-  #     - DISPLAY=${DISPLAY}
-  #     - NVIDIA_VISIBLE_DEVICES=all
-  #     - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
-  #   # command: sleep infinity
-  #   stdin_open: true
-  #   tty: true
-  #   ipc: host
-  #   pid: host
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #           - driver: nvidia
-  #             capabilities: [gpu]
-  #   runtime: nvidia
+  antdrone_depth_to_laserscan:
+    container_name: antdrone-depth-to-laserscan
+    build:
+      context: .
+      dockerfile: docker/linorobot2/dockerfiles/depth_to_laserscan.Dockerfile
+    network_mode: host
+    volumes:
+      - ./antdrone_depth_to_laserscan:/home/humble_ws/src/antdrone_depth_to_laserscan
+    environment:
+      - DISPLAY=${DISPLAY}
+      - NVIDIA_VISIBLE_DEVICES=all
+      - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
+    command: sleep infinity
+    stdin_open: true
+    tty: true
+    ipc: host
+    pid: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+    runtime: nvidia
   
 
   # linorobot2-rmf:

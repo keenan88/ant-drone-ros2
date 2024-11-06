@@ -8,6 +8,7 @@ def generate_launch_description():
     
     ld = launch.LaunchDescription()
 
+    config_filepath = '/home/humble_ws/src/antdrone_depth_to_laserscan/config/pcl_to_laserscan.yaml'
 
     for realsense_placement in ['front_rs', 'left_rs', 'right_rs']:
 
@@ -20,7 +21,7 @@ def generate_launch_description():
                 ('/scan', '/' + realsense_placement + '/scan')
             ],
             parameters = [
-                '/home/humble_ws/src/antdrone_depth_to_laserscan/config/' + realsense_placement + '_pcl_to_laserscan.yaml'
+                config_filepath
             ]
         )
 
@@ -37,7 +38,7 @@ def generate_launch_description():
             ('/scan', '/' + realsense_placement + '/scan_left')
         ],
         parameters = [
-            '/home/humble_ws/src/antdrone_depth_to_laserscan/config/' + realsense_placement + '_pcl_to_laserscan_left.yaml'
+            config_filepath
         ]
     )
     
@@ -50,7 +51,7 @@ def generate_launch_description():
             ('/scan', '/' + realsense_placement + '/scan_right')
         ],
         parameters = [
-            '/home/humble_ws/src/antdrone_depth_to_laserscan/config/' + realsense_placement + '_pcl_to_laserscan_right.yaml'
+            config_filepath
         ]
     )
 
