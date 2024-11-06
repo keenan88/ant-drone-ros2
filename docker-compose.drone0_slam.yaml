@@ -17,7 +17,7 @@ services:
       - ./simulation/models:/home/simulation/models
     working_dir: /home/humble_ws/
     network_mode: host
-    command: sleep infinity
+    # command: sleep infinity
     ipc: host
     pid: host
     deploy:
@@ -28,26 +28,26 @@ services:
               count: 1 # alternatively, use `count: all` for all GPUs
               capabilities: [gpu]
 
-  # linorobot2-slam:
-  #   container_name: linorobot2-slam
-  #   build:
-  #     context: .
-  #     dockerfile: docker/linorobot2/dockerfiles/slam.dockerfile
-  #   stdin_open: true
-  #   tty: true
-  #   environment:
-  #     - DISPLAY=${DISPLAY}
-  #     - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
-  #     - WHEEL_ODOMETRY=false
-  #   volumes:
-  #     - ./linorobot2_navigation:/home/humble_ws/src/linorobot2_navigation
-  #     - ./linorobot2_localization:/home/humble_ws/src/linorobot2_localization
-  #     - ./yolo:/home/yolo
+  linorobot2-slam:
+    container_name: linorobot2-slam
+    build:
+      context: .
+      dockerfile: docker/linorobot2/dockerfiles/slam.dockerfile
+    stdin_open: true
+    tty: true
+    environment:
+      - DISPLAY=${DISPLAY}
+      - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
+      - WHEEL_ODOMETRY=false
+    volumes:
+      - ./linorobot2_navigation:/home/humble_ws/src/linorobot2_navigation
+      - ./linorobot2_localization:/home/humble_ws/src/linorobot2_localization
+      - ./yolo:/home/yolo
     
-  #   # command: sleep infinity
-  #   network_mode: host
-  #   ipc: host
-  #   pid: host
+    # command: sleep infinity
+    network_mode: host
+    ipc: host
+    pid: host
 
   
 
@@ -125,7 +125,6 @@ services:
       - DISPLAY=${DISPLAY}
       - NVIDIA_VISIBLE_DEVICES=all
       - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
-    command: sleep infinity
     stdin_open: true
     tty: true
     ipc: host
