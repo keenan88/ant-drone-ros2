@@ -4,39 +4,35 @@
   <xacro:include filename="$(find linorobot2_description)/urdf/mecanum_properties.urdf.xacro" />
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/base.urdf.xacro" />
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/mecanum_wheel_left_fixed.urdf.xacro" />
-  <xacro:include filename="$(find linorobot2_description)/urdf/mech/mecanum_wheel_right_fixed.urdf.xacro" />
 
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/end_channel.urdf.xacro" />
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/side_channel.urdf.xacro" />
   <xacro:include filename="$(find linorobot2_description)/urdf/robots/camera.urdf.xacro" />
 
-  <!-- 0.0892 -->
+  <xacro:property name="rs_height" value="${base_height/2 + 0.05}" />
 
-  <link name="base_link">
-  </link>
-
-  <xacro:camera camera_pos="front" x="0.410335" y="0" z="0.089" 
+  <xacro:camera camera_pos="front" x="0.410335" y="0" z="${rs_height}" 
                                    r_rs= "-1.57" p_rs="0" yaw_rs="-1.57" 
                                    r_cam="0" p_cam="0" yaw_cam="0"
                                    />
 
-  <xacro:camera camera_pos="left" x="0.0" y="0.247" z="0.089" 
+  <xacro:camera camera_pos="left" x="0.0" y="0.247" z="${rs_height}" 
                                   r_rs="-1.57" p_rs="0.0" yaw_rs="0"
                                   r_cam="0" p_cam="0" yaw_cam="1.57"
                                   />
 
-  <xacro:camera camera_pos="rear" x="-0.41" y="0.0" z="0.089" 
+  <xacro:camera camera_pos="rear" x="-0.41" y="0.0" z="${rs_height}" 
                                   r_rs="-1.57" p_rs="0" yaw_rs="1.57" 
                                   r_cam="0" p_cam="0" yaw_cam="3.14"
                                   />
 
-  <xacro:camera camera_pos="right" x="0" y="-0.247" z="0.089" 
+  <xacro:camera camera_pos="right" x="0" y="-0.247" z="${rs_height}" 
                                   r_rs="-1.57" p_rs="0" yaw_rs="3.14" 
                                   r_cam="0" p_cam="0" yaw_cam="-1.57"
                                   />
 
 
-  <!-- <gazebo>
+  <gazebo>
     <plugin name="mecanum_wheel_mimic" filename="libgazebo_ros_planar_move.so">
       <ros>
         <remapping>odom:=odom/unfiltered</remapping>
@@ -45,27 +41,25 @@
       <odometry_topic>odom/unfiltered</odometry_topic>
       <odometry_frame>odom</odometry_frame>
       <odometry_rate>20.0</odometry_rate>
-      <robot_base_frame>base_footprint</robot_base_frame>
+      <robot_base_frame>base_link</robot_base_frame>
       <publish_odom>true</publish_odom>
       <publish_odom_tf>true</publish_odom_tf>
     </plugin>
-  </gazebo> -->
+  </gazebo>
 
-  <!-- <xacro:base 
+  <xacro:base 
     length="${base_length}" 
     width="${base_width}" 
     height="${base_height}" 
     mass="${base_mass}"
-    wheel_radius="${wheel_radius}"
-    wheel_pos_z="${wheel_pos_z}"
-  /> -->
+  />
 
-  <!-- <xacro:end_channel 
+  <xacro:end_channel 
     end="front"
     pos_x="0.383345"
   />
 
-  <xacro:end_channel 
+  <!-- <xacro:end_channel 
     end="back"
     pos_x="-0.383345"
   /> -->
@@ -80,21 +74,21 @@
     pos_y="-0.23653"
   />
 
-  <!-- <xacro:mecanum_wheel_left 
+  <xacro:mecanum_wheel_left 
     side="left"
     end="front"
     pos_x="${wheel_pos_x}" 
     pos_y="${wheel_pos_y}" 
   />
 
-  <xacro:mecanum_wheel_right
+  <xacro:mecanum_wheel_left
     side="right"
     end="front"
     pos_x="${wheel_pos_x}" 
     pos_y="${-wheel_pos_y}" 
   />
 
-  <xacro:mecanum_wheel_right 
+  <xacro:mecanum_wheel_left
     side="left"
     end="rear"
     pos_x="${-wheel_pos_x}" 
@@ -107,7 +101,7 @@
     end="rear"
     pos_x="${-wheel_pos_x}" 
     pos_y="${-wheel_pos_y}" 
-  /> -->
+  />
 
   
 

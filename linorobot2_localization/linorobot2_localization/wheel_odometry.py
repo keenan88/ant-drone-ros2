@@ -33,9 +33,9 @@ class MecanumStateEstimator(Node):
 
         self.tf_static_broadcaster = StaticTransformBroadcaster(self)
 
-        self.odom_base_footprint_tf = TransformStamped()
-        self.odom_base_footprint_tf.header.frame_id = 'odom'
-        self.odom_base_footprint_tf.child_frame_id = 'base_footprint'
+        self.odom_base_link_tf = TransformStamped()
+        self.odom_base_link_tf.header.frame_id = 'odom'
+        self.odom_base_link_tf.child_frame_id = 'base_link'
         
         self.odometry_publisher = self.create_publisher(Odometry, '/nav2/odom', 10)
         
@@ -129,16 +129,16 @@ class MecanumStateEstimator(Node):
 
         self.odometry_publisher.publish(odom_msg)
 
-        self.odom_base_footprint_tf.transform.translation.x = self.x
-        self.odom_base_footprint_tf.transform.translation.y = self.y
+        self.odom_base_link_tf.transform.translation.x = self.x
+        self.odom_base_link_tf.transform.translation.y = self.y
 
-        self.odom_base_footprint_tf.transform.rotation.x = quat[0]
-        self.odom_base_footprint_tf.transform.rotation.y = quat[1]
-        self.odom_base_footprint_tf.transform.rotation.z = quat[2]
-        self.odom_base_footprint_tf.transform.rotation.w = quat[3]
+        self.odom_base_link_tf.transform.rotation.x = quat[0]
+        self.odom_base_link_tf.transform.rotation.y = quat[1]
+        self.odom_base_link_tf.transform.rotation.z = quat[2]
+        self.odom_base_link_tf.transform.rotation.w = quat[3]
 
-        self.odom_base_footprint_tf.header.stamp = self.get_clock().now().to_msg()
-        self.tf_static_broadcaster.sendTransform(self.odom_base_footprint_tf)
+        self.odom_base_link_tf.header.stamp = self.get_clock().now().to_msg()
+        self.tf_static_broadcaster.sendTransform(self.odom_base_link_tf)
 
         asdf = TransformStamped()
         asdf.header.frame_id = 'map'

@@ -22,13 +22,18 @@ def generate_launch_description():
             ]
         )
 
+        input_topic = realsense_placement + '_camera/frame_fixed/points'
+        crop_topic = realsense_placement + '_rs/pointcloud_cropped'
+        downsample_topic = realsense_placement + '_rs/pointcloud_downsampled'
+
+        
         pointcloud_cropper = Node(
             package='pcl_ros',
             executable='filter_crop_box_node',
             name = realsense_placement + "_rs_pointcloud_cropper",
             output='screen',
             parameters=[
-                '/home/humble_ws/src/linorobot2_pcl/config/' + realsense_placement + '_rs_filter_crop_box.yaml',
+                '/home/humble_ws/src/linorobot2_pcl/config/pcl_filter_crop_box.yaml',
                 {
                     'use_sim_time' : use_sim,
                     "input_frame": realsense_placement + '_rs_depth_optical_frame',
@@ -36,8 +41,8 @@ def generate_launch_description():
                 },
             ],
             remappings=[
-                ('input', realsense_placement + '_camera/frame_fixed/points'), 
-                ('output', realsense_placement + '_rs/pointcloud_cropped')
+                ('input', input_topic), 
+                ('output', crop_topic)
             ]
         )
 
@@ -47,12 +52,12 @@ def generate_launch_description():
             name = realsense_placement + "_rs_pointcloud_downsampler",
             output='screen',
             parameters=[
-                '/home/humble_ws/src/linorobot2_pcl/config/' + realsense_placement + '_rs_pcl_downsample_filter.yaml',
+                '/home/humble_ws/src/linorobot2_pcl/config/pcl_downsample_filter.yaml',
                 {'use_sim_time' : use_sim}
             ],
             remappings=[
-                ('input', realsense_placement + '_rs/pointcloud_cropped'),
-                ('output', realsense_placement + '_rs/pointcloud_downsampled')
+                ('input', crop_topic),
+                ('output', downsample_topic)
             ]
         )
 
