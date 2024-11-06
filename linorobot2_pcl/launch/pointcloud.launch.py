@@ -10,45 +10,55 @@ def generate_launch_description():
 
     ld = launch.LaunchDescription()
 
-    for realsense_placement in ["front_rs"]: #  "rear_rs", "left_rs", "right_rs"
+    for realsense_placement in ["front", "rear", "left", "right"]:
+
+        pcl_frame_fixer = Node(
+            package='linorobot2_pcl',
+            executable='pcl_frame_fixer',
+            name = realsense_placement + "_pcl_frame_fixer",
+            output='screen',
+            parameters=[
+                {'camera_pos': realsense_placement}
+            ]
+        )
 
         pointcloud_cropper = Node(
             package='pcl_ros',
             executable='filter_crop_box_node',
-            name = realsense_placement + "_pointcloud_cropper",
+            name = realsense_placement + "_rs_pointcloud_cropper",
             output='screen',
             parameters=[
-                '/home/humble_ws/src/linorobot2_pcl/config/' + realsense_placement + '_filter_crop_box.yaml',
+                '/home/humble_ws/src/linorobot2_pcl/config/' + realsense_placement + '_rs_filter_crop_box.yaml',
                 {
                     'use_sim_time' : use_sim,
-                    "input_frame": 'front_rs_depth_optical_frame',
+                    "input_frame": realsense_placement + '_rs_depth_optical_frame',
                     "output_frame": 'base_link'
                 },
             ],
             remappings=[
-                # ('input', '/' + realsense_placement + '/' + realsense_placement + '/depth/color/points'),
-                ('input', 'front_camera/frame_fixed/points'), 
-                ('output', realsense_placement + '/pointcloud_cropped')
+                ('input', realsense_placement + '_camera/frame_fixed/points'), 
+                ('output', realsense_placement + '_rs/pointcloud_cropped')
             ]
         )
 
         pointcloud_downsampler = Node(
             package='pcl_ros',
             executable='filter_voxel_grid_node',
-            name = realsense_placement + "_pointcloud_downsampler",
+            name = realsense_placement + "_rs_pointcloud_downsampler",
             output='screen',
             parameters=[
-                '/home/humble_ws/src/linorobot2_pcl/config/' + realsense_placement + '_pcl_downsample_filter.yaml',
+                '/home/humble_ws/src/linorobot2_pcl/config/' + realsense_placement + '_rs_pcl_downsample_filter.yaml',
                 {'use_sim_time' : use_sim}
             ],
             remappings=[
-                ('input', realsense_placement + '/pointcloud_cropped'),
-                ('output', realsense_placement + '/pointcloud_downsampled')
+                ('input', realsense_placement + '_rs/pointcloud_cropped'),
+                ('output', realsense_placement + '_rs/pointcloud_downsampled')
             ]
         )
 
         ld.add_action(pointcloud_cropper)
         ld.add_action(pointcloud_downsampler)
+        ld.add_action(pcl_frame_fixer)
 
 
     # bridge_out_pcl = Node(

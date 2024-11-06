@@ -21,6 +21,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'pcl_frame_fixer = linorobot2_pcl.frame_fixer:main',
         ],
     },
 )

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot name="linorobot2_mecanum" xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:macro name="camera" params="camera_pos x y z r_rs p_rs yaw_rs">
+  <xacro:macro name="camera" params="camera_pos x y z r_rs p_rs yaw_rs r_cam p_cam yaw_cam">
 
     <gazebo reference="${camera_pos}_gazebo_camera_frame">
       <sensor type="depth" name="${camera_pos}_camera">
@@ -60,8 +60,8 @@
     <joint
       name="base_link_to_${camera_pos}_gazebo_camera_frame" type="fixed">
       <origin
-        xyz="0.3 0 0"
-        rpy="0 0 0" />
+        xyz="${x} ${y} ${z}"
+        rpy="${r_cam} ${p_cam} ${yaw_cam}" />
       <parent link="base_link" />
       <child link="${camera_pos}_gazebo_camera_frame" />
     </joint>
