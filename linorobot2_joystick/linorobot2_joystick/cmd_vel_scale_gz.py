@@ -55,7 +55,7 @@ class CmdVelScaler(Node):
 
         if in_lin_vel_range_yaw:
             scalar = -1 if msg.angular.z < 0 else 1
-            scaled_msg.angular.z = (msg.angular.z + scalar * 0.062)/0.993
+            scaled_msg.angular.z = (msg.angular.z + scalar * 0.0816)/0.986
         elif msg.angular.z == 0:
             scaled_msg.angular.z = 0.0
             zero_vel_cmd = True

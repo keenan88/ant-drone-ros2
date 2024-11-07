@@ -4,41 +4,44 @@
   <xacro:macro name="camera" params="camera_pos x y z r_rs p_rs yaw_rs r_cam p_cam yaw_cam">
 
     <gazebo reference="${camera_pos}_gazebo_camera_frame">
-      <sensor type="depth" name="${camera_pos}_camera">
-        <update_rate>15.0</update_rate>
-        <depth_camera name="${camera_pos}_camera">
-          <horizontal_fov>2.96</horizontal_fov>
-          <image>
-            <width>480</width>
-            <height>270</height>
-            <format>R8G8B8</format>
-          </image>
-          <clip>
-            <near>0.02</near>
-            <far>3</far>
-          </clip>
-          <noise>
-            <type>gaussian</type>
-            <mean>0.0</mean>
-            <stddev>0.007</stddev>
-          </noise>
-        </depth_camera>
-        <plugin name="${camera_pos}_camera_controller" filename="libgazebo_ros_camera.so">
-          <alwaysOn>true</alwaysOn>
-          <updateRate>0.0</updateRate>
-          <cameraName>${camera_pos}_camera</cameraName>
-          <imageTopicName>image_raw</imageTopicName>
-          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-          <frameName>/front_rs_gazebo_camera_frame</frameName>
-          <hackBaseline>0.07</hackBaseline>
-          <distortionK1>0.0</distortionK1>
-          <distortionK2>0.0</distortionK2>
-          <distortionK3>0.0</distortionK3>
-          <distortionT1>0.0</distortionT1>
-          <distortionT2>0.0</distortionT2>
-        </plugin>
-      </sensor>
-    </gazebo>
+    <sensor type="depth" name="${camera_pos}_camera">
+      <update_rate>15.0</update_rate>
+      
+      <camera>
+        <horizontal_fov>1.5</horizontal_fov>
+        <image>
+          <width>480</width>
+          <height>270</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>3</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      
+      <!-- Plugin to publish images and camera info to ROS topics -->
+      <plugin name="${camera_pos}_camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>${camera_pos}_camera</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>/${camera_pos}_rs_gazebo_camera_frame</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
 
     <link name="${camera_pos}_rs_depth_optical_frame">
     </link>
