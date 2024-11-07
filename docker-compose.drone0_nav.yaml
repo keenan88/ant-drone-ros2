@@ -44,7 +44,7 @@ services:
       - ./linorobot2_localization:/home/humble_ws/src/linorobot2_localization
       - ./yolo:/home/yolo
     
-    command: sleep infinity
+    # command: sleep infinity
     network_mode: host
     ipc: host
     pid: host
