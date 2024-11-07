@@ -8,7 +8,7 @@
       <update_rate>15.0</update_rate>
       
       <camera>
-        <horizontal_fov>1.5</horizontal_fov>
+        <horizontal_fov>1.517</horizontal_fov>
         <image>
           <width>480</width>
           <height>270</height>
@@ -16,7 +16,7 @@
         </image>
         <clip>
           <near>0.02</near>
-          <far>3</far>
+          <far>5</far> <!--  Be sure to set this greater than the max value of the cropbox distance cutoff, the camera generates a grey plane at this distance that will be interpreted as an obstacle-->
         </clip>
         <noise>
           <type>gaussian</type>

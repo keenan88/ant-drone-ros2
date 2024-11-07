@@ -1,7 +1,12 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:macro name="base" params="length width height">
-    
+
+    <!-- Beware changing masses or inertias of the base link. It will affect the robot's motion. -->
+    <!-- Gazebos planar move model moves the robot at a different velocity than requested, but publishes the requested velocity in odometry. -->
+    <!-- A linear transformation between desired and actual velocity is applied to the velocity going into Gazebo planar movement, and to the odom coming out of Gazebo planar movement -->
+    <!-- This linear transformation will change in the physics of the robot changes, so beware changing masses or inertias of the base link. -->
+
     <link name="base_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>

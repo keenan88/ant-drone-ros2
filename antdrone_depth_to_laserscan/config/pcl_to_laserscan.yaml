@@ -12,7 +12,7 @@
     scan_time: 0.03333333333333333
     target_frame: 'base_link' # Transforming to target frame base_link puts scan in correct frame. Keeping it in original frame gets really messed up. Not sure why.
     transform_tolerance: 1.0
-    use_inf: true
+    use_inf: false
     use_sim_time: true
 
 /left_rs_pointcloud_to_laserscan:
@@ -29,7 +29,7 @@
     scan_time: 0.03333333333333333
     target_frame: 'base_link' # Transforming to target frame base_link puts scan in correct frame. Keeping it in original frame gets really messed up. Not sure why.
     transform_tolerance: 1.0
-    use_inf: true
+    use_inf: false
     use_sim_time: true
 
 
@@ -47,7 +47,7 @@
     scan_time: 0.03333333333333333
     target_frame: 'base_link' # Transforming to target frame base_link puts scan in correct frame. Keeping it in original frame gets really messed up. Not sure why.
     transform_tolerance: 1.0
-    use_inf: true
+    use_inf: false
     use_sim_time: true
 
 /rear_rs_right_pointcloud_to_laserscan:
@@ -64,7 +64,7 @@
     scan_time: 0.03333333333333333
     target_frame: 'base_link' # Transforming to target frame base_link puts scan in correct frame. Keeping it in original frame gets really messed up. Not sure why.
     transform_tolerance: 1.0
-    use_inf: true
+    use_inf: false
     use_sim_time: true
 
 /right_rs_pointcloud_to_laserscan:
@@ -81,5 +81,5 @@
     scan_time: 0.03333333333333333
     target_frame: 'base_link' # Transforming to target frame base_link puts scan in correct frame. Keeping it in original frame gets really messed up. Not sure why.
     transform_tolerance: 1.0
-    use_inf: true
+    use_inf: false
     use_sim_time: true
