@@ -50,7 +50,7 @@ class OdomScaler(Node):
 
         if in_lin_vel_range_yaw:
             scalar = -1 if msg.twist.twist.angular.z < 0 else 1
-            scaled_msg.twist.twist.angular.z = 0.892 * msg.twist.twist.angular.z - scalar * 0.082
+            scaled_msg.twist.twist.angular.z = 0.992 * msg.twist.twist.angular.z - scalar * 0.062
         elif msg.twist.twist.angular.z == 0:
             scaled_msg.twist.twist.angular.z = 0.0
             do_pub = True

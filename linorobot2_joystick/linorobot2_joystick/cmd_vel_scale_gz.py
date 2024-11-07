@@ -36,7 +36,7 @@ class CmdVelScaler(Node):
         # Scaling up is linear, as long as velocity is fast enough (see above 'if' conditions)
         in_lin_vel_range_x = abs(msg.linear.x) >= 0.1
         in_lin_vel_range_y = abs(msg.linear.y) >= 0.1
-        in_lin_vel_range_yaw = abs(msg.angular.z) >= 0.15
+        in_lin_vel_range_yaw = abs(msg.angular.z) >= 0.1
         zero_vel_cmd = False
 
         if in_lin_vel_range_x:
@@ -55,7 +55,7 @@ class CmdVelScaler(Node):
 
         if in_lin_vel_range_yaw:
             scalar = -1 if msg.angular.z < 0 else 1
-            scaled_msg.angular.z = (msg.angular.z + scalar * 0.082)/0.892
+            scaled_msg.angular.z = (msg.angular.z + scalar * 0.062)/0.993
         elif msg.angular.z == 0:
             scaled_msg.angular.z = 0.0
             zero_vel_cmd = True
