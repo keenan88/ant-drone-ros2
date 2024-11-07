@@ -2,8 +2,19 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
+
 
 def generate_launch_description():
+
+    odometry_launch_path = '/home/humble_ws/src/linorobot2_navigation/launch/odometry.launch.py'
+
+    wheels_or_body_odometry = DeclareLaunchArgument(
+        'WHEEL_ODOMETRY',
+        default_value='body',
+        description='Whether to determine odometry from mecanum wheels or body (body given by IsaacSim)'
+    )
 
     rviz_config_path = '/home/humble_ws/src/linorobot2_navigation/rviz/linorobot2_slam.rviz'
     
@@ -17,6 +28,7 @@ def generate_launch_description():
         ],
         remappings=[
                 ('/nav2/plan', '/nav2/plan_with_orientations'),
+                ('/nav2/cmd_vel', '/cmd_vel'),
         ]
     )
 
@@ -81,27 +93,13 @@ def generate_launch_description():
         ]
     )
 
-    
 
-    navigate_to_named_pos_server = Node(
-        package='linorobot2_navigation',
-        executable='navigate_to_named_pose', 
-        parameters=[
-            {
-                'named_poses_file' : '/home/humble_ws/src/linorobot2_navigation/config/named_poses.yaml',
-                'use_sim_time': True,
-            }
-        ]
-    )
 
-    wheel_odometry = Node(
-        package='linorobot2_localization',
-        executable='wheel_odometry', 
-        parameters=[
-            {
-                'use_sim_time' : True
-            }
-        ]
+    odometry = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(odometry_launch_path),
+        launch_arguments={
+            'WHEEL_ODOMETRY': LaunchConfiguration('WHEEL_ODOMETRY')  # Pass the argument to child
+        }.items()
     )
 
     amcl = Node(
@@ -113,35 +111,6 @@ def generate_launch_description():
             {
             'use_sim_time': True,
             }
-        ]
-    )
-
-    ekf = Node(
-        package='robot_localization',
-        executable='ekf_node',
-        name='ekf_filter_node',
-        output='screen',
-        parameters=[
-            '/home/humble_ws/src/linorobot2_localization/config/ekf.yaml',
-            {
-            'use_sim_time': True,
-            }
-        ]
-    )
-
-    wheel_odometry = Node(
-        package='linorobot2_localization',
-        executable='wheel_odometry',
-        parameters=[
-            {'use_sim_time': True}
-        ]
-    )
-
-    wheel_unraveller = Node(
-        package='linorobot2_localization',
-        executable='wheel_unraveller',
-        parameters=[
-            {'use_sim_time': True}
         ]
     )
 
@@ -175,13 +144,13 @@ def generate_launch_description():
     ld.add_action(bt)
     ld.add_action(map_server)
     ld.add_action(lifecycle_manager)
-    # ld.add_action(rviz)
-    ld.add_action(wheel_unraveller)
-    ld.add_action(wheel_odometry)
+    ld.add_action(rviz)
+    ld.add_action(odometry)
     ld.add_action(amcl)
     ld.add_action(amcl_pointcloud)
     ld.add_action(keepout_launch)
     ld.add_action(path_orientation_updater)
+    ld.add_action(wheels_or_body_odometry)
 
 
 

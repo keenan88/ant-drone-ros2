@@ -30,20 +30,22 @@
                                   r_rs="-1.57" p_rs="0" yaw_rs="3.14" 
                                   r_cam="0" p_cam="0" yaw_cam="-1.57"
                                   />
-
-
+  
   <gazebo>
     <plugin name="mecanum_wheel_mimic" filename="libgazebo_ros_planar_move.so">
       <ros>
-        <remapping>odom:=odom/unfiltered</remapping>
+        <remapping>odom:=/odom_unscaled</remapping>
+        <remapping>cmd_vel:=/cmd_vel_scaled</remapping>
       </ros>
       <command_topic>cmd_vel</command_topic>
-      <odometry_topic>odom/unfiltered</odometry_topic>
+      <odometry_topic>odom</odometry_topic>
       <odometry_frame>odom</odometry_frame>
       <odometry_rate>20.0</odometry_rate>
       <robot_base_frame>base_link</robot_base_frame>
       <publish_odom>true</publish_odom>
       <publish_odom_tf>true</publish_odom_tf>
+      <update_rate>100</update_rate>
+      <publish_rate>10</publish_rate>
     </plugin>
   </gazebo>
 
@@ -51,10 +53,9 @@
     length="${base_length}" 
     width="${base_width}" 
     height="${base_height}" 
-    mass="${base_mass}"
   />
 
-  <xacro:end_channel 
+  <!-- <xacro:end_channel 
     end="front"
     pos_x="0.383345"
   />
@@ -72,9 +73,9 @@
   <xacro:side_channel 
     side="right"
     pos_y="-0.23653"
-  />
+  /> -->
 
-  <xacro:mecanum_wheel_left 
+  <!-- <xacro:mecanum_wheel_left 
     side="left"
     end="front"
     pos_x="${wheel_pos_x}" 
@@ -101,7 +102,7 @@
     end="rear"
     pos_x="${-wheel_pos_x}" 
     pos_y="${-wheel_pos_y}" 
-  />
+  /> -->
 
   
 

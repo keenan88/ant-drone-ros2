@@ -28,11 +28,11 @@ services:
               count: 1 # alternatively, use `count: all` for all GPUs
               capabilities: [gpu]
 
-  linorobot2-slam:
-    container_name: linorobot2-slam
+  linorobot2-nav:
+    container_name: linorobot2-nav
     build:
       context: .
-      dockerfile: docker/linorobot2/dockerfiles/slam.dockerfile
+      dockerfile: docker/linorobot2/dockerfiles/nav.dockerfile
     stdin_open: true
     tty: true
     environment:
@@ -44,7 +44,7 @@ services:
       - ./linorobot2_localization:/home/humble_ws/src/linorobot2_localization
       - ./yolo:/home/yolo
     
-    # command: sleep infinity
+    command: sleep infinity
     network_mode: host
     ipc: host
     pid: host

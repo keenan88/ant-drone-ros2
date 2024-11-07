@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:macro name="base" params="length width height mass">
+  <xacro:macro name="base" params="length width height">
     
     <link name="base_link">
       <visual>
@@ -15,14 +15,26 @@
         <geometry>
           <box size="${length} ${width} ${height}"/>
         </geometry>
+
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.0</mu>
+              <mu2>0.0</mu2>
+            </ode>
+          </friction>
+        </surface>
+
       </collision>
 
       <inertial>
         <origin xyz="0 0 0" rpy="0 0 0"/>
-        <mass value="${mass}"/>
-        <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+        <mass value="0.01"/>
+        <inertia ixx="0.0004434"  ixy="0.000"  ixz="0.000" iyy="0.001785" iyz="0.000" izz="0.002179" />
       </inertial>
     </link>
+
+
 
   </xacro:macro>
 </robot>

@@ -34,9 +34,19 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && rm -rf /var/lib/apt/lists/*
     
 
-RUN pip3 install -U trimesh
+RUN pip install setuptools==58.2.0
 
-COPY linorobot2_bringup /home/humble_ws/src/linorobot2_bringup
-COPY linorobot2_navigation /home/humble_ws/src/linorobot2_navigation
+WORKDIR /home/humble_ws
 
-RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+COPY ./linorobot2_navigation /home/humble_ws/src/linorobot2_navigation
+COPY ./linorobot2_localization /home/humble_ws/src/linorobot2_localization
+
+# Build the workspace and source the setup files
+RUN source /opt/ros/humble/setup.bash && \
+    colcon build --symlink-install && \
+    source install/setup.bash && \
+    echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
+    echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
+
+CMD bash -c "source /home/humble_ws/install/setup.bash && \
+            ros2 launch linorobot2_navigation navigation.launch.py WHEEL_ODOMETRY:=${WHEEL_ODOMETRY}"

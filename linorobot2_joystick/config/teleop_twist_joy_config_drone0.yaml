@@ -15,8 +15,8 @@
     publish_stamped_twist: false
     require_enable_button: true
     scale_linear:
-      x: 0.25
-      y: 0.25
+      x: 0.5
+      y: 0.3
       z: 0.0
     scale_angular:
       pitch: 0.0
@@ -30,6 +30,6 @@
     scale_angular_turbo:
       pitch: 0.0
       roll: 0.0
-      yaw: 0.5
+      yaw: 0.2
 
 

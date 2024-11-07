@@ -51,6 +51,16 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration('WHEELED_MOTION'))
     )  
 
+    cmd_vel_scaler = Node(
+        package = 'linorobot2_joystick',
+        executable = 'cmd_vel_scale_gz',
+        parameters = [
+            {
+                'use_sim_time': True
+            }
+        ]
+    )
+
     # robot_teleporter = Node(
     #     package = 'linorobot2_joystick', 
     #     executable = 'robot_teleporter',
@@ -78,7 +88,7 @@ def generate_launch_description():
 
     ld.add_action(joystick_driver)
     ld.add_action(joystick_twist)
-
+    ld.add_action(cmd_vel_scaler)
     ld.add_action(cmd_vel_to_motor_vel)
     # ld.add_action(robot_teleporter)
 

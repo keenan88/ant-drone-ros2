@@ -5,6 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /Grid1
         - /TF1/Frames1
         - /Static Map1/Topic1
         - /LaserScan1/Topic1
@@ -13,11 +14,6 @@ Panels:
         - /Fleet Markers1/Topic1
         - /Local Plan1/Topic1
         - /Scans1
-        - /Scans1/front scan1
-        - /Scans1/rear left scan1
-        - /Scans1/rear right scan1
-        - /Scans1/right scan1
-        - /Scans1/right scan2
       Splitter Ratio: 0.5029411911964417
     Tree Height: 401
   - Class: rviz_common/Selection
@@ -47,7 +43,7 @@ Visualization Manager:
   Class: ""
   Displays:
     - Alpha: 0.10000000149011612
-      Cell Size: 0.25
+      Cell Size: 0.05000000074505806
       Class: rviz_default_plugins/Grid
       Color: 0; 0; 0
       Enabled: true
@@ -109,47 +105,45 @@ Visualization Manager:
           Value: true
       Marker Scale: 0.5
       Name: TF
-      Show Arrows: true
+      Show Arrows: false
       Show Axes: true
       Show Names: true
       Tree:
-        base_link:
-          back_channel:
-            {}
-          front_channel:
-            {}
-          front_gazebo_camera_frame:
-            {}
-          front_left_wheel:
-            {}
-          front_right_wheel:
-            {}
-          front_rs_depth_optical_frame:
-            {}
-          left_channel:
-            {}
-          left_gazebo_camera_frame:
-            {}
-          left_rs_depth_optical_frame:
-            {}
-          rear_gazebo_camera_frame:
-            {}
-          rear_left_wheel:
-            {}
-          rear_right_wheel:
-            {}
-          rear_rs_depth_optical_frame:
-            {}
-          right_channel:
-            {}
-          right_gazebo_camera_frame:
-            {}
-          right_rs_depth_optical_frame:
-            {}
         map:
-          {}
-        odom:
-          {}
+          odom:
+            base_link:
+              back_channel:
+                {}
+              front_channel:
+                {}
+              front_gazebo_camera_frame:
+                {}
+              front_left_wheel:
+                {}
+              front_right_wheel:
+                {}
+              front_rs_depth_optical_frame:
+                {}
+              left_channel:
+                {}
+              left_gazebo_camera_frame:
+                {}
+              left_rs_depth_optical_frame:
+                {}
+              rear_gazebo_camera_frame:
+                {}
+              rear_left_wheel:
+                {}
+              rear_right_wheel:
+                {}
+              rear_rs_depth_optical_frame:
+                {}
+              right_channel:
+                {}
+              right_gazebo_camera_frame:
+                {}
+              right_rs_depth_optical_frame:
+                {}
       Update Interval: 0
       Value: true
     - Alpha: 0.4000000059604645
@@ -177,7 +171,7 @@ Visualization Manager:
       Class: rviz_default_plugins/Map
       Color Scheme: map
       Draw Behind: false
-      Enabled: false
+      Enabled: true
       Name: Global Costmap
       Topic:
         Depth: 5
@@ -193,12 +187,12 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /nav2/global_costmap/costmap_updates
       Use Timestamp: false
-      Value: false
+      Value: true
     - Alpha: 0.699999988079071
       Class: rviz_default_plugins/Map
       Color Scheme: costmap
       Draw Behind: false
-      Enabled: false
+      Enabled: true
       Name: Local Costmap
       Topic:
         Depth: 5
@@ -214,7 +208,7 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /nav2/local_costmap/costmap_updates
       Use Timestamp: false
-      Value: false
+      Value: true
     - Alpha: 0.5
       Class: rviz_default_plugins/Map
       Color Scheme: map
@@ -603,7 +597,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 117; 135; 133
-    Fixed Frame: odom
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -646,25 +640,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/XYOrbit
-      Distance: 2.8208422660827637
+      Distance: 0.559867262840271
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -1.7738933563232422
-        Y: 1.346331000328064
-        Z: 2.6226043701171875e-06
+        X: 0.007771000266075134
+        Y: -0.22382494807243347
+        Z: -5.960464477539062e-07
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.9397967457771301
+      Pitch: 1.5697963237762451
       Target Frame: base_link
       Value: XYOrbit (rviz_default_plugins)
-      Yaw: 1.8092111349105835
+      Yaw: 4.719217777252197
     Saved: ~
 Window Geometry:
   Displays:
