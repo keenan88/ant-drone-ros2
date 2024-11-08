@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<robot name="linorobot2" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="linorobot2" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="namespace" default="drone0"/>
 
   <xacro:include filename="$(find linorobot2_description)/urdf/mecanum_properties.urdf.xacro" />
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/base.urdf.xacro" />
@@ -11,29 +13,34 @@
 
   <xacro:property name="rs_height" value="${base_height/2 + 0.05}" />
 
-  <xacro:camera camera_pos="front" x="0.410335" y="0" z="${rs_height}" 
-                                   r_rs= "-1.57" p_rs="0" yaw_rs="-1.57" 
-                                   r_cam="0" p_cam="0" yaw_cam="0"
-                                   />
+  <xacro:camera namespace="$(arg namespace)" camera_pos="front" 
+                x="0.410335" y="0" z="${rs_height}" 
+                r_rs= "-1.57" p_rs="0" yaw_rs="-1.57" 
+                r_cam="0" p_cam="0" yaw_cam="0"/>
+  
 
-  <xacro:camera camera_pos="left" x="0.0" y="0.247" z="${rs_height}" 
-                                  r_rs="-1.57" p_rs="0.0" yaw_rs="0"
-                                  r_cam="0" p_cam="0" yaw_cam="1.57"
-                                  />
+  <xacro:camera namespace="$(arg namespace)" camera_pos="left" 
+                x="0.0" y="0.247" z="${rs_height}" 
+                r_rs="-1.57" p_rs="0.0" yaw_rs="0"
+                r_cam="0" p_cam="0" yaw_cam="1.57"
+  />
 
-  <xacro:camera camera_pos="rear" x="-0.41" y="0.0" z="${rs_height}" 
-                                  r_rs="-1.57" p_rs="0" yaw_rs="1.57" 
-                                  r_cam="0" p_cam="0" yaw_cam="3.14"
-                                  />
+  <xacro:camera namespace="$(arg namespace)" camera_pos="rear" 
+                x="-0.41" y="0.0" z="${rs_height}" 
+                r_rs="-1.57" p_rs="0" yaw_rs="1.57" 
+                r_cam="0" p_cam="0" yaw_cam="3.14"
+  />
 
-  <xacro:camera camera_pos="right" x="0" y="-0.247" z="${rs_height}" 
-                                  r_rs="-1.57" p_rs="0" yaw_rs="3.14" 
-                                  r_cam="0" p_cam="0" yaw_cam="-1.57"
-                                  />
+  <xacro:camera namespace="$(arg namespace)" camera_pos="right" 
+                x="0" y="-0.247" z="${rs_height}" 
+                r_rs="-1.57" p_rs="0" yaw_rs="3.14" 
+                r_cam="0" p_cam="0" yaw_cam="-1.57"
+  />
   
   <gazebo>
     <plugin name="mecanum_wheel_mimic" filename="libgazebo_ros_planar_move.so">
       <ros>
+        <namespace>$(arg namespace)</namespace>
         <remapping>odom:=/odom_unscaled</remapping>
         <remapping>cmd_vel:=/cmd_vel_scaled</remapping>
       </ros>
@@ -47,7 +54,7 @@
       <update_rate>100</update_rate>
       <publish_rate>10</publish_rate>
     </plugin>
-  </gazebo>
+  </gazebo> 
 
   <xacro:base 
     length="${base_length}" 

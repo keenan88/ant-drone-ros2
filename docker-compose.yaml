@@ -68,7 +68,7 @@ services:
     volumes:
       - ./docker/linorobot2/entry_scripts/joystick_entrypoint.sh:/joystick_entrypoint.sh:rw
       - ./linorobot2_joystick:/home/humble_ws/src/linorobot2_joystick:rw
-      - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup
+      - ./linorobot2_gz:/home/humble_ws/src/linorobot2_gz
     privileged: true
     entrypoint: /joystick_entrypoint.sh
     network_mode: host
@@ -88,7 +88,7 @@ services:
   #   volumes:
   #     - ./docker/linorobot2/entry_scripts/pointcloud_entrypoint.sh:/pointcloud_entrypoint.sh:rw
   #     - ./linorobot2_pcl:/home/humble_ws/src/linorobot2_pcl:rw
-  #     - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup:rw
+  #     - ./linorobot2_gz:/home/humble_ws/src/linorobot2_gz:rw
   #     - ./perception_pcl:/home/humble_ws/src/perception_pcl
   #     - /dev/dri/card0:/dev/dri/card0
   #   privileged: true

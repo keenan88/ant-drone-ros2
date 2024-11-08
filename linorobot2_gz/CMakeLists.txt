@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(linorobot2_bringup)
+project(linorobot2_gz)
 
 find_package(ament_cmake REQUIRED)
 

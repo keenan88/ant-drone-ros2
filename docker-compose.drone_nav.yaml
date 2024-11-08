@@ -1,6 +1,31 @@
 services:
 
-
+  linorobot2-gz:
+    container_name: linorobot2-gz
+    build:
+      context: .
+      dockerfile: docker/linorobot2/dockerfiles/gz.dockerfile
+    stdin_open: true
+    tty: true
+    environment:
+      - DISPLAY=${DISPLAY}
+      - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
+    volumes:
+      - ./linorobot2_gz:/home/humble_ws/src/linorobot2_gz
+      - ./linorobot2_description:/home/humble_ws/src/linorobot2_description
+      - ./simulation/gazebo:/home/simulation/gazebo
+      - ./simulation/models:/home/simulation/models
+    working_dir: /home/humble_ws/
+    network_mode: host
+    ipc: host
+    pid: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1 # alternatively, use `count: all` for all GPUs
+              capabilities: [gpu]
 
   # linorobot2-nav:
   #   container_name: linorobot2-nav
@@ -42,26 +67,24 @@ services:
   #   ipc: host
   #   pid: host
 
-  # linorobot2-joytick:
-  #   container_name: linorobot2-joystick
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/linorobot2/dockerfiles/joystick.dockerfile
-  #   tty: true
-  #   stdin_open: true
-  #   env_file:
-  #     - ./ros_domains.env
-  #   environment:
-  #     - WHEELED_MOTION=false
-  #   volumes:
-  #     - ./linorobot2_joystick:/home/humble_ws/src/linorobot2_joystick:rw
-  #     - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup
-  #   privileged: true
-  #   network_mode: host
-  #   ipc: host
-  #   pid: host
-
-
+  linorobot2-joytick:
+    container_name: linorobot2-joystick
+    build:
+      context: .
+      dockerfile: ./docker/linorobot2/dockerfiles/joystick.dockerfile
+    tty: true
+    stdin_open: true
+    environment:
+      - DRONE_ID=0
+      - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
+      - WHEELED_MOTION=false
+    volumes:
+      - ./linorobot2_joystick:/home/humble_ws/src/linorobot2_joystick:rw
+      - ./linorobot2_gz:/home/humble_ws/src/linorobot2_gz
+    privileged: true
+    network_mode: host
+    ipc: host
+    pid: host
     
   # linorobot2-pcl:
   #   container_name: linorobot2-pcl
@@ -76,7 +99,7 @@ services:
   #     - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
   #   volumes:
   #     - ./linorobot2_pcl:/home/humble_ws/src/linorobot2_pcl:rw
-  #     - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup:rw
+  #     - ./linorobot2_gz:/home/humble_ws/src/linorobot2_gz:rw
   #     - ./perception_pcl:/home/humble_ws/src/perception_pcl
   #   network_mode: host
   #   ipc: host
