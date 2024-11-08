@@ -14,8 +14,8 @@ class ParticleCloudToPoseArray(Node):
             depth=10  # Change this to the desired depth
         )
 
-        self.pose_pub = self.create_publisher(PoseArray, '/particle_cloud_pose_array', qos_best_effort)
-        self.particle_sub = self.create_subscription(ParticleCloud, '/nav2/particle_cloud', self.particle_callback, qos_best_effort)
+        self.pose_pub = self.create_publisher(PoseArray, 'particle_cloud_pose_array', qos_best_effort)
+        self.particle_sub = self.create_subscription(ParticleCloud, 'particle_cloud', self.particle_callback, qos_best_effort)
 
     def particle_callback(self, particle_cloud_msg):
         pose_array = PoseArray()

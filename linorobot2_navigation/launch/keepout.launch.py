@@ -1,10 +1,13 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.substitutions import LaunchConfiguration
+import os
 
 def generate_launch_description():
 
     rviz_config_path = '/home/humble_ws/src/linorobot2_navigation/rviz/linorobot2_slam.rviz'
+
+    drone_name = os.getenv('DRONE_NAME')
 
     rviz = Node(
         package='rviz2',
@@ -28,6 +31,7 @@ def generate_launch_description():
             '/home/humble_ws/src/linorobot2_navigation/config/filter_mask_server.yaml',
             {
                 'use_sim_time': True,
+                'topic_name': '/' + drone_name + '/keepout_filter_mask',
             }
         ]
     )
@@ -41,6 +45,9 @@ def generate_launch_description():
             '/home/humble_ws/src/linorobot2_navigation/config/filter_mask_server.yaml',
             {
                 'use_sim_time': True,
+                'filter_info_topic': '/' + drone_name +'/keepout_filter_info',
+                'mask_topic': '/' + drone_name + '/keepout_filter_mask'
+
             }
         ]
     )

@@ -83,7 +83,7 @@
       
       
 
-/nav2/local_costmap/local_costmap:
+/**/local_costmap/local_costmap:
   ros__parameters:
 
     footprint_padding: 0.0
@@ -92,7 +92,6 @@
     update_frequency: 10.0
     publish_frequency: 10.0
     global_frame: map
-    robot_base_frame: base_link
     rolling_window: true
     resolution: 0.02  
 
@@ -101,7 +100,7 @@
     keepout_filter:
       plugin: "nav2_costmap_2d::KeepoutFilter"
       enabled: True
-      filter_info_topic: costmap_filter_info
+      filter_info_topic: keepout_filter_info
 
     plugins: ["static_layer", "inflation_layer", "obstacle_layer"]
 

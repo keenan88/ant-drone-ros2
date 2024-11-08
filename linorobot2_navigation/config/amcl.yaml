@@ -2,10 +2,9 @@
   ros__parameters:
     # Topics & frames
     use_sim_time: True                  # Use simulated time (set to True for simulation environments)
-    base_frame_id: "base_link"           # Robot's base frame ID, used to link the robot to the map
+    
     scan_topic: scan              # Topic name for the laser scan data
-    global_frame_id: "map"              # Global frame ID, typically set to "map" for localization
-    odom_frame_id: "odom"               # Odometry frame ID, used for robot localization
+    global_frame_id: map              # Global frame ID, typically set to "map" for localization
 
     # Robot odometry parameters
     alpha1: 0.5                          # AMCL parameter for odometry noise in rotation component of the motion model

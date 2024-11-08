@@ -60,5 +60,5 @@
     - nav2_back_up_cancel_bt_node
     - nav2_drive_on_heading_cancel_bt_node
     - nav2_is_battery_charging_condition_bt_node
-    robot_base_frame: base_link
+    
     transform_tolerance: 0.1

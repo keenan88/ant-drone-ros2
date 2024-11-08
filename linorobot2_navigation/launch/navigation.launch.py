@@ -26,11 +26,14 @@ def generate_launch_description():
         namespace = drone_name,
         parameters = [
             {'use_sim_time': True}, 
+            {'robot_base_frame': drone_name + '_base_link'},
+            {'local_costmap.local_costmap.keepout_filter_info': '/' + drone_name + '/keepout_filter_info'},
             '/home/humble_ws/src/linorobot2_navigation/config/controller.yaml'
         ],
         remappings=[
                 ('plan', 'plan_with_orientations'),
-                # ('/nav2/cmd_vel', '/cmd_vel'),
+                ('keepout_filter_info', '/' + drone_name + '/keepout_filter_info'),
+                ('scan', '/' + drone_name + '/scan'),
         ]
     )
 
@@ -40,8 +43,13 @@ def generate_launch_description():
         namespace = drone_name,
         parameters=[
             {'use_sim_time': True},
+            {'robot_base_frame': drone_name + '_base_link'},
             '/home/humble_ws/src/linorobot2_navigation/config/planner.yaml'
         ],
+        remappings=[
+            ('keepout_filter_info', '/' + drone_name + '/keepout_filter_info'),
+            ('scan', '/' + drone_name + '/scan'),
+        ]
     )
 
     behaviors = Node(
@@ -61,6 +69,7 @@ def generate_launch_description():
         respawn_delay=2.0,
         parameters=[
             {'use_sim_time': True},
+            {'robot_base_frame': drone_name + '_base_link'},
             '/home/humble_ws/src/linorobot2_navigation/config/bt.yaml'
         ],
     )
@@ -95,8 +104,6 @@ def generate_launch_description():
         ]
     )
 
-
-
     odometry = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(odometry_launch_path),
         launch_arguments={
@@ -113,6 +120,8 @@ def generate_launch_description():
             '/home/humble_ws/src/linorobot2_navigation/config/amcl.yaml',
             {
             'use_sim_time': True,
+            'base_frame_id': drone_name + '_base_link',
+            'odom_frame_id': drone_name + '_odom'
             }
         ]
     )
