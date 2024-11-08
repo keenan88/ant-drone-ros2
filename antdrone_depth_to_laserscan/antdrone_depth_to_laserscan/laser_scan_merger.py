@@ -10,6 +10,9 @@ class LaserScanMerger(Node):
     def __init__(self):
         super().__init__('laser_scan_merger')
 
+        self.declare_parameter('drone_name', '')
+        self.drone_name = self.get_parameter('drone_name').value
+
         qos_best_effort = QoSProfile(
             reliability=QoSReliabilityPolicy.BEST_EFFORT,
             history=QoSHistoryPolicy.KEEP_LAST,
@@ -20,7 +23,7 @@ class LaserScanMerger(Node):
         # Subscribers for the four laser scan topics
         self.subscriber_1 = self.create_subscription(
             LaserScan,
-            '/front_rs/scan',  # Replace with your actual topic name
+            'front_rs/scan',  # Replace with your actual topic name
             self.record_front_scan,
             qos_best_effort
         )
@@ -33,14 +36,14 @@ class LaserScanMerger(Node):
         
         self.subscriber_3 = self.create_subscription(
             LaserScan,
-            '/left_rs/scan',  # Replace with your actual topic name
+            'left_rs/scan',  # Replace with your actual topic name
             self.record_left_scan,
             qos_best_effort
         )
 
         self.subscriber_4 = self.create_subscription(
             LaserScan,
-            '/right_rs/scan',  # Replace with your actual topic name
+            'right_rs/scan',  # Replace with your actual topic name
             self.record_right_scan,
             qos_best_effort
         )
@@ -52,9 +55,9 @@ class LaserScanMerger(Node):
             qos_best_effort
         )
 
-        self.publisher = self.create_publisher(LaserScan, '/scan', qos_best_effort)
+        self.publisher = self.create_publisher(LaserScan, 'scan', qos_best_effort)
 
-        self.publisher2 = self.create_publisher(LaserScan, '/scan', qos_best_effort)
+        self.publisher2 = self.create_publisher(LaserScan, 'scan', qos_best_effort)
 
         self.scans = [None] * 5
 
@@ -83,7 +86,7 @@ class LaserScanMerger(Node):
         if all(scan is not None for scan in self.scans):
             merged_scan = LaserScan()
             merged_scan.header.stamp = self.get_clock().now().to_msg()
-            merged_scan.header.frame_id = "base_link"
+            merged_scan.header.frame_id = self.drone_name + "_base_link"
             merged_scan.angle_min = -0.7850000262260437
             merged_scan.angle_max = 5.49499997377
 

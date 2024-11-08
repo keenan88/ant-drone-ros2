@@ -2,11 +2,13 @@ import launch
 from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-
+import os
 
 def generate_launch_description():
     
     ld = launch.LaunchDescription()
+
+    drone_name = os.environ.get("DRONE_NAME")
 
     config_filepath = '/home/humble_ws/src/antdrone_depth_to_laserscan/config/pcl_to_laserscan.yaml'
 
@@ -16,12 +18,14 @@ def generate_launch_description():
             package='pointcloud_to_laserscan',
             executable='pointcloud_to_laserscan_node',
             name = realsense_placement + '_pointcloud_to_laserscan',
+            namespace = drone_name,
             remappings=[
-                ('/cloud_in', '/' + realsense_placement + '/pointcloud_downsampled'),
-                ('/scan', '/' + realsense_placement + '/scan')
+                ('cloud_in', realsense_placement + '/pointcloud_downsampled'),
+                ('scan', realsense_placement + '/scan')
             ],
             parameters = [
-                config_filepath
+                config_filepath,
+                {'target_frame': drone_name + '_base_link'}
             ]
         )
 
@@ -33,12 +37,14 @@ def generate_launch_description():
         package='pointcloud_to_laserscan',
         executable='pointcloud_to_laserscan_node',
         name = realsense_placement + '_left_pointcloud_to_laserscan',
+        namespace = drone_name,
         remappings=[
-            ('/cloud_in', '/' + realsense_placement + '/pointcloud_downsampled'),
-            ('/scan', '/' + realsense_placement + '/scan_left')
+            ('cloud_in', realsense_placement + '/pointcloud_downsampled'),
+            ('scan', realsense_placement + '/scan_left')
         ],
         parameters = [
-            config_filepath
+            config_filepath,
+            {'target_frame': drone_name + '_base_link'}
         ]
     )
     
@@ -46,27 +52,32 @@ def generate_launch_description():
         package='pointcloud_to_laserscan',
         executable='pointcloud_to_laserscan_node',
         name = realsense_placement + '_right_pointcloud_to_laserscan',
+        namespace = drone_name,
         remappings=[
-            ('/cloud_in', '/' + realsense_placement + '/pointcloud_downsampled'),
-            ('/scan', '/' + realsense_placement + '/scan_right')
+            ('cloud_in', realsense_placement + '/pointcloud_downsampled'),
+            ('scan', realsense_placement + '/scan_right')
         ],
         parameters = [
-            config_filepath
+            config_filepath,
+            {'target_frame': drone_name + '_base_link'}
         ]
     )
 
     scan_merger = Node(
         package='antdrone_depth_to_laserscan',
         executable='laser_scan_merger',
+        namespace = drone_name,
         parameters=[
-            {'use_sim_time': True}
+            {'use_sim_time': True},
+            {'drone_name': drone_name}
         ]
     )
 
     rviz_node = Node(
         package='rviz2',
-        executable='rviz2',
+        executable='rviz2', 
         name='rviz2',
+        namespace = drone_name,
         output='screen',
         arguments=['-d', '/home/humble_ws/src/antdrone_depth_to_laserscan/config/depth_to_laserscan.rviz'],
     )
