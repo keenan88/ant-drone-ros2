@@ -1,7 +1,7 @@
 # PCLs are in base_link frame when downsampled, and are already cropped.
 # So, filter z is basically pointless, just set it to be large enough that no points are removed.
 
-/front_rs_pointcloud_downsampler:
+/**/front_rs_pointcloud_downsampler:
   ros__parameters:
     # Realsense d435 simple tech specs: https://www.intelrealsense.com/depth-camera-d435i/
     filter_field_name: z
@@ -14,7 +14,7 @@
     transient_local_indices: false
     use_indices: false
 
-/rear_rs_pointcloud_downsampler:
+/**/rear_rs_pointcloud_downsampler:
   ros__parameters:
     # Realsense d435 simple tech specs: https://www.intelrealsense.com/depth-camera-d435i/
     filter_field_name: z
@@ -27,7 +27,7 @@
     transient_local_indices: false
     use_indices: false
 
-/left_rs_pointcloud_downsampler:
+/**/left_rs_pointcloud_downsampler:
   ros__parameters:
     # Realsense d435 simple tech specs: https://www.intelrealsense.com/depth-camera-d435i/
     filter_field_name: z
@@ -40,7 +40,7 @@
     transient_local_indices: false
     use_indices: false
 
-/right_rs_pointcloud_downsampler:
+/**/right_rs_pointcloud_downsampler:
   ros__parameters:
     # Realsense d435 simple tech specs: https://www.intelrealsense.com/depth-camera-d435i/
     filter_field_name: z

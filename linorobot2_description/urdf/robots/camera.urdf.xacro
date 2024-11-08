@@ -4,7 +4,7 @@
   <xacro:macro name="camera" params="namespace camera_pos x y z r_rs p_rs yaw_rs r_cam p_cam yaw_cam">
 
     <gazebo reference="${namespace}_${camera_pos}_gazebo_camera_frame">
-    <sensor type="depth" name="${namespace}_${camera_pos}_camera">
+    <sensor type="depth" name="${camera_pos}_camera">
       <update_rate>15.0</update_rate>
       
       <camera>

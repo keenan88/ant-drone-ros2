@@ -23,7 +23,9 @@ def generate_launch_description():
             namespace = drone_name,
             output='screen',
             parameters=[
-                {'camera_pos': realsense_placement}
+                {'camera_pos': realsense_placement},
+                {'use_sim_time' : use_sim},
+                {'drone_name': drone_name}
             ]
         )
 
@@ -42,8 +44,8 @@ def generate_launch_description():
                 '/home/humble_ws/src/linorobot2_pcl/config/pcl_filter_crop_box.yaml',
                 {
                     'use_sim_time' : use_sim,
-                    "input_frame": realsense_placement + '_rs_depth_optical_frame',
-                    "output_frame": 'base_link'
+                    "input_frame": drone_name + '_' + realsense_placement + '_rs_depth_optical_frame',
+                    "output_frame": drone_name + '_base_link'
                 },
             ],
             remappings=[
