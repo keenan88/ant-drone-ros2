@@ -1,35 +1,6 @@
 services:
 
-  linorobot2-gz:
-    container_name: linorobot2-gz
-    build:
-      context: .
-      dockerfile: docker/linorobot2/dockerfiles/gz.dockerfile
-    stdin_open: true
-    tty: true
-    environment:
-      - DISPLAY=${DISPLAY}
-    env_file:
-      - ./ros_domains.env
-    volumes:
-      - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup
-      - ./linorobot2_description:/home/humble_ws/src/linorobot2_description
-      - ./ant-worker-ros2/antworker_description:/home/humble_ws/src/antworker_description
-      - ./ant-worker-ros2/antworker_gz:/home/humble_ws/src/antworker_gz
-      - ./simulation/gazebo:/home/simulation/gazebo
-      - ./simulation/models:/home/simulation/models
-    working_dir: /home/humble_ws/
-    network_mode: host
-    command: sleep infinity
-    ipc: host
-    pid: host
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1 # alternatively, use `count: all` for all GPUs
-              capabilities: [gpu]
+
 
   # linorobot2-nav:
   #   container_name: linorobot2-nav
