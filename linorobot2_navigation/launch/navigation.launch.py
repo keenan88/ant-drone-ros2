@@ -4,9 +4,11 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
-
+import os
 
 def generate_launch_description():
+
+    drone_name = os.getenv('DRONE_NAME')
 
     odometry_launch_path = '/home/humble_ws/src/linorobot2_navigation/launch/odometry.launch.py'
 
@@ -19,23 +21,23 @@ def generate_launch_description():
     rviz_config_path = '/home/humble_ws/src/linorobot2_navigation/rviz/linorobot2_slam.rviz'
     
     controller = Node(
-        package='nav2_controller',
-        executable='controller_server',
-        namespace='nav2',
-        parameters=[
+        package = 'nav2_controller',
+        executable = 'controller_server',
+        namespace = drone_name,
+        parameters = [
             {'use_sim_time': True}, 
             '/home/humble_ws/src/linorobot2_navigation/config/controller.yaml'
         ],
         remappings=[
-                ('/nav2/plan', '/nav2/plan_with_orientations'),
-                ('/nav2/cmd_vel', '/cmd_vel'),
+                ('plan', 'plan_with_orientations'),
+                # ('/nav2/cmd_vel', '/cmd_vel'),
         ]
     )
 
     planner = Node(
         package='nav2_planner',
         executable='planner_server',
-        namespace='nav2',
+        namespace = drone_name,
         parameters=[
             {'use_sim_time': True},
             '/home/humble_ws/src/linorobot2_navigation/config/planner.yaml'
@@ -45,7 +47,7 @@ def generate_launch_description():
     behaviors = Node(
         package='nav2_behaviors',
         executable='behavior_server',
-        namespace='nav2',
+        namespace = drone_name,
         parameters=[
             {'use_sim_time': True}, 
             '/home/humble_ws/src/linorobot2_navigation/config/behaviors.yaml'
@@ -55,7 +57,7 @@ def generate_launch_description():
     bt = Node(
         package='nav2_bt_navigator',
         executable='bt_navigator',
-        namespace='nav2',
+        namespace = drone_name,
         respawn_delay=2.0,
         parameters=[
             {'use_sim_time': True},
@@ -66,7 +68,7 @@ def generate_launch_description():
     map_server = Node(
         package = 'nav2_map_server',
         executable = 'map_server',
-        namespace = "nav2",
+        namespace = drone_name,
         parameters = [
             '/home/humble_ws/src/linorobot2_navigation/config/map_server.yaml',
             {'use_sim_time' : True}
@@ -76,7 +78,7 @@ def generate_launch_description():
     lifecycle_manager = Node(
         package='nav2_lifecycle_manager',
         executable='lifecycle_manager',
-        namespace='nav2',
+        namespace = drone_name,
         parameters=[
             {'use_sim_time': True},
             '/home/humble_ws/src/linorobot2_navigation/config/lifecycle_manager.yaml',
@@ -87,7 +89,7 @@ def generate_launch_description():
         package='rviz2',
         executable='rviz2',
         arguments=['-d', rviz_config_path],
-        namespace = 'nav2',
+        namespace = drone_name,
         parameters=[
             {'use_sim_time': True}
         ]
@@ -98,14 +100,15 @@ def generate_launch_description():
     odometry = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(odometry_launch_path),
         launch_arguments={
-            'WHEEL_ODOMETRY': LaunchConfiguration('WHEEL_ODOMETRY')  # Pass the argument to child
+            'WHEEL_ODOMETRY': LaunchConfiguration('WHEEL_ODOMETRY'),
+            'DRONE_NAME': drone_name
         }.items()
     )
 
     amcl = Node(
         package='nav2_amcl',
         executable='amcl',
-        namespace='nav2',
+        namespace = drone_name,
         parameters=[
             '/home/humble_ws/src/linorobot2_navigation/config/amcl.yaml',
             {
@@ -117,6 +120,7 @@ def generate_launch_description():
     amcl_pointcloud = Node(
         package='linorobot2_localization',
         executable='amcl_visualizer',
+        namespace = drone_name,
         parameters=[
             {'use_sim_time': True}
         ]
@@ -125,12 +129,16 @@ def generate_launch_description():
     keepout_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             '/home/humble_ws/src/linorobot2_navigation/launch/keepout.launch.py'
-        )
+        ),
+        launch_arguments={
+            'DRONE_NAME': drone_name
+        }.items()
     )
 
     path_orientation_updater = Node(
         package='linorobot2_localization',
         executable='path_orientation_updater',
+        namespace = drone_name,
         parameters=[
             {'use_sim_time': True}
         ]

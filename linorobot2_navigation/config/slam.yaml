@@ -1,4 +1,4 @@
-/nav2/slam_toolbox:
+/**/slam_toolbox:
   ros__parameters:
 
     # Plugin parameters for the SLAM solver
@@ -13,7 +13,7 @@
     odom_frame: odom            # Frame for odometry data
     map_frame: map              # Frame for the generated map
     base_frame: base_link       # Robot's base frame (used for pose transformations)
-    scan_topic: /scan           # Topic for laser scan data (usually provided by a LiDAR sensor)
+    scan_topic: scan           # Topic for laser scan data (usually provided by a LiDAR sensor)
     mode: mapping               # Mode of operation, can be "mapping" for building a map or "localization" for localizing on an existing map
 
     # Start settings for continuing a map or starting from a specific pose/dock

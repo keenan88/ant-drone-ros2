@@ -6,15 +6,9 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     urdf_path = '/home/humble_ws/src/linorobot2_description/urdf/robots/mecanum_libplanar.urdf.xacro'
-    # urdf_path =  '/home/humble_ws/src/antworker_description/description/worker/urdf/worker.urdf.xacro'
 
 
     return LaunchDescription([
-        DeclareLaunchArgument(
-            name='urdf', 
-            default_value=urdf_path,
-            description='URDF path'
-        ),
 
         DeclareLaunchArgument(
             name='use_sim_time', 
@@ -42,7 +36,7 @@ def generate_launch_description():
                 {
                     'use_sim_time': LaunchConfiguration('use_sim_time'),
                     'robot_description': Command([
-                        'xacro ', LaunchConfiguration('urdf'),
+                        'xacro ', urdf_path,
                         ' namespace:=', LaunchConfiguration('namespace')
                     ])
                 }

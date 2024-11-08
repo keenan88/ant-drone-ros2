@@ -4,16 +4,12 @@ from launch.actions import DeclareLaunchArgument, RegisterEventHandler, LogInfo
 from launch.event_handlers import OnShutdown
 from launch.substitutions import LaunchConfiguration, LocalSubstitution
 from launch.conditions import IfCondition, UnlessCondition
-
+import os
 
 
 def generate_launch_description():
 
-    config_path = DeclareLaunchArgument(
-        'config_path',
-        default_value='-1', 
-        description='joystick teleop twist config path'
-    )
+    drone_name = os.getenv('DRONE_NAME')
 
     wheeled_motion = DeclareLaunchArgument(
         'WHEELED_MOTION',
@@ -25,6 +21,7 @@ def generate_launch_description():
         package = 'joy', 
         executable = 'joy_node', 
         name = 'joy_node',
+        namespace = drone_name,
         parameters = [
             '/home/humble_ws/src/linorobot2_joystick/config/joy_node_config.yaml',
             {'dev': '/dev/input/js0'}
@@ -35,14 +32,16 @@ def generate_launch_description():
         package = 'teleop_twist_joy', 
         executable = 'teleop_node',
         name = 'teleop_twist_joy_node',
+        namespace = drone_name,
         parameters = [
-            LaunchConfiguration('config_path')
+            '/home/humble_ws/src/linorobot2_joystick/config/teleop_twist_joy_config.yaml'
         ]
     )
 
     cmd_vel_to_motor_vel = Node(
         package = 'linorobot2_joystick', 
         executable = 'cmd_vel_to_motor_vel',
+        namespace=drone_name,
         parameters = [
             {
                 'use_sim_time': True
@@ -54,6 +53,7 @@ def generate_launch_description():
     cmd_vel_scaler = Node(
         package = 'linorobot2_joystick',
         executable = 'cmd_vel_scale_gz',
+        namespace=drone_name,
         parameters = [
             {
                 'use_sim_time': True
@@ -83,7 +83,6 @@ def generate_launch_description():
 
     ld = LaunchDescription()
 
-    ld.add_action(config_path)
     ld.add_action(wheeled_motion)
 
     ld.add_action(joystick_driver)

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot name="linorobot2" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:arg name="namespace" default="drone0"/>
+  <xacro:arg name="namespace" default=""/>
 
   <xacro:include filename="$(find linorobot2_description)/urdf/mecanum_properties.urdf.xacro" />
   <xacro:include filename="$(find linorobot2_description)/urdf/mech/base.urdf.xacro" />
@@ -41,14 +41,14 @@
     <plugin name="mecanum_wheel_mimic" filename="libgazebo_ros_planar_move.so">
       <ros>
         <namespace>$(arg namespace)</namespace>
-        <remapping>odom:=/odom_unscaled</remapping>
-        <remapping>cmd_vel:=/cmd_vel_scaled</remapping>
+        <remapping>odom:=odom_unscaled</remapping>
+        <remapping>cmd_vel:=cmd_vel_scaled</remapping>
       </ros>
       <command_topic>cmd_vel</command_topic>
       <odometry_topic>odom</odometry_topic>
-      <odometry_frame>odom</odometry_frame>
+      <odometry_frame>$(arg namespace)_odom</odometry_frame>
       <odometry_rate>20.0</odometry_rate>
-      <robot_base_frame>base_link</robot_base_frame>
+      <robot_base_frame>$(arg namespace)_base_link</robot_base_frame>
       <publish_odom>true</publish_odom>
       <publish_odom_tf>true</publish_odom_tf>
       <update_rate>100</update_rate>
@@ -57,6 +57,7 @@
   </gazebo> 
 
   <xacro:base 
+    namespace="$(arg namespace)"
     length="${base_length}" 
     width="${base_width}" 
     height="${base_height}" 

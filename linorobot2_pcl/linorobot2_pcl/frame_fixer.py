@@ -29,7 +29,7 @@ class FrameFixer(Node):
 
         self.subscription = self.create_subscription(
             PointCloud2,
-            '/' + self.camera_pos + '_camera/points',
+            self.camera_pos + '_camera/points',
             self.pointcloud_callback,
             qos_profile
         )
@@ -37,7 +37,7 @@ class FrameFixer(Node):
         # Create publisher
         self.publisher = self.create_publisher(
             PointCloud2,
-            '/' + self.camera_pos + '_camera/frame_fixed/points',
+            self.camera_pos + '_camera/frame_fixed/points',
             qos_profile
         )
 

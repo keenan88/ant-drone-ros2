@@ -25,5 +25,4 @@ RUN source /opt/ros/humble/setup.bash && \
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
             ros2 launch linorobot2_joystick joystick.launch.py \
-            config_path:=/home/humble_ws/src/linorobot2_joystick/config/teleop_twist_joy_config_drone${DRONE_ID}.yaml \
             WHEELED_MOTION:=${WHEELED_MOTION}"

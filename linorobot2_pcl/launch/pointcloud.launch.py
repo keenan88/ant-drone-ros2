@@ -2,8 +2,12 @@ import launch
 from launch_ros.actions import Node
 import os
 
-# Robot has a realsense on front and back, each with own namespacing and frame names
+
 def generate_launch_description():
+
+    drone_name = os.environ.get("DRONE_NAME")
+
+    print(drone_name)
 
     use_sim = os.environ.get("USE_SIM")
     use_sim = use_sim == "True"
@@ -16,6 +20,7 @@ def generate_launch_description():
             package='linorobot2_pcl',
             executable='pcl_frame_fixer',
             name = realsense_placement + "_pcl_frame_fixer",
+            namespace = drone_name,
             output='screen',
             parameters=[
                 {'camera_pos': realsense_placement}
@@ -31,6 +36,7 @@ def generate_launch_description():
             package='pcl_ros',
             executable='filter_crop_box_node',
             name = realsense_placement + "_rs_pointcloud_cropper",
+            namespace = drone_name,
             output='screen',
             parameters=[
                 '/home/humble_ws/src/linorobot2_pcl/config/pcl_filter_crop_box.yaml',
@@ -50,6 +56,7 @@ def generate_launch_description():
             package='pcl_ros',
             executable='filter_voxel_grid_node',
             name = realsense_placement + "_rs_pointcloud_downsampler",
+            namespace = drone_name,
             output='screen',
             parameters=[
                 '/home/humble_ws/src/linorobot2_pcl/config/pcl_downsample_filter.yaml',
@@ -72,8 +79,7 @@ def generate_launch_description():
     #     name = "bridge_out_pcl",
     #     arguments = ['/home/humble_ws/src/linorobot2_pcl/config/bridge_out_pcl.yaml']
     # )
-
-    # # ld.add_action(rviz_node)
+ 
     # if not use_sim:
     #     ld.add_action(bridge_out_pcl)
     

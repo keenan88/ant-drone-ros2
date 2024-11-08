@@ -1,4 +1,4 @@
-/nav2/lifecycle_manager:
+/**/lifecycle_manager:
   ros__parameters:
     /bond_disable_heartbeat_timeout: false
     attempt_respawn_reconnection: true

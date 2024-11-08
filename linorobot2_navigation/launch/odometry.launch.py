@@ -15,6 +15,7 @@ def generate_launch_description():
     wheel_odometry = Node(
         package='linorobot2_localization',
         executable='wheel_odometry', 
+        namespace = LaunchConfiguration('DRONE_NAME'),
         parameters=[
             {
                 'use_sim_time' : True
@@ -26,6 +27,7 @@ def generate_launch_description():
     wheel_unraveller = Node(
         package='linorobot2_localization',
         executable='wheel_unraveller',
+        namespace = LaunchConfiguration('DRONE_NAME'),
         parameters=[
             {'use_sim_time': True}
         ],
@@ -35,9 +37,8 @@ def generate_launch_description():
     odom_vel_scale_gz = Node(
         package='linorobot2_localization',
         executable='odom_vel_scale_gz',
-        # condition=UnlessCondition(LaunchConfiguration('WHEEL_ODOMETRY'))
+        namespace = LaunchConfiguration('DRONE_NAME')
     )
-
 
     ld = LaunchDescription()
 

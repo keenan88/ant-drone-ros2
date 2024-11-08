@@ -54,7 +54,7 @@ class LaserScanMerger(Node):
 
         self.publisher = self.create_publisher(LaserScan, '/scan', qos_best_effort)
 
-        self.publisher2 = self.create_publisher(LaserScan, '/nav2/scan', qos_best_effort)
+        self.publisher2 = self.create_publisher(LaserScan, '/scan', qos_best_effort)
 
         self.scans = [None] * 5
 

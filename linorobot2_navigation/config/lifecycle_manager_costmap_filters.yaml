@@ -1,4 +1,4 @@
-/lifecycle_manager_costmap_filters:
+/**/lifecycle_manager_costmap_filters:
   ros__parameters:
     attempt_respawn_reconnection: true
     autostart: true
