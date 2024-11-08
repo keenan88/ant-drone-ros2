@@ -9,14 +9,18 @@ services:
     tty: true
     environment:
       - DISPLAY=${DISPLAY}
-      - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
+    env_file:
+      - ./ros_domains.env
     volumes:
       - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup
       - ./linorobot2_description:/home/humble_ws/src/linorobot2_description
+      - ./ant-worker-ros2/antworker_description:/home/humble_ws/src/antworker_description
+      - ./ant-worker-ros2/antworker_gz:/home/humble_ws/src/antworker_gz
       - ./simulation/gazebo:/home/simulation/gazebo
       - ./simulation/models:/home/simulation/models
     working_dir: /home/humble_ws/
     network_mode: host
+    command: sleep infinity
     ipc: host
     pid: host
     deploy:
@@ -67,24 +71,26 @@ services:
   #   ipc: host
   #   pid: host
 
-  linorobot2-joytick:
-    container_name: linorobot2-joystick
-    build:
-      context: .
-      dockerfile: ./docker/linorobot2/dockerfiles/joystick.dockerfile
-    tty: true
-    stdin_open: true
-    environment:
-      - DRONE_ID=0
-      - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
-      - WHEELED_MOTION=false
-    volumes:
-      - ./linorobot2_joystick:/home/humble_ws/src/linorobot2_joystick:rw
-      - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup
-    privileged: true
-    network_mode: host
-    ipc: host
-    pid: host
+  # linorobot2-joytick:
+  #   container_name: linorobot2-joystick
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/linorobot2/dockerfiles/joystick.dockerfile
+  #   tty: true
+  #   stdin_open: true
+  #   env_file:
+  #     - ./ros_domains.env
+  #   environment:
+  #     - WHEELED_MOTION=false
+  #   volumes:
+  #     - ./linorobot2_joystick:/home/humble_ws/src/linorobot2_joystick:rw
+  #     - ./linorobot2_bringup:/home/humble_ws/src/linorobot2_bringup
+  #   privileged: true
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
+
+
     
   # linorobot2-pcl:
   #   container_name: linorobot2-pcl

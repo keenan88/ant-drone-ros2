@@ -28,4 +28,4 @@ RUN source /opt/ros/humble/setup.bash && \
 ENV GAZEBO_MODEL_PATH=/home/humble_ws/src/:/home/simulation/models
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-            ros2 launch linorobot2_bringup gz.launch.py"
+            ros2 launch linorobot2_bringup drone_greenhouse.launch.py"

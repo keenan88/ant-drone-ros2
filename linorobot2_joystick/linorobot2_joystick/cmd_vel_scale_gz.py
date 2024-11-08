@@ -32,6 +32,18 @@ class CmdVelScaler(Node):
     def cmd_vel_callback(self, msg):
         scaled_msg = Twist()
 
+        if msg.linear.x != 0:
+            if abs(msg.linear.x) < 0.1:
+                msg.linear.x = 0.1 if msg.linear.x > 0 else -0.1
+
+        if msg.linear.y != 0:
+            if abs(msg.linear.y) < 0.1:
+                msg.linear.y = 0.1 if msg.linear.y > 0 else -0.1
+        
+        if msg.angular.z != 0:
+            if abs(msg.angular.z) < 0.1:
+                msg.angular.z = 0.1 if msg.angular.z > 0 else -0.1
+
         # Gazebo planar move plugin does not move robot quite as much as it should, so velocity needs to be scaled up.
         # Scaling up is linear, as long as velocity is fast enough (see above 'if' conditions)
         in_lin_vel_range_x = abs(msg.linear.x) >= 0.1
