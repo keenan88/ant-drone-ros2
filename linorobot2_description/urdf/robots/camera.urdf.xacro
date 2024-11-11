@@ -5,7 +5,7 @@
 
     <gazebo reference="${namespace}_${camera_pos}_gazebo_camera_frame">
     <sensor type="depth" name="${camera_pos}_camera">
-      <update_rate>15.0</update_rate>
+      <update_rate>60.0</update_rate>
       
       <camera>
         <horizontal_fov>1.517</horizontal_fov>

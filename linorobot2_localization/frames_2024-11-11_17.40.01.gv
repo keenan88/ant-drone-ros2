@@ -1,0 +1,20 @@
+digraph G {
+"drone_boris_base_link" -> "drone_boris_front_gazebo_camera_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"drone_boris_odom" -> "drone_boris_base_link"[label=" Broadcaster: default_authority\nAverage rate: 10.256\nBuffer length: 3.9\nMost recent transform: 2886.375\nOldest transform: 2882.475\n"];
+"drone_boris_base_link" -> "drone_boris_front_rs_depth_optical_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"drone_boris_base_link" -> "drone_boris_left_gazebo_camera_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"drone_boris_base_link" -> "drone_boris_left_rs_depth_optical_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"drone_boris_base_link" -> "drone_boris_rear_gazebo_camera_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"drone_boris_base_link" -> "drone_boris_rear_rs_depth_optical_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"drone_boris_base_link" -> "drone_boris_right_gazebo_camera_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"drone_boris_base_link" -> "drone_boris_right_rs_depth_optical_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"worker_misha_base_link" -> "worker_misha_front_gazebo_camera_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"worker_misha_odom" -> "worker_misha_base_link"[label=" Broadcaster: default_authority\nAverage rate: 10.286\nBuffer length: 3.5\nMost recent transform: 2886.378\nOldest transform: 2882.878\n"];
+"worker_misha_base_link" -> "worker_misha_front_rs_depth_optical_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"worker_misha_base_link" -> "worker_misha_rear_gazebo_camera_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"worker_misha_base_link" -> "worker_misha_rear_rs_depth_optical_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1731346801.1857977"[ shape=plaintext ] ;
+}->"worker_misha_odom";
+}

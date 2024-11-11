@@ -36,6 +36,8 @@ class MultiCameraListener(Node):
 
         # Directory to save images and transforms
         dataset_dir = '/home/yolo/datasets/'
+        os.makedirs(dataset_dir, exist_ok=True)
+        os.chmod(dataset_dir, 0o777)
         dir_names = [d for d in os.listdir(dataset_dir) if os.path.isdir(os.path.join(dataset_dir, d))]
         numeric_dirs = [int(d) for d in dir_names if d.isdigit()]
         next_dataset_dir = str(max(numeric_dirs) + 1) if numeric_dirs else str(0)

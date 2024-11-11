@@ -4,13 +4,14 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
-
+import os
 
 
 def generate_launch_description():
 
+    drone_name = os.getenv('DRONE_NAME')
+
     slam_config_path = '/home/humble_ws/src/linorobot2_navigation/config/slam.yaml'
-    navigation_launch_path = '/home/humble_ws/src/linorobot2_navigation/launch/slam_navigation.launch.py'
     odometry_launch_path = '/home/humble_ws/src/linorobot2_navigation/launch/odometry.launch.py'
     rviz_config_path = '/home/humble_ws/src/linorobot2_navigation/rviz/linorobot2_slam.rviz'
 
@@ -24,24 +25,28 @@ def generate_launch_description():
         package='slam_toolbox',
         executable='async_slam_toolbox_node',
         name='slam_toolbox',
-        namespace = 'nav2',
+        namespace = drone_name,
         parameters=[
             slam_config_path,
-            {'use_sim_time': True}
+            {'use_sim_time': True},
+            {'base_frame': drone_name + '_base_link'},
+            {'odom_frame': drone_name + '_odom'},
+            {'map_frame': drone_name + '_map'},
         ],
-        remappings=[("/map", "/nav2/map")],
+        remappings = [
+            ('/map', '/' + drone_name + "/map"),
+            ('/map_metadata', '/' + drone_name + "/map_metadata")
+        ]
+
     )
 
     image_recorder = Node(
         package='linorobot2_localization',
         executable='slam_image_recorder',
+        namespace = drone_name,
         parameters=[
             {'use_sim_time': True}
         ]
-    )
-
-    navigation = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(navigation_launch_path),
     )
 
     odometry = IncludeLaunchDescription(
@@ -55,6 +60,7 @@ def generate_launch_description():
         package='rviz2',
         executable='rviz2',
         arguments=['-d', rviz_config_path],
+        namespace = drone_name,
         parameters=[
             {'use_sim_time': True}
         ]
@@ -63,8 +69,7 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     ld.add_action(slam_toolbox)
-    # ld.add_action(navigation)
-    ld.add_action(image_recorder)
+    # ld.add_action(image_recorder)
     ld.add_action(odometry)
     ld.add_action(wheels_or_body_odometry)
     

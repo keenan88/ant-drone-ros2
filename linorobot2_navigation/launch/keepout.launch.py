@@ -13,7 +13,7 @@ def generate_launch_description():
         package='rviz2',
         executable='rviz2',
         arguments=['-d', rviz_config_path],
-        namespace = LaunchConfiguration('DRONE_NAME'),
+        namespace = drone_name,
         parameters=[
             {'use_sim_time': True}
         ]
@@ -26,7 +26,7 @@ def generate_launch_description():
         package='nav2_map_server',
         executable='map_server',
         name='filter_mask_server',
-        namespace = LaunchConfiguration('DRONE_NAME'),
+        namespace = drone_name,
         parameters=[
             '/home/humble_ws/src/linorobot2_navigation/config/filter_mask_server.yaml',
             {
@@ -40,7 +40,7 @@ def generate_launch_description():
         package='nav2_map_server',
         executable='costmap_filter_info_server',
         name='costmap_filter_info_server',
-        namespace = LaunchConfiguration('DRONE_NAME'),
+        namespace = drone_name,
         parameters=[
             '/home/humble_ws/src/linorobot2_navigation/config/filter_mask_server.yaml',
             {
@@ -56,7 +56,7 @@ def generate_launch_description():
         package='nav2_lifecycle_manager',
         executable='lifecycle_manager',
         name='lifecycle_manager_costmap_filters',
-        namespace = LaunchConfiguration('DRONE_NAME'),
+        namespace = drone_name,
         parameters=[
             {
                 'use_sim_time': True,

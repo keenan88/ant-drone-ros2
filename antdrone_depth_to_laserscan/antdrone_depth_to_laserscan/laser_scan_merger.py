@@ -3,7 +3,7 @@ from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
 from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
 import math
-
+import os
 
 # Assumes that all laser scan topics are updated fairly quickly
 class LaserScanMerger(Node):
@@ -12,6 +12,9 @@ class LaserScanMerger(Node):
 
         self.declare_parameter('drone_name', '')
         self.drone_name = self.get_parameter('drone_name').value
+
+        slam_or_nav = os.getenv('SLAM_OR_NAV')
+        self.tf_tolerance_s = 0.3 if slam_or_nav == 'SLAM' else 0.3
 
         qos_best_effort = QoSProfile(
             reliability=QoSReliabilityPolicy.BEST_EFFORT,
@@ -57,8 +60,6 @@ class LaserScanMerger(Node):
 
         self.publisher = self.create_publisher(LaserScan, 'scan', qos_best_effort)
 
-        self.publisher2 = self.create_publisher(LaserScan, 'scan', qos_best_effort)
-
         self.scans = [None] * 5
 
     def record_front_scan(self, msg):
@@ -84,34 +85,35 @@ class LaserScanMerger(Node):
     # TODO - account for deadzones on physical realsenses (if need be), and the impact on angle increment.
     def merge_scans(self):
         if all(scan is not None for scan in self.scans):
-            merged_scan = LaserScan()
-            merged_scan.header.stamp = self.get_clock().now().to_msg()
-            merged_scan.header.frame_id = self.drone_name + "_base_link"
-            merged_scan.angle_min = -0.7850000262260437
-            merged_scan.angle_max = 5.49499997377
+            # Get timestamps of all scans
+            timestamps = [scan.header.stamp.sec + scan.header.stamp.nanosec * 1e-9 for scan in self.scans]
+            time_diff = abs(max(timestamps) - min(timestamps))
+            
+            if time_diff <= self.tf_tolerance_s:
+                merged_scan = LaserScan()
+                
+                # Set timestamp as average of all scan timestamps
+                avg_timestamp = sum(timestamps) / len(timestamps)
+                merged_scan.header.stamp.sec = int(avg_timestamp)
+                merged_scan.header.stamp.nanosec = int((avg_timestamp - int(avg_timestamp)) * 1e9)
+                
+                merged_scan.header.frame_id = self.drone_name + "_base_link"
+                merged_scan.angle_min = -0.7850000262260437
+                merged_scan.angle_max = 5.49499997377
 
-            merged_scan.angle_increment = min(scan.angle_increment for scan in self.scans)
-            merged_scan.range_min = min(scan.range_min for scan in self.scans)
-            merged_scan.range_max = max(scan.range_max for scan in self.scans)
+                merged_scan.angle_increment = min(scan.angle_increment for scan in self.scans)
+                merged_scan.range_min = min(scan.range_min for scan in self.scans)
+                merged_scan.range_max = max(scan.range_max for scan in self.scans)
 
-            all_ranges = []
-            all_intensities = []
-            for scan in self.scans:
-                all_ranges += scan.ranges
-                #all_intensities += scan.intensities
-                # print(scan.ranges)
-                # for r, i in zip(scan.ranges, scan.intensities):
-                #     print(r, i)
-                #     if not math.isinf(r):
-                #         all_ranges.append(r)
-                #         all_intensities.append(i)
+                # This merges assuming that the number of points in each scan is already scaled to the angular span of the scan.
+                all_ranges = []
+                for scan in self.scans:
+                    all_ranges += scan.ranges
 
-            merged_scan.ranges = all_ranges
-            merged_scan.intensities = all_intensities
-            merged_scan.time_increment = sum(scan.time_increment for scan in self.scans) / len(self.scans)
+                merged_scan.ranges = all_ranges
+                merged_scan.time_increment = sum(scan.time_increment for scan in self.scans) / len(self.scans)
 
-            self.publisher.publish(merged_scan)
-            self.publisher2.publish(merged_scan)
+                self.publisher.publish(merged_scan)
 
 def main(args=None):
     rclpy.init(args=args)

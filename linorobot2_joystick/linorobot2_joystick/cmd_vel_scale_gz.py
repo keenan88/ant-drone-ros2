@@ -52,14 +52,14 @@ class CmdVelScaler(Node):
         zero_vel_cmd = False
 
         if in_lin_vel_range_x:
-            scalar = -1 if msg.linear.x < 0 else 1 
-            scaled_msg.linear.x = (msg.linear.x + scalar * 0.054)/0.993
+            scalar = 1 if msg.linear.x > 0 else -1 
+            scaled_msg.linear.x = (msg.linear.x + scalar * 0.0546)/0.994
         elif msg.linear.x == 0:
             scaled_msg.linear.x = 0.0
             zero_vel_cmd = True
 
         if in_lin_vel_range_y:
-            scalar = -1 if msg.linear.y < 0 else 1
+            scalar = 1 if msg.linear.y > 0 else -1
             scaled_msg.linear.y = (msg.linear.y + scalar * 0.0516)/0.978
         elif msg.linear.y == 0:
             scaled_msg.linear.y = 0.0

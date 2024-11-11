@@ -3,8 +3,10 @@ from launch.actions import DeclareLaunchArgument
 from launch_ros.actions import Node
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration
-
+import os
 def generate_launch_description():
+
+    drone_name = os.getenv('DRONE_NAME')
 
     wheels_or_body_odometry = DeclareLaunchArgument(
         'WHEEL_ODOMETRY',
@@ -15,7 +17,7 @@ def generate_launch_description():
     wheel_odometry = Node(
         package='linorobot2_localization',
         executable='wheel_odometry', 
-        namespace = LaunchConfiguration('DRONE_NAME'),
+        namespace = drone_name,
         parameters=[
             {
                 'use_sim_time' : True
@@ -27,7 +29,7 @@ def generate_launch_description():
     wheel_unraveller = Node(
         package='linorobot2_localization',
         executable='wheel_unraveller',
-        namespace = LaunchConfiguration('DRONE_NAME'),
+        namespace = drone_name,
         parameters=[
             {'use_sim_time': True}
         ],
@@ -37,7 +39,11 @@ def generate_launch_description():
     odom_vel_scale_gz = Node(
         package='linorobot2_localization',
         executable='odom_vel_scale_gz',
-        namespace = LaunchConfiguration('DRONE_NAME')
+        namespace = drone_name,
+        parameters=[
+            {'use_sim_time': True},
+            {'drone_name': drone_name}
+        ]
     )
 
     ld = LaunchDescription()

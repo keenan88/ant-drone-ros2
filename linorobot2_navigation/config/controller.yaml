@@ -29,7 +29,7 @@
       max_vel_theta: 0.2
       min_speed_theta: 0.0
       min_speed_xy: 0.0
-      max_speed_xy: 0.4
+      max_speed_xy: 0.2
       acc_lim_x: 0.1 # kept low for isaacsim
       acc_lim_y: 0.1 # 0'd for isaacsim
       acc_lim_theta: 0.5 # kept low for isaacsim

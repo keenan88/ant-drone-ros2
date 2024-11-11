@@ -9,7 +9,7 @@ from tf2_ros import Buffer, TransformListener
 from rclpy.action import ActionClient
 from nav2_msgs.action import NavigateThroughPoses, NavigateToPose
 from geometry_msgs.msg import TransformStamped
-from copy import deepcopy
+import os
 
 
 
@@ -35,8 +35,8 @@ class Linorobot2RMF(Node):
 
 
         # TODO - change robot naming to read from a yaml file
-        self.fleet_name = 'drone_fleet'
-        self.robot_name = 'john_the_drone'
+        self.fleet_name = os.getenv('FLEET_NAME')
+        self.robot_name = os.getenv('DRONE_NAME')
         self.seq = 0
 
         self.robot_state = RobotState()

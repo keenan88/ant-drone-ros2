@@ -8,7 +8,7 @@
     min_height: -1.0
     queue_size: 11
     range_max: 5.0
-    range_min: 0.0
+    range_min: 0.03
     scan_time: 0.03333333333333333
     transform_tolerance: 1.0
     use_inf: false
@@ -24,7 +24,7 @@
     min_height: -1.0
     queue_size: 11
     range_max: 5.0
-    range_min: 0.0
+    range_min: 0.03
     scan_time: 0.03333333333333333
     transform_tolerance: 1.0
     use_inf: false
@@ -41,7 +41,7 @@
     min_height: -1.0
     queue_size: 11
     range_max: 5.0
-    range_min: 0.0
+    range_min: 0.03
     scan_time: 0.03333333333333333
     transform_tolerance: 1.0
     use_inf: false
@@ -57,7 +57,7 @@
     min_height: -1.0
     queue_size: 11
     range_max: 5.0
-    range_min: 0.0
+    range_min: 0.03
     scan_time: 0.03333333333333333
     transform_tolerance: 1.0
     use_inf: false
@@ -73,7 +73,7 @@
     min_height: -1.0
     queue_size: 11
     range_max: 5.0
-    range_min: 0.0
+    range_min: 0.03
     scan_time: 0.03333333333333333
     transform_tolerance: 1.0
     use_inf: false
