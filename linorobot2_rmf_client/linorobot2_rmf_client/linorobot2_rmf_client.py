@@ -81,9 +81,6 @@ class Linorobot2RMF(Node):
 
         self.get_logger().info(f"Row L poses: {self.row_L_xy_poses}")
         
-
-
-
     def get_transform(self):
         try:
             now = rclpy.time.Time()

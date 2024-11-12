@@ -15,13 +15,6 @@ class CmdVelScaler(Node):
             10
         )
 
-        self.nav_cmd_vel_sub = self.create_subscription(
-            Twist,
-            '/nav2/cmd_vel',
-            self.cmd_vel_callback,
-            10
-        )
-
         # Create publisher for scaled velocities
         self.scaled_pub = self.create_publisher(
             Twist,
