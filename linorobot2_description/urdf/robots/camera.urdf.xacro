@@ -5,13 +5,13 @@
 
     <gazebo reference="${namespace}_${camera_pos}_gazebo_camera_frame">
     <sensor type="depth" name="${camera_pos}_camera">
-      <update_rate>60.0</update_rate>
+      <update_rate>15.0</update_rate> <!-- Gazebo does not necessarily respect this update rate when publishing the camera data to ros2 -->
       
       <camera>
         <horizontal_fov>1.517</horizontal_fov>
         <image>
-          <width>480</width>
-          <height>270</height>
+          <width>100</width>
+          <height>56</height>
           <format>R8G8B8</format>
         </image>
         <clip>

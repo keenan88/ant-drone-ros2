@@ -52,6 +52,8 @@ class OdomScaler(Node):
                     self.first_x = msg.pose.pose.position.x
                     self.first_y = msg.pose.pose.position.y
 
+                    # self.get_logger().info('First x: {}, first y: {}'.format(self.first_x, self.first_y))
+
 
             if not (self.first_x is None and self.first_y is None):
                 scaled_msg = Odometry()
@@ -92,8 +94,10 @@ class OdomScaler(Node):
 
                 if do_pub or in_lin_vel_range_x or in_lin_vel_range_y or in_lin_vel_range_yaw:
 
-                    scaled_msg.pose.pose.position.x = msg.pose.pose.position.x #- self.first_x
-                    scaled_msg.pose.pose.position.y = msg.pose.pose.position.y# -self.first_y
+                    
+
+                    scaled_msg.pose.pose.position.x = msg.pose.pose.position.x - self.first_x
+                    scaled_msg.pose.pose.position.y = msg.pose.pose.position.y -self.first_y
                     self.scaled_pub.publish(scaled_msg)
 
                     # Create and initialize the static transform
@@ -101,15 +105,23 @@ class OdomScaler(Node):
                     map_odom_tf.header.frame_id = self.drone_name + '_odom'
                     map_odom_tf.header.stamp = msg.header.stamp
                     map_odom_tf.child_frame_id = self.drone_name + '_base_link'
-                    map_odom_tf.transform.translation.x = scaled_msg.pose.pose.position.x - self.first_x
-                    map_odom_tf.transform.translation.y = scaled_msg.pose.pose.position.y - self.first_y
+                    map_odom_tf.transform.translation.x = scaled_msg.pose.pose.position.x
+                    map_odom_tf.transform.translation.y = scaled_msg.pose.pose.position.y
                     map_odom_tf.transform.rotation.x = scaled_msg.pose.pose.orientation.x
                     map_odom_tf.transform.rotation.y = scaled_msg.pose.pose.orientation.y
                     map_odom_tf.transform.rotation.z = scaled_msg.pose.pose.orientation.z
                     map_odom_tf.transform.rotation.w = scaled_msg.pose.pose.orientation.w
 
+                    # self.get_logger().info('Publishing scaled odom, {}, {}'.format(round(map_odom_tf.transform.translation.x, 2), round(map_odom_tf.transform.translation.y, 2)))
+
                     # Publish the static transform
                     self.tf_broadcaster.sendTransform(map_odom_tf)
+
+                else:
+
+                    pass
+
+                    # self.get_logger().info('Not publishing scaled odom, {}, {}'.format(round(msg.pose.pose.position.x, 2), round(msg.pose.pose.position.y, 2)))
 
 def main(args=None):
     rclpy.init(args=args)

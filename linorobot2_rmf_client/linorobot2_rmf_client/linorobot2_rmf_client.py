@@ -52,7 +52,7 @@ class Linorobot2RMF(Node):
 
         self.rmf_path_request_subscription = self.create_subscription(
             PathRequest,
-            'robot_path_requests',
+            '/robot_path_requests',
             self.add_path_to_queue,
             10
         )
@@ -65,9 +65,9 @@ class Linorobot2RMF(Node):
         self.first_tf_set = False
 
         self._action_client = ActionClient(
-            self, NavigateToPose, '/nav2/navigate_to_pose')
+            self, NavigateToPose, '/' + self.robot_name + '/navigate_to_pose')
 
-        self.state_timer = self.create_timer(0.01, self.publish_state)
+        self.state_timer = self.create_timer(1.0, self.publish_state)
 
         self.path_requests = []
         self.completed_tasks_IDs = []
@@ -79,7 +79,7 @@ class Linorobot2RMF(Node):
             now = rclpy.time.Time()
             timeout = rclpy.duration.Duration(seconds=1.0)
             transform: TransformStamped = self.tf_buffer.lookup_transform(
-                'map', 'base_link', now, timeout
+                'map', self.robot_name + '_base_link', now, timeout
             )
 
             x = transform.transform.rotation.x
