@@ -49,7 +49,7 @@ class Linorobot2RMF(Node):
         # TODO - add a bridge to bridge in and out robot_state and robot_path_requests from queen DOMAIN ID to individual robot DOMAIN ID
 
         self.rmf_robot_state_publisher = self.create_publisher(RobotState, 'robot_state', 10)
-
+        
         self.rmf_path_request_subscription = self.create_subscription(
             PathRequest,
             '/robot_path_requests',
@@ -57,11 +57,11 @@ class Linorobot2RMF(Node):
             10
         )
 
-        self.execute_path_timer = self.create_timer(0.01, self.execute_path)
+        self.execute_path_timer = self.create_timer(0.1, self.execute_path)
 
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
-        self.timer = self.create_timer(0.01, self.get_transform)
+        self.timer = self.create_timer(1.5, self.get_transform)
         self.first_tf_set = False
 
         self._action_client = ActionClient(
@@ -143,7 +143,6 @@ class Linorobot2RMF(Node):
             if self.robot_state.mode.mode in [MODE_IDLE, MODE_WAITING, MODE_CHARGING]:
 
                 self.robot_state.mode.mode = MODE_MOVING
-                self.get_logger().info('execute_path: set to idle')
 
                 path_request = self.path_requests.pop(0)
                         
@@ -151,6 +150,7 @@ class Linorobot2RMF(Node):
                 self.robot_state.task_id = path_request.task_id
 
                 waypoint = path_request.path[1]
+                waypoint.yaw = 1.57
 
                 pose = PoseStamped()
                 pose.header.frame_id = 'map'
@@ -165,11 +165,7 @@ class Linorobot2RMF(Node):
 
                 self.send_navigate_through_poses_goal(pose)
 
-                self.get_logger().info(f"Sent:  {path_request.task_id} : \
-                    {round(path_request.path[0].x, 2), round(path_request.path[0].y, 2), round(path_request.path[0].yaw, 2)} \
-                    ) -> ( \
-                    {round(path_request.path[1].x, 2), round(path_request.path[1].y, 2), round(path_request.path[1].yaw, 2)}"
-                )
+                self.get_logger().info(f"Sent task {path_request.task_id}, goal pos: {round(pose.pose.position.x, 2), round(pose.pose.position.y, 2), round(waypoint.yaw, 2)})")
 
     def add_path_to_queue(self, path_request):
         if path_request.fleet_name == self.fleet_name:
@@ -184,11 +180,7 @@ class Linorobot2RMF(Node):
 
                             self.path_requests.append(path_request)
 
-                            self.get_logger().info(f"Queued:  {path_request.task_id} : \
-                                {round(path_request.path[0].x, 2), round(path_request.path[0].y, 2), round(path_request.path[0].yaw, 2)} \
-                                ) -> ( \
-                                {round(path_request.path[1].x, 2), round(path_request.path[1].y, 2), round(path_request.path[1].yaw, 2)}"
-                            )
+                            # self.get_logger().info(f"Queued:  {path_request.task_id} : {round(path_request.path[0].x, 2), round(path_request.path[0].y, 2), round(path_request.path[0].yaw, 2)}) -> ({round(path_request.path[1].x, 2), round(path_request.path[1].y, 2), round(path_request.path[1].yaw, 2)}")
 
             
     
