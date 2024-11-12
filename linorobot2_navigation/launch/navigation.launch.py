@@ -31,7 +31,6 @@ def generate_launch_description():
             '/home/humble_ws/src/linorobot2_navigation/config/controller.yaml'
         ],
         remappings=[
-                ('plan', 'plan_with_orientations'),
                 ('keepout_filter_info', '/' + drone_name + '/keepout_filter_info'),
                 ('scan', '/' + drone_name + '/scan'),
         ]

@@ -10,7 +10,7 @@ from rclpy.action import ActionClient
 from nav2_msgs.action import NavigateThroughPoses, NavigateToPose
 from geometry_msgs.msg import TransformStamped
 import os
-
+import numpy as np
 
 
 # Intended to run on each individual robot
@@ -71,6 +71,16 @@ class Linorobot2RMF(Node):
 
         self.path_requests = []
         self.completed_tasks_IDs = []
+
+        self.row_L_xy_poses = 0.05 * np.array([
+            [464, -286],
+            [493, -286],
+            [521, -286],
+            [555, -286]
+        ])
+
+        self.get_logger().info(f"Row L poses: {self.row_L_xy_poses}")
+        
 
 
 
@@ -150,7 +160,12 @@ class Linorobot2RMF(Node):
                 self.robot_state.task_id = path_request.task_id
 
                 waypoint = path_request.path[1]
-                waypoint.yaw = 1.57
+                for row_pose in self.row_L_xy_poses:
+                    dist = np.linalg.norm(np.array([waypoint.x, waypoint.y]) - row_pose)
+                    if dist < 0.05:
+                        self.get_logger().info(f"Row L pose: {row_pose} straightened")
+                        waypoint.yaw = 1.57
+                        break
 
                 pose = PoseStamped()
                 pose.header.frame_id = 'map'

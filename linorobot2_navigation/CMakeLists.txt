@@ -12,11 +12,4 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
-install(
-  PROGRAMS
-    linorobot2_navigation/navigate_to_named_pose.py  # Path to your Python script
-  DESTINATION lib/${PROJECT_NAME}  # Install location
-  RENAME navigate_to_named_pose  # Remove .py from the installed executable name
-)
-
 ament_package()
