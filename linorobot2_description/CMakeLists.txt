@@ -29,6 +29,12 @@ install(DIRECTORY mecanum_wheel_right/meshes
   FILES_MATCHING PATTERN "*.STL"
 )
 
+install(DIRECTORY drone_point/meshes
+  DESTINATION share/${PROJECT_NAME}/drone_point/
+  FILES_MATCHING PATTERN "*.STL"
+)
+
+
 install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}
 )

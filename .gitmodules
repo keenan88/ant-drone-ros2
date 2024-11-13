@@ -1,3 +1,6 @@
 [submodule "perception_pcl"]
 	path = perception_pcl
 	url = https://github.com/ros-perception/perception_pcl.git
+[submodule "gazebo_model_attachment_plugin"]
+	path = gazebo_model_attachment_plugin
+	url = https://github.com/Boeing/gazebo_model_attachment_plugin.git

@@ -63,60 +63,13 @@
     height="${base_height}" 
   />
 
-  <!-- Sliding platform link -->
-  <link name="$(arg namespace)_sliding_platform">
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-        <box size="${base_length} ${base_width} 0.05"/>
-      </geometry>
-      <material name="gray">
-        <color rgba="0.5 0.5 0.5 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-        <box size="${base_length} ${base_width} 0.05"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <mass value="0.1"/> <!-- Small, non-zero mass -->
-      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
-    </inertial>
-  </link>
+  
 
-  <!-- Prismatic joint for vertical sliding -->
-  <joint name="$(arg namespace)_sliding_joint" type="prismatic">
-    <parent link="$(arg namespace)_base_link"/>
-    <child link="$(arg namespace)_sliding_platform"/>
-    <origin xyz="0 0 ${base_height/2+0.05}" rpy="0 0 0"/>
-    <axis xyz="0 0 1"/>
-    <limit lower="0" upper="0.5" effort="100" velocity="0.5"/>
-  </joint>
 
-  <gazebo>
-    <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
-      <ros>
-        <namespace>$(arg namespace)</namespace>
-        <remapping>joint_states:=joint_states</remapping>
-      </ros>
-      <update_rate>30</update_rate>
-      <joint_name>$(arg namespace)_sliding_joint</joint_name>
-    </plugin>
-  </gazebo>
 
-  <gazebo>
-    <plugin name="gazebo_ros_joint_pose_trajectory"
-        filename="libgazebo_ros_joint_pose_trajectory.so">
-        <ros>
-          <!-- <namespace>$(arg namespace)</namespace> -->
-        </ros>
-        <update_rate>20</update_rate>
-        <frame_id>drone_boris_base_link</frame_id>
-        <!-- <joint_name>$(arg namespace)_sliding_joint</joint_name> -->
-    </plugin>
-  </gazebo>
+ 
+
+  
 
 
 
