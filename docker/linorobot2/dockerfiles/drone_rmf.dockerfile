@@ -22,4 +22,19 @@ RUN apt-get update && \
 
 RUN python3 -m pip install flask-socketio fastapi uvicorn setuptools==58.2.0
 
-RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
+WORKDIR /home/humble_ws/
+
+COPY ./linorobot2_rmf_client /home/humble_ws/src/linorobot2_rmf_client
+
+
+RUN source /opt/ros/humble/setup.bash && \
+    colcon build --symlink-install && \
+    source install/setup.bash && \
+    echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
+    echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
+
+    # ${DRONE_NAME}
+
+CMD bash -c "source /home/humble_ws/install/setup.bash && \
+            ros2 launch linorobot2_rmf_client linorobot2_rmf_client.launch.py ns:=${DRONE_NAME}"
+

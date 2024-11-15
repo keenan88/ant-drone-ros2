@@ -6,6 +6,8 @@ from geometry_msgs.msg import Twist
 from tf2_ros import TransformBroadcaster
 from geometry_msgs.msg import TransformStamped
 from math import isnan
+from geometry_msgs.msg import PoseWithCovarianceStamped
+from time import sleep
 
 class OdomScaler(Node):
     def __init__(self):
@@ -33,6 +35,37 @@ class OdomScaler(Node):
 
         # Create static transform broadcaster for map to odom transform
         self.tf_broadcaster = TransformBroadcaster(self)
+
+        self.initial_pose_pub = self.create_publisher(
+            PoseWithCovarianceStamped,
+            'initialpose',
+            10
+        )
+
+        # Publishing starting pose is just a convenience measure in simulation
+        sleep(2)
+        starting_pose = PoseWithCovarianceStamped()
+        starting_pose.header.stamp = self.get_clock().now().to_msg()
+        starting_pose.header.frame_id = 'map'
+        starting_pose.pose.pose.orientation.x = 0.0
+        starting_pose.pose.pose.orientation.y = 0.0
+        starting_pose.pose.pose.orientation.z = 0.0
+        starting_pose.pose.pose.orientation.w = 1.0
+        
+        starting_pose.pose.pose.position.z = 0.0
+
+        if self.drone_name == 'drone_boris':
+            starting_pose.pose.pose.position.x = 16.5
+            starting_pose.pose.pose.position.y = -6.5
+        elif self.drone_name == 'drone_yuri':
+            starting_pose.pose.pose.position.x = 16.5
+            starting_pose.pose.pose.position.y = -8.0
+
+        self.initial_pose_pub.publish(starting_pose)
+
+
+
+
 
     def odom_callback(self, msg):
 

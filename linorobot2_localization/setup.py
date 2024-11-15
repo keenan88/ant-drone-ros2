@@ -28,6 +28,8 @@ setup(
             'slam_recording_publisher = linorobot2_localization.slam_recording_publisher:main',
             'detected_dynamic_obstacles_publisher = linorobot2_localization.detected_dynamic_obstacles_publisher:main',
             'odom_vel_scale_gz = linorobot2_localization.odom_vel_scale_gz:main',
+            'cmd_vel_scale_gz = linorobot2_localization.cmd_vel_scale_gz:main',
+
         ],
     },
 )

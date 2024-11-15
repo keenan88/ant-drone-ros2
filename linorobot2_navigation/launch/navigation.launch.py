@@ -18,7 +18,7 @@ def generate_launch_description():
         description='Whether to determine odometry from mecanum wheels or body (body given by IsaacSim)'
     )
 
-    rviz_config_path = '/home/humble_ws/src/linorobot2_navigation/rviz/linorobot2_slam.rviz'
+    rviz_config_path = '/home/humble_ws/src/linorobot2_navigation/rviz/linorobot2_slam_' + drone_name + '.rviz'
     
     controller = Node(
         package = 'nav2_controller',
@@ -152,6 +152,17 @@ def generate_launch_description():
         ]
     )
 
+    cmd_vel_scaler = Node(
+        package = 'linorobot2_localization',
+        executable = 'cmd_vel_scale_gz',
+        namespace=drone_name,
+        parameters = [
+            {
+                'use_sim_time': True
+            }
+        ]
+    )
+
     ld = LaunchDescription()
 
     ld.add_action(controller)
@@ -167,6 +178,7 @@ def generate_launch_description():
     ld.add_action(keepout_launch)
     ld.add_action(path_orientation_updater)
     ld.add_action(wheels_or_body_odometry)
+    ld.add_action(cmd_vel_scaler)
 
 
 

@@ -24,7 +24,6 @@ setup(
         "console_scripts": [
             'cmd_vel_to_motor_vel = linorobot2_joystick.cmd_vel_to_motor_vel:main',
             'robot_teleporter = linorobot2_joystick.robot_teleporter:main',
-            'cmd_vel_scale_gz = linorobot2_joystick.cmd_vel_scale_gz:main',
         ],
     },
 )

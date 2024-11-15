@@ -5,18 +5,16 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Grid1
+        - /TF1
         - /TF1/Frames1
         - /Static Map1/Topic1
         - /Particle Cloud1/Topic1
         - /Traffic Map1/Topic1
         - /Fleet Markers1/Topic1
-        - /downsampled1
-        - /framefixed1
-        - /framefixed1/Topic1
-        - /cropped1
-      Splitter Ratio: 0.49312713742256165
-    Tree Height: 307
+        - /Scans1
+        - /Scans1/scan1
+      Splitter Ratio: 0.4584905803203583
+    Tree Height: 329
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -66,8 +64,10 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
+        drone_boris_attachment_point:
+          Value: false
         drone_boris_base_link:
-          Value: true
+          Value: false
         drone_boris_front_gazebo_camera_frame:
           Value: false
         drone_boris_front_rs_depth_optical_frame:
@@ -77,7 +77,7 @@ Visualization Manager:
         drone_boris_left_rs_depth_optical_frame:
           Value: false
         drone_boris_odom:
-          Value: true
+          Value: false
         drone_boris_rear_gazebo_camera_frame:
           Value: false
         drone_boris_rear_rs_depth_optical_frame:
@@ -86,25 +86,77 @@ Visualization Manager:
           Value: false
         drone_boris_right_rs_depth_optical_frame:
           Value: false
-        worker_misha_base_link:
+        drone_yuri_attachment_point:
           Value: false
-        worker_misha_front_gazebo_camera_frame:
+        drone_yuri_base_link:
+          Value: true
+        drone_yuri_front_gazebo_camera_frame:
           Value: false
-        worker_misha_front_rs_depth_optical_frame:
+        drone_yuri_front_rs_depth_optical_frame:
           Value: false
-        worker_misha_odom:
+        drone_yuri_left_gazebo_camera_frame:
           Value: false
-        worker_misha_rear_gazebo_camera_frame:
+        drone_yuri_left_rs_depth_optical_frame:
           Value: false
-        worker_misha_rear_rs_depth_optical_frame:
+        drone_yuri_odom:
+          Value: true
+        drone_yuri_rear_gazebo_camera_frame:
           Value: false
+        drone_yuri_rear_rs_depth_optical_frame:
+          Value: false
+        drone_yuri_right_gazebo_camera_frame:
+          Value: false
+        drone_yuri_right_rs_depth_optical_frame:
+          Value: false
+        map:
+          Value: true
       Marker Scale: 1.5
       Name: TF
       Show Arrows: false
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        map:
+          drone_boris_odom:
+            drone_boris_base_link:
+              drone_boris_attachment_point:
+                {}
+              drone_boris_front_gazebo_camera_frame:
+                {}
+              drone_boris_front_rs_depth_optical_frame:
+                {}
+              drone_boris_left_gazebo_camera_frame:
+                {}
+              drone_boris_left_rs_depth_optical_frame:
+                {}
+              drone_boris_rear_gazebo_camera_frame:
+                {}
+              drone_boris_rear_rs_depth_optical_frame:
+                {}
+              drone_boris_right_gazebo_camera_frame:
+                {}
+              drone_boris_right_rs_depth_optical_frame:
+                {}
+          drone_yuri_odom:
+            drone_yuri_base_link:
+              drone_yuri_attachment_point:
+                {}
+              drone_yuri_front_gazebo_camera_frame:
+                {}
+              drone_yuri_front_rs_depth_optical_frame:
+                {}
+              drone_yuri_left_gazebo_camera_frame:
+                {}
+              drone_yuri_left_rs_depth_optical_frame:
+                {}
+              drone_yuri_rear_gazebo_camera_frame:
+                {}
+              drone_yuri_rear_rs_depth_optical_frame:
+                {}
+              drone_yuri_right_gazebo_camera_frame:
+                {}
+              drone_yuri_right_rs_depth_optical_frame:
+                {}
       Update Interval: 0
       Value: true
     - Alpha: 0.4000000059604645
@@ -119,13 +171,13 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /drone_boris/map
+        Value: /drone_yuri/map
       Update Topic:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /drone_boris/map_updates
+        Value: /drone_yuri/map_updates
       Use Timestamp: false
       Value: true
     - Alpha: 0.699999988079071
@@ -140,13 +192,13 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /drone_boris/global_costmap/costmap
+        Value: /drone_yuri/global_costmap/costmap
       Update Topic:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /drone_boris/global_costmap/costmap_updates
+        Value: /drone_yuri/global_costmap/costmap_updates
       Use Timestamp: false
       Value: true
     - Alpha: 0.699999988079071
@@ -161,13 +213,13 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /drone_boris/local_costmap/costmap
+        Value: /drone_yuri/local_costmap/costmap
       Update Topic:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /drone_boris/local_costmap/costmap_updates
+        Value: /drone_yuri/local_costmap/costmap_updates
       Use Timestamp: false
       Value: true
     - Alpha: 0.5
@@ -182,13 +234,13 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /drone_boris/keepout_filter_mask
+        Value: /drone_yuri/keepout_filter_mask
       Update Topic:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /drone_boris/keepout_filter_mask_updates
+        Value: /drone_yuri/keepout_filter_mask_updates
       Use Timestamp: false
       Value: true
     - Alpha: 1
@@ -202,7 +254,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /drone_boris/global_costmap/published_footprint
+        Value: /drone_yuri/global_costmap/published_footprint
       Value: true
     - Alpha: 1
       Class: rviz_default_plugins/Polygon
@@ -215,7 +267,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /drone_boris/local_costmap/published_footprint
+        Value: /drone_yuri/local_costmap/published_footprint
       Value: true
     - Alpha: 1
       Arrow Length: 0.07500000298023224
@@ -236,7 +288,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /drone_boris/particle_cloud_pose_array
+        Value: /drone_yuri/particle_cloud_pose_array
       Value: true
     - Alpha: 0.5
       Class: rviz_default_plugins/Map
@@ -287,7 +339,9 @@ Visualization Manager:
       Enabled: true
       Name: Map Markers
       Namespaces:
-        {}
+        drone_fleet/labels/L1: true
+        drone_fleet/lanes/L1: true
+        drone_fleet/waypoints/L1: true
       Topic:
         Depth: 5
         Durability Policy: Transient Local
@@ -321,7 +375,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /drone_boris/plan
+        Value: /drone_yuri/plan
       Value: true
     - Class: rviz_common/Group
       Displays:
@@ -504,7 +558,7 @@ Visualization Manager:
           Axis: Z
           Channel Name: intensity
           Class: rviz_default_plugins/LaserScan
-          Color: 255; 255; 127
+          Color: 255; 170; 0
           Color Transformer: FlatColor
           Decay Time: 0
           Enabled: true
@@ -525,114 +579,12 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Best Effort
-            Value: /drone_boris/scan
+            Value: /drone_yuri/scan
           Use Fixed Frame: true
           Use rainbow: true
           Value: true
       Enabled: true
       Name: Scans
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz_default_plugins/PointCloud2
-      Color: 255; 255; 255
-      Color Transformer: RGB8
-      Decay Time: 0
-      Enabled: false
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 4096
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: downsampled
-      Position Transformer: XYZ
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.009999999776482582
-      Style: Flat Squares
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /drone_boris/left_rs/pointcloud_downsampled
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: false
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz_default_plugins/PointCloud2
-      Color: 255; 255; 255
-      Color Transformer: RGB8
-      Decay Time: 0
-      Enabled: false
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 4096
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: framefixed
-      Position Transformer: XYZ
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.009999999776482582
-      Style: Flat Squares
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Best Effort
-        Value: /drone_boris/left_camera/frame_fixed/points
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: false
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz_default_plugins/PointCloud2
-      Color: 255; 255; 255
-      Color Transformer: RGB8
-      Decay Time: 0
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 4096
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: cropped
-      Position Transformer: XYZ
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.009999999776482582
-      Style: Flat Squares
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /drone_boris/left_rs/pointcloud_cropped
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: true
   Enabled: true
   Global Options:
     Background Color: 117; 135; 133
@@ -656,14 +608,14 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /drone_boris/initialpose
+        Value: initialpose
     - Class: rviz_default_plugins/SetGoal
       Topic:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /drone_boris/goal_pose
+        Value: goal_pose
     - Class: rviz_default_plugins/PublishPoint
       Single click: true
       Topic:
@@ -671,7 +623,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /clicked_point
+        Value: clicked_point
   Transformation:
     Current:
       Class: rviz_default_plugins/TF
@@ -679,35 +631,35 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/XYOrbit
-      Distance: 14.506628036499023
+      Distance: 6.561271667480469
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 24.113513946533203
-        Y: -11.363038063049316
-        Z: 1.5926916603348218e-05
+        X: 17.405590057373047
+        Y: -7.925681114196777
+        Z: 1.7113266949309036e-05
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.4197965860366821
+      Pitch: 1.0347964763641357
       Target Frame: base_link
       Value: XYOrbit (rviz_default_plugins)
-      Yaw: 4.689228534698486
+      Yaw: 4.619226932525635
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 452
+  Height: 474
   Hide Left Dock: false
   Hide Right Dock: true
   Navigation 2:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000400000000000001560000016efc020000000ffb0000001200530065006c0065006300740069006f006e000000003b000000840000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b0000016e000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001e005200650061006c00730065006e0073006500430061006d0065007200610000000000ffffffff0000000000000000fb00000018004e0061007600690067006100740069006f006e002000320000000108000001230000012300fffffffb000000100044006900730070006c00610079007300000002b500000128000000c700fffffffb0000000a0049006d00610067006500000002510000018c0000000000000000fb0000000a0049006d0061006700650000000312000000cb0000000000000000fb0000000a0049006d0061006700650100000312000000cb0000000000000000fb0000000a0049006d0061006700650000000162000000a500000000000000000000000100000190000003a2fc020000000bfb0000001000460072006f006e0074005200470042000000003b000000b60000000000000000fc0000003b000000d80000000000fffffffa000000000100000002fb00000010005200690067006800740052004700420000000000ffffffff0000000000000000fb0000000e004c00650066007400520047004200000005f0000001900000000000000000fb000000100052006900670068007400520047004200000001710000008a0000000000000000fc0000003b000000ec0000000000fffffffa000000000100000002fb0000000c00430061006d0065007200610000000000ffffffff0000000000000000fb0000001000460072006f006e007400520047004201000005f0000001900000000000000000fb0000000e004c006500660074005200470042010000012d000000dc0000000000000000fb0000001000520069006700680074005200470042010000020f000000e20000000000000000fb0000000e0052006500610072005200470042000000003b000001650000000000000000fb0000000e005200650061007200520047004200000002b5000001280000000000000000fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003b000003a2000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000780000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d006501000000000000045000000000000000000000025e0000016e00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000015600000184fc020000000ffb0000001200530065006c0065006300740069006f006e000000003b000000840000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b00000184000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001e005200650061006c00730065006e0073006500430061006d0065007200610000000000ffffffff0000000000000000fb00000018004e0061007600690067006100740069006f006e002000320000000108000001230000012300fffffffb000000100044006900730070006c00610079007300000002b500000128000000c700fffffffb0000000a0049006d00610067006500000002510000018c0000000000000000fb0000000a0049006d0061006700650000000312000000cb0000000000000000fb0000000a0049006d0061006700650100000312000000cb0000000000000000fb0000000a0049006d0061006700650000000162000000a500000000000000000000000100000190000003a2fc020000000bfb0000001000460072006f006e0074005200470042000000003b000000b60000000000000000fc0000003b000000d80000000000fffffffa000000000100000002fb00000010005200690067006800740052004700420000000000ffffffff0000000000000000fb0000000e004c00650066007400520047004200000005f0000001900000000000000000fb000000100052006900670068007400520047004200000001710000008a0000000000000000fc0000003b000000ec0000000000fffffffa000000000100000002fb0000000c00430061006d0065007200610000000000ffffffff0000000000000000fb0000001000460072006f006e007400520047004201000005f0000001900000000000000000fb0000000e004c006500660074005200470042010000012d000000dc0000000000000000fb0000001000520069006700680074005200470042010000020f000000e20000000000000000fb0000000e0052006500610072005200470042000000003b000001650000000000000000fb0000000e005200650061007200520047004200000002b5000001280000000000000000fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003b000003a2000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000780000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d006501000000000000045000000000000000000000025e0000018400000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Tool Properties:
@@ -716,4 +668,4 @@ Window Geometry:
     collapsed: true
   Width: 954
   X: 0
-  Y: 591
+  Y: 32

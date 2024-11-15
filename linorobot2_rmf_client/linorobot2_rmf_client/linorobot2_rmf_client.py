@@ -29,14 +29,14 @@ MODE_CLEANING=9
 class Linorobot2RMF(Node):
 
     def __init__(self):
-        super().__init__('linorobot2_rmf')
+        super().__init__('linorobot2_rmf_client')
 
         self.set_parameters([rclpy.parameter.Parameter('use_sim_time', rclpy.Parameter.Type.BOOL, True)])
 
+        self.robot_name = self.get_namespace()
 
         # TODO - change robot naming to read from a yaml file
         self.fleet_name = os.getenv('FLEET_NAME')
-        self.robot_name = os.getenv('DRONE_NAME')
         self.seq = 0
 
         self.robot_state = RobotState()
@@ -65,7 +65,7 @@ class Linorobot2RMF(Node):
         self.first_tf_set = False
 
         self._action_client = ActionClient(
-            self, NavigateToPose, '/' + self.robot_name + '/navigate_to_pose')
+            self, NavigateToPose, 'navigate_to_pose')
 
         self.state_timer = self.create_timer(1.0, self.publish_state)
 
@@ -79,7 +79,7 @@ class Linorobot2RMF(Node):
             [555, -286]
         ])
 
-        self.get_logger().info(f"Row L poses: {self.row_L_xy_poses}")
+        self.get_logger().info(f"{self.robot_name}_rmf_client started")
         
     def get_transform(self):
         try:

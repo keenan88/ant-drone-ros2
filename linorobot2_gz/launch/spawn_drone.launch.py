@@ -22,7 +22,7 @@ def generate_launch_description():
             namespace=LaunchConfiguration('namespace'),
             arguments=[
                 '-topic', 'robot_description', 
-                '-entity', 'linorobot2', 
+                '-entity', LaunchConfiguration('namespace'), 
                 '-x', LaunchConfiguration('spawn_x'),
                 '-y', LaunchConfiguration('spawn_y'),
                 '-z', LaunchConfiguration('spawn_z'),

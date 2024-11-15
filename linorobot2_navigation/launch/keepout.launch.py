@@ -4,20 +4,7 @@ from launch.substitutions import LaunchConfiguration
 import os
 
 def generate_launch_description():
-
-    rviz_config_path = '/home/humble_ws/src/linorobot2_navigation/rviz/linorobot2_slam.rviz'
-
     drone_name = os.getenv('DRONE_NAME')
-
-    rviz = Node(
-        package='rviz2',
-        executable='rviz2',
-        arguments=['-d', rviz_config_path],
-        namespace = drone_name,
-        parameters=[
-            {'use_sim_time': True}
-        ]
-    )
 
     ld = LaunchDescription()
 

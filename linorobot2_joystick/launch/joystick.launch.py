@@ -50,16 +50,7 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration('WHEELED_MOTION'))
     )  
 
-    cmd_vel_scaler = Node(
-        package = 'linorobot2_joystick',
-        executable = 'cmd_vel_scale_gz',
-        namespace=drone_name,
-        parameters = [
-            {
-                'use_sim_time': True
-            }
-        ]
-    )
+    
 
     # robot_teleporter = Node(
     #     package = 'linorobot2_joystick', 
