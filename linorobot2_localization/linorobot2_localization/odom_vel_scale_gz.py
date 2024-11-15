@@ -8,6 +8,9 @@ from geometry_msgs.msg import TransformStamped
 from math import isnan
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from time import sleep
+from nav2_msgs.srv import SetInitialPose
+
+
 
 class OdomScaler(Node):
     def __init__(self):
@@ -36,14 +39,13 @@ class OdomScaler(Node):
         # Create static transform broadcaster for map to odom transform
         self.tf_broadcaster = TransformBroadcaster(self)
 
-        self.initial_pose_pub = self.create_publisher(
-            PoseWithCovarianceStamped,
-            'initialpose',
-            10
-        )
 
         # Publishing starting pose is just a convenience measure in simulation
-        sleep(2)
+        self.set_initial_pose_client = self.create_client(SetInitialPose, 'set_initial_pose')
+        while not self.set_initial_pose_client.wait_for_service(timeout_sec=1):
+            self.get_logger().info('set_initial_pose service not available, waiting again...')
+            sleep(1)
+
         starting_pose = PoseWithCovarianceStamped()
         starting_pose.header.stamp = self.get_clock().now().to_msg()
         starting_pose.header.frame_id = 'map'
@@ -61,11 +63,14 @@ class OdomScaler(Node):
             starting_pose.pose.pose.position.x = 16.5
             starting_pose.pose.pose.position.y = -8.0
 
-        self.initial_pose_pub.publish(starting_pose)
+        req = SetInitialPose.Request()
+        req.pose = starting_pose
+        future = self.set_initial_pose_client.call_async(req)
+        rclpy.spin_until_future_complete(self, future)
 
-
-
-
+        self.get_logger().info(f"{self.drone_name} odometry scaling started")
+        
+    
 
     def odom_callback(self, msg):
 

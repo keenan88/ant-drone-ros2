@@ -89,8 +89,8 @@
     footprint_padding: 0.0
     footprint: "[ [0.41, 0.25], [-0.41, 0.25], [-0.41, -0.25], [0.41, -0.25] ]"
     
-    update_frequency: 10.0
-    publish_frequency: 10.0
+    update_frequency: 1.0
+    publish_frequency: 1.0
     global_frame: map
     rolling_window: true
     resolution: 0.02  

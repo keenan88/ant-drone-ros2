@@ -143,15 +143,6 @@ def generate_launch_description():
         }.items()
     )
 
-    path_orientation_updater = Node(
-        package='linorobot2_localization',
-        executable='path_orientation_updater',
-        namespace = drone_name,
-        parameters=[
-            {'use_sim_time': True}
-        ]
-    )
-
     cmd_vel_scaler = Node(
         package = 'linorobot2_localization',
         executable = 'cmd_vel_scale_gz',
@@ -176,7 +167,6 @@ def generate_launch_description():
     ld.add_action(amcl)
     ld.add_action(amcl_pointcloud)
     ld.add_action(keepout_launch)
-    ld.add_action(path_orientation_updater)
     ld.add_action(wheels_or_body_odometry)
     ld.add_action(cmd_vel_scaler)
 

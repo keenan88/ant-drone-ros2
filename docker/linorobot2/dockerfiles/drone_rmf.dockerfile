@@ -25,7 +25,7 @@ RUN python3 -m pip install flask-socketio fastapi uvicorn setuptools==58.2.0
 WORKDIR /home/humble_ws/
 
 COPY ./linorobot2_rmf_client /home/humble_ws/src/linorobot2_rmf_client
-
+RUN git clone https://github.com/keenan88/IFRA_LinkAttacher
 
 RUN source /opt/ros/humble/setup.bash && \
     colcon build --symlink-install && \

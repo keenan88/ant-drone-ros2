@@ -33,7 +33,7 @@ class Linorobot2RMF(Node):
 
         self.set_parameters([rclpy.parameter.Parameter('use_sim_time', rclpy.Parameter.Type.BOOL, True)])
 
-        self.robot_name = self.get_namespace()
+        self.robot_name = self.get_namespace()[1:]  # Remove leading forward slash from robot name
 
         # TODO - change robot naming to read from a yaml file
         self.fleet_name = os.getenv('FLEET_NAME')
@@ -48,7 +48,7 @@ class Linorobot2RMF(Node):
 
         # TODO - add a bridge to bridge in and out robot_state and robot_path_requests from queen DOMAIN ID to individual robot DOMAIN ID
 
-        self.rmf_robot_state_publisher = self.create_publisher(RobotState, 'robot_state', 10)
+        self.rmf_robot_state_publisher = self.create_publisher(RobotState, '/robot_state', 10)
         
         self.rmf_path_request_subscription = self.create_subscription(
             PathRequest,
@@ -80,13 +80,14 @@ class Linorobot2RMF(Node):
         ])
 
         self.get_logger().info(f"{self.robot_name}_rmf_client started")
+        self.base_link = self.robot_name + '_base_link'
         
     def get_transform(self):
         try:
             now = rclpy.time.Time()
             timeout = rclpy.duration.Duration(seconds=1.0)
             transform: TransformStamped = self.tf_buffer.lookup_transform(
-                'map', self.robot_name + '_base_link', now, timeout
+                'map', self.base_link, now, timeout
             )
 
             x = transform.transform.rotation.x
@@ -116,13 +117,13 @@ class Linorobot2RMF(Node):
     def goal_response_callback(self, future):
         goal_handle = future.result()
         if not goal_handle.accepted:
-            self.get_logger().info('NavigateThroughPoses goal was rejected.')
+            # self.get_logger().info('NavigateThroughPoses goal was rejected.')
             self.robot_state.mode.mode = MODE_IDLE
-            self.get_logger().info('goal_response_callback: set to idle')
+            # self.get_logger().info('goal_response_callback: set to idle')
             self.robot_state.path = []
             return
 
-        self.get_logger().info('NavigateThroughPoses goal accepted.')
+        # self.get_logger().info('NavigateThroughPoses goal accepted.')
         self._get_result_future = goal_handle.get_result_async()
         self._get_result_future.add_done_callback(self.get_result_callback)
 
@@ -134,13 +135,14 @@ class Linorobot2RMF(Node):
         result = future.result().result
 
         if result: 
-            self.get_logger().info('NavigateThroughPoses succeeded!')
+            # self.get_logger().info('NavigateThroughPoses succeeded!')
             self.completed_tasks_IDs.append(self.robot_state.task_id)
         else: 
-            self.get_logger().info('NavigateThroughPoses failed.')
+            # self.get_logger().info('NavigateThroughPoses failed.')
+            pass
 
         self.robot_state.mode.mode = MODE_IDLE
-        self.get_logger().info('get_result_callback: set to idle')
+        # self.get_logger().info('get_result_callback: set to idle')
         self.robot_state.path = []
 
     def execute_path(self):
@@ -160,7 +162,7 @@ class Linorobot2RMF(Node):
                 for row_pose in self.row_L_xy_poses:
                     dist = np.linalg.norm(np.array([waypoint.x, waypoint.y]) - row_pose)
                     if dist < 0.05:
-                        self.get_logger().info(f"Row L pose: {row_pose} straightened")
+                        # self.get_logger().info(f"Row L pose: {row_pose} straightened")
                         waypoint.yaw = 1.57
                         break
 
@@ -177,7 +179,7 @@ class Linorobot2RMF(Node):
 
                 self.send_navigate_through_poses_goal(pose)
 
-                self.get_logger().info(f"Sent task {path_request.task_id}, goal pos: {round(pose.pose.position.x, 2), round(pose.pose.position.y, 2), round(waypoint.yaw, 2)})")
+                # self.get_logger().info(f"Sent task {path_request.task_id}, goal pos: {round(pose.pose.position.x, 2), round(pose.pose.position.y, 2), round(waypoint.yaw, 2)})")
 
     def add_path_to_queue(self, path_request):
         if path_request.fleet_name == self.fleet_name:
@@ -194,8 +196,6 @@ class Linorobot2RMF(Node):
 
                             # self.get_logger().info(f"Queued:  {path_request.task_id} : {round(path_request.path[0].x, 2), round(path_request.path[0].y, 2), round(path_request.path[0].yaw, 2)}) -> ({round(path_request.path[1].x, 2), round(path_request.path[1].y, 2), round(path_request.path[1].yaw, 2)}")
 
-            
-    
     def publish_state(self):
 
         if self.first_tf_set:
