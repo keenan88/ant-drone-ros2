@@ -72,11 +72,11 @@ class Linorobot2RMF(Node):
         self.path_requests = []
         self.completed_tasks_IDs = []
 
-        self.row_L_xy_poses = 0.05 * np.array([
-            [464, -286],
-            [493, -286],
-            [521, -286],
-            [555, -286]
+
+        self.row_L_xy_poses = np.array([
+            [26.049999999999997, -14.299999999999999],
+            [24.65, -14.299999999999999],
+            [23.2, -14.299999999999999],
         ])
 
         self.get_logger().info(f"{self.robot_name}_rmf_client started")
@@ -163,7 +163,7 @@ class Linorobot2RMF(Node):
                     dist = np.linalg.norm(np.array([waypoint.x, waypoint.y]) - row_pose)
                     if dist < 0.05:
                         # self.get_logger().info(f"Row L pose: {row_pose} straightened")
-                        waypoint.yaw = 1.57
+                        waypoint.yaw = 0.0
                         break
 
                 pose = PoseStamped()

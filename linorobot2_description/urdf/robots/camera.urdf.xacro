@@ -4,7 +4,7 @@
   <xacro:macro name="camera" params="namespace camera_pos x y z r_rs p_rs yaw_rs r_cam p_cam yaw_cam">
 
     <gazebo reference="${namespace}_${camera_pos}_gazebo_camera_frame">
-    <sensor type="depth" name="${camera_pos}_camera">
+    <sensor type="depth" name="${camera_pos}_rs">
       <update_rate>15.0</update_rate> <!-- Gazebo does not necessarily respect this update rate when publishing the camera data to ros2 -->
       
       <camera>
@@ -26,9 +26,10 @@
       </camera>
 
 
-      <plugin name="${namespace}_${camera_pos}_camera_controller" filename="libgazebo_ros_camera.so">
+      <plugin name="${camera_pos}_camera_controller" filename="libgazebo_ros_camera.so">
         <ros>
             <namespace>${namespace}</namespace>
+            <remap>points:=${camera_pos}_rs/depth/color/points</remap>
             <!-- TODO - remap gazebo topics to ros topics that match the topics on a physical realsense -->
         </ros>
        

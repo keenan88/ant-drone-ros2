@@ -41,9 +41,9 @@ def generate_launch_description():
         executable='planner_server',
         namespace = drone_name,
         parameters=[
+            '/home/humble_ws/src/linorobot2_navigation/config/planner.yaml',
             {'use_sim_time': True},
-            {'robot_base_frame': drone_name + '_base_link'},
-            '/home/humble_ws/src/linorobot2_navigation/config/planner.yaml'
+            {'robot_base_frame': drone_name + '_base_link'}
         ],
         remappings=[
             ('keepout_filter_info', '/' + drone_name + '/keepout_filter_info'),
