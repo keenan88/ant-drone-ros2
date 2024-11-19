@@ -14,7 +14,7 @@ def generate_launch_description():
 
     ld = launch.LaunchDescription()
 
-    for realsense_placement in ["front", "rear", "left", "right"]:
+    for realsense_placement in ["front_rs", "rear_rs", "left_rs", "right_rs"]:
 
         pcl_frame_fixer = Node(
             package='linorobot2_pcl',
@@ -29,23 +29,23 @@ def generate_launch_description():
             ]
         )
 
-        input_topic = realsense_placement + '_camera/frame_fixed/points'
-        crop_topic = realsense_placement + '_rs/pointcloud_cropped'
-        downsample_topic = realsense_placement + '_rs/pointcloud_downsampled'
+        input_topic = realsense_placement + '/frame_fixed/points'
+        crop_topic = realsense_placement + '/pointcloud_cropped'
+        downsample_topic = realsense_placement + '/pointcloud_downsampled'
 
         
         pointcloud_cropper = Node(
             package='pcl_ros',
             executable='filter_crop_box_node',
-            name = realsense_placement + "_rs_pointcloud_cropper",
+            name = realsense_placement + "_pointcloud_cropper",
             namespace = drone_name,
             output='screen',
             parameters=[
                 '/home/humble_ws/src/linorobot2_pcl/config/pcl_filter_crop_box.yaml',
                 {
                     'use_sim_time' : use_sim,
-                    "input_frame": drone_name + '_' + realsense_placement + '_rs_depth_optical_frame',
-                    "output_frame": drone_name + '_base_link'
+                    "input_frame": drone_name + '_' + realsense_placement + '_depth_optical_frame',
+                    "output_frame": drone_name + '_' + realsense_placement + '_depth_optical_frame'
                 },
             ],
             remappings=[
@@ -57,7 +57,7 @@ def generate_launch_description():
         pointcloud_downsampler = Node(
             package='pcl_ros',
             executable='filter_voxel_grid_node',
-            name = realsense_placement + "_rs_pointcloud_downsampler",
+            name = realsense_placement + "_pointcloud_downsampler",
             namespace = drone_name,
             output='screen',
             parameters=[

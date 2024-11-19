@@ -5,14 +5,12 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /TF1
         - /TF1/Frames1
         - /Static Map1/Topic1
         - /Particle Cloud1/Topic1
         - /Traffic Map1/Topic1
         - /Fleet Markers1/Topic1
         - /Scans1/scan1
-        - /framefixed1/Topic1
       Splitter Ratio: 0.49312713742256165
     Tree Height: 292
   - Class: rviz_common/Selection
@@ -86,64 +84,8 @@ Visualization Manager:
           Value: false
         drone_boris_right_rs_depth_optical_frame:
           Value: false
-        drone_yuri_attachment_point:
-          Value: false
-        drone_yuri_base_link:
-          Value: false
-        drone_yuri_front_gazebo_camera_frame:
-          Value: false
-        drone_yuri_front_rs_depth_optical_frame:
-          Value: false
-        drone_yuri_left_gazebo_camera_frame:
-          Value: false
-        drone_yuri_left_rs_depth_optical_frame:
-          Value: false
-        drone_yuri_rear_gazebo_camera_frame:
-          Value: false
-        drone_yuri_rear_rs_depth_optical_frame:
-          Value: false
-        drone_yuri_right_gazebo_camera_frame:
-          Value: false
-        drone_yuri_right_rs_depth_optical_frame:
-          Value: false
         map:
           Value: true
-        worker_dmitry_base_link:
-          Value: false
-        worker_dmitry_front_gazebo_camera_frame:
-          Value: false
-        worker_dmitry_front_rs_depth_optical_frame:
-          Value: false
-        worker_dmitry_odom:
-          Value: false
-        worker_dmitry_rear_gazebo_camera_frame:
-          Value: false
-        worker_dmitry_rear_rs_depth_optical_frame:
-          Value: false
-        worker_ivan_base_link:
-          Value: false
-        worker_ivan_front_gazebo_camera_frame:
-          Value: false
-        worker_ivan_front_rs_depth_optical_frame:
-          Value: false
-        worker_ivan_odom:
-          Value: false
-        worker_ivan_rear_gazebo_camera_frame:
-          Value: false
-        worker_ivan_rear_rs_depth_optical_frame:
-          Value: false
-        worker_misha_base_link:
-          Value: false
-        worker_misha_front_gazebo_camera_frame:
-          Value: false
-        worker_misha_front_rs_depth_optical_frame:
-          Value: false
-        worker_misha_odom:
-          Value: false
-        worker_misha_rear_gazebo_camera_frame:
-          Value: false
-        worker_misha_rear_rs_depth_optical_frame:
-          Value: false
       Marker Scale: 1.5
       Name: TF
       Show Arrows: false
@@ -152,25 +94,7 @@ Visualization Manager:
       Tree:
         map:
           drone_boris_odom:
-            drone_boris_base_link:
-              drone_boris_attachment_point:
-                {}
-              drone_boris_front_gazebo_camera_frame:
-                {}
-              drone_boris_front_rs_depth_optical_frame:
-                {}
-              drone_boris_left_gazebo_camera_frame:
-                {}
-              drone_boris_left_rs_depth_optical_frame:
-                {}
-              drone_boris_rear_gazebo_camera_frame:
-                {}
-              drone_boris_rear_rs_depth_optical_frame:
-                {}
-              drone_boris_right_gazebo_camera_frame:
-                {}
-              drone_boris_right_rs_depth_optical_frame:
-                {}
+            {}
       Update Interval: 0
       Value: true
     - Alpha: 0.4000000059604645
@@ -663,7 +587,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /drone_boris/left_camera/frame_fixed/points
+        Value: /drone_boris/left_rs/frame_fixed/points
       Use Fixed Frame: true
       Use rainbow: true
       Value: false
@@ -747,25 +671,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/XYOrbit
-      Distance: 12.77975845336914
+      Distance: 7.971208572387695
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 20.43395233154297
-        Y: -16.243576049804688
-        Z: 5.913336281082593e-06
+        X: 18.99870491027832
+        Y: -9.00230598449707
+        Z: 1.144964699051343e-06
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.4047964811325073
+      Pitch: 1.2297966480255127
       Target Frame: base_link
       Value: XYOrbit (rviz_default_plugins)
-      Yaw: 4.654226779937744
+      Yaw: 5.049226760864258
     Saved: ~
 Window Geometry:
   Displays:

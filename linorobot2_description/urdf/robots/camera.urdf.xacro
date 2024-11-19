@@ -3,6 +3,8 @@
 
   <xacro:macro name="camera" params="namespace camera_pos x y z r_rs p_rs yaw_rs r_cam p_cam yaw_cam">
 
+    <xacro:property name="rs_pcl_topic" value="/${namespace}/${camera_pos}_rs/${camera_pos}_rs/depth/color/points" />
+
     <gazebo reference="${namespace}_${camera_pos}_gazebo_camera_frame">
     <sensor type="depth" name="${camera_pos}_rs">
       <update_rate>15.0</update_rate> <!-- Gazebo does not necessarily respect this update rate when publishing the camera data to ros2 -->
@@ -29,16 +31,16 @@
       <plugin name="${camera_pos}_camera_controller" filename="libgazebo_ros_camera.so">
         <ros>
             <namespace>${namespace}</namespace>
-            <remap>points:=${camera_pos}_rs/depth/color/points</remap>
-            <!-- TODO - remap gazebo topics to ros topics that match the topics on a physical realsense -->
+            <remapping>/${namespace}/${camera_pos}_rs/points:=${rs_pcl_topic}</remapping>
         </ros>
        
         <alwaysOn>true</alwaysOn>
         <updateRate>0.0</updateRate>
-        <cameraName>${camera_pos}_camera</cameraName>
+        <cameraName>${namespace}_${camera_pos}_camera</cameraName>
+        <pointsTopicName>points</pointsTopicName>
         <imageTopicName>image_raw</imageTopicName>
         <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-        <frameName>${namespace}_${camera_pos}_rs_gazebo_camera_frame</frameName>
+        <frameName>/${namespace}_${camera_pos}_rs_gazebo_camera_frame</frameName>
         <hackBaseline>0.07</hackBaseline>
         <distortionK1>0.0</distortionK1>
         <distortionK2>0.0</distortionK2>

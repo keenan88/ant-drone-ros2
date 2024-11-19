@@ -32,7 +32,8 @@ class FrameFixer(Node):
 
         self.subscription = self.create_subscription(
             PointCloud2,
-            self.camera_pos + '_camera/points',
+            # /drone_boris/front_rs/front_rs/depth/color/points
+            self.camera_pos + '/' + self.camera_pos + '/depth/color/points',
             self.pointcloud_callback,
             qos_profile
         )
@@ -40,13 +41,13 @@ class FrameFixer(Node):
         # Create publisher
         self.publisher = self.create_publisher(
             PointCloud2,
-            self.camera_pos + '_camera/frame_fixed/points',
+            self.camera_pos + '/frame_fixed/points',
             qos_profile
         )
 
     def pointcloud_callback(self, msg):
         # Change the frame id
-        msg.header.frame_id = self.drone_name + '_' + self.camera_pos + '_rs_depth_optical_frame'
+        msg.header.frame_id = self.drone_name + '_' + self.camera_pos + '_depth_optical_frame'
         
         # Publish the modified message
         self.publisher.publish(msg)
