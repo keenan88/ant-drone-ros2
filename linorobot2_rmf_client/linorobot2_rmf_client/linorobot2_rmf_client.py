@@ -11,6 +11,7 @@ from nav2_msgs.action import NavigateThroughPoses, NavigateToPose
 from geometry_msgs.msg import TransformStamped
 import os
 import numpy as np
+from time import sleep
 
 
 # Intended to run on each individual robot
@@ -37,7 +38,6 @@ class Linorobot2RMF(Node):
 
         # TODO - change robot naming to read from a yaml file
         self.fleet_name = os.getenv('FLEET_NAME')
-        self.seq = 0
 
         self.robot_state = RobotState()
         self.robot_state.battery_percent = 100.0 # TODO - implement hardware checking for battery percent
@@ -45,6 +45,7 @@ class Linorobot2RMF(Node):
         self.robot_state.location.index = 0
         self.robot_state.name = self.robot_name
         self.robot_state.mode.mode = MODE_IDLE
+        self.robot_state.seq = 0
 
         # TODO - add a bridge to bridge in and out robot_state and robot_path_requests from queen DOMAIN ID to individual robot DOMAIN ID
 
@@ -53,11 +54,9 @@ class Linorobot2RMF(Node):
         self.rmf_path_request_subscription = self.create_subscription(
             PathRequest,
             '/robot_path_requests',
-            self.add_path_to_queue,
+            self.execute_path_request,
             10
         )
-
-        self.execute_path_timer = self.create_timer(0.1, self.execute_path)
 
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
@@ -65,13 +64,14 @@ class Linorobot2RMF(Node):
         self.first_tf_set = False
 
         self._action_client = ActionClient(
-            self, NavigateToPose, 'navigate_to_pose')
+            self, NavigateToPose, 'navigate_to_pose'
+        )
+
+        while not self._action_client.wait_for_server(timeout_sec=3.0):
+            self.get_logger().info('Waiting for navigate_to_pose action server to become available...')
+        sleep(3) # Navigate to pose server in unknown state for a few seconds after it becomes available
 
         self.state_timer = self.create_timer(1.0, self.publish_state)
-
-        self.path_requests = []
-        self.completed_tasks_IDs = []
-
 
         self.row_L_xy_poses = np.array([
             [26.049999999999997, -14.299999999999999],
@@ -80,14 +80,13 @@ class Linorobot2RMF(Node):
         ])
 
         self.get_logger().info(f"{self.robot_name}_rmf_client started")
-        self.base_link = self.robot_name + '_base_link'
         
     def get_transform(self):
         try:
             now = rclpy.time.Time()
             timeout = rclpy.duration.Duration(seconds=1.0)
             transform: TransformStamped = self.tf_buffer.lookup_transform(
-                'map', self.base_link, now, timeout
+                'map', self.robot_name + '_base_link', now, timeout
             )
 
             x = transform.transform.rotation.x
@@ -104,56 +103,45 @@ class Linorobot2RMF(Node):
         except Exception as e:
             self.get_logger().info(f"Could not get transform: {e}")
 
-    def send_navigate_through_poses_goal(self, pose):
+    def send_nav_to_pose_goal(self, pose):
         self._action_client.wait_for_server()
 
         goal_msg = NavigateToPose.Goal()
         goal_msg.pose = pose
 
-        self._send_goal_future = self._action_client.send_goal_async(goal_msg, feedback_callback=self.feedback_callback)
+        self._send_goal_future = self._action_client.send_goal_async(goal_msg)
 
-        self._send_goal_future.add_done_callback(self.goal_response_callback)
+        self._send_goal_future.add_done_callback(self.nav_to_pose_response_cb)
 
-    def goal_response_callback(self, future):
+    def nav_to_pose_response_cb(self, future):
         goal_handle = future.result()
         if not goal_handle.accepted:
-            # self.get_logger().info('NavigateThroughPoses goal was rejected.')
-            self.robot_state.mode.mode = MODE_IDLE
-            # self.get_logger().info('goal_response_callback: set to idle')
+            self.robot_state.mode.mode = MODE_IDLE # Have to set mode to IDLE to recieve new path requests
             self.robot_state.path = []
+            self.robot_state.task_id = '' # Empty task ID to tell RMF fleet adapter that task was not completed
             return
 
-        # self.get_logger().info('NavigateThroughPoses goal accepted.')
         self._get_result_future = goal_handle.get_result_async()
-        self._get_result_future.add_done_callback(self.get_result_callback)
+        self._get_result_future.add_done_callback(self.nav_to_pose_result_cb)
 
-    def feedback_callback(self, feedback_msg):
-        feedback = feedback_msg.feedback
-        # self.get_logger().info(f'Position: {round(feedback.current_pose.pose.position.x, 2)}, {round(feedback.current_pose.pose.position.y, 2)} ')
+    def nav_to_pose_result_cb(self, future):
+        nav_movement_succeeded = future.result().result
 
-    def get_result_callback(self, future):
-        result = future.result().result
+        if nav_movement_succeeded:
+            self.robot_state.mode.mode = MODE_IDLE # Have to set mode to IDLE to recieve new path requests
+            self.robot_state.path = []
+        else:
+            self.robot_state.task_id = '' # Empty task ID to tell RMF fleet adapter that task was not completed
+        
+        
+        self.get_logger().info("nav_to_pose_result_cb")
 
-        if result: 
-            # self.get_logger().info('NavigateThroughPoses succeeded!')
-            self.completed_tasks_IDs.append(self.robot_state.task_id)
-        else: 
-            # self.get_logger().info('NavigateThroughPoses failed.')
-            pass
+    def execute_path_request(self, path_request):
+        if path_request.fleet_name == self.fleet_name and path_request.robot_name == self.robot_name:
 
-        self.robot_state.mode.mode = MODE_IDLE
-        # self.get_logger().info('get_result_callback: set to idle')
-        self.robot_state.path = []
-
-    def execute_path(self):
-
-        if len(self.path_requests) > 0:
-
-            if self.robot_state.mode.mode in [MODE_IDLE, MODE_WAITING, MODE_CHARGING]:
+            if self.robot_state.task_id != path_request.task_id: # Do not interrupt task underway
 
                 self.robot_state.mode.mode = MODE_MOVING
-
-                path_request = self.path_requests.pop(0)
                         
                 self.robot_state.path = [path_request.path[1]]
                 self.robot_state.task_id = path_request.task_id
@@ -177,34 +165,17 @@ class Linorobot2RMF(Node):
                 pose.pose.orientation.z = math.sin(waypoint.yaw / 2.0)
                 pose.pose.orientation.w = math.cos(waypoint.yaw / 2.0)
 
-                self.send_navigate_through_poses_goal(pose)
+                self.get_logger().info(f"goal pose: {pose}")
 
-                # self.get_logger().info(f"Sent task {path_request.task_id}, goal pos: {round(pose.pose.position.x, 2), round(pose.pose.position.y, 2), round(waypoint.yaw, 2)})")
-
-    def add_path_to_queue(self, path_request):
-        if path_request.fleet_name == self.fleet_name:
-
-            if path_request.robot_name == self.robot_name:
-
-                if not (path_request.task_id == self.robot_state.task_id and self.robot_state.mode.mode == MODE_MOVING):
-
-                    if path_request.task_id not in [path_request.task_id for path_request in self.path_requests]:
-
-                        if path_request.task_id not in self.completed_tasks_IDs:
-
-                            self.path_requests.append(path_request)
-
-                            # self.get_logger().info(f"Queued:  {path_request.task_id} : {round(path_request.path[0].x, 2), round(path_request.path[0].y, 2), round(path_request.path[0].yaw, 2)}) -> ({round(path_request.path[1].x, 2), round(path_request.path[1].y, 2), round(path_request.path[1].yaw, 2)}")
+                self.send_nav_to_pose_goal(pose)
 
     def publish_state(self):
 
         if self.first_tf_set:
 
-            self.robot_state.seq = self.seq
+            self.robot_state.seq += 1
 
             self.rmf_robot_state_publisher.publish(self.robot_state)
-
-            self.seq += 1
     
 
 def main(args=None):
