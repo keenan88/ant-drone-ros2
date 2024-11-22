@@ -13,6 +13,9 @@ def generate_launch_description():
         package='linorobot2_rmf_client',
         executable='linorobot2_rmf_client',
         namespace=LaunchConfiguration('ns'),
+        parameters = [
+            {'use_sim_time' : True}
+        ]
     )
 
     ld = LaunchDescription()
