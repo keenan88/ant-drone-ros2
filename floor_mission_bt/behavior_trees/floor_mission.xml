@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="3"
+      main_tree_to_execute="floor_mission">
+
+  <BehaviorTree ID="floor_mission">
+    <Sequence>
+      <CheckFloorMissionTriggered/>
+      <GoToPlace/>
+    </Sequence>
+
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+  </TreeNodesModel>
+
+</root>
