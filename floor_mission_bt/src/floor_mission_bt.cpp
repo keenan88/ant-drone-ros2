@@ -27,9 +27,10 @@ class FloorMissionNode : public rclcpp::Node
     {
         BT::BehaviorTreeFactory factory;
 
-        factory.registerNodeType<GoToPlace>("GoToPlace", shared_from_this());
         factory.registerNodeType<CheckFloorMissionTriggered>("CheckFloorMissionTriggered", shared_from_this());
-        
+        factory.registerNodeType<GoToPlace>("GoToPlace", shared_from_this());
+        factory.registerNodeType<CheckIdle>("CheckIdle", shared_from_this());
+
         
         auto blackboard = BT::Blackboard::create();
         tree_ = factory.createTreeFromFile(tree_xml_file_, blackboard);

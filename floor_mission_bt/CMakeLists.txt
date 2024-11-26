@@ -17,6 +17,7 @@ find_package(std_msgs REQUIRED)
 find_package(rmf_task_msgs REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(ant_fleet_interfaces REQUIRED)
+find_package(rmf_fleet_msgs REQUIRED)
 
 
 
@@ -36,6 +37,7 @@ set(TARGET_DEPENDS
     rmf_task_msgs
     nlohmann_json
     ant_fleet_interfaces
+    rmf_fleet_msgs
 )
 include_directories(include)
 

@@ -10,7 +10,9 @@
 
 #include "std_msgs/msg/string.hpp"
 #include "rmf_task_msgs/msg/api_request.hpp"
+#include "rmf_fleet_msgs/msg/robot_state.hpp"
 #include "ant_fleet_interfaces/msg/trigger_floor_mission.hpp"
+
 
 class CheckFloorMissionTriggered : public BT::StatefulActionNode
 {
@@ -18,6 +20,7 @@ class CheckFloorMissionTriggered : public BT::StatefulActionNode
     using trigger_floor_mission_msg_t = ant_fleet_interfaces::msg::TriggerFloorMission;
     rclcpp::Subscription<trigger_floor_mission_msg_t>::SharedPtr subscription_;
     bool floor_mission_triggered = false;
+    std::string drone_name;
     rclcpp::Node::SharedPtr ros2_node_ptr;
 
     CheckFloorMissionTriggered(const std::string &name, const BT::NodeConfig &config, rclcpp::Node::SharedPtr node_ptr);
@@ -44,5 +47,22 @@ class GoToPlace : public BT::StatefulActionNode
     void onHalted() override{};
     static BT::PortsList providedPorts();
 
+};
+
+class CheckIdle : public BT::StatefulActionNode
+{
+  public:
+    using robot_state_msg_t = rmf_fleet_msgs::msg::RobotState;
+    rclcpp::Subscription<robot_state_msg_t>::SharedPtr subscription_;
+    bool drone_idle;
+    rclcpp::Node::SharedPtr ros2_node_ptr;
+
+    CheckIdle(const std::string &name, const BT::NodeConfig &config, rclcpp::Node::SharedPtr node_ptr);
+    BT::NodeStatus onStart() override;
+    BT::NodeStatus onRunning() override;
+    void onHalted() override{};
+    static BT::PortsList providedPorts();
+
+    void checkIdleCallback(const rmf_fleet_msgs::msg::RobotState::SharedPtr msg);
 };
 
