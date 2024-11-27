@@ -16,7 +16,7 @@ CheckFloorMissionTriggered::CheckFloorMissionTriggered(const std::string& name, 
 
 void CheckFloorMissionTriggered::triggerFloorMission(const ant_fleet_interfaces::msg::TriggerFloorMission::SharedPtr msg)
 {
-    RCLCPP_INFO(ros2_node_ptr->get_logger(), "Received trigger message: %s", msg->drone_name.c_str());
+    RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] Received trigger message: %s", this->name().c_str(), msg->drone_name.c_str());
 
     // string worker_name
     // string drone_name
@@ -39,12 +39,12 @@ void CheckFloorMissionTriggered::triggerFloorMission(const ant_fleet_interfaces:
 
 BT::NodeStatus CheckFloorMissionTriggered::onStart() {
   if (!ros2_node_ptr) {
-    std::cout << "[FloorMissionTriggeredMsg] ROS2 node not registered via init() method" << std::endl;
+    std::cout << "[CheckFloorMissionTriggered] ROS2 node not registered via init() method" << std::endl;
 
     return BT::NodeStatus::FAILURE;
   }
 
-  RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] Test subscription BT.CPP node running...", this->name().c_str());
+  RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] BT.CPP node running...", this->name().c_str());
 
   floor_mission_triggered = false;
   

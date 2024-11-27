@@ -32,7 +32,6 @@ class FrameFixer(Node):
 
         self.subscription = self.create_subscription(
             PointCloud2,
-            # /drone_boris/front_rs/front_rs/depth/color/points
             self.camera_pos + '/' + self.camera_pos + '/depth/color/points',
             self.pointcloud_callback,
             qos_profile

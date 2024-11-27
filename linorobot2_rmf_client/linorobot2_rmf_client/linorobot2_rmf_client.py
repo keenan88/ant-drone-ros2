@@ -2,17 +2,18 @@
 
 import rclpy
 from rclpy.node import Node
-from rmf_fleet_msgs.msg import RobotState, PathRequest
-from geometry_msgs.msg import PoseStamped
-import math
-from tf2_ros import Buffer, TransformListener
 from rclpy.action import ActionClient
-from nav2_msgs.action import NavigateThroughPoses, NavigateToPose
-from geometry_msgs.msg import TransformStamped
-import os
-import numpy as np
+
+from rmf_fleet_msgs.msg import RobotState, PathRequest
+from geometry_msgs.msg import PoseStamped, TransformStamped
+from ant_fleet_interfaces.srv import SuspendRMFPathing
+from nav2_msgs.action import NavigateToPose
+
+from tf2_ros import Buffer, TransformListener
+
+import os, math
 from time import sleep
-from copy import deepcopy
+
 
 
 # Intended to run on each individual robot
@@ -46,10 +47,13 @@ class Linorobot2RMF(Node):
             10
         )
 
+        self.suspend_rmf_pathing_srv = self.create_service(SuspendRMFPathing, 'suspend_rmf_pathing', self.suspend_rmf_pathing_cb)
+        self.is_rmf_pathing_suspended = False
+
         # drone_rmf_state_publisher gives feedback to RMF fleet adapter as drone executes paths from RMF fleet adapter
         rmf_fleet_adapter_robot_state_topic_name = '/robot_state'
         self.drone_rmf_state_publisher = self.create_publisher(RobotState, rmf_fleet_adapter_robot_state_topic_name, 10)
-        self.state_timer = self.create_timer(1.0, self.publish_state)
+        self.state_timer = self.create_timer(0.1, self.publish_state)
         self.drone_rmf_state = RobotState()
         self.drone_rmf_state.battery_percent = 100.0 # TODO - implement hardware checking for battery percent
         self.drone_rmf_state.location.level_name = "L1" # TODO - implement level updating later, if need be
@@ -67,31 +71,36 @@ class Linorobot2RMF(Node):
         self.drone_queen_state.name = self.robot_name
         self.drone_queen_state.mode.mode = MODE_IDLE
         self.last_movement_end_time_s = self.get_clock().now().to_msg().sec
-        self.idle_timeout_s = 5 # If RMF doesnt send a new waypoint within timeout period, inform queen that drone is free for new tasks
+        self.idle_timeout_s = 10 # If RMF doesnt send a new waypoint within timeout period, inform queen that drone is free for new tasks
         
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
-        self.timer = self.create_timer(1.5, self.get_transform)
+        self.timer = self.create_timer(0.25, self.get_transform)
         self.first_tf_set = False
 
         self._action_client = ActionClient(self, NavigateToPose, 'navigate_to_pose')
 
-        while not self._action_client.wait_for_server(timeout_sec=3.0):
-            self.get_logger().info('Waiting for navigate_to_pose action server to become available...')
-        sleep(3) # Navigate to pose server in unknown state for a few seconds after it becomes available
+        # while not self._action_client.wait_for_server(timeout_sec=3.0):
+        #     self.get_logger().info('Waiting for navigate_to_pose action server to become available...')
+        # sleep(3) # Navigate to pose server in unknown state for a few seconds after it becomes available
 
-        self.row_L_xy_poses = np.array([
-            [26.049999999999997, -14.299999999999999],
-            [24.65, -14.299999999999999],
-            [23.2, -14.299999999999999],
-        ])
 
         self.get_logger().info(f"{self.robot_name}_rmf_client started")
+
+    def suspend_rmf_pathing_cb(self, request, response):
+
+        self.is_rmf_pathing_suspended = request.is_rmf_pathing_suspended
+
+        self.get_logger().info(f"self.is_rmf_pathing_suspended: {self.is_rmf_pathing_suspended}")
+
+        response.success = True
+
+        return response
         
     def get_transform(self):
         try:
             now = rclpy.time.Time()
-            timeout = rclpy.duration.Duration(seconds=1.0)
+            timeout = rclpy.duration.Duration(seconds=0.1)
             transform: TransformStamped = self.tf_buffer.lookup_transform(
                 'map', self.robot_name + '_base_link', now, timeout
             )
@@ -144,42 +153,38 @@ class Linorobot2RMF(Node):
             self.drone_rmf_state.task_id = '' # Empty task ID to tell RMF fleet adapter that task was not completed
         
         self.last_movement_end_time_s = self.get_clock().now().to_msg().sec
-        self.get_logger().info("nav_to_pose_result_cb")
+        # self.get_logger().info("nav_to_pose_result_cb")
 
     def execute_path_request(self, path_request):
 
         if path_request.fleet_name == self.fleet_name and path_request.robot_name == self.robot_name: # Only execute paths intended for this drone
 
-            if self.drone_rmf_state.task_id != path_request.task_id: # Do not interrupt task underway
+            if not self.is_rmf_pathing_suspended: # Only execute paths if rmf pathing is not suspended
 
-                self.drone_rmf_state.mode.mode = MODE_MOVING
-                self.drone_queen_state.mode.mode = MODE_MOVING
-                        
-                self.drone_rmf_state.path = [path_request.path[1]]
-                self.drone_rmf_state.task_id = path_request.task_id
+                if self.drone_rmf_state.task_id != path_request.task_id: # Do not interrupt task underway
 
-                waypoint = path_request.path[1]
-                for row_pose in self.row_L_xy_poses:
-                    dist = np.linalg.norm(np.array([waypoint.x, waypoint.y]) - row_pose)
-                    if dist < 0.05:
-                        # self.get_logger().info(f"Row L pose: {row_pose} straightened")
-                        waypoint.yaw = 0.0
-                        break
+                    self.drone_rmf_state.mode.mode = MODE_MOVING
+                    self.drone_queen_state.mode.mode = MODE_MOVING
+                            
+                    self.drone_rmf_state.path = [path_request.path[1]]
+                    self.drone_rmf_state.task_id = path_request.task_id
 
-                pose = PoseStamped()
-                pose.header.frame_id = 'map'
-                pose.header.stamp = waypoint.t
+                    waypoint = path_request.path[1]
 
-                pose.pose.position.x = waypoint.x
-                pose.pose.position.y = waypoint.y
-                pose.pose.orientation.x = 0.0
-                pose.pose.orientation.y = 0.0
-                pose.pose.orientation.z = math.sin(waypoint.yaw / 2.0)
-                pose.pose.orientation.w = math.cos(waypoint.yaw / 2.0)
+                    pose = PoseStamped()
+                    pose.header.frame_id = 'map'
+                    pose.header.stamp = waypoint.t
 
-                self.get_logger().info(f"goal pose: {pose}")
+                    pose.pose.position.x = waypoint.x
+                    pose.pose.position.y = waypoint.y
+                    pose.pose.orientation.x = 0.0
+                    pose.pose.orientation.y = 0.0
+                    pose.pose.orientation.z = math.sin(waypoint.yaw / 2.0)
+                    pose.pose.orientation.w = math.cos(waypoint.yaw / 2.0)
 
-                self.send_nav_to_pose_goal(pose)
+                    # self.get_logger().info(f"goal pose: {pose}")
+
+                    self.send_nav_to_pose_goal(pose)
 
     def publish_state(self):
 

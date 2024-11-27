@@ -20,7 +20,10 @@
   <depend>rmf_task_msgs</depend>
   <depend>rmf_fleet_msgs</depend>
   <depend>ant_fleet_interfaces</depend>
-  <depend>nlohmann_json</depend>
+  <!-- <depend>nlohmann_json</depend> -->
+  <depend>linkattacher_msgs</depend>
+  <depend>example_interfaces</depend>
+  <depend>behaviortree_ros2</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

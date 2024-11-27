@@ -18,7 +18,9 @@ find_package(rmf_task_msgs REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(ant_fleet_interfaces REQUIRED)
 find_package(rmf_fleet_msgs REQUIRED)
-
+find_package(linkattacher_msgs REQUIRED)
+find_package(example_interfaces REQUIRED)
+find_package(behaviortree_ros2)
 
 
 # Install directories
@@ -38,6 +40,9 @@ set(TARGET_DEPENDS
     nlohmann_json
     ant_fleet_interfaces
     rmf_fleet_msgs
+    linkattacher_msgs
+    example_interfaces
+    behaviortree_ros2
 )
 include_directories(include)
 

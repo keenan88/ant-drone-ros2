@@ -24,7 +24,8 @@ RUN python3 -m pip install flask-socketio fastapi uvicorn setuptools==58.2.0
 
 WORKDIR /home/humble_ws/
 
-COPY ./linorobot2_rmf_client /home/humble_ws/src/linorobot2_rmf_client
+COPY ./linorobot2/linorobot2_rmf_client /home/humble_ws/src/linorobot2_rmf_client
+COPY ./ant_queen/ant_fleet_interfaces /home/humble_ws/src/ant_fleet_interfaces
 RUN git clone https://github.com/keenan88/IFRA_LinkAttacher
 
 RUN source /opt/ros/humble/setup.bash && \

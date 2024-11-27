@@ -1,9 +1,0 @@
-controller_manager:
-  ros__parameters:
-    update_rate: 50
-    joint_state_broadcaster:
-      type: joint_state_broadcaster/JointStateBroadcaster
-      parameters: {}
-    sliding_joint_controller:
-      type: position_controllers/JointPositionController
-      joint: "drone_boris_sliding_joint"

@@ -28,7 +28,7 @@ setup(
             'detected_dynamic_obstacles_publisher = linorobot2_localization.detected_dynamic_obstacles_publisher:main',
             'odom_vel_scale_gz = linorobot2_localization.odom_vel_scale_gz:main',
             'cmd_vel_scale_gz = linorobot2_localization.cmd_vel_scale_gz:main',
-
+            'pickup_coordinator = linorobot2_localization.pickup_coordinator:main'
         ],
     },
 )

@@ -12,6 +12,18 @@
 #include "rmf_task_msgs/msg/api_request.hpp"
 #include "rmf_fleet_msgs/msg/robot_state.hpp"
 #include "ant_fleet_interfaces/msg/trigger_floor_mission.hpp"
+#include "ant_fleet_interfaces/msg/worker_pickup_state.hpp"
+#include "ant_fleet_interfaces/srv/suspend_rmf_pathing.hpp"
+
+#include "linkattacher_msgs/srv/attach_link.hpp"
+#include "linkattacher_msgs/srv/detach_link.hpp"
+
+#include <behaviortree_ros2/bt_service_node.hpp>
+
+#include "ant_fleet_interfaces/srv/request_worker_pickup.hpp"
+#include "linkattacher_msgs/srv/attach_link.hpp"
+
+using namespace BT;
 
 
 class CheckFloorMissionTriggered : public BT::StatefulActionNode
@@ -66,3 +78,59 @@ class CheckIdle : public BT::StatefulActionNode
     void checkIdleCallback(const rmf_fleet_msgs::msg::RobotState::SharedPtr msg);
 };
 
+
+
+
+class CheckPickup : public BT::StatefulActionNode
+{
+  public:
+    using pickup_state_msg_t = ant_fleet_interfaces::msg::WorkerPickupState;
+    rclcpp::Subscription<pickup_state_msg_t>::SharedPtr subscription_;
+    bool worker_picked_up;
+    rclcpp::Node::SharedPtr ros2_node_ptr;
+
+    CheckPickup(const std::string &name, const BT::NodeConfig &config, rclcpp::Node::SharedPtr node_ptr);
+    BT::NodeStatus onStart() override;
+    BT::NodeStatus onRunning() override;
+    void onHalted() override{};
+    static BT::PortsList providedPorts();
+
+    void workerPickedUpCallback(const pickup_state_msg_t::SharedPtr msg);
+};
+
+using SendPickupCmd_srv_t = linkattacher_msgs::srv::AttachLink;
+class SendPickupCmd: public RosServiceNode<SendPickupCmd_srv_t>
+{
+  public:
+
+  SendPickupCmd(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};
+
+
+using SuspendRMFPathing_srv_t = ant_fleet_interfaces::srv::SuspendRMFPathing;
+class SendSuspendRMFPathing: public RosServiceNode<SuspendRMFPathing_srv_t>
+{
+  public:
+
+  SendSuspendRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};
+
+
+class SendReleaseRMFPathing: public RosServiceNode<SuspendRMFPathing_srv_t>
+{
+  public:
+
+  SendReleaseRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};

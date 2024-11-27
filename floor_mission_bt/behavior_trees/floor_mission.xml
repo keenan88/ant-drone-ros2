@@ -6,7 +6,12 @@
     <Sequence>
       <!-- <CheckFloorMissionTriggered/> -->
       <!-- <GoToPlace/> -->
-      <CheckIdle/>
+      <!-- <CheckIdle/> -->
+      <!-- <SendSuspendRMFPathing/> -->
+      <!-- <SendPickupCmd/> -->
+      <SendReleaseRMFPathing/>
+      <!-- <CheckPickup/> -->
+
     </Sequence>
 
   </BehaviorTree>

@@ -6,7 +6,7 @@
 #include "nodes.h"
 #include "rclcpp/rclcpp.hpp"
 
-
+// Purpose-built Bt.CPP nodes for calling ros2 actions and services: https://www.behaviortree.dev/docs/ros2_integration/
 
 
 using namespace std::chrono_literals;
@@ -30,6 +30,13 @@ class FloorMissionNode : public rclcpp::Node
         factory.registerNodeType<CheckFloorMissionTriggered>("CheckFloorMissionTriggered", shared_from_this());
         factory.registerNodeType<GoToPlace>("GoToPlace", shared_from_this());
         factory.registerNodeType<CheckIdle>("CheckIdle", shared_from_this());
+        
+        factory.registerNodeType<SendPickupCmd>("SendPickupCmd", BT::RosNodeParams(shared_from_this(), "/" "ATTACHLINK"));
+        factory.registerNodeType<SendSuspendRMFPathing>("SendSuspendRMFPathing", BT::RosNodeParams(shared_from_this(), "/drone_boris/" "suspend_rmf_pathing"));
+        factory.registerNodeType<SendReleaseRMFPathing>("SendReleaseRMFPathing", BT::RosNodeParams(shared_from_this(), "/drone_boris/" "suspend_rmf_pathing"));
+
+
+        factory.registerNodeType<CheckPickup>("CheckPickup", shared_from_this());
 
         
         auto blackboard = BT::Blackboard::create();

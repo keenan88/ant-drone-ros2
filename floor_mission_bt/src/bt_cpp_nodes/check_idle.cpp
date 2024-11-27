@@ -6,7 +6,7 @@ CheckIdle::CheckIdle(const std::string& name, const BT::NodeConfig& config, rclc
   if (ros2_node_ptr) {
     RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] BT.CPP node initialized", this->name().c_str());
 
-    subscription_ = ros2_node_ptr->create_subscription<robot_state_msg_t>("/drone_state", 10, std::bind(&CheckIdle::checkIdleCallback, this, std::placeholders::_1));
+    
 
     
   }
@@ -14,7 +14,7 @@ CheckIdle::CheckIdle(const std::string& name, const BT::NodeConfig& config, rclc
 
 void CheckIdle::checkIdleCallback(const rmf_fleet_msgs::msg::RobotState::SharedPtr msg)
 {
-    RCLCPP_INFO(ros2_node_ptr->get_logger(), "Received trigger message: %s", msg->name.c_str());
+    RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] Received trigger message: %s", this->name().c_str(), msg->name.c_str());
 
     // string worker_name
     // string drone_name
@@ -37,12 +37,14 @@ void CheckIdle::checkIdleCallback(const rmf_fleet_msgs::msg::RobotState::SharedP
 
 BT::NodeStatus CheckIdle::onStart() {
   if (!ros2_node_ptr) {
-    std::cout << "[FloorMissionTriggeredMsg] ROS2 node not registered via init() method" << std::endl;
+    std::cout << "[CheckIdle] ROS2 node not registered via init() method" << std::endl;
 
     return BT::NodeStatus::FAILURE;
   }
 
-  RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] Test subscription BT.CPP node running...", this->name().c_str());
+  RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] BT.CPP node running...", this->name().c_str());
+
+  subscription_ = ros2_node_ptr->create_subscription<robot_state_msg_t>("/drone_state", 10, std::bind(&CheckIdle::checkIdleCallback, this, std::placeholders::_1));
 
   drone_idle = false;
   
@@ -54,6 +56,7 @@ BT::NodeStatus CheckIdle::onRunning() {
 
   if (drone_idle) {
     node_status = BT::NodeStatus::SUCCESS;
+    subscription_ = nullptr;
   }
 
   return node_status;

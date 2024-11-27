@@ -20,16 +20,16 @@ GoToPlace::GoToPlace(const std::string& name, const BT::NodeConfig& config, rclc
 
 BT::NodeStatus GoToPlace::onStart() {
   if (!ros2_node_ptr) {
-    std::cout << "[FloorMissionTriggeredMsg] ROS2 node not registered via init() method" << std::endl;
+    std::cout << "[GoToPlace] ROS2 node not registered via init() method" << std::endl;
 
     return BT::NodeStatus::FAILURE;
   }
 
-  RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] Test subscription BT.CPP node running...", this->name().c_str());
+  RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] BT.CPP node running...", this->name().c_str());
 
   std::string drone_name = "drone_boris";
   std::string vertex_name = "S2_L_R1";
-  float orientation = 1.57;
+  float orientation = 1.6;
 
   nlohmann::json composed_task = {
     {"type", "robot_task_request"},
