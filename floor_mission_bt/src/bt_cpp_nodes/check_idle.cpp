@@ -25,7 +25,7 @@ NodeStatus CheckIdle::onResponseReceived(const Response::SharedPtr& response)
 {
   if (auto node = node_.lock())  // Attempt to lock the weak_ptr
   {
-      RCLCPP_INFO(node->get_logger(), "Is drone idle?: %d", response->is_drone_idle);
+      RCLCPP_INFO(node->get_logger(), "[%s] Is drone idle?: %d", this->name().c_str(), response->is_drone_idle);
   }
 
   if(response -> is_drone_idle)

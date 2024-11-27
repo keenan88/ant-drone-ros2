@@ -30,15 +30,24 @@ BT::NodeStatus GoToPlace::onStart() {
   auto vertex_name_result = getInput<std::string>("vertex_name");
   if (!vertex_name_result)
   {
-      std::cerr << "Couldn't get spray_sizes!" << std::endl;
-      setOutput("error_cause", "CANT_GET_SPRAY_SIZE");
+      return BT::NodeStatus::FAILURE;
+  }
+
+  auto drone_name_result = getInput<std::string>("drone_name");
+  if (!drone_name_result)
+  {
+      return BT::NodeStatus::FAILURE;
+  }
+
+  auto orientation_result = getInput<float>("orientation");
+  if (!orientation_result)
+  {
       return BT::NodeStatus::FAILURE;
   }
 
   
-  float orientation = 1.57;
-  std::string drone_name = "drone_boris";
-
+  float orientation = orientation_result.value();
+  std::string drone_name = drone_name_result.value();
   std::string vertex_name = vertex_name_result.value();
 
   RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] going to vertex %s", this->name().c_str(), vertex_name.c_str());
@@ -101,7 +110,9 @@ BT::NodeStatus GoToPlace::onRunning() {
 
 BT::PortsList GoToPlace::providedPorts() { 
   BT::PortsList ports_list = {
-      BT::InputPort<std::string>("vertex_name")
+      BT::InputPort<std::string>("vertex_name"),
+      BT::InputPort<std::string>("drone_name"),
+      BT::InputPort<float>("orientation")
   };
     
     return ports_list;

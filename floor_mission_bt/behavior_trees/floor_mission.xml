@@ -1,61 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root BTCPP_format="3"
-      main_tree_to_execute="floor_mission">
+      main_tree_to_execute="main_loop">
+
+  <BehaviorTree ID="main_loop">
+    <ReactiveSequence>
+
+      <!-- <PublishDroneState floor_mission_underway="{floor_mission_underway}"/> -->
+
+      <SubTree ID="floor_mission"/>
+
+    </ReactiveSequence>
+
+    
+
+  </BehaviorTree>
 
   <BehaviorTree ID="floor_mission">
+
     <Sequence>
-      <!-- <CheckFloorMissionTriggered/> -->
 
-      <RetryUntilSuccessful num_attempts="-1">
-        <Delay delay_msec="2">
-          <CheckIdle/>
-        </Delay>
-      </RetryUntilSuccessful>
+      <CheckFloorMissionTriggered 
+        worker_name="{worker_name}" 
+        drone_name="{drone_name}" 
+        pickup_location_name="{pickup_location_name}" 
+        pickup_orientation="{pickup_orientation}"
+        dropoff_location_name="{dropoff_location_name}" 
+        dropoff_orientation="{dropoff_orientation}"
+        post_dropoff_location_name="{post_dropoff_location_name}"
+        floor_mission_underway="{floor_mission_underway}"
+      />
 
-      <GoToPlace vertex_name="worker_misha_pickup_point"/>
 
-      <!-- TODO - add method of checking if go to place method actually started getting executed. -->
-      <RetryUntilSuccessful num_attempts="-1">
-        <Delay delay_msec="2">
-          <CheckIdle/>
-        </Delay>
-      </RetryUntilSuccessful>
+      <SubTree ID="repeat_idle_check"/>
+    
+      <GoToPlace 
+        vertex_name="{pickup_location_name}" 
+        orientation="{pickup_orientation}"
+        drone_name="{drone_name}" 
+      />
+
+      <SubTree ID="repeat_idle_check"/>
 
 
       <SuspendRMFPathing/>
       <PickupWorker/>
       <ReleaseRMFPathing/>
 
-      <GoToPlace vertex_name="S2_L_R1"/>
-      <!-- TODO - add method of checking if go to place method actually started getting executed. -->
-      <RetryUntilSuccessful num_attempts="-1">
-        <Delay delay_msec="2">
-          <CheckIdle/>
-        </Delay>
-      </RetryUntilSuccessful>
+      <GoToPlace 
+        vertex_name="{dropoff_location_name}" 
+        orientation="{dropoff_orientation}"
+        drone_name="{drone_name}" 
+      />
+      
+      <SubTree ID="repeat_idle_check"/>
 
       <SuspendRMFPathing/>
+
       <LowerWorker/>
 
-      <GoToPlace vertex_name="S2_L_R1_pickup_point"/>
-      <!-- TODO - add method of checking if go to place method actually started getting executed. -->
-      <RetryUntilSuccessful num_attempts="-1">
-        <Delay delay_msec="2">
-          <CheckIdle/>
-        </Delay>
-      </RetryUntilSuccessful>
+      <GoToPlace 
+        vertex_name="{post_dropoff_location_name}" 
+        orientation="{dropoff_orientation}"
+        drone_name="{drone_name}" 
+      />
+
+      <SubTree ID="repeat_idle_check"/>
 
       <ReleaseRMFPathing/>
 
-
-
-
     </Sequence>
-
   </BehaviorTree>
 
-  <!-- Description of Node Models (used by Groot) -->
-  <TreeNodesModel>
-  </TreeNodesModel>
+  <BehaviorTree ID="repeat_idle_check">
+
+    <!-- TODO - add method of checking if go to place method actually started getting executed. -->
+    <RetryUntilSuccessful num_attempts="-1">
+      <Delay delay_msec="5">
+        <CheckIdle/>
+      </Delay>
+    </RetryUntilSuccessful>
+
+  </BehaviorTree>
 
 </root>
