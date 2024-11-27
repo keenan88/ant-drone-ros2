@@ -27,9 +27,22 @@ BT::NodeStatus GoToPlace::onStart() {
 
   RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] BT.CPP node running...", this->name().c_str());
 
+  auto vertex_name_result = getInput<std::string>("vertex_name");
+  if (!vertex_name_result)
+  {
+      std::cerr << "Couldn't get spray_sizes!" << std::endl;
+      setOutput("error_cause", "CANT_GET_SPRAY_SIZE");
+      return BT::NodeStatus::FAILURE;
+  }
+
+  
+  float orientation = 1.57;
   std::string drone_name = "drone_boris";
-  std::string vertex_name = "S2_L_R1";
-  float orientation = 1.6;
+
+  std::string vertex_name = vertex_name_result.value();
+
+  RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] going to vertex %s", this->name().c_str(), vertex_name.c_str());
+
 
   nlohmann::json composed_task = {
     {"type", "robot_task_request"},
@@ -87,7 +100,9 @@ BT::NodeStatus GoToPlace::onRunning() {
 
 
 BT::PortsList GoToPlace::providedPorts() { 
-  BT::PortsList ports_list = {};
+  BT::PortsList ports_list = {
+      BT::InputPort<std::string>("vertex_name")
+  };
     
     return ports_list;
   

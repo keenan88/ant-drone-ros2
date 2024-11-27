@@ -1,9 +1,9 @@
 #include "nodes.h"
 
 
-SendPickupCmd::SendPickupCmd(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : RosServiceNode<SendPickupCmd_srv_t>(name, conf, params) {}
+PickupWorker::PickupWorker(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : RosServiceNode<SendPickupCmd_srv_t>(name, conf, params) {}
 
-PortsList SendPickupCmd::providedPorts()
+PortsList PickupWorker::providedPorts()
 {
   return {};
   // providedBasicPorts({
@@ -11,7 +11,7 @@ PortsList SendPickupCmd::providedPorts()
   //     InputPort<unsigned>("B")});
 }
 
-bool SendPickupCmd::setRequest(Request::SharedPtr& request)
+bool PickupWorker::setRequest(Request::SharedPtr& request)
 {
   request -> model1_name = "drone_boris";
   request -> model2_name = "worker_misha";
@@ -25,18 +25,21 @@ bool SendPickupCmd::setRequest(Request::SharedPtr& request)
   return true;
 }
 
-NodeStatus SendPickupCmd::onResponseReceived(const Response::SharedPtr& response)
+NodeStatus PickupWorker::onResponseReceived(const Response::SharedPtr& response)
 {
-  // RCLCPP_INFO(node_->get_logger(), "Sum: %ld", response->sum);
   if(response -> success)
   {
     return NodeStatus::SUCCESS;
   }
+  else
+  {
+    return NodeStatus::FAILURE;
+  }
 
-  return NodeStatus::FAILURE;
+  return NodeStatus::RUNNING;
 }
 
-NodeStatus SendPickupCmd::onFailure(ServiceNodeErrorCode error)
+NodeStatus PickupWorker::onFailure(ServiceNodeErrorCode error)
 {
   // RCLCPP_ERROR(node_->get_logger(), "Error: %d", error);
   return NodeStatus::FAILURE;

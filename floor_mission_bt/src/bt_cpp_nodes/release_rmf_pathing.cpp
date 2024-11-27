@@ -1,9 +1,9 @@
 #include "nodes.h"
 
 
-SendSuspendRMFPathing::SendSuspendRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : RosServiceNode<SuspendRMFPathing_srv_t>(name, conf, params) {}
+ReleaseRMFPathing::ReleaseRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : RosServiceNode<SuspendRMFPathing_srv_t>(name, conf, params) {}
 
-PortsList SendSuspendRMFPathing::providedPorts()
+PortsList ReleaseRMFPathing::providedPorts()
 {
   return {};
   // providedBasicPorts({
@@ -11,9 +11,9 @@ PortsList SendSuspendRMFPathing::providedPorts()
   //     InputPort<unsigned>("B")});
 }
 
-bool SendSuspendRMFPathing::setRequest(Request::SharedPtr& request)
+bool ReleaseRMFPathing::setRequest(Request::SharedPtr& request)
 {
-  request -> is_rmf_pathing_suspended = true;
+  request -> is_rmf_pathing_suspended = false;
     
   // use input ports to set A and B
   // getInput("A", request->a);
@@ -22,7 +22,7 @@ bool SendSuspendRMFPathing::setRequest(Request::SharedPtr& request)
   return true;
 }
 
-NodeStatus SendSuspendRMFPathing::onResponseReceived(const Response::SharedPtr& response)
+NodeStatus ReleaseRMFPathing::onResponseReceived(const Response::SharedPtr& response)
 {
   // RCLCPP_INFO(node_->get_logger(), "Sum: %ld", response->sum);
   if(response -> success)
@@ -33,7 +33,7 @@ NodeStatus SendSuspendRMFPathing::onResponseReceived(const Response::SharedPtr& 
   return NodeStatus::FAILURE;
 }
 
-NodeStatus SendSuspendRMFPathing::onFailure(ServiceNodeErrorCode error)
+NodeStatus ReleaseRMFPathing::onFailure(ServiceNodeErrorCode error)
 {
   // RCLCPP_ERROR(node_->get_logger(), "Error: %d", error);
   return NodeStatus::FAILURE;

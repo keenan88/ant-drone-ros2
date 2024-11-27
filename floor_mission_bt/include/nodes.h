@@ -21,6 +21,7 @@
 #include <behaviortree_ros2/bt_service_node.hpp>
 
 #include "ant_fleet_interfaces/srv/request_worker_pickup.hpp"
+#include "ant_fleet_interfaces/srv/check_drone_idle.hpp"
 #include "linkattacher_msgs/srv/attach_link.hpp"
 
 using namespace BT;
@@ -61,21 +62,16 @@ class GoToPlace : public BT::StatefulActionNode
 
 };
 
-class CheckIdle : public BT::StatefulActionNode
+using CheckDroneIdle_srv_t = ant_fleet_interfaces::srv::CheckDroneIdle;
+class CheckIdle: public RosServiceNode<CheckDroneIdle_srv_t>
 {
   public:
-    using robot_state_msg_t = rmf_fleet_msgs::msg::RobotState;
-    rclcpp::Subscription<robot_state_msg_t>::SharedPtr subscription_;
-    bool drone_idle;
-    rclcpp::Node::SharedPtr ros2_node_ptr;
 
-    CheckIdle(const std::string &name, const BT::NodeConfig &config, rclcpp::Node::SharedPtr node_ptr);
-    BT::NodeStatus onStart() override;
-    BT::NodeStatus onRunning() override;
-    void onHalted() override{};
-    static BT::PortsList providedPorts();
-
-    void checkIdleCallback(const rmf_fleet_msgs::msg::RobotState::SharedPtr msg);
+  CheckIdle(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 
@@ -99,11 +95,11 @@ class CheckPickup : public BT::StatefulActionNode
 };
 
 using SendPickupCmd_srv_t = linkattacher_msgs::srv::AttachLink;
-class SendPickupCmd: public RosServiceNode<SendPickupCmd_srv_t>
+class PickupWorker: public RosServiceNode<SendPickupCmd_srv_t>
 {
   public:
 
-  SendPickupCmd(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  PickupWorker(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
   static PortsList providedPorts();
   bool setRequest(Request::SharedPtr& request) override;
   NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
@@ -112,11 +108,11 @@ class SendPickupCmd: public RosServiceNode<SendPickupCmd_srv_t>
 
 
 using SuspendRMFPathing_srv_t = ant_fleet_interfaces::srv::SuspendRMFPathing;
-class SendSuspendRMFPathing: public RosServiceNode<SuspendRMFPathing_srv_t>
+class SuspendRMFPathing: public RosServiceNode<SuspendRMFPathing_srv_t>
 {
   public:
 
-  SendSuspendRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  SuspendRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
   static PortsList providedPorts();
   bool setRequest(Request::SharedPtr& request) override;
   NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
@@ -124,11 +120,23 @@ class SendSuspendRMFPathing: public RosServiceNode<SuspendRMFPathing_srv_t>
 };
 
 
-class SendReleaseRMFPathing: public RosServiceNode<SuspendRMFPathing_srv_t>
+class ReleaseRMFPathing: public RosServiceNode<SuspendRMFPathing_srv_t>
 {
   public:
 
-  SendReleaseRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  ReleaseRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};
+
+using SendLowerCmd_srv_t = linkattacher_msgs::srv::DetachLink;
+class LowerWorker: public RosServiceNode<SendLowerCmd_srv_t>
+{
+  public:
+
+  LowerWorker(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
   static PortsList providedPorts();
   bool setRequest(Request::SharedPtr& request) override;
   NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
