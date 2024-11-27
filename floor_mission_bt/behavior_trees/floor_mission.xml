@@ -3,32 +3,57 @@
       main_tree_to_execute="main_loop">
 
   <BehaviorTree ID="main_loop">
-    <ReactiveSequence>
 
-      <!-- <PublishDroneState floor_mission_underway="{floor_mission_underway}"/> -->
+    <Sequence>
 
-      <SubTree ID="floor_mission"/>
+      <InitDroneVars 
+        floor_mission_state="{floor_mission_state}"
+        drone_name="{drone_name}"
+      />
 
-    </ReactiveSequence>
+      <ReactiveSequence>
 
-    
+        <PublishDroneQueenState 
+          floor_mission_state="{floor_mission_state}"
+          drone_name="{drone_name}"
+        />
 
+        <SubTree ID="floor_mission"/>
+
+      </ReactiveSequence>
+
+    </Sequence>
   </BehaviorTree>
 
+
+  <!-- 
+    Execute the main floor mission, consisting of:
+    1. Go to pickup position
+    2. Pickup the worker
+    3. Bring worker to row start
+    4. Lower Worker
+    5. Back up out of the way
+  
+   -->
   <BehaviorTree ID="floor_mission">
 
     <Sequence>
 
-      <CheckFloorMissionTriggered 
-        worker_name="{worker_name}" 
-        drone_name="{drone_name}" 
-        pickup_location_name="{pickup_location_name}" 
-        pickup_orientation="{pickup_orientation}"
-        dropoff_location_name="{dropoff_location_name}" 
-        dropoff_orientation="{dropoff_orientation}"
-        post_dropoff_location_name="{post_dropoff_location_name}"
-        floor_mission_underway="{floor_mission_underway}"
-      />
+      <RetryUntilSuccessful num_attempts="-1">
+
+        <CheckFloorMissionTriggered 
+          worker_name="{worker_name}" 
+          drone_name="{drone_name}" 
+          pickup_location_name="{pickup_location_name}" 
+          pickup_orientation="{pickup_orientation}"
+          dropoff_location_name="{dropoff_location_name}" 
+          dropoff_orientation="{dropoff_orientation}"
+          post_dropoff_location_name="{post_dropoff_location_name}"
+          floor_mission_state="{floor_mission_state}"
+        />
+
+      </RetryUntilSuccessful>
+
 
 
       <SubTree ID="repeat_idle_check"/>

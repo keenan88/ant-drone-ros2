@@ -36,4 +36,4 @@ RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-            ros2 run floor_mission_bt floor_mission_bt"
+            ros2 launch floor_mission_bt bt.launch.py"

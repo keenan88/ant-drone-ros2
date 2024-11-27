@@ -27,8 +27,16 @@ class FloorMissionNode : public rclcpp::Node
     {
         BT::BehaviorTreeFactory factory;
 
-        factory.registerNodeType<CheckFloorMissionTriggered>("CheckFloorMissionTriggered", shared_from_this());
+        // factory.registerNodeType<CheckFloorMissionTriggered>("CheckFloorMissionTriggered", shared_from_this());
+        RosNodeParams params;
+        params.nh = shared_from_this();
+        params.default_port_value = "/trigger_floor_mission";
+        factory.registerNodeType<CheckFloorMissionTriggered>("CheckFloorMissionTriggered", params);
+
+
         factory.registerNodeType<GoToPlace>("GoToPlace", shared_from_this());
+        factory.registerNodeType<PublishDroneQueenState>("PublishDroneQueenState", shared_from_this());
+        factory.registerNodeType<InitDroneVars>("InitDroneVars", shared_from_this());
 
         auto check_idle_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "check_drone_idle");
         check_idle_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
