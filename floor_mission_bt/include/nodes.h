@@ -41,24 +41,6 @@ public:
   NodeStatus onTick(const std::shared_ptr<trigger_floor_mission_msg_t>& last_msg) override;
 };
 
-// class CheckFloorMissionTriggered : public BT::StatefulActionNode
-// {
-//   public:
-//     
-//     rclcpp::Subscription<trigger_floor_mission_msg_t>::SharedPtr subscription_;
-//     bool floor_mission_triggered = false;
-//     std::string drone_name;
-//     rclcpp::Node::SharedPtr ros2_node_ptr;
-
-//     CheckFloorMissionTriggered(const std::string &name, const BT::NodeConfig &config, rclcpp::Node::SharedPtr node_ptr);
-//     BT::NodeStatus onStart() override;
-//     BT::NodeStatus onRunning() override;
-//     void onHalted() override{};
-//     static BT::PortsList providedPorts();
-
-//     void triggerFloorMission(const ant_fleet_interfaces::msg::TriggerFloorMission::SharedPtr msg);
-// };
-
 class GoToPlace : public BT::StatefulActionNode
 {
   public:
@@ -88,25 +70,6 @@ class CheckIdle: public RosServiceNode<CheckDroneIdle_srv_t>
   virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
-
-
-
-class CheckPickup : public BT::StatefulActionNode
-{
-  public:
-    using pickup_state_msg_t = ant_fleet_interfaces::msg::WorkerPickupState;
-    rclcpp::Subscription<pickup_state_msg_t>::SharedPtr subscription_;
-    bool worker_picked_up;
-    rclcpp::Node::SharedPtr ros2_node_ptr;
-
-    CheckPickup(const std::string &name, const BT::NodeConfig &config, rclcpp::Node::SharedPtr node_ptr);
-    BT::NodeStatus onStart() override;
-    BT::NodeStatus onRunning() override;
-    void onHalted() override{};
-    static BT::PortsList providedPorts();
-
-    void workerPickedUpCallback(const pickup_state_msg_t::SharedPtr msg);
-};
 
 using SendPickupCmd_srv_t = linkattacher_msgs::srv::AttachLink;
 class PickupWorker: public RosServiceNode<SendPickupCmd_srv_t>
@@ -155,21 +118,6 @@ class LowerWorker: public RosServiceNode<SendLowerCmd_srv_t>
   bool setRequest(Request::SharedPtr& request) override;
   NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
   virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
-};
-
-class PublishDroneQueenState : public BT::StatefulActionNode
-{
-  public:
-    using StringMsg_t = std_msgs::msg::String;
-    rclcpp::Node::SharedPtr ros2_node_ptr;
-    rclcpp::Publisher<StringMsg_t>::SharedPtr publisher;
-
-    PublishDroneQueenState(const std::string &name, const BT::NodeConfig &config, rclcpp::Node::SharedPtr node_ptr);
-    BT::NodeStatus onStart() override;
-    BT::NodeStatus onRunning() override;
-    void onHalted() override{};
-    static BT::PortsList providedPorts();
-
 };
 
 class InitDroneVars : public BT::StatefulActionNode

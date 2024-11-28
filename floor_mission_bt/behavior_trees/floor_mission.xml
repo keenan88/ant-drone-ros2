@@ -13,11 +13,6 @@
 
       <ReactiveSequence>
 
-        <PublishDroneQueenState 
-          floor_mission_state="{floor_mission_state}"
-          drone_name="{drone_name}"
-        />
-
         <SubTree ID="floor_mission"/>
 
       </ReactiveSequence>
@@ -33,7 +28,6 @@
     3. Bring worker to row start
     4. Lower Worker
     5. Back up out of the way
-  
    -->
   <BehaviorTree ID="floor_mission">
 

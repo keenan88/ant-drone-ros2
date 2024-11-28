@@ -35,7 +35,7 @@ class FloorMissionNode : public rclcpp::Node
 
 
         factory.registerNodeType<GoToPlace>("GoToPlace", shared_from_this());
-        factory.registerNodeType<PublishDroneQueenState>("PublishDroneQueenState", shared_from_this());
+
         factory.registerNodeType<InitDroneVars>("InitDroneVars", shared_from_this());
 
         auto check_idle_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "check_drone_idle");
@@ -55,8 +55,6 @@ class FloorMissionNode : public rclcpp::Node
         rmf_path_release_node_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<ReleaseRMFPathing>("ReleaseRMFPathing", rmf_path_release_node_params);
 
-
-        factory.registerNodeType<CheckPickup>("CheckPickup", shared_from_this());
 
         auto dropoff_params = BT::RosNodeParams(shared_from_this(), "/" "DETACHLINK");
         dropoff_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
