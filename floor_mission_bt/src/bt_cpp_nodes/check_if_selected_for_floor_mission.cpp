@@ -1,26 +1,26 @@
 #include "nodes.h"
 
 
-CheckSelectedForFloorMission::CheckSelectedForFloorMission(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : 
-RosServiceNode<ant_fleet_interfaces::srv::CheckSelectedForFloorMission>(name, conf, params) {}
+CheckIfSelectedForFloorMission::CheckIfSelectedForFloorMission(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : 
+RosServiceNode<ant_fleet_interfaces::srv::CheckIfSelectedForFloorMission>(name, conf, params) {}
 
-PortsList CheckSelectedForFloorMission::providedPorts()
+PortsList CheckIfSelectedForFloorMission::providedPorts()
 {
 
   return {
-    InputPort<std::string>("drone_name");
-    OutputPort<std::string>("worker_name");
-    OutputPort<std::string>("pickup_location_name");
-    OutputPort<float>("pickup_orientation");
-    OutputPort<std::string>("dropoff_location_name");
-    OutputPort<float>("dropoff_orientation");
-    OutputPort<std::string>("post_dropoff_location_name");
-    OutputPort<std::string>("drone_mission_state");
+    InputPort<std::string>("drone_name"),
+    OutputPort<std::string>("worker_name"),
+    OutputPort<std::string>("pickup_location_name"),
+    OutputPort<float>("pickup_orientation"),
+    OutputPort<std::string>("dropoff_location_name"),
+    OutputPort<float>("dropoff_orientation"),
+    OutputPort<std::string>("post_dropoff_location_name"),
+    OutputPort<std::string>("drone_mission_state")
   };
 
 }
 
-bool CheckSelectedForFloorMission::setRequest(Request::SharedPtr& request)
+bool CheckIfSelectedForFloorMission::setRequest(Request::SharedPtr& request)
 {
   
   auto drone_name_result = getInput<std::string>("drone_name");
@@ -35,7 +35,7 @@ bool CheckSelectedForFloorMission::setRequest(Request::SharedPtr& request)
   return true;
 }
 
-NodeStatus CheckSelectedForFloorMission::onResponseReceived(const Response::SharedPtr& response)
+NodeStatus CheckIfSelectedForFloorMission::onResponseReceived(const Response::SharedPtr& response)
 {
   if(response -> is_floor_mission_triggered)
   {
@@ -56,7 +56,7 @@ NodeStatus CheckSelectedForFloorMission::onResponseReceived(const Response::Shar
   return NodeStatus::FAILURE;
 }
 
-NodeStatus CheckSelectedForFloorMission::onFailure(ServiceNodeErrorCode error)
+NodeStatus CheckIfSelectedForFloorMission::onFailure(ServiceNodeErrorCode error)
 {
   // RCLCPP_ERROR(node_->get_logger(), "Error: %d", error);
   return NodeStatus::FAILURE;

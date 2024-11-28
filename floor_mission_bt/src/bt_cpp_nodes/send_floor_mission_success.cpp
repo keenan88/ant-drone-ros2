@@ -2,13 +2,13 @@
 
 
 SendFloorMissionSuccess::SendFloorMissionSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : 
-RosServiceNode<ant_fleet_interfaces::srv::SendFloorMissionSuccess>(name, conf, params) {}
+RosServiceNode<ant_fleet_interfaces::srv::MissionSuccess>(name, conf, params) {}
 
 PortsList SendFloorMissionSuccess::providedPorts()
 {
 
   return {
-    OutputPort<std::string>("drone_mission_state");
+    OutputPort<std::string>("drone_mission_state"),
   };
 
 }
@@ -30,7 +30,7 @@ bool SendFloorMissionSuccess::setRequest(Request::SharedPtr& request)
 
 NodeStatus SendFloorMissionSuccess::onResponseReceived(const Response::SharedPtr& response)
 {
-  if(response -> is_floor_mission_triggered)
+  if(response)
   {
     setOutput("drone_mission_state", "Idle");
     return NodeStatus::SUCCESS;

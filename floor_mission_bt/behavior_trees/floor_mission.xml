@@ -11,7 +11,7 @@
         drone_name="{drone_name}"
       />
 
-      <CheckSelectedForFloorMission/>
+      <CheckIfSelectedForFloorMission/>
 
       <ReactiveSequence>
 
