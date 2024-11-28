@@ -13,7 +13,6 @@
 #include "std_msgs/msg/string.hpp"
 #include "rmf_task_msgs/msg/api_request.hpp"
 #include "rmf_fleet_msgs/msg/robot_state.hpp"
-#include "ant_fleet_interfaces/msg/trigger_floor_mission.hpp"
 #include "ant_fleet_interfaces/msg/worker_pickup_state.hpp"
 #include "ant_fleet_interfaces/srv/suspend_rmf_pathing.hpp"
 
@@ -23,6 +22,7 @@
 #include <behaviortree_ros2/bt_service_node.hpp>
 #include "behaviortree_ros2/bt_topic_sub_node.hpp"
 
+#include "ant_fleet_interfaces/srv/check_selected_for_floor_mission.hpp"
 #include "ant_fleet_interfaces/srv/request_worker_pickup.hpp"
 #include "ant_fleet_interfaces/srv/check_drone_idle.hpp"
 #include "linkattacher_msgs/srv/attach_link.hpp"
@@ -30,6 +30,31 @@
 using namespace BT;
 
 
+
+
+
+using CheckDroneIdle_srv_t = ant_fleet_interfaces::srv::CheckDroneIdle;
+class CheckIdle: public RosServiceNode<CheckDroneIdle_srv_t>
+{
+  public:
+
+  CheckIdle(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};
+
+class CheckSelectedForFloorMission: public RosServiceNode<ant_fleet_interfaces::srv::CheckSelectedForFloorMission>
+{
+  public:
+
+  CheckSelectedForFloorMission(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};
 
 class GoToPlace : public BT::StatefulActionNode
 {
@@ -47,19 +72,6 @@ class GoToPlace : public BT::StatefulActionNode
     static BT::PortsList providedPorts();
 
 };
-
-using CheckDroneIdle_srv_t = ant_fleet_interfaces::srv::CheckDroneIdle;
-class CheckIdle: public RosServiceNode<CheckDroneIdle_srv_t>
-{
-  public:
-
-  CheckIdle(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
-};
-
 
 using SendPickupCmd_srv_t = linkattacher_msgs::srv::AttachLink;
 class PickupWorker: public RosServiceNode<SendPickupCmd_srv_t>

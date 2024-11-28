@@ -27,23 +27,30 @@ class FloorMissionNode : public rclcpp::Node
     {
         BT::BehaviorTreeFactory factory;
 
+        factory.registerNodeType<InitDroneVars>("InitDroneVars", shared_from_this());
+
 
         factory.registerNodeType<GoToPlace>("GoToPlace", shared_from_this());
 
-        factory.registerNodeType<InitDroneVars>("InitDroneVars", shared_from_this());
 
         auto check_idle_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "check_drone_idle");
         check_idle_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckIdle>("CheckIdle", check_idle_params);
+
+        auto check_selected_for_floor_mission_params = BT::RosNodeParams(shared_from_this(), "/" "check_selected_for_floor_mission");
+        check_selected_for_floor_mission_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
+        factory.registerNodeType<CheckSelectedForFloorMission>("CheckSelectedForFloorMission", check_selected_for_floor_mission_params);
+
+
+        auto rmf_path_suspend_node_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "suspend_rmf_pathing");
+        rmf_path_suspend_node_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
+        factory.registerNodeType<SuspendRMFPathing>("SuspendRMFPathing", rmf_path_suspend_node_params);
 
         
         auto pickup_params = BT::RosNodeParams(shared_from_this(), "/" "ATTACHLINK");
         pickup_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<PickupWorker>("PickupWorker", pickup_params);
 
-        auto rmf_path_suspend_node_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "suspend_rmf_pathing");
-        rmf_path_suspend_node_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
-        factory.registerNodeType<SuspendRMFPathing>("SuspendRMFPathing", rmf_path_suspend_node_params);
 
         auto rmf_path_release_node_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "suspend_rmf_pathing");
         rmf_path_release_node_params.wait_for_server_timeout = std::chrono::milliseconds(5000);

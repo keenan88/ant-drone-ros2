@@ -11,6 +11,8 @@
         drone_name="{drone_name}"
       />
 
+      <CheckSelectedForFloorMission/>
+
       <ReactiveSequence>
 
         <SubTree ID="floor_mission"/>
