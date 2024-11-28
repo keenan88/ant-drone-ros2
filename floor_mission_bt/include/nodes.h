@@ -23,6 +23,7 @@
 #include "behaviortree_ros2/bt_topic_sub_node.hpp"
 
 #include "ant_fleet_interfaces/srv/check_selected_for_floor_mission.hpp"
+#include "ant_fleet_interfaces/srv/send_heartbeat_to_queen.hpp"
 #include "ant_fleet_interfaces/srv/request_worker_pickup.hpp"
 #include "ant_fleet_interfaces/srv/check_drone_idle.hpp"
 #include "linkattacher_msgs/srv/attach_link.hpp"
@@ -50,6 +51,20 @@ class CheckSelectedForFloorMission: public RosServiceNode<ant_fleet_interfaces::
   public:
 
   CheckSelectedForFloorMission(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};
+
+class SendHeartbeatToQueen: public RosServiceNode<ant_fleet_interfaces::srv::SendHeartbeatToQueen>
+{
+  public:
+
+  int64_t last_heartbeat_time_s = -1;
+  int64_t heartbeat_timeout_s = 10;
+
+  SendHeartbeatToQueen(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
   static PortsList providedPorts();
   bool setRequest(Request::SharedPtr& request) override;
   NodeStatus onResponseReceived(const Response::SharedPtr& response) override;

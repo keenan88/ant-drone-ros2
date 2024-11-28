@@ -9,7 +9,7 @@ PortsList CheckSelectedForFloorMission::providedPorts()
 
   return {
     InputPort<std::string>("drone_name");
-    OutputPort<std::string>("paired_robot_name");
+    OutputPort<std::string>("worker_name");
     OutputPort<std::string>("pickup_location_name");
     OutputPort<float>("pickup_orientation");
     OutputPort<std::string>("dropoff_location_name");
@@ -39,7 +39,7 @@ NodeStatus CheckSelectedForFloorMission::onResponseReceived(const Response::Shar
 {
   if(response -> is_floor_mission_triggered)
   {
-    setOutput("paired_robot_name", response->paired_robot_name);
+    setOutput("worker_name", response->paired_robot_name);
     setOutput("pickup_location_name", response->pickup_location_name);
     setOutput("pickup_orientation", response->pickup_orientation);
     setOutput("dropoff_location_name", response->dropoff_location_name);

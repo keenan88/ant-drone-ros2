@@ -41,6 +41,10 @@ class FloorMissionNode : public rclcpp::Node
         check_selected_for_floor_mission_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckSelectedForFloorMission>("CheckSelectedForFloorMission", check_selected_for_floor_mission_params);
 
+        auto send_heartbeat_to_queen_params = BT::RosNodeParams(shared_from_this(), "/" "mission_heartbeat");
+        send_heartbeat_to_queen_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
+        factory.registerNodeType<SendHeartbeatToQueen>("SendHeartbeatToQueen", send_heartbeat_to_queen_params);
+
 
         auto rmf_path_suspend_node_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "suspend_rmf_pathing");
         rmf_path_suspend_node_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
