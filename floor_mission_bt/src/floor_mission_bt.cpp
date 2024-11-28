@@ -27,12 +27,6 @@ class FloorMissionNode : public rclcpp::Node
     {
         BT::BehaviorTreeFactory factory;
 
-        // factory.registerNodeType<CheckFloorMissionTriggered>("CheckFloorMissionTriggered", shared_from_this());
-        RosNodeParams params;
-        params.nh = shared_from_this();
-        params.default_port_value = "/trigger_floor_mission";
-        factory.registerNodeType<CheckFloorMissionTriggered>("CheckFloorMissionTriggered", params);
-
 
         factory.registerNodeType<GoToPlace>("GoToPlace", shared_from_this());
 
