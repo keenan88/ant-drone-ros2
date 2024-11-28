@@ -6,18 +6,10 @@ CheckIdle::CheckIdle(const std::string& name, const NodeConfig& conf, const RosN
 PortsList CheckIdle::providedPorts()
 {
   return {};
-  // providedBasicPorts({
-  //     InputPort<unsigned>("A"),
-  //     InputPort<unsigned>("B")});
 }
 
 bool CheckIdle::setRequest(Request::SharedPtr& request)
 {
-    
-  // use input ports to set A and B
-  // getInput("A", request->a);
-  // getInput("B", request->b);
-  // must return true if we are ready to send the request
   return true;
 }
 
@@ -38,6 +30,5 @@ NodeStatus CheckIdle::onResponseReceived(const Response::SharedPtr& response)
 
 NodeStatus CheckIdle::onFailure(ServiceNodeErrorCode error)
 {
-  // RCLCPP_ERROR(node_->get_logger(), "Error: %d", error);
   return NodeStatus::FAILURE;
 }

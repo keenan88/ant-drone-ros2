@@ -20,7 +20,7 @@ BT::NodeStatus InitDroneVars::onStart() {
 
   RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] BT.CPP node running...", this->name().c_str());
 
-  setOutput("floor_mission_state", "available");
+  setOutput("drone_floor_mission_status", "IDLE");
   setOutput("drone_name", drone_name);
   
   return BT::NodeStatus::RUNNING;
@@ -39,7 +39,7 @@ BT::NodeStatus InitDroneVars::onRunning() {
 BT::PortsList InitDroneVars::providedPorts() { 
   BT::PortsList ports_list = {
       BT::OutputPort<std::string>("drone_name"),
-      BT::OutputPort<std::string>("floor_mission_state")
+      BT::OutputPort<std::string>("drone_floor_mission_status")
   };
     
     return ports_list;

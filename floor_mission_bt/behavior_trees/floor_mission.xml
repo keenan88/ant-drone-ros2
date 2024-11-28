@@ -6,19 +6,48 @@
 
     <Sequence>
 
+      <!-- Variable initialization -->
       <InitDroneVars 
-        floor_mission_state="{floor_mission_state}"
+        drone_floor_mission_status="{drone_floor_mission_status}"
         drone_name="{drone_name}"
       />
 
-      <CheckIfSelectedForFloorMission/>
+      <!-- Main loop, repeat forever -->
+      <Repeat num_cycles = -1>
 
-      <ReactiveSequence>
+        <Sequence>
 
-        <SubTree ID="floor_mission"/>
+          <SendHeartbeatToQueen drone_name = "{drone_name}" drone_floor_mission_status = "{drone_floor_mission_status}" error_state = "{error_state}"/>
 
-      </ReactiveSequence>
+          <SubTree ID="repeat_idle_check"/>
 
+          <!-- Keep checking if the drone has been selected for a floor mission until it has -->
+          <RetryUntilSuccessful num_attempts="-1">
+            <Delay delay_msec="3">
+              <Sequence>
+
+                <SendHeartbeatToQueen drone_name = "{drone_name}" drone_floor_mission_status = "{drone_floor_mission_status}" error_state = "{error_state}"/>
+
+                <CheckIfSelectedForFloorMission
+                  drone_name = "{drone_name}"
+                  worker_name = "{worker_name}"
+                  pickup_location_name = "{pickup_location_name}"
+                  pickup_orientation = "{pickup_orientation}"
+                  dropoff_location_name = "{dropoff_location_name}"
+                  dropoff_orientation = "{dropoff_orientation}"
+                  post_dropoff_location_name = "{post_dropoff_location_name}"
+                  drone_floor_mission_status = "{drone_floor_mission_status}"
+                />
+                
+              </Sequence>
+            </Delay>
+          </RetryUntilSuccessful>
+
+          <!-- Execute the floor mission -->
+          <SubTree ID="floor_mission"/>
+
+        </Sequence>
+      </Repeat>
     </Sequence>
   </BehaviorTree>
 
@@ -35,23 +64,6 @@
 
     <Sequence>
 
-      <RetryUntilSuccessful num_attempts="-1">
-
-        <CheckFloorMissionTriggered 
-          worker_name="{worker_name}" 
-          drone_name="{drone_name}" 
-          pickup_location_name="{pickup_location_name}" 
-          pickup_orientation="{pickup_orientation}"
-          dropoff_location_name="{dropoff_location_name}" 
-          dropoff_orientation="{dropoff_orientation}"
-          post_dropoff_location_name="{post_dropoff_location_name}"
-          floor_mission_state="{floor_mission_state}"
-        />
-
-      </RetryUntilSuccessful>
-
-
-
       <SubTree ID="repeat_idle_check"/>
     
       <GoToPlace 
@@ -66,6 +78,8 @@
       <SuspendRMFPathing/>
       <PickupWorker/>
       <ReleaseRMFPathing/>
+
+      <SubTree ID="repeat_idle_check"/>
 
       <GoToPlace 
         vertex_name="{dropoff_location_name}" 
@@ -94,10 +108,12 @@
 
   <BehaviorTree ID="repeat_idle_check">
 
-    <!-- TODO - add method of checking if go to place method actually started getting executed. -->
     <RetryUntilSuccessful num_attempts="-1">
-      <Delay delay_msec="5">
-        <CheckIdle/>
+      <Delay delay_msec="3">
+        <Sequence>
+          <CheckIdle/> 
+          <SendHeartbeatToQueen drone_name = "{drone_name}" drone_floor_mission_status = "{drone_floor_mission_status}" error_state = "{error_state}"/>
+        </Sequence>
       </Delay>
     </RetryUntilSuccessful>
 

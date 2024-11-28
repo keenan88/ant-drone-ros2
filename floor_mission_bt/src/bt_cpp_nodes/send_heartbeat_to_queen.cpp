@@ -9,7 +9,7 @@ PortsList SendHeartbeatToQueen::providedPorts()
 
   return {
     InputPort<std::string>("drone_name"),
-    InputPort<std::string>("robot_status"),
+    InputPort<std::string>("drone_floor_mission_status"),
 
     OutputPort<std::string>("error_state"),
   };
@@ -33,7 +33,7 @@ bool SendHeartbeatToQueen::setRequest(Request::SharedPtr& request)
   }
 
   request -> robot_name = drone_name_result.value();
-  request -> robot_status = drone_status_result.value();
+  request -> drone_floor_mission_status = drone_status_result.value();
   if (auto node = node_.lock()) {
     request -> robot_heartbeat_s = node->get_clock()->now().seconds();
   }

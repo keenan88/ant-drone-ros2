@@ -15,7 +15,7 @@ PortsList CheckIfSelectedForFloorMission::providedPorts()
     OutputPort<std::string>("dropoff_location_name"),
     OutputPort<float>("dropoff_orientation"),
     OutputPort<std::string>("post_dropoff_location_name"),
-    OutputPort<std::string>("drone_mission_state")
+    OutputPort<std::string>("drone_floor_mission_status")
   };
 
 }
@@ -46,12 +46,12 @@ NodeStatus CheckIfSelectedForFloorMission::onResponseReceived(const Response::Sh
     setOutput("dropoff_orientation", response->dropoff_orientation);
     setOutput("post_dropoff_location_name", response->post_dropoff_location_name);
     
-    setOutput("drone_mission_state", "FloorMission");
+    setOutput("drone_floor_mission_status", "FLOOR_MISSION");
 
     return NodeStatus::SUCCESS;
   }
 
-  setOutput("drone_mission_state", "Idle");
+  setOutput("drone_floor_mission_status", "IDLE");
 
   return NodeStatus::FAILURE;
 }
