@@ -29,17 +29,7 @@
 
 using namespace BT;
 
-using trigger_floor_mission_msg_t = ant_fleet_interfaces::msg::TriggerFloorMission;
-class CheckFloorMissionTriggered : public RosTopicSubNode<trigger_floor_mission_msg_t>
-{
-public:
-  std::string drone_name;
-  CheckFloorMissionTriggered(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
 
-  static BT::PortsList providedPorts();
-
-  NodeStatus onTick(const std::shared_ptr<trigger_floor_mission_msg_t>& last_msg) override;
-};
 
 class GoToPlace : public BT::StatefulActionNode
 {
