@@ -22,8 +22,9 @@
 #include <behaviortree_ros2/bt_service_node.hpp>
 #include "behaviortree_ros2/bt_topic_sub_node.hpp"
 
+#include "ant_fleet_interfaces/srv/mission_success.hpp"
 #include "ant_fleet_interfaces/srv/check_selected_for_floor_mission.hpp"
-#include "ant_fleet_interfaces/srv/send_heartbeat_to_queen.hpp"
+#include "ant_fleet_interfaces/srv/mission_heartbeat.hpp"
 #include "ant_fleet_interfaces/srv/request_worker_pickup.hpp"
 #include "ant_fleet_interfaces/srv/check_drone_idle.hpp"
 #include "linkattacher_msgs/srv/attach_link.hpp"
@@ -32,6 +33,21 @@ using namespace BT;
 
 
 
+class InitDroneVars : public BT::StatefulActionNode
+{
+  public:
+
+    std::string drone_name;
+
+    rclcpp::Node::SharedPtr ros2_node_ptr;
+
+    InitDroneVars(const std::string &name, const BT::NodeConfig &config, rclcpp::Node::SharedPtr node_ptr);
+    BT::NodeStatus onStart() override;
+    BT::NodeStatus onRunning() override;
+    void onHalted() override{};
+    static BT::PortsList providedPorts();
+
+};
 
 
 using CheckDroneIdle_srv_t = ant_fleet_interfaces::srv::CheckDroneIdle;
@@ -57,7 +73,7 @@ class CheckSelectedForFloorMission: public RosServiceNode<ant_fleet_interfaces::
   virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
-class SendHeartbeatToQueen: public RosServiceNode<ant_fleet_interfaces::srv::SendHeartbeatToQueen>
+class SendHeartbeatToQueen: public RosServiceNode<ant_fleet_interfaces::srv::MissionHeartbeat>
 {
   public:
 
@@ -137,20 +153,16 @@ class LowerWorker: public RosServiceNode<SendLowerCmd_srv_t>
   virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
-class InitDroneVars : public BT::StatefulActionNode
+
+class SendFloorMissionSuccess: public RosServiceNode<ant_fleet_interfaces::srv::MissionSuccess>
 {
   public:
 
-    std::string drone_name;
-
-    rclcpp::Node::SharedPtr ros2_node_ptr;
-
-    InitDroneVars(const std::string &name, const BT::NodeConfig &config, rclcpp::Node::SharedPtr node_ptr);
-    BT::NodeStatus onStart() override;
-    BT::NodeStatus onRunning() override;
-    void onHalted() override{};
-    static BT::PortsList providedPorts();
-
+  SendFloorMissionSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 

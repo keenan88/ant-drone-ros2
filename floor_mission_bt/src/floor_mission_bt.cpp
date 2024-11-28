@@ -65,6 +65,10 @@ class FloorMissionNode : public rclcpp::Node
         dropoff_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<LowerWorker>("LowerWorker", dropoff_params);
 
+        auto send_floor_mission_success_params = BT::RosNodeParams(shared_from_this(), "/" "floor_mission_success");
+        send_floor_mission_success_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
+        factory.registerNodeType<SendFloorMissionSuccess>("SendFloorMissionSuccess", send_floor_mission_success_params);
+
         
         auto blackboard = BT::Blackboard::create();
         tree_ = factory.createTreeFromFile(tree_xml_file_, blackboard);
