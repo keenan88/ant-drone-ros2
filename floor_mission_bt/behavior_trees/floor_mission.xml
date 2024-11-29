@@ -13,20 +13,27 @@
       />
 
       <!-- Main loop, repeat forever -->
-      <Repeat num_cycles = -1>
+      <Repeat num_cycles = "-1">
 
         <Sequence>
 
-          <SendHeartbeatToQueen drone_name = "{drone_name}" drone_floor_mission_status = "{drone_floor_mission_status}" error_state = "{error_state}"/>
+          <RetryUntilSuccessful num_attempts="3">
+            <Delay delay_msec="3">
+              <Sequence>
+                <CheckHeartbeat drone_floor_mission_status = "{drone_floor_mission_status}" error_state = "{error_state}"/>
+              </Sequence>
+            </Delay>
+          </RetryUntilSuccessful>
+          
 
-          <SubTree ID="repeat_idle_check"/>
+          <!-- <SubTree ID="repeat_idle_check"/> -->
 
           <!-- Keep checking if the drone has been selected for a floor mission until it has -->
-          <RetryUntilSuccessful num_attempts="-1">
+          <!-- <RetryUntilSuccessful num_attempts="-1">
             <Delay delay_msec="3">
               <Sequence>
 
-                <SendHeartbeatToQueen drone_name = "{drone_name}" drone_floor_mission_status = "{drone_floor_mission_status}" error_state = "{error_state}"/>
+                <CheckHeartbeat drone_floor_mission_status = "{drone_floor_mission_status}" error_state = "{error_state}"/>
 
                 <CheckIfSelectedForFloorMission
                   drone_name = "{drone_name}"
@@ -41,10 +48,10 @@
                 
               </Sequence>
             </Delay>
-          </RetryUntilSuccessful>
+          </RetryUntilSuccessful> -->
 
           <!-- Execute the floor mission -->
-          <SubTree ID="floor_mission"/>
+          <!-- <SubTree ID="floor_mission"/> -->
 
         </Sequence>
       </Repeat>
@@ -112,7 +119,7 @@
       <Delay delay_msec="3">
         <Sequence>
           <CheckIdle/> 
-          <SendHeartbeatToQueen drone_name = "{drone_name}" drone_floor_mission_status = "{drone_floor_mission_status}" error_state = "{error_state}"/>
+          <CheckHeartbeat drone_floor_mission_status = "{drone_floor_mission_status}" error_state = "{error_state}"/>
         </Sequence>
       </Delay>
     </RetryUntilSuccessful>

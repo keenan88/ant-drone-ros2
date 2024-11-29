@@ -24,7 +24,7 @@
 
 #include "ant_fleet_interfaces/srv/mission_success.hpp"
 #include "ant_fleet_interfaces/srv/check_if_selected_for_floor_mission.hpp"
-#include "ant_fleet_interfaces/srv/mission_heartbeat.hpp"
+#include "ant_fleet_interfaces/srv/mission_heartbeat_srv.hpp"
 #include "ant_fleet_interfaces/srv/request_worker_pickup.hpp"
 #include "ant_fleet_interfaces/srv/check_drone_idle.hpp"
 #include "linkattacher_msgs/srv/attach_link.hpp"
@@ -73,14 +73,11 @@ class CheckIfSelectedForFloorMission: public RosServiceNode<ant_fleet_interfaces
   virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
-class SendHeartbeatToQueen: public RosServiceNode<ant_fleet_interfaces::srv::MissionHeartbeat>
+class CheckHeartbeat: public RosServiceNode<ant_fleet_interfaces::srv::MissionHeartbeatSrv>
 {
   public:
 
-  int64_t last_heartbeat_time_s = -1;
-  int64_t heartbeat_timeout_s = 10;
-
-  SendHeartbeatToQueen(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  CheckHeartbeat(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
   static PortsList providedPorts();
   bool setRequest(Request::SharedPtr& request) override;
   NodeStatus onResponseReceived(const Response::SharedPtr& response) override;

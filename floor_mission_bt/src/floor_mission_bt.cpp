@@ -37,13 +37,13 @@ class FloorMissionNode : public rclcpp::Node
         check_idle_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckIdle>("CheckIdle", check_idle_params);
 
-        auto check_selected_for_floor_mission_params = BT::RosNodeParams(shared_from_this(), "/" "check_selected_for_floor_mission");
+        auto check_selected_for_floor_mission_params = BT::RosNodeParams(shared_from_this(), "/" "check_if_selected_for_floor_mission");
         check_selected_for_floor_mission_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckIfSelectedForFloorMission>("CheckIfSelectedForFloorMission", check_selected_for_floor_mission_params);
 
-        auto send_heartbeat_to_queen_params = BT::RosNodeParams(shared_from_this(), "/" "mission_heartbeat");
-        send_heartbeat_to_queen_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
-        factory.registerNodeType<SendHeartbeatToQueen>("SendHeartbeatToQueen", send_heartbeat_to_queen_params);
+        auto check_heartbeat_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "mission_heartbeat");
+        check_heartbeat_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
+        factory.registerNodeType<CheckHeartbeat>("CheckHeartbeat", check_heartbeat_params);
 
 
         auto rmf_path_suspend_node_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "suspend_rmf_pathing");
