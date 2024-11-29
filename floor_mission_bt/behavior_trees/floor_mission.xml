@@ -16,27 +16,11 @@
       <Repeat num_cycles = "-1">
 
         <Sequence>
-            <!-- S2_L_R1 -->
 
-          <GoToPlace 
-            vertex_name="S2_L_R1" 
-
-            orientation="0.0"
-            drone_name="drone_boris" 
-          />
-
-          <RetryUntilSuccessful num_attempts="-1">
-
-            <Delay delay_msec="1">
-              <CheckGoToPlaceSuccess vertex_name="S2_L_R1" error_state="{error_state}"/>
-            </Delay>            
-
-
-          </RetryUntilSuccessful>
           
           <!-- Keep checking if drone is idle w/ heartbeat, and triggered for a floor mission -->
           
-          <!-- <RetryUntilSuccessful num_attempts="-1">
+          <RetryUntilSuccessful num_attempts="-1">
             <Sequence>
               <SubTree ID="repeat_idle_check"/>
 
@@ -51,11 +35,11 @@
                 drone_floor_mission_status = "{drone_floor_mission_status}"
               />
             </Sequence>
-          </RetryUntilSuccessful> -->
+          </RetryUntilSuccessful>
 
 
           <!-- Execute the floor mission -->
-          <!-- <SubTree ID="floor_mission"/> -->
+          <SubTree ID="floor_mission"/>
 
         </Sequence>
       </Repeat>
@@ -77,43 +61,58 @@
   <BehaviorTree ID="floor_mission">
 
     <Sequence>
+
+      <!-- <SubTree ID="repeat_idle_check"/> -->
     
-      <GoToPlace 
+      <!-- <GoToPlace 
         vertex_name="{pickup_location_name}" 
         orientation="{pickup_orientation}"
         drone_name="{drone_name}" 
-      />
+      /> -->
 
-      <!-- TODO - figure out a way to determine if/when robot gets to its gotoplace goal -->
+      <RetryUntilSuccessful num_attempts="-1">
+        <Delay delay_msec="1">
+          <CheckGoToPlaceSuccess vertex_name="{pickup_location_name}" error_state="{error_state}"/>
+        </Delay>            
+      </RetryUntilSuccessful>
 
-
-      <SuspendRMFPathing/>
+      <!-- <SuspendRMFPathing/>
       <PickupWorker/>
-      <ReleaseRMFPathing/>
+      <ReleaseRMFPathing/> -->
 
-      <SubTree ID="repeat_idle_check"/>
+      <!-- <SubTree ID="repeat_idle_check"/> -->
 
-      <GoToPlace 
+      <!-- <GoToPlace 
         vertex_name="{dropoff_location_name}" 
         orientation="{dropoff_orientation}"
         drone_name="{drone_name}" 
       />
       
-      <SubTree ID="repeat_idle_check"/>
+      <RetryUntilSuccessful num_attempts="-1">
+        <Delay delay_msec="1">
+          <CheckGoToPlaceSuccess vertex_name="{dropoff_location_name}" error_state="{error_state}"/>
+        </Delay>            
+      </RetryUntilSuccessful> -->
 
-      <SuspendRMFPathing/>
-
+      <!-- <SuspendRMFPathing/>
       <LowerWorker/>
+      <ReleaseRMFPathing/> -->
 
-      <GoToPlace 
+      <!-- <SubTree ID="repeat_idle_check"/> -->
+
+      <!-- <GoToPlace 
         vertex_name="{post_dropoff_location_name}" 
         orientation="{dropoff_orientation}"
         drone_name="{drone_name}" 
       />
 
-      <SubTree ID="repeat_idle_check"/>
+      <RetryUntilSuccessful num_attempts="-1">
+        <Delay delay_msec="1">
+          <CheckGoToPlaceSuccess vertex_name="{post_dropoff_location_name}" error_state="{error_state}"/>
+        </Delay>            
+      </RetryUntilSuccessful> -->
 
-      <ReleaseRMFPathing/>
+      
 
     </Sequence>
   </BehaviorTree>
@@ -123,7 +122,7 @@
     <RetryUntilSuccessful num_attempts="-1">
       <Delay delay_msec="3">
         <Sequence>
-          <CheckHeartbeat drone_floor_mission_status = "{drone_floor_mission_status}" error_state = "{error_state}"/>
+          
           <CheckIdle/> 
         </Sequence>
       </Delay>

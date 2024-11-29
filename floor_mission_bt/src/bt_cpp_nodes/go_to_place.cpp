@@ -124,6 +124,6 @@ BT::PortsList GoToPlace::providedPorts() {
       BT::InputPort<float>("orientation")
   };
     
-    return ports_list;
-  
+  return ports_list;
+
 }
