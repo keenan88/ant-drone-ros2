@@ -16,39 +16,43 @@
       <Repeat num_cycles = "-1">
 
         <Sequence>
+            <!-- S2_L_R1 -->
 
-          <RetryUntilSuccessful num_attempts="3">
-            <Delay delay_msec="3">
-              <Sequence>
-                <CheckHeartbeat drone_floor_mission_status = "{drone_floor_mission_status}" error_state = "{error_state}"/>
-              </Sequence>
-            </Delay>
+          <GoToPlace 
+            vertex_name="S2_L_R1" 
+
+            orientation="0.0"
+            drone_name="drone_boris" 
+          />
+
+          <RetryUntilSuccessful num_attempts="-1">
+
+            <Delay delay_msec="1">
+              <CheckGoToPlaceSuccess vertex_name="S2_L_R1" error_state="{error_state}"/>
+            </Delay>            
+
+
           </RetryUntilSuccessful>
           
-
-          <!-- <SubTree ID="repeat_idle_check"/> -->
-
-          <!-- Keep checking if the drone has been selected for a floor mission until it has -->
+          <!-- Keep checking if drone is idle w/ heartbeat, and triggered for a floor mission -->
+          
           <!-- <RetryUntilSuccessful num_attempts="-1">
-            <Delay delay_msec="3">
-              <Sequence>
+            <Sequence>
+              <SubTree ID="repeat_idle_check"/>
 
-                <CheckHeartbeat drone_floor_mission_status = "{drone_floor_mission_status}" error_state = "{error_state}"/>
-
-                <CheckIfSelectedForFloorMission
-                  drone_name = "{drone_name}"
-                  worker_name = "{worker_name}"
-                  pickup_location_name = "{pickup_location_name}"
-                  pickup_orientation = "{pickup_orientation}"
-                  dropoff_location_name = "{dropoff_location_name}"
-                  dropoff_orientation = "{dropoff_orientation}"
-                  post_dropoff_location_name = "{post_dropoff_location_name}"
-                  drone_floor_mission_status = "{drone_floor_mission_status}"
-                />
-                
-              </Sequence>
-            </Delay>
+              <CheckIfSelectedForFloorMission
+                drone_name = "{drone_name}"
+                worker_name = "{worker_name}"
+                pickup_location_name = "{pickup_location_name}"
+                pickup_orientation = "{pickup_orientation}"
+                dropoff_location_name = "{dropoff_location_name}"
+                dropoff_orientation = "{dropoff_orientation}"
+                post_dropoff_location_name = "{post_dropoff_location_name}"
+                drone_floor_mission_status = "{drone_floor_mission_status}"
+              />
+            </Sequence>
           </RetryUntilSuccessful> -->
+
 
           <!-- Execute the floor mission -->
           <!-- <SubTree ID="floor_mission"/> -->
@@ -66,12 +70,13 @@
     3. Bring worker to row start
     4. Lower Worker
     5. Back up out of the way
+
+    Assumptions:
+    1. floor_mission is started with an idle robot that has a healthy heartbeat and was triggered by the queen to do a floor mission
    -->
   <BehaviorTree ID="floor_mission">
 
     <Sequence>
-
-      <SubTree ID="repeat_idle_check"/>
     
       <GoToPlace 
         vertex_name="{pickup_location_name}" 
@@ -79,7 +84,7 @@
         drone_name="{drone_name}" 
       />
 
-      <SubTree ID="repeat_idle_check"/>
+      <!-- TODO - figure out a way to determine if/when robot gets to its gotoplace goal -->
 
 
       <SuspendRMFPathing/>
@@ -118,8 +123,8 @@
     <RetryUntilSuccessful num_attempts="-1">
       <Delay delay_msec="3">
         <Sequence>
-          <CheckIdle/> 
           <CheckHeartbeat drone_floor_mission_status = "{drone_floor_mission_status}" error_state = "{error_state}"/>
+          <CheckIdle/> 
         </Sequence>
       </Delay>
     </RetryUntilSuccessful>

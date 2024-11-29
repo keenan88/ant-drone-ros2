@@ -27,6 +27,7 @@
 #include "ant_fleet_interfaces/srv/mission_heartbeat_srv.hpp"
 #include "ant_fleet_interfaces/srv/request_worker_pickup.hpp"
 #include "ant_fleet_interfaces/srv/check_drone_idle.hpp"
+#include "ant_fleet_interfaces/srv/last_known_end_waypoint_name.hpp"
 #include "linkattacher_msgs/srv/attach_link.hpp"
 
 using namespace BT;
@@ -99,6 +100,19 @@ class GoToPlace : public BT::StatefulActionNode
     void onHalted() override{};
     static BT::PortsList providedPorts();
 
+};
+
+class CheckGoToPlaceSuccess: public RosServiceNode<ant_fleet_interfaces::srv::LastKnownEndWaypointName>
+{
+  public:
+
+  std::string desired_vertex_name;
+
+  CheckGoToPlaceSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 using SendPickupCmd_srv_t = linkattacher_msgs::srv::AttachLink;

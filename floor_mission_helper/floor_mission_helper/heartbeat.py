@@ -94,9 +94,9 @@ class Heartbeat(Node):
 
     def heartbeat_srv_cb(self, req, res):
 
-        self.last_drone_drone_floor_mission_status = req.drone_floor_mission_status
+        # self.last_drone_drone_floor_mission_status = req.drone_floor_mission_status
 
-        res.robot_floor_mission_status_healthy = (self.last_drone_drone_floor_mission_status == self.last_queen_drone_floor_mission_status)
+        res.robot_floor_mission_status_healthy = True #(self.last_drone_drone_floor_mission_status == self.last_queen_drone_floor_mission_status)
     
         res.heartbeat_timeout_healthy = self.heartbeat_timeout_healthy
 

@@ -16,18 +16,18 @@ PortsList CheckHeartbeat::providedPorts()
 
 bool CheckHeartbeat::setRequest(Request::SharedPtr& request)
 {
-  auto drone_floor_mission_status_result = getInput<std::string>("drone_floor_mission_status");
-  if (!drone_floor_mission_status_result)
-  {
-      if (auto node = node_.lock())  // Attempt to lock the weak_ptr
-      {
-          RCLCPP_INFO(node->get_logger(), "[%s] Could not read drone_floor_mission_status from blackboard ", this->name().c_str());
-      }
-      setOutput("error_state", "couldnt_read_drone_floor_mission_status");
-      return false;
-  }
+  // auto drone_floor_mission_status_result = getInput<std::string>("drone_floor_mission_status");
+  // if (!drone_floor_mission_status_result)
+  // {
+  //     if (auto node = node_.lock())  // Attempt to lock the weak_ptr
+  //     {
+  //         RCLCPP_INFO(node->get_logger(), "[%s] Could not read drone_floor_mission_status from blackboard ", this->name().c_str());
+  //     }
+  //     setOutput("error_state", "couldnt_read_drone_floor_mission_status");
+  //     return false;
+  // }
 
-  request -> drone_floor_mission_status = drone_floor_mission_status_result.value();
+  request -> drone_floor_mission_status = ""; //drone_floor_mission_status_result.value();
     
   // must return true if we are ready to send the request
   return true;

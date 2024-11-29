@@ -30,18 +30,24 @@ BT::NodeStatus GoToPlace::onStart() {
   auto vertex_name_result = getInput<std::string>("vertex_name");
   if (!vertex_name_result)
   {
+      RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] Could not read vertex_name from blackboard", this->name().c_str());
+      
       return BT::NodeStatus::FAILURE;
   }
 
   auto drone_name_result = getInput<std::string>("drone_name");
   if (!drone_name_result)
   {
+      RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] Could not read drone_name from blackboard", this->name().c_str());
+      
       return BT::NodeStatus::FAILURE;
   }
 
   auto orientation_result = getInput<float>("orientation");
   if (!orientation_result)
   {
+      RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] Could not read orientation from blackboard", this->name().c_str());
+      
       return BT::NodeStatus::FAILURE;
   }
 
@@ -94,6 +100,9 @@ BT::NodeStatus GoToPlace::onStart() {
   api_request.json_msg = composed_task.dump();
 
   publisher->publish(api_request);
+
+  RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] Go to place: %s api request sent to RMF", this->name().c_str(), vertex_name.c_str());
+  
   
   return BT::NodeStatus::RUNNING;
 }

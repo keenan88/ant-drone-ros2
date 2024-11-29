@@ -26,6 +26,10 @@ bool CheckIfSelectedForFloorMission::setRequest(Request::SharedPtr& request)
   auto drone_name_result = getInput<std::string>("drone_name");
   if (!drone_name_result)
   {
+      if (auto node = node_.lock())  // Attempt to lock the weak_ptr
+      {
+          RCLCPP_INFO(node->get_logger(), "[%s] Could not read drone name from blackboard", this->name().c_str());
+      }
       return false;
   }
 
@@ -48,7 +52,17 @@ NodeStatus CheckIfSelectedForFloorMission::onResponseReceived(const Response::Sh
     
     setOutput("drone_floor_mission_status", "FLOOR_MISSION");
 
+    if (auto node = node_.lock())  // Attempt to lock the weak_ptr
+    {
+        RCLCPP_INFO(node->get_logger(), "[%s] Floor mission triggered", this->name().c_str());
+    }
+
     return NodeStatus::SUCCESS;
+  }
+
+  if (auto node = node_.lock())  // Attempt to lock the weak_ptr
+  {
+      RCLCPP_INFO(node->get_logger(), "[%s] Floor mission not triggered", this->name().c_str());
   }
 
   setOutput("drone_floor_mission_status", "IDLE");
@@ -58,6 +72,12 @@ NodeStatus CheckIfSelectedForFloorMission::onResponseReceived(const Response::Sh
 
 NodeStatus CheckIfSelectedForFloorMission::onFailure(ServiceNodeErrorCode error)
 {
+
+  if (auto node = node_.lock())  // Attempt to lock the weak_ptr
+  {
+      RCLCPP_INFO(node->get_logger(), "[%s] Error calling check_if_selected_for_floor_mission server", this->name().c_str());
+  }
+
   // RCLCPP_ERROR(node_->get_logger(), "Error: %d", error);
   return NodeStatus::FAILURE;
 }
