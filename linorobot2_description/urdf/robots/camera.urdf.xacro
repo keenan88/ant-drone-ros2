@@ -17,7 +17,7 @@
           <format>R8G8B8</format>
         </image>
         <clip>
-          <near>0.02</near>
+          <near>0.05</near>
           <far>5</far> <!--  Be sure to set this greater than the max value of the cropbox distance cutoff, the camera generates a grey plane at this distance that will be interpreted as an obstacle-->
         </clip>
         <noise>
@@ -47,6 +47,8 @@
         <distortionK3>0.0</distortionK3>
         <distortionT1>0.0</distortionT1>
         <distortionT2>0.0</distortionT2>
+
+        
       </plugin>
     </sensor>
   </gazebo>

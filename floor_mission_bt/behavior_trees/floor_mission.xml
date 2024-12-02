@@ -84,8 +84,6 @@
       <PickupWorker drone_name="{drone_name}" worker_name="{worker_name}" />
       <ReleaseRMFPathing/>
 
-      <!-- <SubTree ID="repeat_idle_check"/> -->
-
       <GoToPlace 
         vertex_name="{dropoff_location_name}" 
         orientation="{dropoff_orientation}"
@@ -100,11 +98,9 @@
 
       <SuspendRMFPathing/>
       <LowerWorker drone_name="{drone_name}" worker_name="{worker_name}"/>
-      <ReleaseRMFPathing/>
+      
 
-      <!-- <SubTree ID="repeat_idle_check"/> -->
-
-      <GoToPlace 
+      <!-- <GoToPlace 
         vertex_name="{post_dropoff_location_name}" 
         orientation="{dropoff_orientation}"
         drone_name="{drone_name}" 
@@ -114,7 +110,11 @@
         <Delay delay_msec="1">
           <CheckGoToPlaceSuccess vertex_name="{post_dropoff_location_name}" error_state="{error_state}"/>
         </Delay>            
-      </RetryUntilSuccessful>
+      </RetryUntilSuccessful> -->
+
+      <MoveOut/>
+
+      <ReleaseRMFPathing/>
 
       <SendFloorMissionSuccess drone_floor_mission_status="{drone_floor_mission_status}" drone_name="{drone_name}"/>
 

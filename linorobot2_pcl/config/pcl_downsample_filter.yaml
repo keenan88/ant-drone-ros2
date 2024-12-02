@@ -7,7 +7,7 @@
     # Filter field is unused for this filter, cropping is done by dedicated crop filter.
     filter_field_name: z
     filter_limit_max: 3.0
-    filter_limit_min: -0.1
+    filter_limit_min: 0.0
     filter_limit_negative: false
     leaf_size: 0.01
     max_queue_size: 3
@@ -21,7 +21,7 @@
     # Filter field is unused for this filter, cropping is done by dedicated crop filter.
     filter_field_name: z
     filter_limit_max: 3.0
-    filter_limit_min: -0.1
+    filter_limit_min: 0.0
     filter_limit_negative: false
     leaf_size: 0.01
     max_queue_size: 3
@@ -35,7 +35,7 @@
     # Filter field is unused for this filter, cropping is done by dedicated crop filter.
     filter_field_name: z
     filter_limit_max: 3.0
-    filter_limit_min: -0.1
+    filter_limit_min: 0.0
     filter_limit_negative: false
     leaf_size: 0.01
     max_queue_size: 3
@@ -49,7 +49,7 @@
     # Filter field is unused for this filter, cropping is done by dedicated crop filter.
     filter_field_name: z
     filter_limit_max: 3.0
-    filter_limit_min: -0.1
+    filter_limit_min: 0.0
     filter_limit_negative: false
     leaf_size: 0.01
     max_queue_size: 3

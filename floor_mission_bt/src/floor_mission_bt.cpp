@@ -73,6 +73,10 @@ class FloorMissionNode : public rclcpp::Node
         send_floor_mission_success_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<SendFloorMissionSuccess>("SendFloorMissionSuccess", send_floor_mission_success_params);
 
+        auto moveout_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "moveout");
+        moveout_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
+        factory.registerNodeType<MoveOut>("MoveOut", moveout_params);
+
         
         auto blackboard = BT::Blackboard::create();
         tree_ = factory.createTreeFromFile(tree_xml_file_, blackboard);

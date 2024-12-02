@@ -33,11 +33,24 @@ def generate_launch_description():
         ]
     )
 
+    moveout = Node(
+        package='floor_mission_helper',
+        executable='moveout',
+        namespace = drone_name,
+        parameters=[
+            {
+                # self.get_clock() does not increment when use_sim_time=True, not sure why.
+                'use_sim_time': False,
+            }
+        ]
+    )
+
 
 
     
     ld.add_action(floor_mission_bt)
     ld.add_action(heartbeat)
+    ld.add_action(moveout)
 
     return ld
 

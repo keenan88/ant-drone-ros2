@@ -28,6 +28,7 @@
 #include "ant_fleet_interfaces/srv/request_worker_pickup.hpp"
 #include "ant_fleet_interfaces/srv/check_drone_idle.hpp"
 #include "ant_fleet_interfaces/srv/last_known_end_waypoint_name.hpp"
+#include "ant_fleet_interfaces/srv/move_out.hpp"
 #include "linkattacher_msgs/srv/attach_link.hpp"
 
 
@@ -181,5 +182,16 @@ class CheckGoToPlaceSuccess: public RosServiceNode<ant_fleet_interfaces::srv::La
   NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
   virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 
+};
+
+class MoveOut: public RosServiceNode<ant_fleet_interfaces::srv::MoveOut>
+{
+  public:
+
+  MoveOut(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 

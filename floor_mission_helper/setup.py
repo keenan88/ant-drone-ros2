@@ -22,6 +22,7 @@ setup(
     entry_points={
         "console_scripts": [
             'heartbeat = floor_mission_helper.heartbeat:main',
+            'moveout = floor_mission_helper.moveout:main',
         ],
     },
 )
