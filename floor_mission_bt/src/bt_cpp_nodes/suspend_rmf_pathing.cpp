@@ -6,25 +6,17 @@ SuspendRMFPathing::SuspendRMFPathing(const std::string& name, const NodeConfig& 
 PortsList SuspendRMFPathing::providedPorts()
 {
   return {};
-  // providedBasicPorts({
-  //     InputPort<unsigned>("A"),
-  //     InputPort<unsigned>("B")});
 }
 
 bool SuspendRMFPathing::setRequest(Request::SharedPtr& request)
 {
   request -> is_rmf_pathing_suspended = true;
     
-  // use input ports to set A and B
-  // getInput("A", request->a);
-  // getInput("B", request->b);
-  // must return true if we are ready to send the request
   return true;
 }
 
 NodeStatus SuspendRMFPathing::onResponseReceived(const Response::SharedPtr& response)
 {
-  // RCLCPP_INFO(node_->get_logger(), "Sum: %ld", response->sum);
   if(response -> success)
   {
     return NodeStatus::SUCCESS;
@@ -35,6 +27,5 @@ NodeStatus SuspendRMFPathing::onResponseReceived(const Response::SharedPtr& resp
 
 NodeStatus SuspendRMFPathing::onFailure(ServiceNodeErrorCode error)
 {
-  // RCLCPP_ERROR(node_->get_logger(), "Error: %d", error);
   return NodeStatus::FAILURE;
 }

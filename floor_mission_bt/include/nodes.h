@@ -158,122 +158,16 @@ class SendFloorMissionSuccess: public RosServiceNode<ant_fleet_interfaces::srv::
 };
 
 
-
-// using namespace BT;
-
-// class CheckIfSelectedForFloorMission: public RosServiceNode<ant_fleet_interfaces::srv::CheckIfSelectedForFloorMission>
-// {
-//   public:
-
-//   CheckIfSelectedForFloorMission(const std::string& name, const NodeConfig& conf, const RosNodeParams& params): 
-//     RosServiceNode<ant_fleet_interfaces::srv::CheckIfSelectedForFloorMission>(name, conf, params) {}
-
-//   static PortsList providedPorts() {
-//     return providedBasicPorts({
-//       InputPort<std::string>("drone_name"),
-//       OutputPort<std::string>("worker_name"),
-//       OutputPort<std::string>("pickup_location_name"),
-//       OutputPort<float>("pickup_orientation"),
-//       OutputPort<std::string>("dropoff_location_name"),
-//       OutputPort<float>("dropoff_orientation"),
-//       OutputPort<std::string>("post_dropoff_location_name"),
-//       OutputPort<std::string>("drone_floor_mission_status")
-//     });
-//   }
-
-
-
-//   bool setRequest(Request::SharedPtr& request) override {
-  
-//     auto drone_name_result = getInput<std::string>("drone_name");
-//     if (!drone_name_result)
-//     {
-//         if (auto node = node_.lock())  // Attempt to lock the weak_ptr
-//         {
-//             RCLCPP_INFO(node->get_logger(), "[%s] Could not read drone name from blackboard", this->name().c_str());
-//         }
-//         return false;
-//     }
-
-//     request -> robot_name = drone_name_result.value();
-      
-//     // must return true if we are ready to send the request
-//     return true;
-//   }
-
-
-
-//   NodeStatus onResponseReceived(const Response::SharedPtr& response) override {
-//     if(response -> is_floor_mission_triggered)
-//     {
-//       // setOutput("worker_name", response->paired_robot_name);
-//       setOutput<std::string>("pickup_location_name", "worker_misha_pickup_point"); //response->pickup_location_name
-//       // setOutput("pickup_orientation", response->pickup_orientation);
-//       // setOutput("dropoff_location_name", response->dropoff_location_name);
-//       // setOutput("dropoff_orientation", response->dropoff_orientation);
-//       // setOutput("post_dropoff_location_name", response->post_dropoff_location_name);
-//       // setOutput("drone_floor_mission_status", "FLOOR_MISSION");
-
-//       if (auto node = node_.lock())  // Attempt to lock the weak_ptr
-//       {
-//           RCLCPP_INFO(node->get_logger(), "[%s] Floor mission triggered", this->name().c_str());
-//       }
-
-//       return NodeStatus::SUCCESS;
-//     }
-
-//     if (auto node = node_.lock())  // Attempt to lock the weak_ptr
-//     {
-//         RCLCPP_INFO(node->get_logger(), "[%s] Floor mission not triggered", this->name().c_str());
-//     }
-
-//     // setOutput("drone_floor_mission_status", "IDLE");
-
-//     return NodeStatus::FAILURE;
-//   }
-
-
-
-//   virtual NodeStatus onFailure(ServiceNodeErrorCode error) override {
-
-//     if (auto node = node_.lock())  // Attempt to lock the weak_ptr
-//     {
-//         RCLCPP_INFO(node->get_logger(), "[%s] Error calling check_if_selected_for_floor_mission server", this->name().c_str());
-//     }
-
-//     // RCLCPP_ERROR(node_->get_logger(), "Error: %d", error);
-//     return NodeStatus::FAILURE;
-//   }
-// };
-
-using namespace BT;
-
 class CheckIfSelectedForFloorMission: public RosServiceNode<ant_fleet_interfaces::srv::CheckIfSelectedForFloorMission>
 {
   public:
 
   CheckIfSelectedForFloorMission(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-
   static PortsList providedPorts();
-
-
-
   bool setRequest(Request::SharedPtr& request) override;
-
-
-
   NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-
-
-
   virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
-
-
-
-
-
-
 
 class CheckGoToPlaceSuccess: public RosServiceNode<ant_fleet_interfaces::srv::LastKnownEndWaypointName>
 {
@@ -281,74 +175,11 @@ class CheckGoToPlaceSuccess: public RosServiceNode<ant_fleet_interfaces::srv::La
 
   std::string desired_vertex_name;
 
-  CheckGoToPlaceSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params)  : 
-    RosServiceNode<ant_fleet_interfaces::srv::LastKnownEndWaypointName>(name, conf, params) {};
-
-
-  static PortsList providedPorts(){
-
-    return providedBasicPorts ({
-      BT::InputPort<std::string>("vertex_name"),
-      BT::OutputPort<std::string>("error_state")
-    });
-
-  }
-
-
-  bool setRequest(Request::SharedPtr& request) override {
-
-    getInput("vertex_name", desired_vertex_name);
-
-    if (auto node = node_.lock())  // Attempt to lock the weak_ptr
-    {
-        RCLCPP_INFO(node->get_logger(), "[%s] From blackboard, desired_vertex_name = %s ", this->name().c_str(), desired_vertex_name.c_str());
-    }
-    
-
-    // desired_vertex_name = desired_vertex_name_result.value();
-      
-    // must return true if we are ready to send the request
-    return true;
-  }
-
-
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override {
-    NodeStatus node_status = NodeStatus::FAILURE;
-
-    if(response -> last_known_waypoint_name == desired_vertex_name)
-    {
-      node_status = NodeStatus::SUCCESS;
-      if (auto node = node_.lock())  // Attempt to lock the weak_ptr
-      {
-          RCLCPP_INFO(node->get_logger(), "[%s] Drone has reached desired vertex %s ", this->name().c_str(), desired_vertex_name.c_str());
-      }
-    }
-    else
-    {
-      if (auto node = node_.lock())  // Attempt to lock the weak_ptr
-      {
-          RCLCPP_INFO(node->get_logger(), "[%s] Last known end vertex: %s, desired: %s ", this->name().c_str(), response -> last_known_waypoint_name.c_str(), desired_vertex_name.c_str());
-      }
-    }
-
-    return node_status;
-  }
-
-
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override {
-    NodeStatus node_status = NodeStatus::FAILURE;
-
-    if (auto node = node_.lock())  // Attempt to lock the weak_ptr
-    {
-        RCLCPP_INFO(node->get_logger(), "[%s] Error calling drone last_known_end_waypoint_name server ", this->name().c_str());
-    }
-    setOutput("error_state", "last_known_end_waypoint_name_call_failed");
-
-    return node_status;
-  }
-
+  CheckGoToPlaceSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 
 };
-
-
 

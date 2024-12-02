@@ -9,20 +9,19 @@ PortsList SendFloorMissionSuccess::providedPorts()
 
   return {
     OutputPort<std::string>("drone_floor_mission_status"),
+    InputPort<std::string>("drone_name")
   };
 
 }
 
 bool SendFloorMissionSuccess::setRequest(Request::SharedPtr& request)
 {
-  
-  auto drone_name_result = getInput<std::string>("drone_name");
-  if (!drone_name_result)
-  {
-      return false;
-  }
 
-  request -> robot_name = drone_name_result.value();
+  std::string drone_name;
+
+  getInput("drone_name", drone_name);
+
+  request -> robot_name = drone_name;
     
   // must return true if we are ready to send the request
   return true;

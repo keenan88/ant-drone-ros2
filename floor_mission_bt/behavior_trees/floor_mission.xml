@@ -16,8 +16,6 @@
       <Repeat num_cycles = "-1">
 
         <Sequence>
-
-          
           <!-- Keep checking if drone is idle w/ heartbeat, and triggered for a floor mission -->
           <RetryUntilSuccessful num_attempts="-1">
             <Sequence>
@@ -82,13 +80,13 @@
         </Delay>            
       </RetryUntilSuccessful>
 
-      <!-- <SuspendRMFPathing/>
-      <PickupWorker/>
-      <ReleaseRMFPathing/> -->
+      <SuspendRMFPathing/>
+      <PickupWorker drone_name="{drone_name}" worker_name="{worker_name}" />
+      <ReleaseRMFPathing/>
 
       <!-- <SubTree ID="repeat_idle_check"/> -->
 
-      <!-- <GoToPlace 
+      <GoToPlace 
         vertex_name="{dropoff_location_name}" 
         orientation="{dropoff_orientation}"
         drone_name="{drone_name}" 
@@ -98,15 +96,15 @@
         <Delay delay_msec="1">
           <CheckGoToPlaceSuccess vertex_name="{dropoff_location_name}" error_state="{error_state}"/>
         </Delay>            
-      </RetryUntilSuccessful> -->
+      </RetryUntilSuccessful>
 
-      <!-- <SuspendRMFPathing/>
-      <LowerWorker/>
-      <ReleaseRMFPathing/> -->
+      <SuspendRMFPathing/>
+      <LowerWorker drone_name="{drone_name}" worker_name="{worker_name}"/>
+      <ReleaseRMFPathing/>
 
       <!-- <SubTree ID="repeat_idle_check"/> -->
 
-      <!-- <GoToPlace 
+      <GoToPlace 
         vertex_name="{post_dropoff_location_name}" 
         orientation="{dropoff_orientation}"
         drone_name="{drone_name}" 
@@ -116,7 +114,9 @@
         <Delay delay_msec="1">
           <CheckGoToPlaceSuccess vertex_name="{post_dropoff_location_name}" error_state="{error_state}"/>
         </Delay>            
-      </RetryUntilSuccessful> -->
+      </RetryUntilSuccessful>
+
+      <SendFloorMissionSuccess drone_floor_mission_status="{drone_floor_mission_status}" drone_name="{drone_name}"/>
 
       
 

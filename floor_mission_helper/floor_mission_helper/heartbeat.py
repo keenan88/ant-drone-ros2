@@ -44,9 +44,6 @@ class Heartbeat(Node):
         # we will make a server here that it can call to validate heartbeat and drone_floor_mission_status are health
         self.heartbeat_server = self.create_service(MissionHeartbeatSrv, 'mission_heartbeat', self.heartbeat_srv_cb)
 
-        
-
-        
         self.get_logger().info(f'heartbeat node started')
 
 
@@ -76,7 +73,7 @@ class Heartbeat(Node):
             curr_time_s = self.get_clock().now().to_msg().sec
             self.heartbeat_timeout_healthy = (curr_time_s - self.last_queen_heartbeat_s <= self.heartbeat_timeout_s)
 
-            self.get_logger().info(f"heartbeat_timeout_healthy? {self.heartbeat_timeout_healthy}, {curr_time_s}, {self.last_queen_heartbeat_s}")
+            # self.get_logger().info(f"heartbeat_timeout_healthy? {self.heartbeat_timeout_healthy}, {curr_time_s}, {self.last_queen_heartbeat_s}")
         
 
     def handle_incoming_heartbeat(self, msg: MissionHeartbeatMsg):
@@ -90,7 +87,7 @@ class Heartbeat(Node):
             curr_time_s = self.get_clock().now().to_msg().sec
             self.heartbeat_timeout_healthy = (curr_time_s - self.last_queen_heartbeat_s <= self.heartbeat_timeout_s)
 
-            self.get_logger().info(f"heartbeat_timeout_healthy? {self.heartbeat_timeout_healthy}, {curr_time_s}, {self.last_queen_heartbeat_s}")
+            # self.get_logger().info(f"heartbeat_timeout_healthy? {self.heartbeat_timeout_healthy}, {curr_time_s}, {self.last_queen_heartbeat_s}")
 
     def heartbeat_srv_cb(self, req, res):
 

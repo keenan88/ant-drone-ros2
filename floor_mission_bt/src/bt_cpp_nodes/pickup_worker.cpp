@@ -5,23 +5,19 @@ PickupWorker::PickupWorker(const std::string& name, const NodeConfig& conf, cons
 
 PortsList PickupWorker::providedPorts()
 {
-  return {};
-  // providedBasicPorts({
-  //     InputPort<unsigned>("A"),
-  //     InputPort<unsigned>("B")});
+  return providedBasicPorts({
+      InputPort<std::string>("drone_name"),
+      InputPort<std::string>("worker_name")
+  });
 }
 
 bool PickupWorker::setRequest(Request::SharedPtr& request)
 {
-  request -> model1_name = "drone_boris";
-  request -> model2_name = "worker_misha";
+  getInput("drone_name", request -> model1_name);
+  getInput("worker_name", request -> model2_name);
   request -> link1_name = request -> model1_name + "_attachment_point";
   request -> link2_name = request -> model2_name + "_base_link";    
     
-  // use input ports to set A and B
-  // getInput("A", request->a);
-  // getInput("B", request->b);
-  // must return true if we are ready to send the request
   return true;
 }
 
