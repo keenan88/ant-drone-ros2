@@ -8,7 +8,6 @@ PortsList SendFloorMissionSuccess::providedPorts()
 {
 
   return {
-    OutputPort<std::string>("drone_floor_mission_status"),
     InputPort<std::string>("drone_name")
   };
 
@@ -31,7 +30,6 @@ NodeStatus SendFloorMissionSuccess::onResponseReceived(const Response::SharedPtr
 {
   if(response)
   {
-    setOutput("drone_floor_mission_status", "IDLE");
     return NodeStatus::SUCCESS;
   }
 

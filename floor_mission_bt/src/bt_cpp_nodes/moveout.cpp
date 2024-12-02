@@ -11,6 +11,10 @@ PortsList MoveOut::providedPorts()
 
 bool MoveOut::setRequest(Request::SharedPtr& request)
 {
+  if (auto node = node_.lock())  // Attempt to lock the weak_ptr
+  {
+      RCLCPP_INFO(node->get_logger(), "[%s] Moving out from under worker..", this->name().c_str());
+  }
   return true;
 }
 

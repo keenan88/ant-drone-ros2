@@ -6,11 +6,13 @@
 
     <Sequence>
 
-      <!-- Variable initialization -->
-      <InitDroneVars 
-        drone_floor_mission_status="{drone_floor_mission_status}"
-        drone_name="{drone_name}"
-      />
+      <!-- One-time initialization -->
+      <RetryUntilSuccessful num_attempts="-1">
+        <Sequence>
+          <InitDroneVars drone_name="{drone_name}"/>
+          <RegisterDrone drone_name="{drone_name}"/>
+        </Sequence>
+      </RetryUntilSuccessful>
 
       <!-- Main loop, repeat forever -->
       <Repeat num_cycles = "-1">
@@ -19,8 +21,8 @@
           <!-- Keep checking if drone is idle w/ heartbeat, and triggered for a floor mission -->
           <RetryUntilSuccessful num_attempts="-1">
             <Sequence>
-              <SubTree ID="repeat_idle_check"/>
-
+              <CheckHeartbeat />
+              <CheckIdle/> 
               <CheckIfSelectedForFloorMission
                 drone_name = "{drone_name}"
                 worker_name = "{worker_name}"
@@ -29,11 +31,10 @@
                 dropoff_location_name = "{dropoff_location_name}"
                 dropoff_orientation = "{dropoff_orientation}"
                 post_dropoff_location_name = "{post_dropoff_location_name}"
-                drone_floor_mission_status = "{drone_floor_mission_status}"
               />
             </Sequence>
-          </RetryUntilSuccessful>
 
+          </RetryUntilSuccessful>
 
           <!-- Execute the floor mission -->
           <SubTree ID="floor_mission" 
@@ -44,7 +45,6 @@
             dropoff_location_name = "{dropoff_location_name}"
             dropoff_orientation = "{dropoff_orientation}"
             post_dropoff_location_name = "{post_dropoff_location_name}"
-            drone_floor_mission_status = "{drone_floor_mission_status}"
           />
 
         </Sequence>
@@ -98,27 +98,11 @@
 
       <SuspendRMFPathing/>
       <LowerWorker drone_name="{drone_name}" worker_name="{worker_name}"/>
-      
-
-      <!-- <GoToPlace 
-        vertex_name="{post_dropoff_location_name}" 
-        orientation="{dropoff_orientation}"
-        drone_name="{drone_name}" 
-      />
-
-      <RetryUntilSuccessful num_attempts="-1">
-        <Delay delay_msec="1">
-          <CheckGoToPlaceSuccess vertex_name="{post_dropoff_location_name}" error_state="{error_state}"/>
-        </Delay>            
-      </RetryUntilSuccessful> -->
-
       <MoveOut/>
-
       <ReleaseRMFPathing/>
 
-      <SendFloorMissionSuccess drone_floor_mission_status="{drone_floor_mission_status}" drone_name="{drone_name}"/>
+      <SendFloorMissionSuccess drone_name="{drone_name}"/>
 
-      
 
     </Sequence>
   </BehaviorTree>

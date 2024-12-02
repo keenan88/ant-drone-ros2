@@ -35,13 +35,11 @@ class Heartbeat(Node):
         self.last_queen_heartbeat_s = -1
         self.heartbeat_timeout_s = 10.0
         self.heartbeat_timeout_healthy = False # Assume no heartbeat until recieved
+        self.heartbeat_state_healthy = False
 
-        # Both queen and drone track the drone's floor mission status. Use this node to validate that the statuses match.
-        self.last_queen_drone_floor_mission_status = 'IDLE' # Assume starts idle
-        self.last_drone_drone_floor_mission_status = 'IDLE' # Assume starts idle
 
         # drone behavior tree needs to check if the heartbeat is still healthy before executing calls to the queen, so 
-        # we will make a server here that it can call to validate heartbeat and drone_floor_mission_status are health
+        # we will make a server here that it can call to validate heartbeat is healthy
         self.heartbeat_server = self.create_service(MissionHeartbeatSrv, 'mission_heartbeat', self.heartbeat_srv_cb)
 
         self.get_logger().info(f'heartbeat node started')
@@ -59,7 +57,6 @@ class Heartbeat(Node):
         heartbeat_msg = MissionHeartbeatMsg()
         heartbeat_msg.sender_name = self.drone_name
         heartbeat_msg.heartbeat_s = self.get_clock().now().to_msg().sec
-        heartbeat_msg.drone_floor_mission_status
 
         self.heartbeat_pub.publish(heartbeat_msg)
 
@@ -81,7 +78,7 @@ class Heartbeat(Node):
         if msg.sender_name == "queen":
 
             self.last_queen_heartbeat_s = msg.heartbeat_s
-            # self.last_queen_drone_floor_mission_status = msg.drone_floor_mission_status
+
 
             # Update heartbeat as soon as heartbeat message recieved
             curr_time_s = self.get_clock().now().to_msg().sec
@@ -91,12 +88,8 @@ class Heartbeat(Node):
 
     def heartbeat_srv_cb(self, req, res):
 
-        # self.last_drone_drone_floor_mission_status = req.drone_floor_mission_status
 
-        res.robot_floor_mission_status_healthy = True #(self.last_drone_drone_floor_mission_status == self.last_queen_drone_floor_mission_status)
-    
         res.heartbeat_timeout_healthy = self.heartbeat_timeout_healthy
-
         self.get_logger().info(f"returning: {res}")
 
         return res

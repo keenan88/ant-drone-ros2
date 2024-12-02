@@ -32,6 +32,10 @@ class FloorMissionNode : public rclcpp::Node
 
         factory.registerNodeType<GoToPlace>("GoToPlace", shared_from_this());
 
+        auto register_robot_params = BT::RosNodeParams(shared_from_this(), "/register_robot");
+        register_robot_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
+        factory.registerNodeType<RegisterDrone>("RegisterDrone", register_robot_params);
+
         auto check_go_to_place_success_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "last_known_end_waypoint_name");
         check_go_to_place_success_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckGoToPlaceSuccess>("CheckGoToPlaceSuccess", check_go_to_place_success_params);

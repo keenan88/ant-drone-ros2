@@ -25,7 +25,7 @@ COPY ./ant_queen/ant_fleet_interfaces /home/humble_ws/src/ant_fleet_interfaces
 
 WORKDIR /home/humble_ws/src
 RUN git clone https://github.com/keenan88/IFRA_LinkAttacher
-RUN git clone https://github.com/BehaviorTree/BehaviorTree.ROS2.git
+RUN git clone --branch humble https://github.com/BehaviorTree/BehaviorTree.ROS2.git
 
 WORKDIR /home/humble_ws/
 

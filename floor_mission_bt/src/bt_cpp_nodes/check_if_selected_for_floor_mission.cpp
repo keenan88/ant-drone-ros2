@@ -16,7 +16,6 @@ return providedBasicPorts({
     OutputPort<std::string>("dropoff_location_name"),
     OutputPort<float>("dropoff_orientation"),
     OutputPort<std::string>("post_dropoff_location_name"),
-    OutputPort<std::string>("drone_floor_mission_status")
 });
 }
 
@@ -51,7 +50,6 @@ if(response -> is_floor_mission_triggered)
     setOutput("dropoff_location_name", response->dropoff_location_name);
     setOutput("dropoff_orientation", response->dropoff_orientation);
     setOutput("post_dropoff_location_name", response->post_dropoff_location_name);
-    setOutput("drone_floor_mission_status", "FLOOR_MISSION");
 
     if (auto node = node_.lock())  // Attempt to lock the weak_ptr
     {
@@ -66,7 +64,6 @@ if (auto node = node_.lock())  // Attempt to lock the weak_ptr
     RCLCPP_INFO(node->get_logger(), "[%s] Floor mission not triggered", this->name().c_str());
 }
 
-setOutput("drone_floor_mission_status", "IDLE");
 
 return NodeStatus::FAILURE;
 }

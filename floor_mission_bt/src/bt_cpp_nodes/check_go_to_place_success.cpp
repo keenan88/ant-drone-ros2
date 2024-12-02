@@ -20,13 +20,6 @@ PortsList CheckGoToPlaceSuccess::providedPorts(){
 bool CheckGoToPlaceSuccess::setRequest(Request::SharedPtr& request) {
 
   getInput("vertex_name", desired_vertex_name);
-
-  if (auto node = node_.lock())  // Attempt to lock the weak_ptr
-  {
-      RCLCPP_INFO(node->get_logger(), "[%s] From blackboard, desired_vertex_name = %s ", this->name().c_str(), desired_vertex_name.c_str());
-  }
-  
-    
   // must return true if we are ready to send the request
   return true;
 }

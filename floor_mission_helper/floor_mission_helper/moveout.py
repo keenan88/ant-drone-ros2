@@ -33,7 +33,6 @@ class Moveout(Node):
 
         while tdiff < t_move:
             tdiff =  self.get_clock().now().to_msg().sec - t0
-            self.get_logger().info(f"publising pos twist {tdiff}")
             self.twist_pub.publish(moveout_twist)
             
             time.sleep(0.25)

@@ -20,7 +20,6 @@
 #include "linkattacher_msgs/srv/detach_link.hpp"
 
 #include <behaviortree_ros2/bt_service_node.hpp>
-#include "behaviortree_ros2/bt_topic_sub_node.hpp"
 
 #include "ant_fleet_interfaces/srv/mission_success.hpp"
 #include "ant_fleet_interfaces/srv/check_if_selected_for_floor_mission.hpp"
@@ -28,6 +27,7 @@
 #include "ant_fleet_interfaces/srv/request_worker_pickup.hpp"
 #include "ant_fleet_interfaces/srv/check_drone_idle.hpp"
 #include "ant_fleet_interfaces/srv/last_known_end_waypoint_name.hpp"
+#include "ant_fleet_interfaces/srv/register_robot.hpp"
 #include "ant_fleet_interfaces/srv/move_out.hpp"
 #include "linkattacher_msgs/srv/attach_link.hpp"
 
@@ -50,6 +50,17 @@ class InitDroneVars : public BT::StatefulActionNode
     void onHalted() override{};
     static BT::PortsList providedPorts();
 
+};
+
+class RegisterDrone: public RosServiceNode<ant_fleet_interfaces::srv::RegisterRobot>
+{
+  public:
+
+  RegisterDrone(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 
