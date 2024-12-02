@@ -38,7 +38,7 @@
       wz_std: 0.4
       vx_max: 0.5
       vx_min: -0.5
-      vy_max: 0.5
+      vy_max: 0.1 # Keep vy_max a good amount lower than vx_max, or robot will drive on a diagonal to maximize its velocity toward the goal.
       wz_max: 1.9
       ax_max: 3.0
       ax_min: -3.0
