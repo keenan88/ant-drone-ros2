@@ -19,7 +19,6 @@
 
           
           <!-- Keep checking if drone is idle w/ heartbeat, and triggered for a floor mission -->
-          
           <RetryUntilSuccessful num_attempts="-1">
             <Sequence>
               <SubTree ID="repeat_idle_check"/>
@@ -39,7 +38,16 @@
 
 
           <!-- Execute the floor mission -->
-          <SubTree ID="floor_mission"/>
+          <SubTree ID="floor_mission" 
+            drone_name = "{drone_name}"
+            worker_name = "{worker_name}"
+            pickup_location_name = "{pickup_location_name}"
+            pickup_orientation = "{pickup_orientation}"
+            dropoff_location_name = "{dropoff_location_name}"
+            dropoff_orientation = "{dropoff_orientation}"
+            post_dropoff_location_name = "{post_dropoff_location_name}"
+            drone_floor_mission_status = "{drone_floor_mission_status}"
+          />
 
         </Sequence>
       </Repeat>
@@ -61,14 +69,12 @@
   <BehaviorTree ID="floor_mission">
 
     <Sequence>
-
-      <!-- <SubTree ID="repeat_idle_check"/> -->
     
-      <!-- <GoToPlace 
+      <GoToPlace 
         vertex_name="{pickup_location_name}" 
         orientation="{pickup_orientation}"
         drone_name="{drone_name}" 
-      /> -->
+      />
 
       <RetryUntilSuccessful num_attempts="-1">
         <Delay delay_msec="1">
@@ -121,10 +127,7 @@
 
     <RetryUntilSuccessful num_attempts="-1">
       <Delay delay_msec="3">
-        <Sequence>
-          
-          <CheckIdle/> 
-        </Sequence>
+        <CheckIdle/> 
       </Delay>
     </RetryUntilSuccessful>
 

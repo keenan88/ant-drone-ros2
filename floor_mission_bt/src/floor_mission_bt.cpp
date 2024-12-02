@@ -41,7 +41,7 @@ class FloorMissionNode : public rclcpp::Node
         check_idle_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckIdle>("CheckIdle", check_idle_params);
 
-        auto check_selected_for_floor_mission_params = BT::RosNodeParams(shared_from_this(), "/" "check_if_selected_for_floor_mission");
+        auto check_selected_for_floor_mission_params = BT::RosNodeParams(shared_from_this(), "/" "check_if_selected_for_floor_mission"); 
         check_selected_for_floor_mission_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckIfSelectedForFloorMission>("CheckIfSelectedForFloorMission", check_selected_for_floor_mission_params);
 
