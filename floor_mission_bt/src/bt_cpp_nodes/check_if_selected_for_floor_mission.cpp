@@ -45,7 +45,7 @@ NodeStatus CheckIfSelectedForFloorMission::onResponseReceived(const Response::Sh
 if(response -> is_floor_mission_triggered)
 {
     setOutput("worker_name", response->paired_robot_name);
-    setOutput<std::string>("pickup_location_name", "worker_misha_pickup_point"); //response->pickup_location_name
+    setOutput<std::string>("pickup_location_name", response->pickup_location_name);
     setOutput("pickup_orientation", response->pickup_orientation);
     setOutput("dropoff_location_name", response->dropoff_location_name);
     setOutput("dropoff_orientation", response->dropoff_orientation);
