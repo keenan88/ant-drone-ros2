@@ -31,6 +31,11 @@
 #include "ant_fleet_interfaces/srv/move_out.hpp"
 #include "linkattacher_msgs/srv/attach_link.hpp"
 
+#include <rclcpp/rclcpp.hpp>
+#include <tf2_ros/buffer.h>
+#include <tf2_ros/transform_listener.h>
+#include <geometry_msgs/msg/transform_stamped.hpp>
+
 
 using namespace BT;
 
@@ -168,6 +173,22 @@ class SendFloorMissionSuccess: public RosServiceNode<ant_fleet_interfaces::srv::
   NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
   virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
+
+class SendDropoffPosition: public RosServiceNode<ant_fleet_interfaces::srv::MissionSuccess>
+{
+  public:
+
+  std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
+  std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
+  geometry_msgs::msg::TransformStamped getTransform(std::string drone_name);
+
+  SendDropoffPosition(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};
+
 
 
 class CheckIfSelectedForFloorMission: public RosServiceNode<ant_fleet_interfaces::srv::CheckIfSelectedForFloorMission>

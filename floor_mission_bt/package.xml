@@ -24,6 +24,8 @@
   <depend>linkattacher_msgs</depend>
   <depend>example_interfaces</depend>
   <depend>behaviortree_ros2</depend>
+  <depend>tf2_ros</depend>
+  <depend>geometry_msgs</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

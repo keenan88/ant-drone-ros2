@@ -35,5 +35,9 @@ NodeStatus MoveOut::onResponseReceived(const Response::SharedPtr& response)
 
 NodeStatus MoveOut::onFailure(ServiceNodeErrorCode error)
 {
+  if (auto node = node_.lock())  // Attempt to lock the weak_ptr
+  {
+      RCLCPP_INFO(node->get_logger(), "[%s] Error contacting moveout server", this->name().c_str());
+  }
   return NodeStatus::FAILURE;
 }

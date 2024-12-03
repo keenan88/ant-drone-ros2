@@ -1,8 +1,9 @@
 #include "nodes.h"
 
-
 SendFloorMissionSuccess::SendFloorMissionSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : 
-RosServiceNode<ant_fleet_interfaces::srv::MissionSuccess>(name, conf, params) {}
+RosServiceNode<ant_fleet_interfaces::srv::MissionSuccess>(name, conf, params) 
+{
+}
 
 PortsList SendFloorMissionSuccess::providedPorts()
 {
@@ -16,12 +17,9 @@ PortsList SendFloorMissionSuccess::providedPorts()
 bool SendFloorMissionSuccess::setRequest(Request::SharedPtr& request)
 {
 
-  std::string drone_name;
+  getInput("drone_name", request -> robot_name);
 
-  getInput("drone_name", drone_name);
 
-  request -> robot_name = drone_name;
-    
   // must return true if we are ready to send the request
   return true;
 }

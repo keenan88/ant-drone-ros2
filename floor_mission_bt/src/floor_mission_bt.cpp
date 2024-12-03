@@ -73,12 +73,17 @@ class FloorMissionNode : public rclcpp::Node
         dropoff_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<LowerWorker>("LowerWorker", dropoff_params);
 
+        auto send_dropoff_position_params = BT::RosNodeParams(shared_from_this(), "/" "dropoff_position");
+        send_dropoff_position_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
+        factory.registerNodeType<SendDropoffPosition>("SendDropoffPosition", send_dropoff_position_params);
+
         auto send_floor_mission_success_params = BT::RosNodeParams(shared_from_this(), "/" "floor_mission_success");
         send_floor_mission_success_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<SendFloorMissionSuccess>("SendFloorMissionSuccess", send_floor_mission_success_params);
 
         auto moveout_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "moveout");
         moveout_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
+        moveout_params.server_timeout = std::chrono::milliseconds(10000);
         factory.registerNodeType<MoveOut>("MoveOut", moveout_params);
 
         

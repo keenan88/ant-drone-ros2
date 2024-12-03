@@ -21,6 +21,8 @@ find_package(rmf_fleet_msgs REQUIRED)
 find_package(linkattacher_msgs REQUIRED)
 find_package(example_interfaces REQUIRED)
 find_package(behaviortree_ros2)
+find_package(tf2_ros)
+find_package(geometry_msgs)
 
 
 # Install directories
@@ -43,6 +45,8 @@ set(TARGET_DEPENDS
     linkattacher_msgs
     example_interfaces
     behaviortree_ros2
+    tf2_ros
+    geometry_msgs
 )
 include_directories(include)
 

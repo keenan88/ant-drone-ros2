@@ -6,12 +6,13 @@
 
     <Sequence>
 
+      <InitDroneVars drone_name="{drone_name}"/>
+
       <!-- One-time initialization -->
       <RetryUntilSuccessful num_attempts="-1">
-        <Sequence>
-          <InitDroneVars drone_name="{drone_name}"/>
+        <Delay delay_msec="1000">
           <RegisterDrone drone_name="{drone_name}"/>
-        </Sequence>
+        </Delay>
       </RetryUntilSuccessful>
 
       <!-- Main loop, repeat forever -->
@@ -75,7 +76,7 @@
       />
 
       <RetryUntilSuccessful num_attempts="-1">
-        <Delay delay_msec="1">
+        <Delay delay_msec="1000">
           <CheckGoToPlaceSuccess vertex_name="{pickup_location_name}" error_state="{error_state}"/>
         </Delay>            
       </RetryUntilSuccessful>
@@ -91,10 +92,12 @@
       />
       
       <RetryUntilSuccessful num_attempts="-1">
-        <Delay delay_msec="1">
+        <Delay delay_msec="1000">
           <CheckGoToPlaceSuccess vertex_name="{dropoff_location_name}" error_state="{error_state}"/>
         </Delay>            
       </RetryUntilSuccessful>
+
+      <SendDropoffPosition drone_name="{drone_name}"/>
 
       <SuspendRMFPathing/>
       <LowerWorker drone_name="{drone_name}" worker_name="{worker_name}"/>
@@ -110,7 +113,7 @@
   <BehaviorTree ID="repeat_idle_check">
 
     <RetryUntilSuccessful num_attempts="-1">
-      <Delay delay_msec="3">
+      <Delay delay_msec="3000">
         <CheckIdle/> 
       </Delay>
     </RetryUntilSuccessful>

@@ -18,7 +18,7 @@ class Moveout(Node):
 
         self.moveout_srv = self.create_service(MoveOut, 'moveout', self.moveout_cb)
 
-        self.twist_pub = self.create_publisher(Twist, '/drone_boris/cmd_vel', 10)
+        self.twist_pub = self.create_publisher(Twist, 'cmd_vel', 10)
 
 
     def moveout_cb(self, req, res):

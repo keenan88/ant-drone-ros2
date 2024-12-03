@@ -90,7 +90,6 @@ class Heartbeat(Node):
 
 
         res.heartbeat_timeout_healthy = self.heartbeat_timeout_healthy
-        self.get_logger().info(f"returning: {res}")
 
         return res
 
