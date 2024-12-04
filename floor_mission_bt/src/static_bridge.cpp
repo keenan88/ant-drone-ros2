@@ -22,7 +22,7 @@
 #include "domain_bridge/parse_domain_bridge_yaml_config.hpp"
 #include "domain_bridge/process_cmd_line_arguments.hpp"
 
-#include "example_interfaces/srv/add_two_ints.hpp"
+#include "bt_datatypes.h"
 
 int main(int argc, char ** argv)
 {
@@ -34,12 +34,25 @@ int main(int argc, char ** argv)
   }
   domain_bridge::DomainBridge domain_bridge(*config_rc_pair.first);
 
-  // domain_bridge::DomainBridge bridge;
-  domain_bridge.bridge_service<example_interfaces::srv::AddTwoInts>("add_two_ints", 8, 10);
-
   // Add component manager node and domain bridge to single-threaded executor
   auto executor = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
   auto node = std::make_shared<domain_bridge::ComponentManager>(executor);
+
+  // Bridge 
+  uint8_t main_ros_domain_id = static_cast<uint8_t>(std::stoi(std::getenv("MAIN_ROS_DOMAIN_ID")));
+  uint8_t drone_ros_domain_id = static_cast<uint8_t>(std::stoi(std::getenv("ROS_DOMAIN_ID")));
+  
+  std::string namespace_ = node->get_namespace();
+  namespace_.erase(0, 1); // Get rid of leading forwardslash from namespace   
+
+  // Add access to all of queen's servers
+  domain_bridge.bridge_service<ant_fleet_interfaces::srv::RegisterRobot>("/queen/register_robot", main_ros_domain_id, drone_ros_domain_id);
+  domain_bridge.bridge_service<ant_fleet_interfaces::srv::CheckIfSelectedForFloorMission>("/queen/check_if_selected_for_floor_mission", main_ros_domain_id, drone_ros_domain_id);
+
+  domain_bridge.bridge_service<ant_fleet_interfaces::srv::LastKnownEndWaypointName>("/" + namespace_ + "/last_known_end_waypoint_name", main_ros_domain_id, drone_ros_domain_id);
+  domain_bridge.bridge_service<ant_fleet_interfaces::srv::MissionSuccess>("/queen/floor_mission_success", main_ros_domain_id, drone_ros_domain_id);
+
+  
 
   domain_bridge.add_to_executor(*executor);
   executor->add_node(node);

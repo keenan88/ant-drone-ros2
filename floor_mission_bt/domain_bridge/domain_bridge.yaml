@@ -1,10 +1,16 @@
-name: my_domain_bridge
-from_domain: 8
-to_domain: 10
+name: bridge_to_queen_and_rmf
 
-services:
-  # Bridge "add_two_ints" service from domain ID 4 to domain ID 6
-  add_two_ints:
-    type: example_interfaces/srv/AddTwoInts
-    from_domain: 8
-    to_domain: 10
+from_domain: 1 # Be sure to override from_domain and to_domain in the launch file with the correct domains for the main domain and robot-specific domain
+to_domain: 2 # Be sure to override from_domain and to_domain in the launch file with the correct domains for the main domain and robot-specific domain
+
+topics:
+  /robot_path_requests:
+    type: rmf_fleet_msgs/msg/PathRequest
+    reversed: True
+
+  /robot_state:
+    type: rmf_fleet_msgs/msg/RobotState
+
+  /map_markers:
+    type: visualization_msgs/msg/MarkerArray
+    reversed: True

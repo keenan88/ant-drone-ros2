@@ -22,6 +22,22 @@ def generate_launch_description():
         ]
     )
 
+    bridge_to_queen_and_rmf = Node(
+        package='floor_mission_bt',
+        executable='domain_bridge',
+        namespace = drone_name,
+        parameters=[
+            {
+                'use_sim_time': True,
+            }
+        ],
+        arguments = [
+            '--from', os.getenv('ROS_DOMAIN_ID'), '--to', os.getenv('MAIN_ROS_DOMAIN_ID'),
+            '/home/humble_ws/src/floor_mission_bt/domain_bridge/domain_bridge.yaml'
+        ]
+    )
+
+
     heartbeat = Node(
         package='floor_mission_helper',
         executable='heartbeat',
@@ -51,6 +67,7 @@ def generate_launch_description():
     ld.add_action(floor_mission_bt)
     ld.add_action(heartbeat)
     ld.add_action(moveout)
+    ld.add_action(bridge_to_queen_and_rmf)
 
     return ld
 

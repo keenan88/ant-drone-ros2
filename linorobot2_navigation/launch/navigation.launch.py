@@ -154,17 +154,6 @@ def generate_launch_description():
         ]
     )
 
-    pickup_coordinator = Node(
-        package = 'linorobot2_localization',
-        executable = 'pickup_coordinator',
-        namespace=drone_name,
-        parameters = [
-            {
-                'use_sim_time': True
-            }
-        ]
-    )
-
 
 
     ld = LaunchDescription()
@@ -182,7 +171,7 @@ def generate_launch_description():
     ld.add_action(keepout_launch)
     ld.add_action(wheels_or_body_odometry)
     ld.add_action(cmd_vel_scaler)
-    # ld.add_action(pickup_coordinator)
+
 
 
 

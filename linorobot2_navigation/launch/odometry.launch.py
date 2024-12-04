@@ -4,9 +4,13 @@ from launch_ros.actions import Node
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration
 import os
+
 def generate_launch_description():
 
     drone_name = os.getenv('DRONE_NAME')
+    
+
+    print(drone_name)
 
     wheels_or_body_odometry = DeclareLaunchArgument(
         'WHEEL_ODOMETRY',
@@ -46,12 +50,16 @@ def generate_launch_description():
         ]
     )
 
+    
+
     ld = LaunchDescription()
 
     ld.add_action(wheels_or_body_odometry)
     ld.add_action(wheel_odometry)
     ld.add_action(wheel_unraveller)
     ld.add_action(odom_vel_scale_gz)
+
+
     return ld
 
 

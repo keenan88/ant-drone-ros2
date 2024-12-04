@@ -31,6 +31,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     x11-xserver-utils \
     ros-humble-robot-localization \
     ros-humble-rosbridge-server \
+    ros-humble-domain-bridge \
     && rm -rf /var/lib/apt/lists/*
     
 

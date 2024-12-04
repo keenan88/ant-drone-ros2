@@ -8,33 +8,18 @@
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
 
-
-
-#include "std_msgs/msg/string.hpp"
-#include "rmf_task_msgs/msg/api_request.hpp"
-#include "rmf_fleet_msgs/msg/robot_state.hpp"
-#include "ant_fleet_interfaces/msg/worker_pickup_state.hpp"
-#include "ant_fleet_interfaces/srv/suspend_rmf_pathing.hpp"
-
-#include "linkattacher_msgs/srv/attach_link.hpp"
-#include "linkattacher_msgs/srv/detach_link.hpp"
-
-#include <behaviortree_ros2/bt_service_node.hpp>
-
-#include "ant_fleet_interfaces/srv/mission_success.hpp"
-#include "ant_fleet_interfaces/srv/check_if_selected_for_floor_mission.hpp"
-#include "ant_fleet_interfaces/srv/mission_heartbeat_srv.hpp"
-#include "ant_fleet_interfaces/srv/request_worker_pickup.hpp"
-#include "ant_fleet_interfaces/srv/check_drone_idle.hpp"
-#include "ant_fleet_interfaces/srv/last_known_end_waypoint_name.hpp"
-#include "ant_fleet_interfaces/srv/register_robot.hpp"
-#include "ant_fleet_interfaces/srv/move_out.hpp"
-#include "linkattacher_msgs/srv/attach_link.hpp"
-
-#include <rclcpp/rclcpp.hpp>
+// #include <rclcpp/rclcpp.hpp>
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
 #include <geometry_msgs/msg/transform_stamped.hpp>
+
+#include <behaviortree_ros2/bt_service_node.hpp>
+
+// #include "std_msgs/msg/string.hpp"
+// #include "rmf_fleet_msgs/msg/robot_state.hpp"
+// #include "ant_fleet_interfaces/msg/worker_pickup_state.hpp"
+
+#include "bt_datatypes.h"
 
 
 using namespace BT;
@@ -98,7 +83,7 @@ class GoToPlace : public BT::StatefulActionNode
 {
   public:
     using API_request_msg_t = rmf_task_msgs::msg::ApiRequest;
-    using StringMsg_t = std_msgs::msg::String;
+    // using StringMsg_t = std_msgs::msg::String;
     rclcpp::Node::SharedPtr ros2_node_ptr;
     rclcpp::Publisher<API_request_msg_t>::SharedPtr publisher;
     bool done_flag;
