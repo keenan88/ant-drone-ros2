@@ -1,0 +1,10 @@
+name: my_domain_bridge
+from_domain: 8
+to_domain: 10
+
+services:
+  # Bridge "add_two_ints" service from domain ID 4 to domain ID 6
+  add_two_ints:
+    type: example_interfaces/srv/AddTwoInts
+    from_domain: 8
+    to_domain: 10

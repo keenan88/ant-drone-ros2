@@ -32,56 +32,56 @@ class FloorMissionNode : public rclcpp::Node
 
         factory.registerNodeType<GoToPlace>("GoToPlace", shared_from_this());
 
-        auto register_robot_params = BT::RosNodeParams(shared_from_this(), "/register_robot");
+        auto register_robot_params = BT::RosNodeParams(shared_from_this(), "/queen/register_robot");
         register_robot_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<RegisterDrone>("RegisterDrone", register_robot_params);
 
-        auto check_go_to_place_success_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "last_known_end_waypoint_name");
+        auto check_go_to_place_success_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/last_known_end_waypoint_name");
         check_go_to_place_success_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckGoToPlaceSuccess>("CheckGoToPlaceSuccess", check_go_to_place_success_params);
 
 
-        auto check_idle_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "check_drone_idle");
+        auto check_idle_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/check_drone_idle");
         check_idle_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckIdle>("CheckIdle", check_idle_params);
 
-        auto check_selected_for_floor_mission_params = BT::RosNodeParams(shared_from_this(), "/" "check_if_selected_for_floor_mission"); 
+        auto check_selected_for_floor_mission_params = BT::RosNodeParams(shared_from_this(), "/queen/check_if_selected_for_floor_mission"); 
         check_selected_for_floor_mission_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckIfSelectedForFloorMission>("CheckIfSelectedForFloorMission", check_selected_for_floor_mission_params);
 
-        auto check_heartbeat_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "mission_heartbeat");
+        auto check_heartbeat_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/mission_heartbeat");
         check_heartbeat_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckHeartbeat>("CheckHeartbeat", check_heartbeat_params);
 
 
-        auto rmf_path_suspend_node_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "suspend_rmf_pathing");
+        auto rmf_path_suspend_node_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/suspend_rmf_pathing");
         rmf_path_suspend_node_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<SuspendRMFPathing>("SuspendRMFPathing", rmf_path_suspend_node_params);
 
         
-        auto pickup_params = BT::RosNodeParams(shared_from_this(), "/" "ATTACHLINK");
+        auto pickup_params = BT::RosNodeParams(shared_from_this(), "/ATTACHLINK");
         pickup_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<PickupWorker>("PickupWorker", pickup_params);
 
 
-        auto rmf_path_release_node_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "suspend_rmf_pathing");
+        auto rmf_path_release_node_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/suspend_rmf_pathing");
         rmf_path_release_node_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<ReleaseRMFPathing>("ReleaseRMFPathing", rmf_path_release_node_params);
 
 
-        auto dropoff_params = BT::RosNodeParams(shared_from_this(), "/" "DETACHLINK");
+        auto dropoff_params = BT::RosNodeParams(shared_from_this(), "/DETACHLINK");
         dropoff_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<LowerWorker>("LowerWorker", dropoff_params);
 
-        auto send_dropoff_position_params = BT::RosNodeParams(shared_from_this(), "/" "dropped_off_position");
+        auto send_dropoff_position_params = BT::RosNodeParams(shared_from_this(), "/queen/dropped_off_position");
         send_dropoff_position_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<SendDropoffPosition>("SendDropoffPosition", send_dropoff_position_params);
 
-        auto send_floor_mission_success_params = BT::RosNodeParams(shared_from_this(), "/" "floor_mission_success");
+        auto send_floor_mission_success_params = BT::RosNodeParams(shared_from_this(), "/queen/floor_mission_success");
         send_floor_mission_success_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<SendFloorMissionSuccess>("SendFloorMissionSuccess", send_floor_mission_success_params);
 
-        auto moveout_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/" "moveout");
+        auto moveout_params = BT::RosNodeParams(shared_from_this(), "/drone_boris/moveout");
         moveout_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         moveout_params.server_timeout = std::chrono::milliseconds(10000);
         factory.registerNodeType<MoveOut>("MoveOut", moveout_params);

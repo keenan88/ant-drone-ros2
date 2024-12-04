@@ -23,6 +23,7 @@ find_package(example_interfaces REQUIRED)
 find_package(behaviortree_ros2)
 find_package(tf2_ros)
 find_package(geometry_msgs)
+find_package(domain_bridge)
 
 
 # Install directories
@@ -47,13 +48,19 @@ set(TARGET_DEPENDS
     behaviortree_ros2
     tf2_ros
     geometry_msgs
+    domain_bridge
 )
 include_directories(include)
 
 add_executable(floor_mission_bt src/floor_mission_bt.cpp ${AUTONOMY_SOURCES})
 
+add_executable(domain_bridge src/static_bridge.cpp ${AUTONOMY_SOURCES})
+
+
+
 install(TARGETS
-floor_mission_bt
+    floor_mission_bt
+    domain_bridge
     DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -63,6 +70,10 @@ install(
 )
 
 ament_target_dependencies(floor_mission_bt ${TARGET_DEPENDS})
+
+ament_target_dependencies(domain_bridge ${TARGET_DEPENDS})
+
+
 target_link_libraries(
   floor_mission_bt 
 )
