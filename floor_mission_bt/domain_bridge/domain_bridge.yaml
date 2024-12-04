@@ -4,6 +4,9 @@ from_domain: 1 # Be sure to override from_domain and to_domain in the launch fil
 to_domain: 2 # Be sure to override from_domain and to_domain in the launch file with the correct domains for the main domain and robot-specific domain
 
 topics:
+  /task_api_requests:
+    type: rmf_task_msgs/msg/ApiRequest
+
   /robot_path_requests:
     type: rmf_fleet_msgs/msg/PathRequest
     reversed: True
@@ -14,3 +17,11 @@ topics:
   /map_markers:
     type: visualization_msgs/msg/MarkerArray
     reversed: True
+
+  /mission_queen_heartbeat:
+    type: ant_fleet_interfaces/msg/MissionHeartbeatMsg
+    reversed: True
+
+  /mission_robot_heartbeat:
+    type: ant_fleet_interfaces/msg/MissionHeartbeatMsg
+

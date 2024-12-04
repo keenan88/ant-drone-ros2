@@ -22,14 +22,14 @@ class Heartbeat(Node):
 
         qos_reliable = QoSProfile(
             reliability = QoSReliabilityPolicy.BEST_EFFORT,
-            durability = QoSDurabilityPolicy.TRANSIENT_LOCAL,
+            durability = QoSDurabilityPolicy.VOLATILE,
             history = QoSHistoryPolicy.KEEP_LAST,
-            depth = 10
+            depth = 50
         )
 
         # Use pub/sub for heartbeat instead of a server, is more async. Can still use reliable QOS to ensure message delivery.
-        self.heartbeat_pub = self.create_publisher(MissionHeartbeatMsg, '/mission_heartbeat', qos_reliable)
-        self.heartbeat_sub = self.create_subscription(MissionHeartbeatMsg, '/mission_heartbeat', self.handle_incoming_heartbeat, qos_reliable)
+        self.heartbeat_pub = self.create_publisher(MissionHeartbeatMsg, '/mission_robot_heartbeat', qos_reliable)
+        self.heartbeat_sub = self.create_subscription(MissionHeartbeatMsg, '/mission_queen_heartbeat', self.handle_incoming_heartbeat, qos_reliable)
 
         self.heartbeat_timer = self.create_timer(2, self.heartbeat_timed_cb)
         self.last_queen_heartbeat_s = -1

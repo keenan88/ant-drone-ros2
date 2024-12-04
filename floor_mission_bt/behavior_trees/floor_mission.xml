@@ -21,20 +21,21 @@
         <Sequence>
           <!-- Keep checking if drone is idle w/ heartbeat, and triggered for a floor mission -->
           <RetryUntilSuccessful num_attempts="-1">
-            <Sequence>
-              <CheckHeartbeat />
-              <CheckIdle/> 
-              <CheckIfSelectedForFloorMission
-                drone_name = "{drone_name}"
-                worker_name = "{worker_name}"
-                pickup_location_name = "{pickup_location_name}"
-                pickup_orientation = "{pickup_orientation}"
-                dropoff_location_name = "{dropoff_location_name}"
-                dropoff_orientation = "{dropoff_orientation}"
-                post_dropoff_location_name = "{post_dropoff_location_name}"
-              />
-            </Sequence>
-
+            <Delay delay_msec="1000">
+              <Sequence>
+                <CheckHeartbeat />
+                <CheckIdle/> 
+                <CheckIfSelectedForFloorMission
+                  drone_name = "{drone_name}"
+                  worker_name = "{worker_name}"
+                  pickup_location_name = "{pickup_location_name}"
+                  pickup_orientation = "{pickup_orientation}"
+                  dropoff_location_name = "{dropoff_location_name}"
+                  dropoff_orientation = "{dropoff_orientation}"
+                  post_dropoff_location_name = "{post_dropoff_location_name}"
+                />
+              </Sequence>
+            </Delay>
           </RetryUntilSuccessful>
 
           <!-- Execute the floor mission -->

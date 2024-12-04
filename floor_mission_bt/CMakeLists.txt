@@ -54,7 +54,7 @@ include_directories(include)
 
 add_executable(floor_mission_bt src/floor_mission_bt.cpp ${AUTONOMY_SOURCES})
 
-add_executable(domain_bridge src/static_bridge.cpp ${AUTONOMY_SOURCES})
+add_executable(domain_bridge src/domain_bridge.cpp ${AUTONOMY_SOURCES})
 
 
 
