@@ -57,7 +57,9 @@ def generate_launch_description():
         namespace = drone_name,
         parameters=[
             {'use_sim_time': True}, 
-            '/home/humble_ws/src/linorobot2_navigation/config/behaviors.yaml'
+            '/home/humble_ws/src/linorobot2_navigation/config/behaviors.yaml',
+            {'robot_base_frame': drone_name + '_base_link'}
+            
         ],
     )
 

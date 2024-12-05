@@ -70,8 +70,6 @@
 
     <Sequence>
 
-      
-    
       <GoToPlace 
         vertex_name="{pickup_location_name}" 
         orientation="{pickup_orientation}"

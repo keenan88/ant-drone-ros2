@@ -7,10 +7,7 @@
     cycle_frequency: 10.0
     footprint_topic: local_costmap/published_footprint
     global_frame: map
-    max_rotational_vel: 0.0
-    min_rotational_vel: 0.0
-    robot_base_frame: base_link
-    rotational_acc_lim: 0.0
+    # robot_base_frame: drone_boris_base_link
     simulate_ahead_time: 2.0
     transform_tolerance: 0.1
     spin:

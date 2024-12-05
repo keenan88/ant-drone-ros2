@@ -58,7 +58,7 @@
         time_step: 3
       AckermannConstraints:
         min_turning_r: 0.2
-      critics: ["CostCritic", "GoalCritic", "GoalAngleCritic", "PathAlignCritic", "PathFollowCritic", "PathAngleCritic", "PreferForwardCritic"] # ObstaclesCritic
+      critics: ["CostCritic", "GoalCritic", "GoalAngleCritic", "PathAlignCritic", "PathFollowCritic", "PathAngleCritic", "PreferForwardCritic", "ObstaclesCritic"] 
       GoalCritic:
         enabled: true
         cost_power: 1
@@ -74,17 +74,17 @@
         cost_power: 1
         cost_weight: 5.0
         threshold_to_consider: 0.5
-      # ObstaclesCritic:
-      #   enabled: true
-      #   cost_power: 1
-      #   repulsion_weight: 50.0
-      #   critical_weight: 100000.0
-      #   consider_footprint: true
-      #   collision_cost: 100000.0
-      #   collision_margin_distance: 0.2
-      #   near_goal_distance: 0.0
-      #   inflation_radius: 0.2 # Larger inflation radius will make it hard to navigate to be close to the pipe rail for dropoff
-      #   cost_scaling_factor: 0.01 # (only in Humble)
+      ObstaclesCritic:
+        enabled: true
+        cost_power: 1
+        repulsion_weight: 1.5
+        critical_weight: 20.0
+        consider_footprint: false
+        collision_cost: 10000.0
+        collision_margin_distance: 0.1
+        near_goal_distance: 0.0
+        inflation_radius: 0.4 # (only in Humble)
+        cost_scaling_factor: 10.0 # (only in Humble)
       CostCritic:
         enabled: true
         cost_power: 1
@@ -92,7 +92,7 @@
         critical_cost: 300.0
         consider_footprint: true
         collision_cost: 1000000.0
-        near_goal_distance: 1.0
+        near_goal_distance: 0.0
         trajectory_point_step: 2
 
       PathAlignCritic:
@@ -186,7 +186,7 @@
     inflation_layer:
       plugin: "nav2_costmap_2d::InflationLayer"
       enabled: True
-      inflation_radius: 0.5 # Larger inflation radius will make it hard to navigate to be close to the pipe rail fro dropoff
+      inflation_radius: 0.4 # Larger inflation radius will make it hard to navigate to be close to the pipe rail fro dropoff
       cost_scaling_factor: 10.0
       inflate_unknown: false
       inflate_around_unknown: false

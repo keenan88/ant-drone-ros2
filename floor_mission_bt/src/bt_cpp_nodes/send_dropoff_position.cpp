@@ -86,13 +86,20 @@ bool SendDropoffPosition::setRequest(Request::SharedPtr& request)
     float yaw = std::atan2(2.0 * (w * z + x * y), 1.0 - 2.0 * (y * y + z * z));
 
     request -> drone_pos_yaw = yaw;
+
+    
+
+    if (auto node = node_.lock())  // Attempt to lock the weak_ptr
+    {
+        RCLCPP_INFO(node->get_logger(), "[%s] Sending dropoff position..", this->name().c_str());
+    }
   }
   else
   {
     return false;
   }
 
-  RCLCPP_INFO(node->get_logger(), "[%s] Sending dropoff position..", this->name().c_str());
+  
 
   // must return true if we are ready to send the request
   return true;

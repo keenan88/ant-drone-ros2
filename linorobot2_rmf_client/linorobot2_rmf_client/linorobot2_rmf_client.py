@@ -141,8 +141,10 @@ class Linorobot2RMF(Node):
             self.drone_rmf_state.path = []
             self.drone_rmf_state.task_id = '' # Empty task ID to tell RMF fleet adapter that task was not completed
             self.last_movement_end_time_s = self.get_clock().now().to_msg().sec
+            self.get_logger().info("Navigation not accepted")
             return
 
+        self.get_logger().info("Navigation accepted")
         self._get_result_future = goal_handle.get_result_async()
         self._get_result_future.add_done_callback(self.nav_to_pose_result_cb)
 
@@ -169,6 +171,8 @@ class Linorobot2RMF(Node):
                 # Do not interrupt task underway. This is NECESSARY since RMF may try sending path requests before the previous path request finished.
                 if self.drone_rmf_state.task_id != path_request.task_id and self.drone_rmf_state.mode.mode == MODE_IDLE: 
 
+                    self.get_logger().info(f"Accepted path request #{path_request.task_id} x: {path_request.path[0].x} -> {path_request.path[1].x}, y: {path_request.path[0].y} -> {path_request.path[1].y}")
+
                     self.drone_rmf_state.mode.mode = MODE_MOVING
                     self.drone_queen_state.mode.mode = MODE_MOVING
                             
@@ -188,10 +192,11 @@ class Linorobot2RMF(Node):
                     pose.pose.orientation.z = math.sin(waypoint.yaw / 2.0)
                     pose.pose.orientation.w = math.cos(waypoint.yaw / 2.0)
 
-                    self.get_logger().info(f"goal pose: {pose}")
-                    self.get_logger().info(f"Curr time: {self.get_clock().now().to_msg().sec}")
-
                     self.send_nav_to_pose_goal(pose)
+
+                else:
+
+                    self.get_logger().info(f"Ignored path request #{path_request.task_id} x: {path_request.path[0].x} -> {path_request.path[1].x}, y: {path_request.path[0].y} -> {path_request.path[1].y}")
 
     def publish_state(self):
 
