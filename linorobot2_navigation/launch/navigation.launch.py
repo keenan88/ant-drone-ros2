@@ -134,13 +134,33 @@ def generate_launch_description():
         ]
     )
 
-    keepout_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            '/home/humble_ws/src/linorobot2_navigation/launch/keepout.launch.py'
-        ),
-        launch_arguments={
-            'DRONE_NAME': drone_name
-        }.items()
+    keepout_filter_mask_server = Node(
+        package='nav2_map_server',
+        executable='map_server',
+        name='filter_mask_server',
+        namespace = drone_name,
+        parameters=[
+            '/home/humble_ws/src/linorobot2_navigation/config/filter_mask_server.yaml',
+            {
+                'use_sim_time': True,
+                'topic_name': '/' + drone_name + '/keepout_filter_mask',
+            }
+        ]
+    )
+
+    keepout_filter_map_server = Node(
+        package='nav2_map_server',
+        executable='costmap_filter_info_server',
+        name='costmap_filter_info_server',
+        namespace = drone_name,
+        parameters=[
+            '/home/humble_ws/src/linorobot2_navigation/config/filter_mask_server.yaml',
+            {
+                'use_sim_time': True,
+                'filter_info_topic': '/' + drone_name +'/keepout_filter_info',
+                'mask_topic': '/' + drone_name + '/keepout_filter_mask'
+            }
+        ]
     )
 
     cmd_vel_scaler = Node(
@@ -154,9 +174,10 @@ def generate_launch_description():
         ]
     )
 
-
-
     ld = LaunchDescription()
+
+    ld.add_action(keepout_filter_map_server)
+    ld.add_action(keepout_filter_mask_server)
 
     ld.add_action(controller)
     ld.add_action(planner)
@@ -168,7 +189,6 @@ def generate_launch_description():
     ld.add_action(odometry)
     ld.add_action(amcl)
     ld.add_action(amcl_pointcloud)
-    ld.add_action(keepout_launch)
     ld.add_action(wheels_or_body_odometry)
     ld.add_action(cmd_vel_scaler)
 

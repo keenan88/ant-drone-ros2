@@ -9,9 +9,15 @@
       period: 1.0
     node_names: # ORDER MATTERS! Make sure map_server is first, then amcl
     - map_server
+    - filter_mask_server
+    - costmap_filter_info_server
+    
     - amcl
+    
     - planner_server
     - controller_server
     - behavior_server
     - bt_navigator
+    
+    
     
