@@ -21,7 +21,7 @@
       publish_frequency: 1.0
       global_frame: map
       
-      resolution: 0.05
+      resolution: 0.02
 
       filters: ["keepout_filter", "inflation_layer"]
       
@@ -38,7 +38,7 @@
         map_subscribe_transient_local: True
         enabled: true
         subscribe_to_updates: true
-        transform_tolerance: 0.1
+        transform_tolerance: 0.0
 
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
@@ -62,11 +62,11 @@
       
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        enabled: true
-        inflation_radius: 0.8  # Robot radius is 0.48m, planner plans with base link, so set to local costmap inflation radius + robot radius
-        cost_scaling_factor: 2.0  # Higher cost scaling factor to heavily penalize keepout zones and obstacles
-        inflate_unknown: false
-        inflate_around_unknown: true
+        enabled: True
+        inflation_radius: 0.55  # Robot radius is 0.48m, planner plans with base link, so set to local costmap inflation radius + robot radius
+        cost_scaling_factor: 10.0  # Higher cost scaling factor to heavily penalize keepout zones and obstacles
+        inflate_unknown: False
+        inflate_around_unknown: True
 
       
 
