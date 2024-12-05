@@ -84,6 +84,18 @@ Visualization Manager:
           Value: false
         map:
           Value: true
+        worker_misha_base_link:
+          Value: true
+        worker_misha_front_gazebo_camera_frame:
+          Value: true
+        worker_misha_front_rs_depth_optical_frame:
+          Value: true
+        worker_misha_odom:
+          Value: true
+        worker_misha_rear_gazebo_camera_frame:
+          Value: true
+        worker_misha_rear_rs_depth_optical_frame:
+          Value: true
       Marker Scale: 1.5
       Name: TF
       Show Arrows: false
@@ -302,17 +314,19 @@ Visualization Manager:
         Value: /schedule_markers
       Value: false
     - Class: rviz_default_plugins/MarkerArray
-      Enabled: false
+      Enabled: true
       Name: Map Markers
       Namespaces:
-        {}
+        drone_fleet/labels/L1: true
+        drone_fleet/lanes/L1: true
+        drone_fleet/waypoints/L1: true
       Topic:
         Depth: 5
         Durability Policy: Transient Local
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /map_markers
-      Value: false
+      Value: true
     - Alpha: 1
       Buffer Length: 1
       Class: rviz_default_plugins/Path
@@ -731,16 +745,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/XYOrbit
-      Distance: 7.384152412414551
+      Distance: 11.310760498046875
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 17.956438064575195
-        Y: -10.38446044921875
-        Z: 6.278566434048116e-05
+        X: 20.8585262298584
+        Y: -13.440462112426758
+        Z: 6.82692916598171e-05
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
@@ -767,5 +781,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 798
-  X: 0
+  X: 1122
   Y: 27

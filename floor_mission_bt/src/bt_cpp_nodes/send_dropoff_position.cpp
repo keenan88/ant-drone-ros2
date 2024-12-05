@@ -6,8 +6,6 @@ RosServiceNode<ant_fleet_interfaces::srv::MissionSuccess>(name, conf, params)
 {
   if (auto node = node_.lock())  // Attempt to lock the weak_ptr
   {
-      RCLCPP_INFO(node->get_logger(), "[%s] Sending dropoff position..", this->name().c_str());
-
       tf_buffer_ = std::make_shared<tf2_ros::Buffer>(node->get_clock());
 
       tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
@@ -93,6 +91,8 @@ bool SendDropoffPosition::setRequest(Request::SharedPtr& request)
   {
     return false;
   }
+
+  RCLCPP_INFO(node->get_logger(), "[%s] Sending dropoff position..", this->name().c_str());
 
   // must return true if we are ready to send the request
   return true;

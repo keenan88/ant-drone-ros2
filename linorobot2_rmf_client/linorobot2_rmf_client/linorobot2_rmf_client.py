@@ -152,11 +152,13 @@ class Linorobot2RMF(Node):
         if nav_movement_succeeded:
             self.drone_rmf_state.mode.mode = MODE_IDLE # Have to set mode to IDLE to recieve new path requests
             self.drone_rmf_state.path = []
+            self.get_logger().info("Navigation succeeded")
         else:
             self.drone_rmf_state.task_id = '' # Empty task ID to tell RMF fleet adapter that task was not completed
-        
+            self.get_logger().info("Navigation failed")
+
         self.last_movement_end_time_s = self.get_clock().now().to_msg().sec
-        # self.get_logger().info("nav_to_pose_result_cb")
+        
 
     def execute_path_request(self, path_request):
 
@@ -164,7 +166,8 @@ class Linorobot2RMF(Node):
 
             if not self.is_rmf_pathing_suspended: # Only execute paths if rmf pathing is not suspended
 
-                if self.drone_rmf_state.task_id != path_request.task_id: # Do not interrupt task underway
+                # Do not interrupt task underway. This is NECESSARY since RMF may try sending path requests before the previous path request finished.
+                if self.drone_rmf_state.task_id != path_request.task_id and self.drone_rmf_state.mode.mode == MODE_IDLE: 
 
                     self.drone_rmf_state.mode.mode = MODE_MOVING
                     self.drone_queen_state.mode.mode = MODE_MOVING
@@ -185,7 +188,8 @@ class Linorobot2RMF(Node):
                     pose.pose.orientation.z = math.sin(waypoint.yaw / 2.0)
                     pose.pose.orientation.w = math.cos(waypoint.yaw / 2.0)
 
-                    # self.get_logger().info(f"goal pose: {pose}")
+                    self.get_logger().info(f"goal pose: {pose}")
+                    self.get_logger().info(f"Curr time: {self.get_clock().now().to_msg().sec}")
 
                     self.send_nav_to_pose_goal(pose)
 

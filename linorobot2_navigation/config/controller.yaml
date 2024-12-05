@@ -186,7 +186,7 @@
     inflation_layer:
       plugin: "nav2_costmap_2d::InflationLayer"
       enabled: True
-      inflation_radius: 0.55 # Larger inflation radius will make it hard to navigate to be close to the pipe rail fro dropoff
+      inflation_radius: 0.5 # Larger inflation radius will make it hard to navigate to be close to the pipe rail fro dropoff
       cost_scaling_factor: 10.0
       inflate_unknown: false
       inflate_around_unknown: false

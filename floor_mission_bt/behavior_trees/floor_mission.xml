@@ -69,6 +69,8 @@
   <BehaviorTree ID="floor_mission">
 
     <Sequence>
+
+      
     
       <GoToPlace 
         vertex_name="{pickup_location_name}" 

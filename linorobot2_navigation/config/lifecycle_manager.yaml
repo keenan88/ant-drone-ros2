@@ -1,16 +1,16 @@
 /**/lifecycle_manager:
   ros__parameters:
-    /bond_disable_heartbeat_timeout: false
     attempt_respawn_reconnection: true
     autostart: true
     bond_respawn_max_duration: 10.0
     bond_timeout: 4.0
     diagnostic_updater:
       period: 1.0
+      use_fqn: false
+
     node_names: # ORDER MATTERS! Make sure map_server is first, then amcl
     - map_server
-    - filter_mask_server
-    - costmap_filter_info_server
+    
     
     - amcl
     
@@ -18,6 +18,9 @@
     - controller_server
     - behavior_server
     - bt_navigator
+
+    - filter_mask_server
+    - costmap_filter_info_server
     
     
     

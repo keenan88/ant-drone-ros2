@@ -57,8 +57,8 @@ class OdomScaler(Node):
         starting_pose.pose.pose.position.z = 0.0
 
         if self.drone_name == 'drone_boris':
-            starting_pose.pose.pose.position.x = 16.5
-            starting_pose.pose.pose.position.y = -6.5
+            starting_pose.pose.pose.position.x = 16.5 
+            starting_pose.pose.pose.position.y = -6.75 
         elif self.drone_name == 'drone_yuri':
             starting_pose.pose.pose.position.x = 16.5
             starting_pose.pose.pose.position.y = -8.0
