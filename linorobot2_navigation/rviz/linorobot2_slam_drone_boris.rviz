@@ -5,11 +5,13 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /Grid1
         - /TF1/Frames1
         - /Static Map1/Topic1
         - /Particle Cloud1/Topic1
         - /Traffic Map1/Topic1
         - /Fleet Markers1/Topic1
+        - /Map Markers1
       Splitter Ratio: 0.5176470875740051
     Tree Height: 289
   - Class: rviz_common/Selection
@@ -39,7 +41,7 @@ Visualization Manager:
   Class: ""
   Displays:
     - Alpha: 0.10000000149011612
-      Cell Size: 0.5
+      Cell Size: 1
       Class: rviz_default_plugins/Grid
       Color: 0; 0; 0
       Enabled: true
@@ -139,7 +141,7 @@ Visualization Manager:
       Class: rviz_default_plugins/Map
       Color Scheme: map
       Draw Behind: false
-      Enabled: true
+      Enabled: false
       Name: Global Costmap
       Topic:
         Depth: 5
@@ -155,7 +157,7 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /drone_boris/global_costmap/costmap_updates
       Use Timestamp: false
-      Value: true
+      Value: false
     - Alpha: 0.699999988079071
       Class: rviz_default_plugins/Map
       Color Scheme: costmap
@@ -291,7 +293,7 @@ Visualization Manager:
         Value: /schedule_markers
       Value: false
     - Class: rviz_default_plugins/MarkerArray
-      Enabled: true
+      Enabled: false
       Name: Map Markers
       Namespaces:
         {}
@@ -301,7 +303,7 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /map_markers
-      Value: true
+      Value: false
     - Alpha: 1
       Buffer Length: 1
       Class: rviz_default_plugins/Path
@@ -720,25 +722,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/XYOrbit
-      Distance: 7.5077433586120605
+      Distance: 7.599599838256836
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 18.301624298095703
-        Y: -8.018485069274902
-        Z: 3.584436126402579e-05
+        X: 17.086158752441406
+        Y: -9.022031784057617
+        Z: 6.326250149868429e-05
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.23979651927948
+      Pitch: 1.479796290397644
       Target Frame: base_link
       Value: XYOrbit (rviz_default_plugins)
-      Yaw: 4.904246807098389
+      Yaw: 4.694242477416992
     Saved: ~
 Window Geometry:
   Displays:

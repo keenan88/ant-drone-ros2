@@ -29,7 +29,7 @@ class Moveout(Node):
         t0 = self.get_clock().now().to_msg().sec
         tdiff = self.get_clock().now().to_msg().sec - t0
 
-        t_move = 2.0 / moveout_twist.linear.x
+        t_move = 1.75 / moveout_twist.linear.x
 
         while tdiff < t_move:
             tdiff =  self.get_clock().now().to_msg().sec - t0

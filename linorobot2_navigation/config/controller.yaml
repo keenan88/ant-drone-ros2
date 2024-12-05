@@ -83,7 +83,7 @@
         collision_cost: 10000.0
         collision_margin_distance: 0.1
         near_goal_distance: 0.5
-        inflation_radius: 0.55 # (only in Humble)
+        inflation_radius: 0.2 # Larger inflation radius will make it hard to navigate to be close to the pipe rail fro dropoff
         cost_scaling_factor: 10.0 # (only in Humble)
       CostCritic:
         enabled: true
@@ -132,9 +132,14 @@
 /**/local_costmap/local_costmap:
   ros__parameters:
 
-    footprint_padding: 0.0
+    footprint_padding: 0.15 # Larger footprint padding will make it hard to navigate to be close to the pipe rail fro dropoff
     footprint: "[ [0.41, 0.25], [-0.41, 0.25], [-0.41, -0.25], [0.41, -0.25] ]"
-    
+
+    # Larger costmap gives robot more heads up about incoming obstacles, but uses more computation. 
+    # Since max pointcloud dist is 4m, set local costmap width and height to 2*4 = 8m to make most use of pointcloud.
+    width: 8 
+    height: 8
+
     update_frequency: 5.0
     publish_frequency: 5.0
     global_frame: map
@@ -180,7 +185,7 @@
     inflation_layer:
       plugin: "nav2_costmap_2d::InflationLayer"
       enabled: true
-      inflation_radius: 0.2
+      inflation_radius: 0.2 # Larger inflation radius will make it hard to navigate to be close to the pipe rail fro dropoff
       cost_scaling_factor: 10.0
       inflate_unknown: false
       inflate_around_unknown: true

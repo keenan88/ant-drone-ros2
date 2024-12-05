@@ -86,6 +86,8 @@
       <PickupWorker drone_name="{drone_name}" worker_name="{worker_name}" />
       <ReleaseRMFPathing/>
 
+      <!-- <ClearEntireCostmap name="ClearLocalCostmap-Subtree" service_name="local_costmap/clear_entirely_local_costmap"/> -->
+
       <GoToPlace 
         vertex_name="{dropoff_location_name}" 
         orientation="{dropoff_orientation}"
