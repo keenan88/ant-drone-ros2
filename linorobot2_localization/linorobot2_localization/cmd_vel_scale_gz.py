@@ -25,48 +25,35 @@ class CmdVelScaler(Node):
     def cmd_vel_callback(self, msg):
         scaled_msg = Twist()
 
-        if msg.linear.x != 0:
-            if abs(msg.linear.x) < 0.1:
-                msg.linear.x = 0.1 if msg.linear.x > 0 else -0.1
+        # Gazebo's planar movement plugin is far slower than commanded at low velocities
+        nonlinear_regime_limit = 0.04
 
-        if msg.linear.y != 0:
-            if abs(msg.linear.y) < 0.1:
-                msg.linear.y = 0.1 if msg.linear.y > 0 else -0.1
-        
-        if msg.angular.z != 0:
-            if abs(msg.angular.z) < 0.1:
-                msg.angular.z = 0.1 if msg.angular.z > 0 else -0.1
+        if abs(msg.linear.y) <= nonlinear_regime_limit:
+            
+            if msg.linear.y > 0:
+                scaled_msg.linear.y = 3.3 * msg.linear.y - 68.4 * msg.linear.y * msg.linear.y
+            else:
+                scaled_msg.linear.y = 3.3 * msg.linear.y + 68.4 * msg.linear.y * msg.linear.y
+        else:
+            scaled_msg.linear.y = msg.linear.y
 
-        # Gazebo planar move plugin does not move robot quite as much as it should, so velocity needs to be scaled up.
-        # Scaling up is linear, as long as velocity is fast enough (see above 'if' conditions)
-        in_lin_vel_range_x = abs(msg.linear.x) >= 0.1
-        in_lin_vel_range_y = abs(msg.linear.y) >= 0.1
-        in_lin_vel_range_yaw = abs(msg.angular.z) >= 0.1
-        zero_vel_cmd = False
 
-        if in_lin_vel_range_x:
-            scalar = 1 if msg.linear.x > 0 else -1 
-            scaled_msg.linear.x = (msg.linear.x + scalar * 0.0526)/0.992
-        elif msg.linear.x == 0:
-            scaled_msg.linear.x = 0.0
-            zero_vel_cmd = True
+        if abs(msg.linear.x) <= nonlinear_regime_limit:
+            if msg.linear.x > 0:
+                scaled_msg.linear.x = 3.3 * msg.linear.x - 68.4 * msg.linear.x * msg.linear.x
+            else:
+                scaled_msg.linear.x = 3.3 * msg.linear.x + 68.4 * msg.linear.x * msg.linear.x
+        else:
+            scaled_msg.linear.x = msg.linear.x
 
-        if in_lin_vel_range_y:
-            scalar = 1 if msg.linear.y > 0 else -1
-            scaled_msg.linear.y = (msg.linear.y + scalar * 0.0516)/0.978
-        elif msg.linear.y == 0:
-            scaled_msg.linear.y = 0.0
-            zero_vel_cmd = True
-
-        if in_lin_vel_range_yaw:
+        if abs(msg.angular.z) >= 0.1:
             scalar = -1 if msg.angular.z < 0 else 1
             scaled_msg.angular.z = (msg.angular.z + scalar * 0.0816)/0.986
         elif msg.angular.z == 0:
             scaled_msg.angular.z = 0.0
-            zero_vel_cmd = True
+        
 
-        if zero_vel_cmd or in_lin_vel_range_x or in_lin_vel_range_y or in_lin_vel_range_yaw:
-            self.scaled_pub.publish(scaled_msg)
+        self.scaled_pub.publish(scaled_msg)
                     
                     
                     

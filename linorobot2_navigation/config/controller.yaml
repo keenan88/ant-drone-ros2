@@ -1,44 +1,43 @@
 /**/controller_server:
   ros__parameters:
     controller_frequency: 30.0
+    controller_plugins:
+    - FollowPath
     controller_server:
       verbose: false
-
     failure_tolerance: 0.0
-
     goal_checker:
       plugin: nav2_controller::SimpleGoalChecker
       stateful: true
       xy_goal_tolerance: 0.05
-      yaw_goal_tolerance: 0.087
-
-    goal_checker_plugins: [goal_checker]
+      yaw_goal_tolerance: 0.05
+    goal_checker_plugins:
+    - goal_checker
 
     min_theta_velocity_threshold: 0.0001
-    min_x_velocity_threshold: 0.0001
-    min_y_velocity_threshold: 0.0001
-
+    min_x_velocity_threshold: 0.01
+    min_y_velocity_threshold: 0.01
+    
     odom_topic: odom
     
-    progress_checker_plugin: progress_checker
-
     progress_checker:
       movement_time_allowance: 10.0
       plugin: nav2_controller::SimpleProgressChecker
       required_movement_radius: 0.5
-    
-    controller_plugins: [ FollowPath]
+
+    progress_checker_plugin: progress_checker
+
     FollowPath:
       plugin: "nav2_mppi_controller::MPPIController"
       time_steps: 56
       model_dt: 0.05
-      batch_size: 2000
+      batch_size: 1000
       vx_std: 0.2
       vy_std: 0.2
       wz_std: 0.4
       vx_max: 0.5
-      vx_min: -0.5
-      vy_max: 0.1 # Keep vy_max a good amount lower than vx_max, or robot will drive on a diagonal to maximize its velocity toward the goal.
+      vx_min: -0.35
+      vy_max: 0.5
       wz_max: 1.9
       ax_max: 3.0
       ax_min: -3.0
@@ -54,11 +53,13 @@
       reset_period: 1.0 # (only in Humble)
       regenerate_noises: false
       TrajectoryVisualizer:
-        trajectory_step: 5
+        trajectory_step: 25
         time_step: 3
-      AckermannConstraints:
-        min_turning_r: 0.2
-      critics: ["CostCritic", "GoalCritic", "GoalAngleCritic", "PathAlignCritic", "PathFollowCritic", "PathAngleCritic", "PreferForwardCritic", "ObstaclesCritic"] 
+      critics: ["ConstraintCritic", "CostCritic", "GoalCritic", "GoalAngleCritic", "PathAlignCritic", "PathFollowCritic", "PathAngleCritic", "PreferForwardCritic"]
+      ConstraintCritic:
+        enabled: false
+        cost_power: 1
+        cost_weight: 4.0
       GoalCritic:
         enabled: true
         cost_power: 1
@@ -67,24 +68,24 @@
       GoalAngleCritic:
         enabled: true
         cost_power: 1
-        cost_weight: 5.0
-        threshold_to_consider: 1.0
+        cost_weight: 3.0
+        threshold_to_consider: 1.4
       PreferForwardCritic:
         enabled: true
         cost_power: 1
         cost_weight: 5.0
-        threshold_to_consider: 0.5
-      ObstaclesCritic:
-        enabled: true
-        cost_power: 1
-        repulsion_weight: 1.5
-        critical_weight: 20.0
-        consider_footprint: false
-        collision_cost: 10000.0
-        collision_margin_distance: 0.1
-        near_goal_distance: 0.0
-        inflation_radius: 0.4 # (only in Humble)
-        cost_scaling_factor: 10.0 # (only in Humble)
+        threshold_to_consider: 1.4
+      # ObstaclesCritic:
+      #   enabled: true
+      #   cost_power: 1
+      #   repulsion_weight: 1.5
+      #   critical_weight: 20.0
+      #   consider_footprint: false
+      #   collision_cost: 10000.0
+      #   collision_margin_distance: 0.1
+      #   near_goal_distance: 0.5
+      #   inflation_radius: 0.55 # (only in Humble)
+      #   cost_scaling_factor: 10.0 # (only in Humble)
       CostCritic:
         enabled: true
         cost_power: 1
@@ -92,18 +93,17 @@
         critical_cost: 300.0
         consider_footprint: true
         collision_cost: 1000000.0
-        near_goal_distance: 0.0
+        near_goal_distance: 0.5
         trajectory_point_step: 2
-
       PathAlignCritic:
         enabled: true
         cost_power: 1
-        cost_weight: 20.0
+        cost_weight: 14.0
         max_path_occupancy_ratio: 0.05
         trajectory_point_step: 4
-        threshold_to_consider: 1.0
+        threshold_to_consider: 1.4
         offset_from_furthest: 20
-        use_path_orientations: false
+        use_path_orientations: true
       PathFollowCritic:
         enabled: true
         cost_power: 1
@@ -115,7 +115,7 @@
         cost_power: 1
         cost_weight: 2.0
         offset_from_furthest: 4
-        threshold_to_consider: 0.5
+        threshold_to_consider: 1.4
         max_angle_to_furthest: 1.0
         mode: 0
       # VelocityDeadbandCritic:
@@ -123,10 +123,10 @@
       #   cost_power: 1
       #   cost_weight: 35.0
       #   deadband_velocities: [0.05, 0.05, 0.05]
-      TwirlingCritic:
-        enabled: true
-        twirling_cost_power: 1
-        twirling_cost_weight: 10.0
+      # TwirlingCritic:
+      #   enabled: true
+      #   twirling_cost_power: 1
+      #   twirling_cost_weight: 10.0
       
       
 
