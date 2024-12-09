@@ -6,6 +6,8 @@
 
     <Sequence>
 
+      
+
       <InitDroneVars drone_name="{drone_name}"/>
 
       <!-- One-time initialization -->
@@ -84,9 +86,9 @@
 
       <SuspendRMFPathing/>
       <PickupWorker drone_name="{drone_name}" worker_name="{worker_name}" />
+      <UpdateFootprint is_carrying_worker="True"/>
       <ReleaseRMFPathing/>
 
-      <!-- <ClearEntireCostmap name="ClearLocalCostmap-Subtree" service_name="local_costmap/clear_entirely_local_costmap"/> -->
 
       <GoToPlace 
         vertex_name="{dropoff_location_name}" 
@@ -104,6 +106,7 @@
 
       <SuspendRMFPathing/>
       <LowerWorker drone_name="{drone_name}" worker_name="{worker_name}"/>
+      <UpdateFootprint is_carrying_worker="False"/>
       <MoveOut/>
       <ReleaseRMFPathing/>
 

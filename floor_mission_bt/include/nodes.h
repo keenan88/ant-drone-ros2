@@ -8,16 +8,12 @@
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
 
-// #include <rclcpp/rclcpp.hpp>
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
 #include <geometry_msgs/msg/transform_stamped.hpp>
 
 #include <behaviortree_ros2/bt_service_node.hpp>
 
-// #include "std_msgs/msg/string.hpp"
-// #include "rmf_fleet_msgs/msg/robot_state.hpp"
-// #include "ant_fleet_interfaces/msg/worker_pickup_state.hpp"
 
 #include "bt_datatypes.h"
 
@@ -108,6 +104,21 @@ class PickupWorker: public RosServiceNode<SendPickupCmd_srv_t>
   bool setRequest(Request::SharedPtr& request) override;
   NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
   virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};
+
+class UpdateFootprint : public BT::StatefulActionNode
+{
+  public:
+    using FootprintMsg_t = geometry_msgs::msg::Polygon;
+    rclcpp::Node::SharedPtr ros2_node_ptr;
+    rclcpp::Publisher<FootprintMsg_t>::SharedPtr local_footprint_publisher;
+    rclcpp::Publisher<FootprintMsg_t>::SharedPtr global_footprint_publisher;
+
+    UpdateFootprint(const std::string &name, const BT::NodeConfig &config, rclcpp::Node::SharedPtr node_ptr);
+    BT::NodeStatus onStart() override;
+    BT::NodeStatus onRunning() override;
+    void onHalted() override{};
+    static BT::PortsList providedPorts();
 };
 
 

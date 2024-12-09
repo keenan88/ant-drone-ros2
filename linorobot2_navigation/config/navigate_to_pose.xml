@@ -7,11 +7,6 @@
   <BehaviorTree ID="MainTree">
     <Sequence>
 
-      <!-- There will be times where there are obstacles still seen on costmap, and drone will try to avoid them, even tho the obstalces are no longer actually present -->
-      <!-- <ClearEntireCostmap name="ClearLocalCostmap-Subtree" service_name="local_costmap/clear_entirely_local_costmap"/>
-      <ClearEntireCostmap name="ClearGlobalCostmap-Subtree" service_name="global_costmap/clear_entirely_global_costmap"/>
-      <Wait wait_duration="2"/> -->
-
       <RecoveryNode number_of_retries="6" name="NavigateRecovery">
         <PipelineSequence name="NavigateWithReplanning">
 

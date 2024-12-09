@@ -68,6 +68,7 @@ class FloorMissionNode : public rclcpp::Node
         pickup_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<PickupWorker>("PickupWorker", pickup_params);
 
+        factory.registerNodeType<UpdateFootprint>("UpdateFootprint", shared_from_this());
 
         auto rmf_path_release_node_params = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/suspend_rmf_pathing");
         rmf_path_release_node_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
