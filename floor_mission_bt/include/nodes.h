@@ -121,6 +121,17 @@ class UpdateFootprint : public BT::StatefulActionNode
     static BT::PortsList providedPorts();
 };
 
+class SetCostmapParams: public RosServiceNode<rcl_interfaces::srv::SetParameters>
+{
+  public:
+
+  SetCostmapParams(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};
+
 
 using SuspendRMFPathing_srv_t = ant_fleet_interfaces::srv::SuspendRMFPathing;
 class SuspendRMFPathing: public RosServiceNode<SuspendRMFPathing_srv_t>

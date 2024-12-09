@@ -70,6 +70,14 @@ class FloorMissionNode : public rclcpp::Node
 
         factory.registerNodeType<UpdateFootprint>("UpdateFootprint", shared_from_this());
 
+        auto set_local_costmap_params_node = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/local_costmap/local_costmap/set_parameters");
+        set_local_costmap_params_node.wait_for_server_timeout = std::chrono::milliseconds(5000);
+        factory.registerNodeType<SetCostmapParams>("SetLocalCostmapParams", set_local_costmap_params_node);
+
+        auto set_global_costmap_params_node = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/global_costmap/global_costmap/set_parameters");
+        set_global_costmap_params_node.wait_for_server_timeout = std::chrono::milliseconds(5000);
+        factory.registerNodeType<SetCostmapParams>("SetGlobalCostmapParams", set_global_costmap_params_node);
+
         auto rmf_path_release_node_params = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/suspend_rmf_pathing");
         rmf_path_release_node_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<ReleaseRMFPathing>("ReleaseRMFPathing", rmf_path_release_node_params);

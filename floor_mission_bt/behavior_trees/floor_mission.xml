@@ -6,8 +6,6 @@
 
     <Sequence>
 
-      
-
       <InitDroneVars drone_name="{drone_name}"/>
 
       <!-- One-time initialization -->
@@ -87,6 +85,8 @@
       <SuspendRMFPathing/>
       <PickupWorker drone_name="{drone_name}" worker_name="{worker_name}" />
       <UpdateFootprint is_carrying_worker="True"/>
+      <SetLocalCostmapParams is_carrying_worker="True"/>
+      <SetGlobalCostmapParams is_carrying_worker="True"/>
       <ReleaseRMFPathing/>
 
 
@@ -106,6 +106,9 @@
 
       <SuspendRMFPathing/>
       <LowerWorker drone_name="{drone_name}" worker_name="{worker_name}"/>
+      <UpdateFootprint is_carrying_worker="False"/>
+      <SetLocalCostmapParams is_carrying_worker="False"/>
+      <SetGlobalCostmapParams is_carrying_worker="False"/>
       <UpdateFootprint is_carrying_worker="False"/>
       <MoveOut/>
       <ReleaseRMFPathing/>
