@@ -70,7 +70,7 @@
       />
 
       <RetryUntilSuccessful num_attempts="-1">
-        <Delay delay_msec="1000">
+        <Delay delay_msec="250">
           <CheckGoToPlaceSuccess vertex_name="{pickup_location_name}" error_state="{error_state}"/>
         </Delay>            
       </RetryUntilSuccessful>
@@ -100,7 +100,7 @@
       />
       
       <RetryUntilSuccessful num_attempts="-1">
-        <Delay delay_msec="1000">
+        <Delay delay_msec="250">
           <CheckGoToPlaceSuccess vertex_name="{dropoff_location_name}" error_state="{error_state}"/>
         </Delay>            
       </RetryUntilSuccessful>
@@ -113,8 +113,20 @@
       <SetLocalCostmapParams is_carrying_worker="False"/>
       <SetGlobalCostmapParams is_carrying_worker="False"/>
       <UpdateFootprint is_carrying_worker="False"/>
-      <MoveOut/>
+
       <ReleaseRMFPathing/>
+
+      <GoToPlace 
+        vertex_name="{post_dropoff_location_name}" 
+        orientation="{dropoff_orientation}"
+        drone_name="{drone_name}" 
+      />
+
+      <RetryUntilSuccessful num_attempts="-1">
+        <Delay delay_msec="250">
+          <CheckGoToPlaceSuccess vertex_name="{post_dropoff_location_name}" error_state="{error_state}"/>
+        </Delay>            
+      </RetryUntilSuccessful>
 
       <SendFloorMissionSuccess drone_name="{drone_name}"/>
 
