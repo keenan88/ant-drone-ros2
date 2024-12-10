@@ -12,6 +12,7 @@ RUN apt-get update && \
     ros-humble-rmf-dev \
     ros-humble-generate-parameter-library \
     ros-humble-domain-bridge \
+    ros-humble-nav2-msgs \
     && rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m pip install setuptools==58.2.0

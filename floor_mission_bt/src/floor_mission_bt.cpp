@@ -58,10 +58,26 @@ class FloorMissionNode : public rclcpp::Node
         check_heartbeat_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckHeartbeat>("CheckHeartbeat", check_heartbeat_params);
 
-
         auto rmf_path_suspend_node_params = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/suspend_rmf_pathing");
         rmf_path_suspend_node_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<SuspendRMFPathing>("SuspendRMFPathing", rmf_path_suspend_node_params);
+
+        auto clear_local_costmap_params = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/local_costmap/clear_entirely_local_costmap");
+        clear_local_costmap_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
+        factory.registerNodeType<ClearCostmap>("ClearLocalCostmap", clear_local_costmap_params);
+
+        auto clear_global_costmap_params = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/global_costmap/clear_entirely_global_costmap");
+        clear_global_costmap_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
+        factory.registerNodeType<ClearCostmap>("ClearGlobalCostmap", clear_global_costmap_params);
+
+
+        auto send_comeout_trigger_params = BT::RosNodeParams(shared_from_this(), "/queen/check_comeout_triggered");
+        send_comeout_trigger_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
+        factory.registerNodeType<SendComeOutTrigger>("SendComeOutTrigger", send_comeout_trigger_params);
+
+        auto check_comeout_complete_params = BT::RosNodeParams(shared_from_this(), "/queen/check_comeout_completed");
+        check_comeout_complete_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
+        factory.registerNodeType<CheckComeOutComplete>("CheckComeOutComplete", check_comeout_complete_params);
 
         
         auto pickup_params = BT::RosNodeParams(shared_from_this(), "/ATTACHLINK");
@@ -111,7 +127,7 @@ class FloorMissionNode : public rclcpp::Node
     {        
         create_behavior_tree();
 
-        const auto timer_period = 500ms;
+        const auto timer_period = 250ms;
         timer_ = this->create_wall_timer(timer_period, std::bind(&FloorMissionNode::update_behavior_tree, this));
 
         rclcpp::spin(shared_from_this());

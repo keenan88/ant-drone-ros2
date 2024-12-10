@@ -24,6 +24,7 @@ find_package(behaviortree_ros2)
 find_package(tf2_ros)
 find_package(geometry_msgs)
 find_package(domain_bridge)
+find_package(nav2_msgs)
 
 
 # Install directories
@@ -49,6 +50,7 @@ set(TARGET_DEPENDS
     tf2_ros
     geometry_msgs
     domain_bridge
+    nav2_msgs
 )
 include_directories(include)
 

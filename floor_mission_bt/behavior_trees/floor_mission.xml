@@ -10,7 +10,7 @@
 
       <!-- One-time initialization -->
       <RetryUntilSuccessful num_attempts="-1">
-        <Delay delay_msec="1000">
+        <Delay delay_msec="250">
           <RegisterDrone drone_name="{drone_name}"/>
         </Delay>
       </RetryUntilSuccessful>
@@ -55,20 +55,13 @@
   </BehaviorTree>
 
 
-  <!-- 
-    Execute the main floor mission, consisting of:
-    1. Go to pickup position
-    2. Pickup the worker
-    3. Bring worker to row start
-    4. Lower Worker
-    5. Back up out of the way
 
-    Assumptions:
-    1. floor_mission is started with an idle robot that has a healthy heartbeat and was triggered by the queen to do a floor mission
-   -->
   <BehaviorTree ID="floor_mission">
 
     <Sequence>
+
+      <ClearLocalCostmap/>
+      <ClearGlobalCostmap/>
 
       <GoToPlace 
         vertex_name="{pickup_location_name}" 
@@ -83,7 +76,17 @@
       </RetryUntilSuccessful>
 
       <SuspendRMFPathing/>
+      <SendComeOutTrigger worker_name="{worker_name}"/>
+
+      <RetryUntilSuccessful num_attempts="-1">
+        <Delay delay_msec="1000">                
+          <CheckComeOutComplete worker_name="{worker_name}"/>
+        </Delay>
+      </RetryUntilSuccessful>
+
       <PickupWorker drone_name="{drone_name}" worker_name="{worker_name}" />
+      <ClearLocalCostmap/>
+      <ClearGlobalCostmap/>
       <UpdateFootprint is_carrying_worker="True"/>
       <SetLocalCostmapParams is_carrying_worker="True"/>
       <SetGlobalCostmapParams is_carrying_worker="True"/>

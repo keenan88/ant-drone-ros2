@@ -133,6 +133,41 @@ class SetCostmapParams: public RosServiceNode<rcl_interfaces::srv::SetParameters
 };
 
 
+class SendComeOutTrigger: public RosServiceNode<ant_fleet_interfaces::srv::CheckIfComeOutTriggered>
+{
+  public:
+
+  SendComeOutTrigger(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};
+
+class ClearCostmap: public RosServiceNode<nav2_msgs::srv::ClearEntireCostmap>
+{
+  public:
+
+  ClearCostmap(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};
+
+
+class CheckComeOutComplete: public RosServiceNode<ant_fleet_interfaces::srv::CheckIfComeOutTriggered>
+{
+  public:
+
+  CheckComeOutComplete(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr& request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};
+
+
 using SuspendRMFPathing_srv_t = ant_fleet_interfaces::srv::SuspendRMFPathing;
 class SuspendRMFPathing: public RosServiceNode<SuspendRMFPathing_srv_t>
 {

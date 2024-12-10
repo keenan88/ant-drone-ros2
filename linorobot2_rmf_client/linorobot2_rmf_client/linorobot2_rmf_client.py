@@ -164,6 +164,9 @@ class Linorobot2RMF(Node):
 
     def execute_path_request(self, path_request):
 
+        self.get_logger().info(f"{self.fleet_name}, {path_request.fleet_name}")
+        self.get_logger().info(f"{self.robot_name}, {path_request.robot_name}")
+
         if path_request.fleet_name == self.fleet_name and path_request.robot_name == self.robot_name: # Only execute paths intended for this drone
 
             if not self.is_rmf_pathing_suspended: # Only execute paths if rmf pathing is not suspended

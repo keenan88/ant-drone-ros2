@@ -51,7 +51,7 @@ class CmdVelScaler(Node):
         if msg.angular.z == 0.0:
             scaled_msg.angular.z = 0.0
         elif abs(msg.angular.z) <= nonlin_regime_lim_yaw:
-            self.get_logger().info(f"lower regime {msg.linear.y}")
+            # self.get_logger().info(f"lower regime {msg.linear.y}")
             if msg.angular.z > 0:
                 scaled_msg.angular.z = 8 * msg.angular.z - 15 * msg.angular.z * msg.angular.z
             else:

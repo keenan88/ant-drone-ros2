@@ -52,6 +52,9 @@ int main(int argc, char ** argv)
   domain_bridge.bridge_service<ant_fleet_interfaces::srv::MissionSuccess>("/queen/dropped_off_position", main_ros_domain_id, drone_ros_domain_id);
   domain_bridge.bridge_service<ant_fleet_interfaces::srv::MissionSuccess>("/queen/floor_mission_success", main_ros_domain_id, drone_ros_domain_id);
 
+  domain_bridge.bridge_service<ant_fleet_interfaces::srv::CheckIfComeOutTriggered>("/queen/check_comeout_triggered", main_ros_domain_id, drone_ros_domain_id);
+  domain_bridge.bridge_service<ant_fleet_interfaces::srv::CheckIfComeOutTriggered>("/queen/check_comeout_completed", main_ros_domain_id, drone_ros_domain_id);
+
   domain_bridge.bridge_service<linkattacher_msgs::srv::AttachLink>("/ATTACHLINK", main_ros_domain_id, drone_ros_domain_id);
   domain_bridge.bridge_service<linkattacher_msgs::srv::DetachLink>("/DETACHLINK", main_ros_domain_id, drone_ros_domain_id);
   
