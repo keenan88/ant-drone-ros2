@@ -9,7 +9,7 @@
     goal_checker:
       plugin: nav2_controller::SimpleGoalChecker
       stateful: true
-      xy_goal_tolerance: 0.05
+      xy_goal_tolerance: 0.075
       yaw_goal_tolerance: 0.05
     goal_checker_plugins:
     - goal_checker
