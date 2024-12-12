@@ -1,0 +1,5 @@
+bool is_rmf_pathing_suspended
+
+---
+
+bool success

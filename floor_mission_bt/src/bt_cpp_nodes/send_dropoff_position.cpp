@@ -2,7 +2,7 @@
 #include <cmath> // For std::atan2
 
 SendDropoffPosition::SendDropoffPosition(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : 
-RosServiceNode<ant_fleet_interfaces::srv::MissionSuccess>(name, conf, params) 
+RosServiceNode<ant_queen_interfaces::srv::DropoffPos>(name, conf, params) 
 {
   if (auto node = node_.lock())  // Attempt to lock the weak_ptr
   {
@@ -75,9 +75,9 @@ bool SendDropoffPosition::setRequest(Request::SharedPtr& request)
 
   if(map_to_attachment_point_tf.transform.rotation.w <= 1.0)
   {
-    request -> robot_name = drone_name;
-    request -> drone_pos_x = map_to_attachment_point_tf.transform.translation.x;
-    request -> drone_pos_y = map_to_attachment_point_tf.transform.translation.y;
+    request -> drone_name = drone_name;
+    request -> x = map_to_attachment_point_tf.transform.translation.x;
+    request -> y = map_to_attachment_point_tf.transform.translation.y;
     
     float w = map_to_attachment_point_tf.transform.rotation.w;
     float x = map_to_attachment_point_tf.transform.rotation.x;
@@ -85,9 +85,7 @@ bool SendDropoffPosition::setRequest(Request::SharedPtr& request)
     float z = map_to_attachment_point_tf.transform.rotation.z;
     float yaw = std::atan2(2.0 * (w * z + x * y), 1.0 - 2.0 * (y * y + z * z));
 
-    request -> drone_pos_yaw = yaw;
-
-    
+    request -> yaw = yaw;
 
     if (auto node = node_.lock())  // Attempt to lock the weak_ptr
     {

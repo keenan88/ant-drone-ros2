@@ -1,7 +1,7 @@
 #include "nodes.h"
 
 
-CheckComeOutComplete::CheckComeOutComplete(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : RosServiceNode<ant_fleet_interfaces::srv::CheckIfComeOutTriggered>(name, conf, params) {}
+CheckComeOutComplete::CheckComeOutComplete(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : RosServiceNode<ant_queen_interfaces::srv::ComeOut>(name, conf, params) {}
 
 PortsList CheckComeOutComplete::providedPorts()
 {
@@ -17,7 +17,7 @@ bool CheckComeOutComplete::setRequest(Request::SharedPtr& request)
 
 NodeStatus CheckComeOutComplete::onResponseReceived(const Response::SharedPtr& response)
 {
-  if(response -> is_triggered)
+  if(response -> is_comeout_complete)
   {
     return NodeStatus::SUCCESS;
   }

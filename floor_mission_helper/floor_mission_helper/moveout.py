@@ -2,7 +2,7 @@
 
 import rclpy
 from rclpy.node import Node
-from ant_fleet_interfaces.srv import MoveOut
+from ant_queen_interfaces.srv import MoveOut
 from geometry_msgs.msg import Twist
 import time
 from rclpy.executors import MultiThreadedExecutor

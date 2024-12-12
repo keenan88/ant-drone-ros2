@@ -2,7 +2,7 @@
 
 
 RegisterDrone::RegisterDrone(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : 
-RosServiceNode<ant_fleet_interfaces::srv::RegisterRobot>(name, conf, params) {}
+RosServiceNode<ant_queen_interfaces::srv::RegisterRobot>(name, conf, params) {}
 
 PortsList RegisterDrone::providedPorts()
 {

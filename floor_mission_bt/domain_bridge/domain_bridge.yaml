@@ -19,9 +19,9 @@ topics:
     reversed: True
 
   /mission_queen_heartbeat:
-    type: ant_fleet_interfaces/msg/MissionHeartbeatMsg
+    type: ant_queen_interfaces/msg/MissionHeartbeatMsg
     reversed: True
 
   /mission_robot_heartbeat:
-    type: ant_fleet_interfaces/msg/MissionHeartbeatMsg
+    type: ant_queen_interfaces/msg/MissionHeartbeatMsg
 

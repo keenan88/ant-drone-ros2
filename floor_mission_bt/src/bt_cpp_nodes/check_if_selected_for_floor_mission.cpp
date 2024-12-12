@@ -4,10 +4,10 @@ using namespace BT;
 
 
 
-CheckIfSelectedForFloorMission::CheckIfSelectedForFloorMission(const std::string& name, const NodeConfig& conf, const RosNodeParams& params): 
-RosServiceNode<ant_fleet_interfaces::srv::CheckIfSelectedForFloorMission>(name, conf, params) {}
+CheckIfFloorMissionTriggered::CheckIfFloorMissionTriggered(const std::string& name, const NodeConfig& conf, const RosNodeParams& params): 
+RosServiceNode<ant_queen_interfaces::srv::CheckIfFloorMissionTriggered>(name, conf, params) {}
 
-PortsList CheckIfSelectedForFloorMission::providedPorts() {
+PortsList CheckIfFloorMissionTriggered::providedPorts() {
 return providedBasicPorts({
     InputPort<std::string>("drone_name"),
     OutputPort<std::string>("worker_name"),
@@ -21,7 +21,7 @@ return providedBasicPorts({
 
 
 
-bool CheckIfSelectedForFloorMission::setRequest(Request::SharedPtr& request) {
+bool CheckIfFloorMissionTriggered::setRequest(Request::SharedPtr& request) {
 
 auto drone_name_result = getInput<std::string>("drone_name");
 if (!drone_name_result)
@@ -41,7 +41,7 @@ return true;
 
 
 
-NodeStatus CheckIfSelectedForFloorMission::onResponseReceived(const Response::SharedPtr& response) {
+NodeStatus CheckIfFloorMissionTriggered::onResponseReceived(const Response::SharedPtr& response) {
 if(response -> is_floor_mission_triggered)
 {
     setOutput("worker_name", response->paired_robot_name);
@@ -70,11 +70,11 @@ return NodeStatus::FAILURE;
 
 
 
-NodeStatus CheckIfSelectedForFloorMission::onFailure(ServiceNodeErrorCode error) {
+NodeStatus CheckIfFloorMissionTriggered::onFailure(ServiceNodeErrorCode error) {
 
 if (auto node = node_.lock())  // Attempt to lock the weak_ptr
 {
-    RCLCPP_INFO(node->get_logger(), "[%s] Error calling check_if_selected_for_floor_mission server", this->name().c_str());
+    RCLCPP_INFO(node->get_logger(), "[%s] Error calling check_if_floor_mission_triggered server", this->name().c_str());
 }
 
 // RCLCPP_ERROR(node_->get_logger(), "Error: %d", error);

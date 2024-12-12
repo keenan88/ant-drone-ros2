@@ -1,7 +1,7 @@
 #include "nodes.h"
 
 
-CheckIdle::CheckIdle(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : RosServiceNode<CheckDroneIdle_srv_t>(name, conf, params) {}
+CheckIdle::CheckIdle(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : RosServiceNode<antdrone_interfaces::srv::CheckDroneIdle>(name, conf, params) {}
 
 PortsList CheckIdle::providedPorts()
 {

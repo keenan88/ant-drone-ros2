@@ -2,8 +2,8 @@
 
 import rclpy
 from rclpy.node import Node
-from ant_fleet_interfaces.srv import MissionHeartbeatSrv
-from ant_fleet_interfaces.msg import MissionHeartbeatMsg
+from antdrone_interfaces.srv import MissionHeartbeatSrv
+from ant_queen_interfaces.msg import MissionHeartbeatMsg
 from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy, QoSDurabilityPolicy
 from rclpy.executors import MultiThreadedExecutor
 
@@ -20,16 +20,9 @@ class Heartbeat(Node):
 
         self.drone_name = self.get_namespace()[1:] # Remove leading forward slash
 
-        qos_reliable = QoSProfile(
-            reliability = QoSReliabilityPolicy.BEST_EFFORT,
-            durability = QoSDurabilityPolicy.VOLATILE,
-            history = QoSHistoryPolicy.KEEP_LAST,
-            depth = 50
-        )
-
         # Use pub/sub for heartbeat instead of a server, is more async. Can still use reliable QOS to ensure message delivery.
-        self.heartbeat_pub = self.create_publisher(MissionHeartbeatMsg, '/mission_robot_heartbeat', qos_reliable)
-        self.heartbeat_sub = self.create_subscription(MissionHeartbeatMsg, '/mission_queen_heartbeat', self.handle_incoming_heartbeat, qos_reliable)
+        self.heartbeat_pub = self.create_publisher(MissionHeartbeatMsg, '/mission_robot_heartbeat', 25)
+        self.heartbeat_sub = self.create_subscription(MissionHeartbeatMsg, '/mission_queen_heartbeat', self.handle_incoming_heartbeat, 25)
 
         self.heartbeat_timer = self.create_timer(2, self.heartbeat_timed_cb)
         self.last_queen_heartbeat_s = -1

@@ -1,7 +1,7 @@
 #include "nodes.h"
 
 SendFloorMissionSuccess::SendFloorMissionSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : 
-RosServiceNode<ant_fleet_interfaces::srv::MissionSuccess>(name, conf, params) 
+RosServiceNode<ant_queen_interfaces::srv::MissionSuccess>(name, conf, params) 
 {
 }
 
@@ -18,7 +18,7 @@ bool SendFloorMissionSuccess::setRequest(Request::SharedPtr& request)
 {
 
   getInput("drone_name", request -> robot_name);
-
+  request -> mission_type = "floor_mission";
 
   // must return true if we are ready to send the request
   return true;

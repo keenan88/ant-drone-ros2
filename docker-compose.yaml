@@ -83,7 +83,7 @@ services:
   #   tty: true
   #   stdin_open: true
   #   environment:
-  #     - USE_SIM=True
+  #     - USE_SIM_TIME=True
   #     - NVIDIA_VISIBLE_DEVICES=all
   #   volumes:
   #     - ./docker/linorobot2/entry_scripts/pointcloud_entrypoint.sh:/pointcloud_entrypoint.sh:rw

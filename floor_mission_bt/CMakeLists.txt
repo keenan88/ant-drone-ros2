@@ -16,7 +16,7 @@ find_package(behaviortree_cpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rmf_task_msgs REQUIRED)
 find_package(nlohmann_json REQUIRED)
-find_package(ant_fleet_interfaces REQUIRED)
+find_package(ant_queen_interfaces REQUIRED)
 find_package(rmf_fleet_msgs REQUIRED)
 find_package(linkattacher_msgs REQUIRED)
 find_package(example_interfaces REQUIRED)
@@ -25,7 +25,7 @@ find_package(tf2_ros)
 find_package(geometry_msgs)
 find_package(domain_bridge)
 find_package(nav2_msgs)
-
+find_package(antdrone_interfaces)
 
 # Install directories
 install(DIRECTORY
@@ -42,7 +42,7 @@ set(TARGET_DEPENDS
     std_msgs
     rmf_task_msgs
     nlohmann_json
-    ant_fleet_interfaces
+    ant_queen_interfaces
     rmf_fleet_msgs
     linkattacher_msgs
     example_interfaces
@@ -51,6 +51,7 @@ set(TARGET_DEPENDS
     geometry_msgs
     domain_bridge
     nav2_msgs
+    antdrone_interfaces
 )
 include_directories(include)
 

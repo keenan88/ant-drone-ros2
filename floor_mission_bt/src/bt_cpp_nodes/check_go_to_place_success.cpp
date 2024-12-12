@@ -4,7 +4,7 @@ using namespace BT;
 
 
 CheckGoToPlaceSuccess::CheckGoToPlaceSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params)  : 
-  RosServiceNode<ant_fleet_interfaces::srv::LastKnownEndWaypointName>(name, conf, params) {};
+  RosServiceNode<ant_queen_interfaces::srv::LastKnownEndWaypointName>(name, conf, params) {};
 
 
 PortsList CheckGoToPlaceSuccess::providedPorts(){

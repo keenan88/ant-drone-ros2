@@ -46,21 +46,16 @@ int main(int argc, char ** argv)
   namespace_.erase(0, 1); // Get rid of leading forwardslash from namespace   
 
   // Add access to all of queen's servers
-  domain_bridge.bridge_service<ant_fleet_interfaces::srv::RegisterRobot>("/queen/register_robot", main_ros_domain_id, drone_ros_domain_id);
-  domain_bridge.bridge_service<ant_fleet_interfaces::srv::CheckIfSelectedForFloorMission>("/queen/check_if_selected_for_floor_mission", main_ros_domain_id, drone_ros_domain_id);
-  domain_bridge.bridge_service<ant_fleet_interfaces::srv::LastKnownEndWaypointName>("/" + namespace_ + "/last_known_end_waypoint_name", main_ros_domain_id, drone_ros_domain_id);
-  domain_bridge.bridge_service<ant_fleet_interfaces::srv::MissionSuccess>("/queen/dropped_off_position", main_ros_domain_id, drone_ros_domain_id);
-  domain_bridge.bridge_service<ant_fleet_interfaces::srv::MissionSuccess>("/queen/floor_mission_success", main_ros_domain_id, drone_ros_domain_id);
+  domain_bridge.bridge_service<ant_queen_interfaces::srv::RegisterRobot>("/queen/register_robot", main_ros_domain_id, drone_ros_domain_id);
+  domain_bridge.bridge_service<ant_queen_interfaces::srv::CheckIfFloorMissionTriggered>("/queen/check_if_floor_mission_triggered", main_ros_domain_id, drone_ros_domain_id);
+  domain_bridge.bridge_service<ant_queen_interfaces::srv::LastKnownEndWaypointName>("/" + namespace_ + "/last_known_end_waypoint_name", main_ros_domain_id, drone_ros_domain_id);
+  domain_bridge.bridge_service<ant_queen_interfaces::srv::DropoffPos>("/queen/dropoff_pos", main_ros_domain_id, drone_ros_domain_id);
+  domain_bridge.bridge_service<ant_queen_interfaces::srv::MissionSuccess>("/queen/mission_success", main_ros_domain_id, drone_ros_domain_id);
 
-  domain_bridge.bridge_service<ant_fleet_interfaces::srv::CheckIfComeOutTriggered>("/queen/check_comeout_triggered", main_ros_domain_id, drone_ros_domain_id);
-  domain_bridge.bridge_service<ant_fleet_interfaces::srv::CheckIfComeOutTriggered>("/queen/check_comeout_completed", main_ros_domain_id, drone_ros_domain_id);
+  domain_bridge.bridge_service<ant_queen_interfaces::srv::ComeOut>("/queen/worker_comeout", main_ros_domain_id, drone_ros_domain_id);
 
   domain_bridge.bridge_service<linkattacher_msgs::srv::AttachLink>("/ATTACHLINK", main_ros_domain_id, drone_ros_domain_id);
-  domain_bridge.bridge_service<linkattacher_msgs::srv::DetachLink>("/DETACHLINK", main_ros_domain_id, drone_ros_domain_id);
-  
-  domain_bridge.bridge_service<ant_fleet_interfaces::srv::MissionSuccess>("/queen/floor_mission_success", main_ros_domain_id, drone_ros_domain_id);
-
-  
+  domain_bridge.bridge_service<linkattacher_msgs::srv::DetachLink>("/DETACHLINK", main_ros_domain_id, drone_ros_domain_id);  
 
   domain_bridge.add_to_executor(*executor);
   executor->add_node(node);

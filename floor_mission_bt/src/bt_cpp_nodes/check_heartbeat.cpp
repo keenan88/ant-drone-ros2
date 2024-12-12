@@ -2,7 +2,7 @@
 
 
 CheckHeartbeat::CheckHeartbeat(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : 
-RosServiceNode<ant_fleet_interfaces::srv::MissionHeartbeatSrv>(name, conf, params) {}
+RosServiceNode<antdrone_interfaces::srv::MissionHeartbeatSrv>(name, conf, params) {}
 
 PortsList CheckHeartbeat::providedPorts()
 {

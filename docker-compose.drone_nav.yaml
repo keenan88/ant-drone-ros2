@@ -93,7 +93,7 @@ services:
   #   tty: true
   #   stdin_open: true
   #   environment:
-  #     - USE_SIM=True
+  #     - USE_SIM_TIME=True
   #     - NVIDIA_VISIBLE_DEVICES=all
   #     - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
   #   volumes:

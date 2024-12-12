@@ -10,7 +10,7 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - PRIVACY_CONSENT=Y
-      - USE_SIM=True
+      - USE_SIM_TIME=True
       - DISPLAY=$DISPLAY
     deploy:
       resources:

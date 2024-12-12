@@ -6,7 +6,7 @@ from rclpy.action import ActionClient
 
 from rmf_fleet_msgs.msg import RobotState, PathRequest
 from geometry_msgs.msg import PoseStamped, TransformStamped
-from ant_fleet_interfaces.srv import SuspendRMFPathing, CheckDroneIdle
+from antdrone_interfaces.srv import SuspendRMFPathing, CheckDroneIdle
 from nav2_msgs.action import NavigateToPose
 
 from tf2_ros import Buffer, TransformListener
@@ -121,6 +121,8 @@ class Linorobot2RMF(Node):
             # self.drone_queen_state.location = self.drone_rmf_state.location
             self.first_tf_set = True
 
+            # self.get_logger().info(f"{x}, {y}")
+
         except Exception as e:
             self.get_logger().info(f"Could not get transform: {e}")
 
@@ -163,9 +165,6 @@ class Linorobot2RMF(Node):
         
 
     def execute_path_request(self, path_request):
-
-        self.get_logger().info(f"{self.fleet_name}, {path_request.fleet_name}")
-        self.get_logger().info(f"{self.robot_name}, {path_request.robot_name}")
 
         if path_request.fleet_name == self.fleet_name and path_request.robot_name == self.robot_name: # Only execute paths intended for this drone
 

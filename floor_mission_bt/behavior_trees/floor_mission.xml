@@ -25,7 +25,7 @@
               <Sequence>
                 <CheckHeartbeat />
                 <CheckIdle/> 
-                <CheckIfSelectedForFloorMission
+                <CheckIfFloorMissionTriggered
                   drone_name = "{drone_name}"
                   worker_name = "{worker_name}"
                   pickup_location_name = "{pickup_location_name}"
@@ -127,6 +127,9 @@
           <CheckGoToPlaceSuccess vertex_name="{post_dropoff_location_name}" error_state="{error_state}"/>
         </Delay>            
       </RetryUntilSuccessful>
+
+      <ClearLocalCostmap/>
+      <ClearGlobalCostmap/>
 
       <SendFloorMissionSuccess drone_name="{drone_name}"/>
 

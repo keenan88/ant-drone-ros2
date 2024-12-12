@@ -38,41 +38,40 @@ class InitDroneVars : public BT::StatefulActionNode
 
 };
 
-class RegisterDrone: public RosServiceNode<ant_fleet_interfaces::srv::RegisterRobot>
+class RegisterDrone: public RosServiceNode<ant_queen_interfaces::srv::RegisterRobot>
 {
   public:
 
-  RegisterDrone(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    RegisterDrone(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 
-using CheckDroneIdle_srv_t = ant_fleet_interfaces::srv::CheckDroneIdle;
-class CheckIdle: public RosServiceNode<CheckDroneIdle_srv_t>
+class CheckIdle: public RosServiceNode<antdrone_interfaces::srv::CheckDroneIdle>
 {
   public:
 
-  CheckIdle(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    CheckIdle(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 
 
-class CheckHeartbeat: public RosServiceNode<ant_fleet_interfaces::srv::MissionHeartbeatSrv>
+class CheckHeartbeat: public RosServiceNode<antdrone_interfaces::srv::MissionHeartbeatSrv>
 {
   public:
 
-  CheckHeartbeat(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    CheckHeartbeat(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 class GoToPlace : public BT::StatefulActionNode
@@ -99,11 +98,11 @@ class PickupWorker: public RosServiceNode<SendPickupCmd_srv_t>
 {
   public:
 
-  PickupWorker(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    PickupWorker(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 class UpdateFootprint : public BT::StatefulActionNode
@@ -125,71 +124,70 @@ class SetCostmapParams: public RosServiceNode<rcl_interfaces::srv::SetParameters
 {
   public:
 
-  SetCostmapParams(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    SetCostmapParams(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 
-class SendComeOutTrigger: public RosServiceNode<ant_fleet_interfaces::srv::CheckIfComeOutTriggered>
+class SendComeOutTrigger: public RosServiceNode<ant_queen_interfaces::srv::ComeOut>
 {
   public:
 
-  SendComeOutTrigger(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    SendComeOutTrigger(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 class ClearCostmap: public RosServiceNode<nav2_msgs::srv::ClearEntireCostmap>
 {
   public:
 
-  ClearCostmap(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    ClearCostmap(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 
-class CheckComeOutComplete: public RosServiceNode<ant_fleet_interfaces::srv::CheckIfComeOutTriggered>
+class CheckComeOutComplete: public RosServiceNode<ant_queen_interfaces::srv::ComeOut>
 {
   public:
 
-  CheckComeOutComplete(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    CheckComeOutComplete(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 
-using SuspendRMFPathing_srv_t = ant_fleet_interfaces::srv::SuspendRMFPathing;
-class SuspendRMFPathing: public RosServiceNode<SuspendRMFPathing_srv_t>
+class SuspendRMFPathing: public RosServiceNode<antdrone_interfaces::srv::SuspendRMFPathing>
 {
   public:
 
-  SuspendRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    SuspendRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 
-class ReleaseRMFPathing: public RosServiceNode<SuspendRMFPathing_srv_t>
+class ReleaseRMFPathing: public RosServiceNode<antdrone_interfaces::srv::SuspendRMFPathing>
 {
   public:
 
-  ReleaseRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    ReleaseRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 using SendLowerCmd_srv_t = linkattacher_msgs::srv::DetachLink;
@@ -197,75 +195,75 @@ class LowerWorker: public RosServiceNode<SendLowerCmd_srv_t>
 {
   public:
 
-  LowerWorker(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    LowerWorker(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 
-class SendFloorMissionSuccess: public RosServiceNode<ant_fleet_interfaces::srv::MissionSuccess>
+class SendFloorMissionSuccess: public RosServiceNode<ant_queen_interfaces::srv::MissionSuccess>
 {
   public:
 
-  SendFloorMissionSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    SendFloorMissionSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
-class SendDropoffPosition: public RosServiceNode<ant_fleet_interfaces::srv::MissionSuccess>
+class SendDropoffPosition: public RosServiceNode<ant_queen_interfaces::srv::DropoffPos>
 {
   public:
 
-  std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
-  std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
-  geometry_msgs::msg::TransformStamped getTransform(std::string drone_name);
+    std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
+    std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
+    geometry_msgs::msg::TransformStamped getTransform(std::string drone_name);
 
-  SendDropoffPosition(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    SendDropoffPosition(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
 
 
-class CheckIfSelectedForFloorMission: public RosServiceNode<ant_fleet_interfaces::srv::CheckIfSelectedForFloorMission>
+class CheckIfFloorMissionTriggered: public RosServiceNode<ant_queen_interfaces::srv::CheckIfFloorMissionTriggered>
 {
   public:
 
-  CheckIfSelectedForFloorMission(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    CheckIfFloorMissionTriggered(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
-class CheckGoToPlaceSuccess: public RosServiceNode<ant_fleet_interfaces::srv::LastKnownEndWaypointName>
+class CheckGoToPlaceSuccess: public RosServiceNode<ant_queen_interfaces::srv::LastKnownEndWaypointName>
 {
   public:
 
-  std::string desired_vertex_name;
+    std::string desired_vertex_name;
 
-  CheckGoToPlaceSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    CheckGoToPlaceSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 
 };
 
-class MoveOut: public RosServiceNode<ant_fleet_interfaces::srv::MoveOut>
+class MoveOut: public RosServiceNode<ant_queen_interfaces::srv::MoveOut>
 {
   public:
 
-  MoveOut(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-  static PortsList providedPorts();
-  bool setRequest(Request::SharedPtr& request) override;
-  NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+    MoveOut(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    static PortsList providedPorts();
+    bool setRequest(Request::SharedPtr& request) override;
+    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
+    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 

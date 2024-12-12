@@ -9,7 +9,7 @@ def generate_launch_description():
 
     print(drone_name)
 
-    use_sim = os.environ.get("USE_SIM")
+    use_sim = os.environ.get("USE_SIM_TIME")
     use_sim = use_sim == "True"
 
     ld = launch.LaunchDescription()

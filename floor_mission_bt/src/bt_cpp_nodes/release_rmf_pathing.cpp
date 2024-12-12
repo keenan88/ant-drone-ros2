@@ -1,7 +1,7 @@
 #include "nodes.h"
 
 
-ReleaseRMFPathing::ReleaseRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : RosServiceNode<SuspendRMFPathing_srv_t>(name, conf, params) {}
+ReleaseRMFPathing::ReleaseRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : RosServiceNode<antdrone_interfaces::srv::SuspendRMFPathing>(name, conf, params) {}
 
 PortsList ReleaseRMFPathing::providedPorts()
 {
