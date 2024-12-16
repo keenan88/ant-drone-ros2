@@ -103,6 +103,7 @@ SendDropoffPosition::onResponseReceived(const Response::SharedPtr &response) {
 }
 
 NodeStatus SendDropoffPosition::onFailure(ServiceNodeErrorCode error) {
+  if(error){} // To avoid build warning
   // RCLCPP_ERROR(node_->get_logger(), "Error: %d", error);
   return NodeStatus::FAILURE;
 }

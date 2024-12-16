@@ -62,5 +62,6 @@ SetCostmapParams::onResponseReceived(const Response::SharedPtr &response) {
 }
 
 NodeStatus SetCostmapParams::onFailure(ServiceNodeErrorCode error) {
+  if(error){} // To avoid build warning
   return NodeStatus::FAILURE;
 }

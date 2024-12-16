@@ -38,5 +38,5 @@ RUN source /opt/ros/humble/setup.bash && \
     # ${DRONE_NAME}
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-            ros2 launch linorobot2_rmf_client linorobot2_rmf_client.launch.py ns:=${DRONE_NAME}"
+            ros2 launch linorobot2_rmf_client linorobot2_rmf_client.launch.py DRONE_NAME:=${DRONE_NAME}"
 

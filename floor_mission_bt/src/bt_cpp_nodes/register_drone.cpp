@@ -45,6 +45,7 @@ RegisterDrone::onResponseReceived(const Response::SharedPtr &response) {
 }
 
 NodeStatus RegisterDrone::onFailure(ServiceNodeErrorCode error) {
+  if(error){} // To avoid build warning
   NodeStatus node_status = NodeStatus::FAILURE;
 
   if (auto node = node_.lock()) {

@@ -11,6 +11,7 @@ PortsList CheckHeartbeat::providedPorts() {
 }
 
 bool CheckHeartbeat::setRequest(Request::SharedPtr &request) {
+  if(request){} // To avoid build warning
   // must return true if we are ready to send the request
   return true;
 }
@@ -37,6 +38,7 @@ CheckHeartbeat::onResponseReceived(const Response::SharedPtr &response) {
 }
 
 NodeStatus CheckHeartbeat::onFailure(ServiceNodeErrorCode error) {
+  if(error){} // To avoid build warning
   NodeStatus node_status = NodeStatus::FAILURE;
 
   if (auto node = node_.lock()) {

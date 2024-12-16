@@ -71,7 +71,7 @@
 
       <RetryUntilSuccessful num_attempts="-1">
         <Delay delay_msec="250">
-          <CheckGoToPlaceSuccess vertex_name="{pickup_location_name}" error_state="{error_state}"/>
+          <CheckGoToPlaceSuccess vertex_name="{pickup_location_name}" error_state="{error_state}" drone_name="{drone_name}"/>
         </Delay>            
       </RetryUntilSuccessful>
 
@@ -101,7 +101,7 @@
       
       <RetryUntilSuccessful num_attempts="-1">
         <Delay delay_msec="250">
-          <CheckGoToPlaceSuccess vertex_name="{dropoff_location_name}" error_state="{error_state}"/>
+          <CheckGoToPlaceSuccess vertex_name="{dropoff_location_name}" error_state="{error_state}" drone_name="{drone_name}"/>
         </Delay>            
       </RetryUntilSuccessful>
 
@@ -124,7 +124,7 @@
 
       <RetryUntilSuccessful num_attempts="-1">
         <Delay delay_msec="250">
-          <CheckGoToPlaceSuccess vertex_name="{post_dropoff_location_name}" error_state="{error_state}"/>
+          <CheckGoToPlaceSuccess vertex_name="{post_dropoff_location_name}" error_state="{error_state}" drone_name="{drone_name}"/>
         </Delay>            
       </RetryUntilSuccessful>
 

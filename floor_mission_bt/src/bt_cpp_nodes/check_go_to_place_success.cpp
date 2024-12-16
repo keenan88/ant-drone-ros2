@@ -11,11 +11,13 @@ CheckGoToPlaceSuccess::CheckGoToPlaceSuccess(const std::string &name,
 PortsList CheckGoToPlaceSuccess::providedPorts() {
 
   return providedBasicPorts({BT::InputPort<std::string>("vertex_name"),
-                             BT::OutputPort<std::string>("error_state")});
+                             BT::InputPort<std::string>("drone_name"),
+                             BT::OutputPort<std::string>("error_state"),
+                             });
 }
 
 bool CheckGoToPlaceSuccess::setRequest(Request::SharedPtr &request) {
-
+  getInput("drone_name", request->drone_name);
   getInput("vertex_name", desired_vertex_name);
   // must return true if we are ready to send the request
   return true;
@@ -45,6 +47,7 @@ CheckGoToPlaceSuccess::onResponseReceived(const Response::SharedPtr &response) {
 }
 
 NodeStatus CheckGoToPlaceSuccess::onFailure(ServiceNodeErrorCode error) {
+  if(error){} // To avoid build warning
   NodeStatus node_status = NodeStatus::FAILURE;
 
   if (auto node = node_.lock()) {

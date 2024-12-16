@@ -18,10 +18,12 @@ bool SendComeOutTrigger::setRequest(Request::SharedPtr& request)
 
 NodeStatus SendComeOutTrigger::onResponseReceived(const Response::SharedPtr& response)
 {
-   return NodeStatus::SUCCESS;
+  if(response) {} // To avoid build warning
+  return NodeStatus::SUCCESS;
 }
 
 NodeStatus SendComeOutTrigger::onFailure(ServiceNodeErrorCode error)
 {
+  if(error){} // To avoid build warning
   return NodeStatus::FAILURE;
 }

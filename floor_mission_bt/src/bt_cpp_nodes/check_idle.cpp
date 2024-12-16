@@ -7,7 +7,10 @@ CheckIdle::CheckIdle(const std::string &name, const NodeConfig &conf,
 
 PortsList CheckIdle::providedPorts() { return {}; }
 
-bool CheckIdle::setRequest(Request::SharedPtr &request) { return true; }
+bool CheckIdle::setRequest(Request::SharedPtr &request) { 
+  if(request){} // To avoid build warning
+  return true; 
+}
 
 NodeStatus CheckIdle::onResponseReceived(const Response::SharedPtr &response) {
   if (auto node = node_.lock()) {
@@ -23,5 +26,6 @@ NodeStatus CheckIdle::onResponseReceived(const Response::SharedPtr &response) {
 }
 
 NodeStatus CheckIdle::onFailure(ServiceNodeErrorCode error) {
+  if(error){} // To avoid build warning
   return NodeStatus::FAILURE;
 }

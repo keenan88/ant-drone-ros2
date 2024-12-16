@@ -27,5 +27,6 @@ NodeStatus SuspendRMFPathing::onResponseReceived(const Response::SharedPtr& resp
 
 NodeStatus SuspendRMFPathing::onFailure(ServiceNodeErrorCode error)
 {
+  if(error){} // To avoid build warning
   return NodeStatus::FAILURE;
 }

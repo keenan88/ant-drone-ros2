@@ -27,5 +27,6 @@ NodeStatus CheckComeOutComplete::onResponseReceived(const Response::SharedPtr& r
 
 NodeStatus CheckComeOutComplete::onFailure(ServiceNodeErrorCode error)
 {
+  if(error){} // To avoid build warning
   return NodeStatus::FAILURE;
 }

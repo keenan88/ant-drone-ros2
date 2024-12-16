@@ -7,6 +7,7 @@ MoveOut::MoveOut(const std::string &name, const NodeConfig &conf,
 PortsList MoveOut::providedPorts() { return {}; }
 
 bool MoveOut::setRequest(Request::SharedPtr &request) {
+  if(request){} // To avoid build warning
   if (auto node = node_.lock()) {
     RCLCPP_INFO(node->get_logger(), "[%s] Moving out from under worker..",
                 this->name().c_str());
@@ -28,6 +29,7 @@ NodeStatus MoveOut::onResponseReceived(const Response::SharedPtr &response) {
 }
 
 NodeStatus MoveOut::onFailure(ServiceNodeErrorCode error) {
+  if(error){} // To avoid build warning
   if (auto node = node_.lock()) {
     RCLCPP_INFO(node->get_logger(), "[%s] Error contacting moveout server",
                 this->name().c_str());

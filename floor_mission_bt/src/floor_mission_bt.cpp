@@ -15,22 +15,21 @@ class FloorMissionNode : public rclcpp::Node
   public:
     FloorMissionNode() : Node("bt")
     {
+        this->declare_parameter<std::string>("DRONE_NAME", "");
         this->declare_parameter<std::string>("tree_xml_file", default_bt_xml_file);
         tree_xml_file_ = this->get_parameter("tree_xml_file").as_string();
-        RCLCPP_WARN(this->get_logger(), "xml file: %s", tree_xml_file_.c_str());
+        
+
+        RCLCPP_WARN(this->get_logger(), "drone name: %s, xml file: %s", drone_name.c_str(), tree_xml_file_.c_str());
     }
 
     void create_behavior_tree()
     {
-
-        std::string namespace_ = this->get_namespace();
-        namespace_.erase(0, 1); // Get rid of leading forwardslash from namespace
-
-
+        
+        
         BT::BehaviorTreeFactory factory;
 
         factory.registerNodeType<InitDroneVars>("InitDroneVars", shared_from_this());
-
 
         factory.registerNodeType<GoToPlace>("GoToPlace", shared_from_this());
 
@@ -38,12 +37,12 @@ class FloorMissionNode : public rclcpp::Node
         register_robot_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<RegisterDrone>("RegisterDrone", register_robot_params);
 
-        auto check_go_to_place_success_params = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/last_known_end_waypoint_name");
+        auto check_go_to_place_success_params = BT::RosNodeParams(shared_from_this(), "/last_known_end_waypoint_name");
         check_go_to_place_success_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckGoToPlaceSuccess>("CheckGoToPlaceSuccess", check_go_to_place_success_params);
 
 
-        auto check_idle_params = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/check_drone_idle");
+        auto check_idle_params = BT::RosNodeParams(shared_from_this(), "/check_drone_idle");
         check_idle_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckIdle>("CheckIdle", check_idle_params);
 
@@ -51,19 +50,19 @@ class FloorMissionNode : public rclcpp::Node
         check_selected_for_floor_mission_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckIfFloorMissionTriggered>("CheckIfFloorMissionTriggered", check_selected_for_floor_mission_params);
 
-        auto check_heartbeat_params = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/mission_heartbeat");
+        auto check_heartbeat_params = BT::RosNodeParams(shared_from_this(), "/mission_heartbeat");
         check_heartbeat_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckHeartbeat>("CheckHeartbeat", check_heartbeat_params);
 
-        auto rmf_path_suspend_node_params = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/suspend_rmf_pathing");
+        auto rmf_path_suspend_node_params = BT::RosNodeParams(shared_from_this(), "/suspend_rmf_pathing");
         rmf_path_suspend_node_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<SuspendRMFPathing>("SuspendRMFPathing", rmf_path_suspend_node_params);
 
-        auto clear_local_costmap_params = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/local_costmap/clear_entirely_local_costmap");
+        auto clear_local_costmap_params = BT::RosNodeParams(shared_from_this(), "/local_costmap/clear_entirely_local_costmap");
         clear_local_costmap_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<ClearCostmap>("ClearLocalCostmap", clear_local_costmap_params);
 
-        auto clear_global_costmap_params = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/global_costmap/clear_entirely_global_costmap");
+        auto clear_global_costmap_params = BT::RosNodeParams(shared_from_this(), "/global_costmap/clear_entirely_global_costmap");
         clear_global_costmap_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<ClearCostmap>("ClearGlobalCostmap", clear_global_costmap_params);
 
@@ -83,15 +82,15 @@ class FloorMissionNode : public rclcpp::Node
 
         factory.registerNodeType<UpdateFootprint>("UpdateFootprint", shared_from_this());
 
-        auto set_local_costmap_params_node = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/local_costmap/local_costmap/set_parameters");
+        auto set_local_costmap_params_node = BT::RosNodeParams(shared_from_this(), "/local_costmap/local_costmap/set_parameters");
         set_local_costmap_params_node.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<SetCostmapParams>("SetLocalCostmapParams", set_local_costmap_params_node);
 
-        auto set_global_costmap_params_node = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/global_costmap/global_costmap/set_parameters");
+        auto set_global_costmap_params_node = BT::RosNodeParams(shared_from_this(), "/global_costmap/global_costmap/set_parameters");
         set_global_costmap_params_node.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<SetCostmapParams>("SetGlobalCostmapParams", set_global_costmap_params_node);
 
-        auto rmf_path_release_node_params = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/suspend_rmf_pathing");
+        auto rmf_path_release_node_params = BT::RosNodeParams(shared_from_this(), "/suspend_rmf_pathing");
         rmf_path_release_node_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<ReleaseRMFPathing>("ReleaseRMFPathing", rmf_path_release_node_params);
 
@@ -108,7 +107,7 @@ class FloorMissionNode : public rclcpp::Node
         send_floor_mission_success_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<SendFloorMissionSuccess>("SendFloorMissionSuccess", send_floor_mission_success_params);
 
-        auto moveout_params = BT::RosNodeParams(shared_from_this(), "/" + namespace_ + "/moveout");
+        auto moveout_params = BT::RosNodeParams(shared_from_this(), "/moveout");
         moveout_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         moveout_params.server_timeout = std::chrono::milliseconds(10000);
         factory.registerNodeType<MoveOut>("MoveOut", moveout_params);
@@ -151,6 +150,7 @@ class FloorMissionNode : public rclcpp::Node
     }
 
     std::string tree_xml_file_;
+    std::string drone_name;
 
     rclcpp::TimerBase::SharedPtr timer_;
     BT::Tree tree_;

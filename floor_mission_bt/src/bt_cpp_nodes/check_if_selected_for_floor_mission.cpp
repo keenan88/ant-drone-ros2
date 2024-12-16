@@ -67,6 +67,7 @@ NodeStatus CheckIfFloorMissionTriggered::onResponseReceived(
 }
 
 NodeStatus CheckIfFloorMissionTriggered::onFailure(ServiceNodeErrorCode error) {
+  if(error){} // To avoid build warning
 
   if (auto node = node_.lock()) {
     RCLCPP_INFO(node->get_logger(),
