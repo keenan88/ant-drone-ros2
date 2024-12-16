@@ -1,4 +1,4 @@
-/**/front_rs_pointcloud_cropper:
+/front_rs_pointcloud_cropper:
   ros__parameters:
     approximate_sync: false
     keep_organized: false
@@ -19,7 +19,7 @@
     filter_limit_negative: false
     use_indices: false
 
-/**/rear_rs_pointcloud_cropper:
+/rear_rs_pointcloud_cropper:
   ros__parameters:
     approximate_sync: false
     keep_organized: false
@@ -40,7 +40,7 @@
     filter_limit_negative: false
     use_indices: false
 
-/**/left_rs_pointcloud_cropper:
+/left_rs_pointcloud_cropper:
   ros__parameters:
     approximate_sync: false
     keep_organized: false
@@ -61,7 +61,7 @@
     filter_limit_negative: false
     use_indices: false
 
-/**/right_rs_pointcloud_cropper:
+/right_rs_pointcloud_cropper:
   ros__parameters:
     approximate_sync: false
     keep_organized: false

@@ -4,12 +4,8 @@
   <xacro:arg name="namespace" default=""/>
 
   <xacro:include filename="$(find antdrone_description)/urdf/mecanum_properties.urdf.xacro" />
-  <xacro:include filename="$(find antdrone_description)/urdf/mech/base.urdf.xacro" />
-  <xacro:include filename="$(find antdrone_description)/urdf/mech/mecanum_wheel_left_fixed.urdf.xacro" />
-
-  <xacro:include filename="$(find antdrone_description)/urdf/mech/end_channel.urdf.xacro" />
-  <xacro:include filename="$(find antdrone_description)/urdf/mech/side_channel.urdf.xacro" />
-  <xacro:include filename="$(find antdrone_description)/urdf/robots/camera.urdf.xacro" />
+  <xacro:include filename="$(find antdrone_description)/urdf/base.urdf.xacro" />
+  <xacro:include filename="$(find antdrone_description)/urdf/camera.urdf.xacro" />
 
   <xacro:property name="rs_height" value="${base_height/2 + 0.05}" />
 
@@ -60,18 +56,5 @@
     width="${base_width}" 
     height="${base_height}" 
   />
-
-  
-
-
-
- 
-
-  
-
-
-
-
-
 
 </robot>

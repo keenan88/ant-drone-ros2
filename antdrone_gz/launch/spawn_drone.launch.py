@@ -17,10 +17,10 @@ def generate_launch_description():
             executable='spawn_entity.py',
             name='urdf_spawner',
             output='screen',
-            namespace=LaunchConfiguration('ns'),
+            namespace=LaunchConfiguration('DRONE_NAME'),
             arguments=[
                 '-topic', 'robot_description', 
-                '-entity', LaunchConfiguration('ns'), 
+                '-entity', LaunchConfiguration('DRONE_NAME'), 
                 '-x', LaunchConfiguration('x0'),
                 '-y', LaunchConfiguration('y0'),
                 '-z', LaunchConfiguration('z0'),
@@ -33,7 +33,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(drone_description_launch_path),
             launch_arguments={
                 'use_sim_time': 'True',
-                'namespace': LaunchConfiguration('ns')
+                'DRONE_NAME': LaunchConfiguration('DRONE_NAME')
             }.items()
         )
     ])

@@ -4,40 +4,12 @@ project(antdrone_description)
 find_package(ament_cmake REQUIRED)
 find_package(urdf REQUIRED)
 
-install(
-  DIRECTORY urdf rviz
+
+install(DIRECTORY urdf launch 
   DESTINATION share/${PROJECT_NAME}
 )
 
-install(DIRECTORY mecanum_wheel_left/urdf/
-  DESTINATION share/${PROJECT_NAME}/mecanum_wheel_left/urdf/
-  FILES_MATCHING PATTERN "*.urdf"
-)
 
-install(DIRECTORY mecanum_wheel_left/meshes
-  DESTINATION share/${PROJECT_NAME}/mecanum_wheel_left/
-  FILES_MATCHING PATTERN "*.STL"
-)
-
-install(DIRECTORY mecanum_wheel_right/urdf/
-  DESTINATION share/${PROJECT_NAME}/mecanum_wheel_right/urdf/
-  FILES_MATCHING PATTERN "*.urdf"
-)
-
-install(DIRECTORY mecanum_wheel_right/meshes
-  DESTINATION share/${PROJECT_NAME}/mecanum_wheel_right/
-  FILES_MATCHING PATTERN "*.STL"
-)
-
-install(DIRECTORY drone_point/meshes
-  DESTINATION share/${PROJECT_NAME}/drone_point/
-  FILES_MATCHING PATTERN "*.STL"
-)
-
-
-install(DIRECTORY launch
-  DESTINATION share/${PROJECT_NAME}
-)
 
 
 ament_package()

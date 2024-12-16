@@ -5,6 +5,7 @@ from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
 
 # Assumes that all laser scan topics are updated fairly quickly
 class LaserScanMerger(Node):
+    # Potentially replace with: https://github.com/mich1342/ros2_laser_scan_merger or maybe there is sth here: https://index.ros.org/search/?term=laser
     def __init__(self):
         super().__init__('laser_scan_merger')
 

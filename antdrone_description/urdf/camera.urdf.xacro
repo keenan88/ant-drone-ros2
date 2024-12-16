@@ -18,7 +18,9 @@
         </image>
         <clip>
           <near>0.05</near>
-          <far>5</far> <!--  Be sure to set this greater than the max value of the cropbox distance cutoff, the camera generates a grey plane at this distance that will be interpreted as an obstacle-->
+          <!--  Be sure to set far clip greater than cropbox node's cutoff distance.
+            The camera generates a grey plane at this distance that will be interpreted in nav2 as an obstacle-->
+          <far>5</far> 
         </clip>
         <noise>
           <type>gaussian</type>
@@ -55,7 +57,6 @@
 
     <link name="${namespace}_${camera_pos}_rs_depth_optical_frame">
     </link>
-
 
     <joint
       name="${namespace}_base_link_to_${camera_pos}_rs" type="fixed">
