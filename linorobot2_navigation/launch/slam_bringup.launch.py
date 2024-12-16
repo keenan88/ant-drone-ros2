@@ -12,12 +12,6 @@ def generate_launch_description():
     odometry_launch_path = '/home/humble_ws/src/linorobot2_localization/launch/odometry.launch.py'
     rviz_config_path = '/home/humble_ws/src/linorobot2_navigation/rviz/linorobot2_slam.rviz'
 
-    wheels_or_body_odometry = DeclareLaunchArgument(
-        'WHEEL_ODOMETRY',
-        default_value='body',
-        description='Whether to determine odometry from mecanum wheels or body (body given by IsaacSim)'
-    )
-
     slam_toolbox = Node(
         package='slam_toolbox',
         executable='async_slam_toolbox_node',
@@ -40,7 +34,6 @@ def generate_launch_description():
     odometry = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(odometry_launch_path),
         launch_arguments={
-            'WHEEL_ODOMETRY': LaunchConfiguration('WHEEL_ODOMETRY'),
             'DRONE_NAME': LaunchConfiguration('DRONE_NAME'),
             'USE_SIM_TIME': LaunchConfiguration("USE_SIM_TIME")
         }.items()

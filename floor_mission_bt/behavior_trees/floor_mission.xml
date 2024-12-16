@@ -6,8 +6,6 @@
 
     <Sequence>
 
-      <InitDroneVars drone_name="{drone_name}"/>
-
       <!-- One-time initialization -->
       <RetryUntilSuccessful num_attempts="-1">
         <Delay delay_msec="250">
@@ -63,7 +61,7 @@
       <ClearLocalCostmap/>
       <ClearGlobalCostmap/>
 
-      <GoToPlace 
+      <GoToWaypoint 
         vertex_name="{pickup_location_name}" 
         orientation="{pickup_orientation}"
         drone_name="{drone_name}" 
@@ -75,7 +73,7 @@
         </Delay>            
       </RetryUntilSuccessful>
 
-      <SuspendRMFPathing/>
+      <SuspendReleaseRMFPathing set_state="suspend"/>
       <SendComeOutTrigger worker_name="{worker_name}"/>
 
       <RetryUntilSuccessful num_attempts="-1">
@@ -90,10 +88,10 @@
       <UpdateFootprint is_carrying_worker="True"/>
       <SetLocalCostmapParams is_carrying_worker="True"/>
       <SetGlobalCostmapParams is_carrying_worker="True"/>
-      <ReleaseRMFPathing/>
+      <SuspendReleaseRMFPathing set_state="release"/>
 
 
-      <GoToPlace 
+      <GoToWaypoint 
         vertex_name="{dropoff_location_name}" 
         orientation="{dropoff_orientation}"
         drone_name="{drone_name}" 
@@ -107,16 +105,16 @@
 
       <SendDropoffPosition drone_name="{drone_name}"/>
 
-      <SuspendRMFPathing/>
+      <SuspendReleaseRMFPathing set_state="suspend"/>
       <LowerWorker drone_name="{drone_name}" worker_name="{worker_name}"/>
       <UpdateFootprint is_carrying_worker="False"/>
       <SetLocalCostmapParams is_carrying_worker="False"/>
       <SetGlobalCostmapParams is_carrying_worker="False"/>
       <UpdateFootprint is_carrying_worker="False"/>
 
-      <ReleaseRMFPathing/>
+      <SuspendReleaseRMFPathing set_state="release"/>
 
-      <GoToPlace 
+      <GoToWaypoint 
         vertex_name="{post_dropoff_location_name}" 
         orientation="{dropoff_orientation}"
         drone_name="{drone_name}" 

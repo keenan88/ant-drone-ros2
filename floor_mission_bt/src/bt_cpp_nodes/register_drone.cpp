@@ -1,13 +1,16 @@
 #include "nodes.h"
 
-RegisterDrone::RegisterDrone(const std::string &name, const NodeConfig &conf,
-                             const RosNodeParams &params)
-    : RosServiceNode<ant_queen_interfaces::srv::RegisterRobot>(name, conf,
-                                                               params) {}
+RegisterDrone::RegisterDrone(const std::string &name, const NodeConfig &conf,  const RosNodeParams &params)
+    : RosServiceNode<ant_queen_interfaces::srv::RegisterRobot>(name, conf,  params) {
+      if (auto node = node_.lock()) {
+        setOutput("drone_name", node->get_parameter("DRONE_NAME").as_string());
+      }
+
+}
 
 PortsList RegisterDrone::providedPorts() {
 
-  return {InputPort<std::string>("drone_name")};
+  return {BidirectionalPort<std::string>("drone_name")};
 }
 
 bool RegisterDrone::setRequest(Request::SharedPtr &request) {
@@ -23,8 +26,7 @@ bool RegisterDrone::setRequest(Request::SharedPtr &request) {
   return true;
 }
 
-NodeStatus
-RegisterDrone::onResponseReceived(const Response::SharedPtr &response) {
+NodeStatus RegisterDrone::onResponseReceived(const Response::SharedPtr &response) {
   NodeStatus node_status = NodeStatus::FAILURE;
 
   if (response->registered) {

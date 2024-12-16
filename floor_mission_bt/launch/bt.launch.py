@@ -15,6 +15,7 @@ def generate_launch_description():
         parameters=[
             {
                 'use_sim_time': LaunchConfiguration("USE_SIM_TIME"),
+                'DRONE_NAME': LaunchConfiguration("DRONE_NAME")
             }
         ]
     )
@@ -40,7 +41,7 @@ def generate_launch_description():
         parameters=[
             {
                 'use_sim_time': LaunchConfiguration("USE_SIM_TIME"),
-                'drone_name': LaunchConfiguration("DRONE_NAME")
+                'DRONE_NAME': LaunchConfiguration("DRONE_NAME")
             }
         ]
     )

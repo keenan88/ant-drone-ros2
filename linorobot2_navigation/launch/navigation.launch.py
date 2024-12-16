@@ -78,7 +78,6 @@ def generate_launch_description():
     odometry = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(odometry_launch_path),
         launch_arguments={
-            'WHEEL_ODOMETRY': LaunchConfiguration('WHEEL_ODOMETRY'),
             'DRONE_NAME': LaunchConfiguration("DRONE_NAME"),
             'USE_SIM_TIME': LaunchConfiguration("USE_SIM_TIME")
         }.items()

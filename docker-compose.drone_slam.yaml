@@ -38,7 +38,6 @@ services:
     environment:
       - DISPLAY=${DISPLAY}
       - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
-      - WHEEL_ODOMETRY=false
     volumes:
       - ./linorobot2_navigation:/home/humble_ws/src/linorobot2_navigation
       - ./linorobot2_localization:/home/humble_ws/src/linorobot2_localization

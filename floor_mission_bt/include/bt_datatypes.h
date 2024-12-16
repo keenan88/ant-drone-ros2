@@ -12,7 +12,7 @@
 #include "ant_queen_interfaces/srv/come_out.hpp"
 #include "ant_queen_interfaces/srv/dropoff_pos.hpp"
 
-#include "antdrone_interfaces/srv/suspend_rmf_pathing.hpp"
+#include "antdrone_interfaces/srv/suspend_release_rmf_pathing.hpp"
 #include "antdrone_interfaces/srv/check_drone_idle.hpp"
 #include "antdrone_interfaces/srv/mission_heartbeat_srv.hpp"
 

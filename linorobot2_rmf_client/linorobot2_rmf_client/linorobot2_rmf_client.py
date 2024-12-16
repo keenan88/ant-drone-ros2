@@ -6,12 +6,12 @@ from rclpy.action import ActionClient
 
 from rmf_fleet_msgs.msg import RobotState, PathRequest, RobotMode
 from geometry_msgs.msg import PoseStamped, TransformStamped
-from antdrone_interfaces.srv import SuspendRMFPathing, CheckDroneIdle
+from antdrone_interfaces.srv import SuspendReleaseRMFPathing, CheckDroneIdle
 from nav2_msgs.action import NavigateToPose
 
 from tf2_ros import Buffer, TransformListener
 
-import os, math
+import math
 from time import sleep
 
 # Intended to run on each individual robot
@@ -22,8 +22,7 @@ class Linorobot2RMF(Node):
         super().__init__('linorobot2_rmf_client')
 
         self.drone_name = self.declare_parameter('DRONE_NAME', '').get_parameter_value().string_value
-
-        self.fleet_name = os.getenv('FLEET_NAME')
+        self.fleet_name = self.declare_parameter('FLEET_NAME', '').get_parameter_value().string_value
 
         # RMF fleet adapter sends paths to robots over /robot_path_requests topic
         self.rmf_path_request_subscription = self.create_subscription(
@@ -65,7 +64,7 @@ class Linorobot2RMF(Node):
         sleep(3) # Navigate to pose server in unknown state for a few seconds after it becomes available
 
         # RMF pathing needs to be suspended while robot does pickup and dropoff routines to avoid conflicts in desired robot position
-        self.suspend_rmf_pathing_srv = self.create_service(SuspendRMFPathing, 'suspend_rmf_pathing', self.suspend_rmf_pathing_cb)
+        self.suspend_rmf_pathing_srv = self.create_service(SuspendReleaseRMFPathing, 'suspend_release_rmf_pathing', self.suspend_rmf_pathing_cb)
         self.is_rmf_pathing_suspended = False
 
         self.get_logger().info("rmf_client started")

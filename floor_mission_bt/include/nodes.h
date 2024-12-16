@@ -20,24 +20,6 @@
 
 using namespace BT;
 
-
-
-class InitDroneVars : public BT::StatefulActionNode
-{
-  public:
-
-    std::string drone_name;
-
-    rclcpp::Node::SharedPtr ros2_node_ptr;
-
-    InitDroneVars(const std::string &name, const BT::NodeConfig &config, rclcpp::Node::SharedPtr node_ptr);
-    BT::NodeStatus onStart() override;
-    BT::NodeStatus onRunning() override;
-    void onHalted() override{};
-    static BT::PortsList providedPorts();
-
-};
-
 class RegisterDrone: public RosServiceNode<ant_queen_interfaces::srv::RegisterRobot>
 {
   public:
@@ -74,7 +56,7 @@ class CheckHeartbeat: public RosServiceNode<antdrone_interfaces::srv::MissionHea
     virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
-class GoToPlace : public BT::StatefulActionNode
+class GoToWaypoint : public BT::StatefulActionNode
 {
   public:
     using API_request_msg_t = rmf_task_msgs::msg::ApiRequest;
@@ -83,7 +65,7 @@ class GoToPlace : public BT::StatefulActionNode
     rclcpp::Publisher<API_request_msg_t>::SharedPtr publisher;
     bool done_flag;
 
-    GoToPlace(const std::string &name, const BT::NodeConfig &config, rclcpp::Node::SharedPtr node_ptr);
+    GoToWaypoint(const std::string &name, const BT::NodeConfig &config, rclcpp::Node::SharedPtr node_ptr);
     BT::NodeStatus onStart() override;
     BT::NodeStatus onRunning() override;
     void onHalted() override{};
@@ -94,11 +76,11 @@ class GoToPlace : public BT::StatefulActionNode
 
 
 using SendPickupCmd_srv_t = linkattacher_msgs::srv::AttachLink;
-class PickupWorker: public RosServiceNode<SendPickupCmd_srv_t>
+class LowerPickupWorker: public RosServiceNode<SendPickupCmd_srv_t>
 {
   public:
 
-    PickupWorker(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    LowerPickupWorker(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
     static PortsList providedPorts();
     bool setRequest(Request::SharedPtr& request) override;
     NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
@@ -167,28 +149,17 @@ class CheckComeOutComplete: public RosServiceNode<ant_queen_interfaces::srv::Com
 };
 
 
-class SuspendRMFPathing: public RosServiceNode<antdrone_interfaces::srv::SuspendRMFPathing>
+class SuspendReleaseRMFPathing: public RosServiceNode<antdrone_interfaces::srv::SuspendReleaseRMFPathing>
 {
   public:
 
-    SuspendRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    SuspendReleaseRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
     static PortsList providedPorts();
     bool setRequest(Request::SharedPtr& request) override;
     NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
     virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
-
-class ReleaseRMFPathing: public RosServiceNode<antdrone_interfaces::srv::SuspendRMFPathing>
-{
-  public:
-
-    ReleaseRMFPathing(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-    static PortsList providedPorts();
-    bool setRequest(Request::SharedPtr& request) override;
-    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
-};
 
 using SendLowerCmd_srv_t = linkattacher_msgs::srv::DetachLink;
 class LowerWorker: public RosServiceNode<SendLowerCmd_srv_t>

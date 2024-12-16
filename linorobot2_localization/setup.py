@@ -21,7 +21,6 @@ setup(
     entry_points={
         'console_scripts': [
             'wheel_odometry = linorobot2_localization.wheel_odometry:main',
-            'wheel_unraveller = linorobot2_localization.sim_wheel_rotation_unraveller:main',
             'amcl_visualizer = linorobot2_localization.amcl_visualizer:main',
             'slam_image_recorder = linorobot2_localization.slam_image_recorder:main',
             'slam_recording_publisher = linorobot2_localization.slam_recording_publisher:main',

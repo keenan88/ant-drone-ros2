@@ -25,13 +25,9 @@ class FloorMissionNode : public rclcpp::Node
 
     void create_behavior_tree()
     {
-        
-        
         BT::BehaviorTreeFactory factory;
 
-        factory.registerNodeType<InitDroneVars>("InitDroneVars", shared_from_this());
-
-        factory.registerNodeType<GoToPlace>("GoToPlace", shared_from_this());
+        factory.registerNodeType<GoToWaypoint>("GoToWaypoint", shared_from_this());
 
         auto register_robot_params = BT::RosNodeParams(shared_from_this(), "/queen/register_robot");
         register_robot_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
@@ -40,7 +36,6 @@ class FloorMissionNode : public rclcpp::Node
         auto check_go_to_place_success_params = BT::RosNodeParams(shared_from_this(), "/last_known_end_waypoint_name");
         check_go_to_place_success_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckGoToPlaceSuccess>("CheckGoToPlaceSuccess", check_go_to_place_success_params);
-
 
         auto check_idle_params = BT::RosNodeParams(shared_from_this(), "/check_drone_idle");
         check_idle_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
@@ -54,9 +49,9 @@ class FloorMissionNode : public rclcpp::Node
         check_heartbeat_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckHeartbeat>("CheckHeartbeat", check_heartbeat_params);
 
-        auto rmf_path_suspend_node_params = BT::RosNodeParams(shared_from_this(), "/suspend_rmf_pathing");
+        auto rmf_path_suspend_node_params = BT::RosNodeParams(shared_from_this(), "/suspend_release_rmf_pathing");
         rmf_path_suspend_node_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
-        factory.registerNodeType<SuspendRMFPathing>("SuspendRMFPathing", rmf_path_suspend_node_params);
+        factory.registerNodeType<SuspendReleaseRMFPathing>("SuspendReleaseRMFPathing", rmf_path_suspend_node_params);
 
         auto clear_local_costmap_params = BT::RosNodeParams(shared_from_this(), "/local_costmap/clear_entirely_local_costmap");
         clear_local_costmap_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
@@ -78,7 +73,7 @@ class FloorMissionNode : public rclcpp::Node
         
         auto pickup_params = BT::RosNodeParams(shared_from_this(), "/ATTACHLINK");
         pickup_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
-        factory.registerNodeType<PickupWorker>("PickupWorker", pickup_params);
+        factory.registerNodeType<LowerPickupWorker>("PickupWorker", pickup_params);
 
         factory.registerNodeType<UpdateFootprint>("UpdateFootprint", shared_from_this());
 
@@ -90,14 +85,9 @@ class FloorMissionNode : public rclcpp::Node
         set_global_costmap_params_node.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<SetCostmapParams>("SetGlobalCostmapParams", set_global_costmap_params_node);
 
-        auto rmf_path_release_node_params = BT::RosNodeParams(shared_from_this(), "/suspend_rmf_pathing");
-        rmf_path_release_node_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
-        factory.registerNodeType<ReleaseRMFPathing>("ReleaseRMFPathing", rmf_path_release_node_params);
-
-
         auto dropoff_params = BT::RosNodeParams(shared_from_this(), "/DETACHLINK");
         dropoff_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
-        factory.registerNodeType<LowerWorker>("LowerWorker", dropoff_params);
+        factory.registerNodeType<LowerPickupWorker>("LowerWorker", dropoff_params);
 
         auto send_dropoff_position_params = BT::RosNodeParams(shared_from_this(), "/queen/dropoff_pos");
         send_dropoff_position_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
@@ -150,7 +140,7 @@ class FloorMissionNode : public rclcpp::Node
     }
 
     std::string tree_xml_file_;
-    std::string drone_name;
+    
 
     rclcpp::TimerBase::SharedPtr timer_;
     BT::Tree tree_;

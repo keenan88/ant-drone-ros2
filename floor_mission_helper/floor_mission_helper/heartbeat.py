@@ -18,7 +18,7 @@ class Heartbeat(Node):
     def __init__(self):
         super().__init__('heartbeat')
 
-        self.drone_name = self.declare_parameter('drone_name', '').get_parameter_value().string_value
+        self.drone_name = self.declare_parameter('DRONE_NAME', '').get_parameter_value().string_value
 
         # Use pub/sub for heartbeat instead of a server, is more async. Can still use reliable QOS to ensure message delivery.
         self.heartbeat_pub = self.create_publisher(MissionHeartbeatMsg, '/mission_robot_heartbeat', 25)

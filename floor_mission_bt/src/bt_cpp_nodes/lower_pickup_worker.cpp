@@ -1,9 +1,9 @@
 #include "nodes.h"
 
 
-LowerWorker::LowerWorker(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : RosServiceNode<SendLowerCmd_srv_t>(name, conf, params) {}
+LowerPickupWorker::LowerPickupWorker(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : RosServiceNode<SendPickupCmd_srv_t>(name, conf, params) {}
 
-PortsList LowerWorker::providedPorts()
+PortsList LowerPickupWorker::providedPorts()
 {
   return providedBasicPorts({
       InputPort<std::string>("drone_name"),
@@ -11,7 +11,7 @@ PortsList LowerWorker::providedPorts()
   });
 }
 
-bool LowerWorker::setRequest(Request::SharedPtr& request)
+bool LowerPickupWorker::setRequest(Request::SharedPtr& request)
 {
   getInput("drone_name", request -> model1_name);
   getInput("worker_name", request -> model2_name);
@@ -21,18 +21,21 @@ bool LowerWorker::setRequest(Request::SharedPtr& request)
   return true;
 }
 
-NodeStatus LowerWorker::onResponseReceived(const Response::SharedPtr& response)
+NodeStatus LowerPickupWorker::onResponseReceived(const Response::SharedPtr& response)
 {
-  // RCLCPP_INFO(node_->get_logger(), "Sum: %ld", response->sum);
   if(response -> success)
   {
     return NodeStatus::SUCCESS;
   }
+  else
+  {
+    return NodeStatus::FAILURE;
+  }
 
-  return NodeStatus::FAILURE;
+  return NodeStatus::RUNNING;
 }
 
-NodeStatus LowerWorker::onFailure(ServiceNodeErrorCode error)
+NodeStatus LowerPickupWorker::onFailure(ServiceNodeErrorCode error)
 {
   if(error){} // To avoid build warning
   // RCLCPP_ERROR(node_->get_logger(), "Error: %d", error);

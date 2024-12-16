@@ -4,7 +4,7 @@
 #include <boost/uuid/uuid_generators.hpp> // for boost::uuids::random_generator
 #include <boost/uuid/uuid_io.hpp>         // for streaming operators
 
-GoToPlace::GoToPlace(const std::string& name, const BT::NodeConfig& config, rclcpp::Node::SharedPtr node_ptr) : BT::StatefulActionNode(name, config) {
+GoToWaypoint::GoToWaypoint(const std::string& name, const BT::NodeConfig& config, rclcpp::Node::SharedPtr node_ptr) : BT::StatefulActionNode(name, config) {
   ros2_node_ptr = node_ptr;
 
   if (ros2_node_ptr) {
@@ -18,9 +18,9 @@ GoToPlace::GoToPlace(const std::string& name, const BT::NodeConfig& config, rclc
   }
 }
 
-BT::NodeStatus GoToPlace::onStart() {
+BT::NodeStatus GoToWaypoint::onStart() {
   if (!ros2_node_ptr) {
-    std::cout << "[GoToPlace] ROS2 node not registered via init() method" << std::endl;
+    std::cout << "[GoToWaypoint] ROS2 node not registered via init() method" << std::endl;
 
     return BT::NodeStatus::FAILURE;
   }
@@ -107,7 +107,7 @@ BT::NodeStatus GoToPlace::onStart() {
   return BT::NodeStatus::RUNNING;
 }
 
-BT::NodeStatus GoToPlace::onRunning() {
+BT::NodeStatus GoToWaypoint::onRunning() {
   BT::NodeStatus node_status = BT::NodeStatus::RUNNING;
 
   node_status = BT::NodeStatus::SUCCESS;
@@ -117,7 +117,7 @@ BT::NodeStatus GoToPlace::onRunning() {
 }
 
 
-BT::PortsList GoToPlace::providedPorts() { 
+BT::PortsList GoToWaypoint::providedPorts() { 
   BT::PortsList ports_list = {
       BT::InputPort<std::string>("vertex_name"),
       BT::InputPort<std::string>("drone_name"),
