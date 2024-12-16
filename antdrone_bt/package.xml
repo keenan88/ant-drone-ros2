@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<package format="2">
+  <!-- Package taken from demo: https://github.com/sea-bass/turtlebot3_behavior_demos/tree/main -->
+  <name>antdrone_bt</name>
+  <version>0.1.0</version>
+  <description>Behavior tree that coordinates movement of drone to worker, pickup of worker, and dropoff of worker at row start</description>
+
+  <maintainer email="support@ecoationlabs.ca">Ecoation Labs</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+  <depend>rclpy</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_action</depend>
+  <depend>ament_index_cpp</depend>
+  <depend>behaviortree_cpp</depend>
+  <depend>std_msgs</depend>
+  <depend>rmf_task_msgs</depend>
+  <depend>rmf_fleet_msgs</depend>
+  <depend>ant_queen_interfaces</depend>
+  <!-- <depend>nlohmann_json</depend> -->
+  <depend>linkattacher_msgs</depend>
+  <depend>behaviortree_ros2</depend>
+  <depend>tf2_ros</depend>
+  <depend>geometry_msgs</depend>
+  <depend>example_interfaces</depend>
+  <depend>nav2_msgs</depend>
+  <depend>antdrone_interfaces</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

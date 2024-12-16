@@ -40,8 +40,8 @@ RUN pip install setuptools==58.2.0
 
 WORKDIR /home/humble_ws
 
-COPY ./linorobot2_navigation /home/humble_ws/src/linorobot2_navigation
-COPY ./linorobot2_localization /home/humble_ws/src/linorobot2_localization
+COPY ./antdrone_navigation /home/humble_ws/src/antdrone_navigation
+COPY ./antdrone_localization /home/humble_ws/src/antdrone_localization
 
 # Build the workspace and source the setup files
 RUN source /opt/ros/humble/setup.bash && \
@@ -51,4 +51,4 @@ RUN source /opt/ros/humble/setup.bash && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-            ros2 launch linorobot2_navigation slam_bringup.launch.py DRONE_NAME:=${DRONE_NAME} USE_SIM_TIME:=${USE_SIM_TIME}"
+            ros2 launch antdrone_navigation slam_bringup.launch.py DRONE_NAME:=${DRONE_NAME} USE_SIM_TIME:=${USE_SIM_TIME}"

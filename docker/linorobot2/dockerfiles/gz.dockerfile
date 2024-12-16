@@ -16,11 +16,11 @@ RUN pip install setuptools==58.2.0
 
 WORKDIR /home/humble_ws
 
-COPY ./linorobot2_gz/ /home/humble_ws/src/linorobot2_gz/
-COPY ./linorobot2_description/ /home/humble_ws/src/linorobot2_description
+COPY ./antdrone_gz/ /home/humble_ws/src/antdrone_gz/
+COPY ./antdrone_description/ /home/humble_ws/src/antdrone_description
 
 RUN source /opt/ros/humble/setup.bash && \
-    colcon build --symlink-install --packages-select linorobot2_gz linorobot2_description && \
+    colcon build --symlink-install --packages-select antdrone_gz antdrone_description && \
     source install/setup.bash && \
     echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
@@ -28,4 +28,4 @@ RUN source /opt/ros/humble/setup.bash && \
 ENV GAZEBO_MODEL_PATH=/home/humble_ws/src/:/home/simulation/models
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-            ros2 launch linorobot2_gz drone_greenhouse.launch.py"
+            ros2 launch antdrone_gz drone_greenhouse.launch.py"

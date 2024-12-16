@@ -18,7 +18,7 @@ RUN apt-get update && \
 RUN python3 -m pip install setuptools==58.2.0
 
 
-COPY ./linorobot2/floor_mission_bt /home/humble_ws/src/floor_mission_bt
+COPY ./linorobot2/antdrone_bt /home/humble_ws/src/antdrone_bt
 COPY ./linorobot2/antdrone_interfaces /home/humble_ws/src/antdrone_interfaces
 COPY ./ant_queen/ant_queen_interfaces /home/humble_ws/src/ant_queen_interfaces
 
@@ -36,4 +36,4 @@ RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-            ros2 launch floor_mission_bt bt.launch.py DRONE_NAME:=${DRONE_NAME} USE_SIM_TIME:=${USE_SIM_TIME}"
+            ros2 launch antdrone_bt bt.launch.py DRONE_NAME:=${DRONE_NAME} USE_SIM_TIME:=${USE_SIM_TIME}"

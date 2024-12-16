@@ -9,8 +9,8 @@ services:
     stdin_open: true
     volumes:
       - ./docker/linorobot2/entry_scripts/joystick_entrypoint.sh:/joystick_entrypoint.sh:rw
-      - ./linorobot2_joystick:/home/humble_ws/src/linorobot2_joystick:rw
-      - ./linorobot2_gz:/home/humble_ws/src/linorobot2_gz
+      - ./antdrone_joystick:/home/humble_ws/src/antdrone_joystick:rw
+      - ./antdrone_gz:/home/humble_ws/src/antdrone_gz
     privileged: true
     entrypoint: /joystick_entrypoint.sh
     network_mode: host

@@ -22,7 +22,7 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            'antdrone_queen_client = antdrone_queen_client.antdrone_queen_client:main',
+            'rmf_client = antdrone_queen_client.rmf_client:main',
             'heartbeat = antdrone_queen_client.heartbeat:main',
         ],
     },

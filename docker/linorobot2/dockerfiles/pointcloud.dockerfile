@@ -25,7 +25,7 @@ RUN pip install setuptools==58.2.0
 
 WORKDIR /home/humble_ws
 
-COPY ./linorobot2_pcl /home/humble_ws/src/linorobot2_pcl
+COPY ./antdrone_pcl /home/humble_ws/src/antdrone_pcl
 COPY ./perception_pcl /home/humble_ws/src/perception_pcl
 
 # Build the workspace and source the setup files
@@ -36,4 +36,4 @@ RUN source /opt/ros/humble/setup.bash && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-            ros2 launch linorobot2_pcl pointcloud.launch.py USE_SIM_TIME:=${USE_SIM_TIME}"
+            ros2 launch antdrone_pcl pointcloud.launch.py USE_SIM_TIME:=${USE_SIM_TIME}"

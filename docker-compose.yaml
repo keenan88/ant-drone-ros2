@@ -11,8 +11,8 @@ services:
       - DISPLAY=${DISPLAY}
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
-      - ./linorobot2_navigation:/home/humble_ws/src/linorobot2_navigation
-      - ./linorobot2_localization:/home/humble_ws/src/linorobot2_localization
+      - ./antdrone_navigation:/home/humble_ws/src/antdrone_navigation
+      - ./antdrone_localization:/home/humble_ws/src/antdrone_localization
       - ./docker/linorobot2/entry_scripts/slam_nav_entrypoint.sh:/slam_nav_entrypoint.sh
       - ./yolo:/home/yolo
     working_dir: /home/humble_ws
@@ -48,8 +48,8 @@ services:
   #     - DISPLAY=${DISPLAY}
   #   volumes:
   #     - /tmp/.X11-unix:/tmp/.X11-unix
-  #     - ./linorobot2_navigation:/home/humble_ws/src/linorobot2_navigation
-  #     - ./linorobot2_localization:/home/humble_ws/src/linorobot2_localization
+  #     - ./antdrone_navigation:/home/humble_ws/src/antdrone_navigation
+  #     - ./antdrone_localization:/home/humble_ws/src/antdrone_localization
   #     - ./yolo:/home/yolo
   #     # - ./docker/linorobot2/entry_scripts/slam_nav_entrypoint.sh:/slam_nav_entrypoint.sh
   #   working_dir: /home/humble_ws
@@ -67,8 +67,8 @@ services:
     stdin_open: true
     volumes:
       - ./docker/linorobot2/entry_scripts/joystick_entrypoint.sh:/joystick_entrypoint.sh:rw
-      - ./linorobot2_joystick:/home/humble_ws/src/linorobot2_joystick:rw
-      - ./linorobot2_gz:/home/humble_ws/src/linorobot2_gz
+      - ./antdrone_joystick:/home/humble_ws/src/antdrone_joystick:rw
+      - ./antdrone_gz:/home/humble_ws/src/antdrone_gz
     privileged: true
     entrypoint: /joystick_entrypoint.sh
     network_mode: host
@@ -87,8 +87,8 @@ services:
   #     - NVIDIA_VISIBLE_DEVICES=all
   #   volumes:
   #     - ./docker/linorobot2/entry_scripts/pointcloud_entrypoint.sh:/pointcloud_entrypoint.sh:rw
-  #     - ./linorobot2_pcl:/home/humble_ws/src/linorobot2_pcl:rw
-  #     - ./linorobot2_gz:/home/humble_ws/src/linorobot2_gz:rw
+  #     - ./antdrone_pcl:/home/humble_ws/src/antdrone_pcl:rw
+  #     - ./antdrone_gz:/home/humble_ws/src/antdrone_gz:rw
   #     - ./perception_pcl:/home/humble_ws/src/perception_pcl
   #     - /dev/dri/card0:/dev/dri/card0
   #   privileged: true

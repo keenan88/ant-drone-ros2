@@ -11,8 +11,8 @@ services:
       - DISPLAY=${DISPLAY}
       - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
     volumes:
-      - ./linorobot2_gz:/home/humble_ws/src/linorobot2_gz
-      - ./linorobot2_description:/home/humble_ws/src/linorobot2_description
+      - ./antdrone_gz:/home/humble_ws/src/antdrone_gz
+      - ./antdrone_description:/home/humble_ws/src/antdrone_description
       - ./simulation/gazebo:/home/simulation/gazebo
       - ./simulation/models:/home/simulation/models
     working_dir: /home/humble_ws/
@@ -39,8 +39,8 @@ services:
       - DISPLAY=${DISPLAY}
       - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
     volumes:
-      - ./linorobot2_navigation:/home/humble_ws/src/linorobot2_navigation
-      - ./linorobot2_localization:/home/humble_ws/src/linorobot2_localization
+      - ./antdrone_navigation:/home/humble_ws/src/antdrone_navigation
+      - ./antdrone_localization:/home/humble_ws/src/antdrone_localization
       - ./yolo:/home/yolo
     
     # command: sleep infinity
@@ -79,8 +79,8 @@ services:
       - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
       - WHEELED_MOTION=false
     volumes:
-      - ./linorobot2_joystick:/home/humble_ws/src/linorobot2_joystick:rw
-      - ./linorobot2_gz:/home/humble_ws/src/linorobot2_gz
+      - ./antdrone_joystick:/home/humble_ws/src/antdrone_joystick:rw
+      - ./antdrone_gz:/home/humble_ws/src/antdrone_gz
     privileged: true
     network_mode: host
     ipc: host
@@ -98,8 +98,8 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
       - ROS_DOMAIN_ID=${DRONE0_DOMAIN_ID}
     volumes:
-      - ./linorobot2_pcl:/home/humble_ws/src/linorobot2_pcl:rw
-      - ./linorobot2_gz:/home/humble_ws/src/linorobot2_gz:rw
+      - ./antdrone_pcl:/home/humble_ws/src/antdrone_pcl:rw
+      - ./antdrone_gz:/home/humble_ws/src/antdrone_gz:rw
       - ./perception_pcl:/home/humble_ws/src/perception_pcl
     network_mode: host
     ipc: host

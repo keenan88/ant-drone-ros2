@@ -15,11 +15,11 @@
 
 ![image](https://github.com/user-attachments/assets/aad7d61e-92ad-4c15-9a90-82a8ed1b8f70)
 
-8. When you are happy with your map, run `docker exec -it linorobot2-slam bash` and `ros2 run nav2_map_server map_saver_cli -t /nav2/map -f /home/humble_ws/src/linorobot2_navigation/maps/greenhouse`
+8. When you are happy with your map, run `docker exec -it linorobot2-slam bash` and `ros2 run nav2_map_server map_saver_cli -t /nav2/map -f /home/humble_ws/src/antdrone_navigation/maps/greenhouse`
 
 9. Be sure the robot is in the map bounds or the map will not save.
 
-10. You can view your map in the [map folder](/linorobot2_navigation/maps/)  
+10. You can view your map in the [map folder](/antdrone_navigation/maps/)  
 
 
 
@@ -61,5 +61,5 @@ _The edges of a rotated & sharpened pipe rail should not slant from one row of p
 1. Follow [this](https://docs.nav2.org/tutorials/docs/navigation2_with_keepout_filter.html) tutorial to create the .pgm and .yaml files that represent a keepout mask.
 2. For compatbility with RMF traffic editor, set the map origin in the yaml file to `[0.0, y, 0.0]`, where `y = -1 * resolution * map height in px` (You can find map height in the .pgm file's properties).
    1. For example, if the image height was 300 pixels, and resolution 0.05m/px, replace y with -15, since -0.05 * 300 = -15.
-3. Edit [filter_mask_server.yaml](/linorobot2_navigation/config/filter_mask_server.yaml) -> `filter_mask_server -> yaml_filename` to point to the yaml file that lists your keepout filter .pgm image.
+3. Edit [filter_mask_server.yaml](/antdrone_navigation/config/filter_mask_server.yaml) -> `filter_mask_server -> yaml_filename` to point to the yaml file that lists your keepout filter .pgm image.
 4. Run ___-compose.yaml. The keepout filter can be viewed in foxglove or rviz2.

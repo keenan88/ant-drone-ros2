@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="roller_left" params="roller_num xyz rpyaw">
+     
+    <link
+      name="${end}_${side}_roller${roller_num}">
+      <inertial>
+        <origin
+          xyz="5.96744875736022E-16 -1.24475083018716E-14 -0.0215899999999933"
+          rpy="0 0 0" />
+        <mass
+          value="0.00499543658848208" />
+        <inertia
+          ixx="8.99919949242919E-07"
+          ixy="3.97046694025453E-23"
+          ixz="9.81863387100444E-22"
+          iyy="8.9991994924288E-07"
+          iyz="-8.0163727523739E-19"
+          izz="3.31951561004127E-07" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://antdrone_description/mecanum_wheel_left/meshes/roller${roller_num}.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://antdrone_description/mecanum_wheel_left/meshes/roller${roller_num}.STL" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint
+      name="${end}_${side}_wheel_to_${end}_${side}_roller${roller_num}"
+      type="fixed">
+      <origin
+        xyz="${xyz}"
+        rpy="${rpyaw}" />
+      <parent
+        link="${end}_${side}_wheel" />
+      <child
+        link="${end}_${side}_roller${roller_num}" />
+    </joint>
+    
+  </xacro:macro>
+</robot>
