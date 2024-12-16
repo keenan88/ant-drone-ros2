@@ -35,11 +35,11 @@ class FloorMissionNode : public rclcpp::Node
 
         auto check_go_to_place_success_params = BT::RosNodeParams(shared_from_this(), "/last_known_end_waypoint_name");
         check_go_to_place_success_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
-        factory.registerNodeType<CheckGoToPlaceSuccess>("CheckGoToPlaceSuccess", check_go_to_place_success_params);
+        factory.registerNodeType<CheckGoToWaypointSuccess>("CheckGoToWaypointSuccess", check_go_to_place_success_params);
 
-        auto check_idle_params = BT::RosNodeParams(shared_from_this(), "/check_drone_idle");
+        auto check_idle_params = BT::RosNodeParams(shared_from_this(), "/check_rmf_client_idle");
         check_idle_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
-        factory.registerNodeType<CheckIdle>("CheckIdle", check_idle_params);
+        factory.registerNodeType<CheckRMFClientIdle>("CheckRMFClientIdle", check_idle_params);
 
         auto check_selected_for_floor_mission_params = BT::RosNodeParams(shared_from_this(), "/queen/check_if_floor_mission_triggered"); 
         check_selected_for_floor_mission_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
@@ -61,15 +61,13 @@ class FloorMissionNode : public rclcpp::Node
         clear_global_costmap_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<ClearCostmap>("ClearGlobalCostmap", clear_global_costmap_params);
 
-
         auto send_comeout_trigger_params = BT::RosNodeParams(shared_from_this(), "/queen/worker_comeout");
         send_comeout_trigger_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
-        factory.registerNodeType<SendComeOutTrigger>("SendComeOutTrigger", send_comeout_trigger_params);
+        factory.registerNodeType<TriggerWorkerComeout>("TriggerWorkerComeout", send_comeout_trigger_params);
 
         auto check_comeout_complete_params = BT::RosNodeParams(shared_from_this(), "/queen/worker_comeout");
         check_comeout_complete_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
         factory.registerNodeType<CheckComeOutComplete>("CheckComeOutComplete", check_comeout_complete_params);
-
         
         auto pickup_params = BT::RosNodeParams(shared_from_this(), "/ATTACHLINK");
         pickup_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
@@ -95,12 +93,7 @@ class FloorMissionNode : public rclcpp::Node
 
         auto send_floor_mission_success_params = BT::RosNodeParams(shared_from_this(), "/queen/mission_success");
         send_floor_mission_success_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
-        factory.registerNodeType<SendFloorMissionSuccess>("SendFloorMissionSuccess", send_floor_mission_success_params);
-
-        auto moveout_params = BT::RosNodeParams(shared_from_this(), "/moveout");
-        moveout_params.wait_for_server_timeout = std::chrono::milliseconds(5000);
-        moveout_params.server_timeout = std::chrono::milliseconds(10000);
-        factory.registerNodeType<MoveOut>("MoveOut", moveout_params);
+        factory.registerNodeType<SucceedFloorMission>("SucceedFloorMission", send_floor_mission_success_params);
         
         auto blackboard = BT::Blackboard::create();
         tree_ = factory.createTreeFromFile(tree_xml_file_, blackboard);

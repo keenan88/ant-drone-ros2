@@ -2,7 +2,7 @@ import os
 from glob import glob
 from setuptools import find_packages, setup
 
-package_name = "linorobot2_rmf_client"
+package_name = "antdrone_queen_client"
 
 setup(
     name=package_name,
@@ -22,7 +22,8 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            'linorobot2_rmf_client = linorobot2_rmf_client.linorobot2_rmf_client:main',
+            'antdrone_queen_client = antdrone_queen_client.antdrone_queen_client:main',
+            'heartbeat = antdrone_queen_client.heartbeat:main',
         ],
     },
 )

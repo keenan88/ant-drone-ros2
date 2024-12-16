@@ -32,11 +32,11 @@ class RegisterDrone: public RosServiceNode<ant_queen_interfaces::srv::RegisterRo
 };
 
 
-class CheckIdle: public RosServiceNode<antdrone_interfaces::srv::CheckDroneIdle>
+class CheckRMFClientIdle: public RosServiceNode<antdrone_interfaces::srv::CheckRMFClientIdle>
 {
   public:
 
-    CheckIdle(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    CheckRMFClientIdle(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
     static PortsList providedPorts();
     bool setRequest(Request::SharedPtr& request) override;
     NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
@@ -114,11 +114,11 @@ class SetCostmapParams: public RosServiceNode<rcl_interfaces::srv::SetParameters
 };
 
 
-class SendComeOutTrigger: public RosServiceNode<ant_queen_interfaces::srv::ComeOut>
+class TriggerWorkerComeout: public RosServiceNode<ant_queen_interfaces::srv::ComeOut>
 {
   public:
 
-    SendComeOutTrigger(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    TriggerWorkerComeout(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
     static PortsList providedPorts();
     bool setRequest(Request::SharedPtr& request) override;
     NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
@@ -174,11 +174,11 @@ class LowerWorker: public RosServiceNode<SendLowerCmd_srv_t>
 };
 
 
-class SendFloorMissionSuccess: public RosServiceNode<ant_queen_interfaces::srv::MissionSuccess>
+class SucceedFloorMission: public RosServiceNode<ant_queen_interfaces::srv::MissionSuccess>
 {
   public:
 
-    SendFloorMissionSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    SucceedFloorMission(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
     static PortsList providedPorts();
     bool setRequest(Request::SharedPtr& request) override;
     NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
@@ -213,28 +213,17 @@ class CheckIfFloorMissionTriggered: public RosServiceNode<ant_queen_interfaces::
     virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
-class CheckGoToPlaceSuccess: public RosServiceNode<ant_queen_interfaces::srv::LastKnownEndWaypointName>
+class CheckGoToWaypointSuccess: public RosServiceNode<ant_queen_interfaces::srv::LastKnownEndWaypointName>
 {
   public:
 
     std::string desired_vertex_name;
 
-    CheckGoToPlaceSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
+    CheckGoToWaypointSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
     static PortsList providedPorts();
     bool setRequest(Request::SharedPtr& request) override;
     NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
     virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 
-};
-
-class MoveOut: public RosServiceNode<ant_queen_interfaces::srv::MoveOut>
-{
-  public:
-
-    MoveOut(const std::string& name, const NodeConfig& conf, const RosNodeParams& params);
-    static PortsList providedPorts();
-    bool setRequest(Request::SharedPtr& request) override;
-    NodeStatus onResponseReceived(const Response::SharedPtr& response) override;
-    virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 

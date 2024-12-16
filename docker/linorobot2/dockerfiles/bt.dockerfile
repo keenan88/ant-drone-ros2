@@ -19,7 +19,6 @@ RUN python3 -m pip install setuptools==58.2.0
 
 
 COPY ./linorobot2/floor_mission_bt /home/humble_ws/src/floor_mission_bt
-COPY ./linorobot2/floor_mission_helper /home/humble_ws/src/floor_mission_helper
 COPY ./linorobot2/antdrone_interfaces /home/humble_ws/src/antdrone_interfaces
 COPY ./ant_queen/ant_queen_interfaces /home/humble_ws/src/ant_queen_interfaces
 

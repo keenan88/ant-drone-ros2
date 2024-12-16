@@ -22,7 +22,7 @@
             <Delay delay_msec="1000">
               <Sequence>
                 <CheckHeartbeat />
-                <CheckIdle/> 
+                <CheckRMFClientIdle/> 
                 <CheckIfFloorMissionTriggered
                   drone_name = "{drone_name}"
                   worker_name = "{worker_name}"
@@ -69,12 +69,12 @@
 
       <RetryUntilSuccessful num_attempts="-1">
         <Delay delay_msec="250">
-          <CheckGoToPlaceSuccess vertex_name="{pickup_location_name}" error_state="{error_state}" drone_name="{drone_name}"/>
+          <CheckGoToWaypointSuccess vertex_name="{pickup_location_name}" error_state="{error_state}" drone_name="{drone_name}"/>
         </Delay>            
       </RetryUntilSuccessful>
 
       <SuspendReleaseRMFPathing set_state="suspend"/>
-      <SendComeOutTrigger worker_name="{worker_name}"/>
+      <TriggerWorkerComeout worker_name="{worker_name}"/>
 
       <RetryUntilSuccessful num_attempts="-1">
         <Delay delay_msec="1000">                
@@ -99,7 +99,7 @@
       
       <RetryUntilSuccessful num_attempts="-1">
         <Delay delay_msec="250">
-          <CheckGoToPlaceSuccess vertex_name="{dropoff_location_name}" error_state="{error_state}" drone_name="{drone_name}"/>
+          <CheckGoToWaypointSuccess vertex_name="{dropoff_location_name}" error_state="{error_state}" drone_name="{drone_name}"/>
         </Delay>            
       </RetryUntilSuccessful>
 
@@ -122,14 +122,14 @@
 
       <RetryUntilSuccessful num_attempts="-1">
         <Delay delay_msec="250">
-          <CheckGoToPlaceSuccess vertex_name="{post_dropoff_location_name}" error_state="{error_state}" drone_name="{drone_name}"/>
+          <CheckGoToWaypointSuccess vertex_name="{post_dropoff_location_name}" error_state="{error_state}" drone_name="{drone_name}"/>
         </Delay>            
       </RetryUntilSuccessful>
 
       <ClearLocalCostmap/>
       <ClearGlobalCostmap/>
 
-      <SendFloorMissionSuccess drone_name="{drone_name}"/>
+      <SucceedFloorMission drone_name="{drone_name}"/>
 
 
     </Sequence>
@@ -139,7 +139,7 @@
 
     <RetryUntilSuccessful num_attempts="-1">
       <Delay delay_msec="3000">
-        <CheckIdle/> 
+        <CheckRMFClientIdle/> 
       </Delay>
     </RetryUntilSuccessful>
 

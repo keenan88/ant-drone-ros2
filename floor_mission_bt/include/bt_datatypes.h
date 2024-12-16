@@ -7,13 +7,12 @@
 #include "ant_queen_interfaces/srv/register_robot.hpp"
 #include "ant_queen_interfaces/srv/check_if_floor_mission_triggered.hpp"
 #include "ant_queen_interfaces/srv/last_known_end_waypoint_name.hpp"
-#include "ant_queen_interfaces/srv/move_out.hpp"
 #include "ant_queen_interfaces/srv/mission_success.hpp"
 #include "ant_queen_interfaces/srv/come_out.hpp"
 #include "ant_queen_interfaces/srv/dropoff_pos.hpp"
 
 #include "antdrone_interfaces/srv/suspend_release_rmf_pathing.hpp"
-#include "antdrone_interfaces/srv/check_drone_idle.hpp"
+#include "antdrone_interfaces/srv/check_rmf_client_idle.hpp"
 #include "antdrone_interfaces/srv/mission_heartbeat_srv.hpp"
 
 #include "geometry_msgs/msg/polygon.hpp"

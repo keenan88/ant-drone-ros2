@@ -2,13 +2,13 @@
 
 using namespace BT;
 
-CheckGoToPlaceSuccess::CheckGoToPlaceSuccess(const std::string &name,
+CheckGoToWaypointSuccess::CheckGoToWaypointSuccess(const std::string &name,
                                              const NodeConfig &conf,
                                              const RosNodeParams &params)
     : RosServiceNode<ant_queen_interfaces::srv::LastKnownEndWaypointName>(
           name, conf, params){};
 
-PortsList CheckGoToPlaceSuccess::providedPorts() {
+PortsList CheckGoToWaypointSuccess::providedPorts() {
 
   return providedBasicPorts({BT::InputPort<std::string>("vertex_name"),
                              BT::InputPort<std::string>("drone_name"),
@@ -16,7 +16,7 @@ PortsList CheckGoToPlaceSuccess::providedPorts() {
                              });
 }
 
-bool CheckGoToPlaceSuccess::setRequest(Request::SharedPtr &request) {
+bool CheckGoToWaypointSuccess::setRequest(Request::SharedPtr &request) {
   getInput("drone_name", request->drone_name);
   getInput("vertex_name", desired_vertex_name);
   // must return true if we are ready to send the request
@@ -24,7 +24,7 @@ bool CheckGoToPlaceSuccess::setRequest(Request::SharedPtr &request) {
 }
 
 NodeStatus
-CheckGoToPlaceSuccess::onResponseReceived(const Response::SharedPtr &response) {
+CheckGoToWaypointSuccess::onResponseReceived(const Response::SharedPtr &response) {
   NodeStatus node_status = NodeStatus::FAILURE;
 
   if (response->last_known_waypoint_name == desired_vertex_name) {
@@ -46,7 +46,7 @@ CheckGoToPlaceSuccess::onResponseReceived(const Response::SharedPtr &response) {
   return node_status;
 }
 
-NodeStatus CheckGoToPlaceSuccess::onFailure(ServiceNodeErrorCode error) {
+NodeStatus CheckGoToWaypointSuccess::onFailure(ServiceNodeErrorCode error) {
   if(error){} // To avoid build warning
   NodeStatus node_status = NodeStatus::FAILURE;
 

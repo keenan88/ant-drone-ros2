@@ -34,35 +34,7 @@ def generate_launch_description():
         ]
     )
 
-
-    heartbeat = Node(
-        package='floor_mission_helper',
-        executable='heartbeat',
-        parameters=[
-            {
-                'use_sim_time': LaunchConfiguration("USE_SIM_TIME"),
-                'DRONE_NAME': LaunchConfiguration("DRONE_NAME")
-            }
-        ]
-    )
-
-    moveout = Node(
-        package='floor_mission_helper',
-        executable='moveout',
-        parameters=[
-            {
-                # self.get_clock() does not increment when use_sim_time=True, not sure why.
-                'use_sim_time': False,
-            }
-        ]
-    )
-
-
-
-    
     ld.add_action(floor_mission_bt)
-    ld.add_action(heartbeat)
-    ld.add_action(moveout)
     ld.add_action(bridge_to_queen_and_rmf)
 
     return ld

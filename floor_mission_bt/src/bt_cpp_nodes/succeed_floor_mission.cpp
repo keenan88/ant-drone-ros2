@@ -1,11 +1,11 @@
 #include "nodes.h"
 
-SendFloorMissionSuccess::SendFloorMissionSuccess(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : 
+SucceedFloorMission::SucceedFloorMission(const std::string& name, const NodeConfig& conf, const RosNodeParams& params) : 
 RosServiceNode<ant_queen_interfaces::srv::MissionSuccess>(name, conf, params) 
 {
 }
 
-PortsList SendFloorMissionSuccess::providedPorts()
+PortsList SucceedFloorMission::providedPorts()
 {
 
   return {
@@ -14,7 +14,7 @@ PortsList SendFloorMissionSuccess::providedPorts()
 
 }
 
-bool SendFloorMissionSuccess::setRequest(Request::SharedPtr& request)
+bool SucceedFloorMission::setRequest(Request::SharedPtr& request)
 {
 
   getInput("drone_name", request -> robot_name);
@@ -24,7 +24,7 @@ bool SendFloorMissionSuccess::setRequest(Request::SharedPtr& request)
   return true;
 }
 
-NodeStatus SendFloorMissionSuccess::onResponseReceived(const Response::SharedPtr& response)
+NodeStatus SucceedFloorMission::onResponseReceived(const Response::SharedPtr& response)
 {
   if(response)
   {
@@ -36,7 +36,7 @@ NodeStatus SendFloorMissionSuccess::onResponseReceived(const Response::SharedPtr
   return NodeStatus::FAILURE;
 }
 
-NodeStatus SendFloorMissionSuccess::onFailure(ServiceNodeErrorCode error)
+NodeStatus SucceedFloorMission::onFailure(ServiceNodeErrorCode error)
 {
   if(error){} // To avoid build warning
   // RCLCPP_ERROR(node_->get_logger(), "Error: %d", error);

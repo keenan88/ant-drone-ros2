@@ -6,7 +6,7 @@ from rclpy.action import ActionClient
 
 from rmf_fleet_msgs.msg import RobotState, PathRequest, RobotMode
 from geometry_msgs.msg import PoseStamped, TransformStamped
-from antdrone_interfaces.srv import SuspendReleaseRMFPathing, CheckDroneIdle
+from antdrone_interfaces.srv import SuspendReleaseRMFPathing, CheckRMFClientIdle
 from nav2_msgs.action import NavigateToPose
 
 from tf2_ros import Buffer, TransformListener
@@ -19,7 +19,7 @@ from time import sleep
 class Linorobot2RMF(Node):
 
     def __init__(self):
-        super().__init__('linorobot2_rmf_client')
+        super().__init__('antdrone_queen_client')
 
         self.drone_name = self.declare_parameter('DRONE_NAME', '').get_parameter_value().string_value
         self.fleet_name = self.declare_parameter('FLEET_NAME', '').get_parameter_value().string_value
@@ -50,7 +50,7 @@ class Linorobot2RMF(Node):
         self.drone_queen_state.mode.mode = RobotMode.MODE_IDLE
         self.last_movement_end_time_s = self.get_clock().now().to_msg().sec
         self.idle_timeout_s = 3 # If RMF doesnt send a new waypoint within timeout period, inform drone behavior tree that drone is free for new tasks
-        self.check_drone_idle_srv = self.create_service(CheckDroneIdle, 'check_drone_idle', self.check_drone_idle_cb)
+        self.check_rmf_client_idle_srv = self.create_service(CheckRMFClientIdle, 'check_rmf_client_idle', self.check_rmf_client_idle_cb)
         
         # Robot position is needed for drone_rmf_state
         self.tf_buffer = Buffer()
@@ -69,9 +69,9 @@ class Linorobot2RMF(Node):
 
         self.get_logger().info("rmf_client started")
     
-    def check_drone_idle_cb(self, request, response):
+    def check_rmf_client_idlee_cb(self, request, response):
 
-        response.is_drone_idle = self.drone_queen_state.mode.mode == RobotMode.MODE_IDLE
+        response.is_rmf_client_idle = self.drone_queen_state.mode.mode == RobotMode.MODE_IDLE
 
         return response
 
