@@ -71,7 +71,7 @@ services:
     container_name: linorobot2-joystick
     build:
       context: .
-      dockerfile: ./docker/linorobot2/dockerfiles/joystick.dockerfile
+      dockerfile: ./docker/joystick.dockerfile
     tty: true
     stdin_open: true
     environment:
@@ -90,7 +90,7 @@ services:
     container_name: linorobot2-pcl
     build:
       context: .
-      dockerfile: ./docker/linorobot2/dockerfiles/pointcloud.dockerfile
+      dockerfile: ./docker/pointcloud.dockerfile
     tty: true
     stdin_open: true
     environment:

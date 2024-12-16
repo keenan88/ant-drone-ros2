@@ -50,7 +50,7 @@ class Linorobot2RMF(Node):
         self.drone_queen_state.mode.mode = RobotMode.MODE_IDLE
         self.last_movement_end_time_s = self.get_clock().now().to_msg().sec
         self.idle_timeout_s = 3 # If RMF doesnt send a new waypoint within timeout period, inform drone behavior tree that drone is free for new tasks
-        self.check_rmf_client_idle_srv = self.create_service(CheckRMFClientIdle, 'check_rmf_client_idle', self.check_rmf_client_idle_cb)
+        self.check_rmf_client_idle_srv = self.create_service(CheckRMFClientIdle, 'check_rmf_client_idle', self.check_rmf_client_idlee_cb)
         
         # Robot position is needed for drone_rmf_state
         self.tf_buffer = Buffer()
@@ -64,7 +64,7 @@ class Linorobot2RMF(Node):
         sleep(3) # Navigate to pose server in unknown state for a few seconds after it becomes available
 
         # RMF pathing needs to be suspended while robot does pickup and dropoff routines to avoid conflicts in desired robot position
-        self.suspend_rmf_pathing_srv = self.create_service(SuspendReleaseRMFPathing, 'suspend_release_rmf_pathing', self.suspend_rmf_pathing_cb)
+        self.suspend_release_rmf_pathing_srv = self.create_service(SuspendReleaseRMFPathing, '/suspend_release_rmf_pathing', self.suspend_rmf_pathing_cb)
         self.is_rmf_pathing_suspended = False
 
         self.get_logger().info("rmf_client started")

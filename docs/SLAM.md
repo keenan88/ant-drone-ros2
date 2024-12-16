@@ -4,7 +4,8 @@
 
 1. (first time only) Run `gitmodule init` from the repo root.
 2. (first time only) Run `docker compose -f docker-compose.slam.yaml build`
-3. Start Isaacsim simulation as detailed above. You do not need to start the teleop file.
+
+
 4. Run `docker compose -f docker-compose.slam.yaml up`.
 5. RVIZ2 will open a view of the robot, including its base frame, laser scans, and the map being generated.
 

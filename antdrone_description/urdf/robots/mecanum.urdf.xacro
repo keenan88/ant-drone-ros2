@@ -91,7 +91,6 @@
     mass="${wheel_mass}"
   />
 
-  <!-- IsaacSim will likely not respect joint angles for realsense joints -->
   <joint
     name="base_link_to_front_rs" type="fixed">
     <origin
@@ -104,13 +103,9 @@
   <link name="front_rs_depth_optical_frame">
   </link>
 
-
   <link name="rear_rs_depth_optical_frame">
   </link>
 
-  
-
-  <!-- IsaacSim will likely not respect joint angles for realsense joints -->
   <joint
     name="base_link_to_rear_rs" type="fixed">
     <origin
@@ -124,7 +119,6 @@
   <link name="left_rs_depth_optical_frame">
   </link>
 
-  <!-- IsaacSim will likely not respect joint angles for realsense joints -->
   <joint
     name="base_link_to_left_rs" type="fixed">
     <origin
@@ -138,7 +132,6 @@
   <link name="right_rs_depth_optical_frame">
   </link>
 
-  <!-- IsaacSim will likely not respect joint angles for realsense joints -->
   <joint
     name="base_link_to_right_rs" type="fixed">
     <origin

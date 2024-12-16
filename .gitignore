@@ -1,7 +1,6 @@
 log
 build
 install
-simulation/isaacsim/models/omniverse
 yolo/yolo11n-seg.pt
 yolo/yolov8n-seg.pt
 yolo/marked
