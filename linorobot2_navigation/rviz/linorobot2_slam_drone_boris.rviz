@@ -66,25 +66,25 @@ Visualization Manager:
         base_link:
           Value: true
         front_gazebo_camera_frame:
-          Value: false
+          Value: true
         front_rs_depth_optical_frame:
-          Value: false
+          Value: true
         left_gazebo_camera_frame:
-          Value: false
+          Value: true
         left_rs_depth_optical_frame:
-          Value: false
+          Value: true
         map:
           Value: true
         odom:
           Value: true
         rear_gazebo_camera_frame:
-          Value: false
+          Value: true
         rear_rs_depth_optical_frame:
-          Value: false
+          Value: true
         right_gazebo_camera_frame:
-          Value: false
+          Value: true
         right_rs_depth_optical_frame:
-          Value: false
+          Value: true
       Marker Scale: 0.75
       Name: TF
       Show Arrows: false
@@ -734,16 +734,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/XYOrbit
-      Distance: 18.70020866394043
+      Distance: 21.81654167175293
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 2.093212127685547
-        Y: -1.6037449836730957
-        Z: -1.762423198670149e-05
+        X: 1.1995563507080078
+        Y: -1.9129137992858887
+        Z: -7.049000123515725e-05
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false

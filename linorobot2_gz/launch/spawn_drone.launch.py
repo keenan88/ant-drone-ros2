@@ -32,7 +32,7 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(drone_description_launch_path),
             launch_arguments={
-                'use_sim_time': True,
+                'use_sim_time': 'True',
                 'namespace': LaunchConfiguration('ns')
             }.items()
         )

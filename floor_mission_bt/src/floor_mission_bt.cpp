@@ -20,7 +20,7 @@ class FloorMissionNode : public rclcpp::Node
         tree_xml_file_ = this->get_parameter("tree_xml_file").as_string();
         
 
-        RCLCPP_WARN(this->get_logger(), "drone name: %s, xml file: %s", drone_name.c_str(), tree_xml_file_.c_str());
+        RCLCPP_WARN(this->get_logger(), "xml file: %s", tree_xml_file_.c_str());
     }
 
     void create_behavior_tree()

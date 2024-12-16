@@ -2,18 +2,11 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 
 def generate_launch_description():
 
     odometry_launch_path = '/home/humble_ws/src/linorobot2_localization/launch/odometry.launch.py'
-
-    wheels_or_body_odometry = DeclareLaunchArgument(
-        'WHEEL_ODOMETRY',
-        default_value='body',
-        description='Whether to determine odometry from mecanum wheels or body (body given by IsaacSim)'
-    )
 
     rviz_config_path = '/home/humble_ws/src/linorobot2_navigation/rviz/linorobot2_slam_' + "drone_boris" + '.rviz'
     
@@ -97,7 +90,7 @@ def generate_launch_description():
         parameters=[
             '/home/humble_ws/src/linorobot2_navigation/config/amcl.yaml',
             {
-                {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
+                'use_sim_time': LaunchConfiguration("USE_SIM_TIME")
             }
         ]
     )
@@ -117,7 +110,7 @@ def generate_launch_description():
         parameters=[
             '/home/humble_ws/src/linorobot2_navigation/config/filter_mask_server.yaml',
             {
-                {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
+                'use_sim_time': LaunchConfiguration("USE_SIM_TIME")
             }
         ]
     )
@@ -129,7 +122,7 @@ def generate_launch_description():
         parameters=[
             '/home/humble_ws/src/linorobot2_navigation/config/filter_mask_server.yaml',
             {
-                {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
+                'use_sim_time': LaunchConfiguration("USE_SIM_TIME")
             }
         ]
     )
@@ -139,8 +132,9 @@ def generate_launch_description():
         executable = 'cmd_vel_scale_gz',
         parameters = [
             {
-                {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
+                'use_sim_time': LaunchConfiguration("USE_SIM_TIME")
             }
+            
         ]
     )
 
@@ -159,7 +153,6 @@ def generate_launch_description():
     ld.add_action(odometry)
     ld.add_action(amcl)
     ld.add_action(amcl_pointcloud)
-    ld.add_action(wheels_or_body_odometry)
     ld.add_action(cmd_vel_scaler)
 
     return ld
