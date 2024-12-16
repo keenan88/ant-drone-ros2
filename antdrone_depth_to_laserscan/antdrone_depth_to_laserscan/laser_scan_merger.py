@@ -2,55 +2,50 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
 from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
-import math
-import os
 
 # Assumes that all laser scan topics are updated fairly quickly
 class LaserScanMerger(Node):
     def __init__(self):
         super().__init__('laser_scan_merger')
 
-        slam_or_nav = os.getenv('SLAM_OR_NAV')
-        self.tf_tolerance_s = 0.3 if slam_or_nav == 'SLAM' else 0.3
+        self.tf_tolerance_s = 0.3
 
         qos_best_effort = QoSProfile(
             reliability=QoSReliabilityPolicy.BEST_EFFORT,
             history=QoSHistoryPolicy.KEEP_LAST,
-            depth=10  # Change this to the desired depth
+            depth=10
         )
 
-
-        # Subscribers for the four laser scan topics
         self.subscriber_1 = self.create_subscription(
             LaserScan,
-            'front_rs/scan',  # Replace with your actual topic name
+            'front_rs/scan',
             self.record_front_scan,
             qos_best_effort
         )
         self.subscriber_2 = self.create_subscription(
             LaserScan,
-            'rear_rs/scan_left',  # Replace with your actual topic name
+            'rear_rs/scan_left',
             self.record_rear_left_scan,
             qos_best_effort
         )
         
         self.subscriber_3 = self.create_subscription(
             LaserScan,
-            'left_rs/scan',  # Replace with your actual topic name
+            'left_rs/scan',
             self.record_left_scan,
             qos_best_effort
         )
 
         self.subscriber_4 = self.create_subscription(
             LaserScan,
-            'right_rs/scan',  # Replace with your actual topic name
+            'right_rs/scan',
             self.record_right_scan,
             qos_best_effort
         )
 
         self.subscriber_5 = self.create_subscription(
             LaserScan,
-            'rear_rs/scan_right',  # Replace with your actual topic name
+            'rear_rs/scan_right',
             self.record_rear_right_scan,
             qos_best_effort
         )

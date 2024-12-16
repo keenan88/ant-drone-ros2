@@ -4,7 +4,6 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
-import os
 
 
 def generate_launch_description():
@@ -25,7 +24,7 @@ def generate_launch_description():
         name='slam_toolbox',
         parameters=[
             slam_config_path,
-            {'use_sim_time': True}
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}
         ]
 
     )
@@ -34,7 +33,7 @@ def generate_launch_description():
         package='linorobot2_localization',
         executable='slam_image_recorder',
         parameters=[
-            {'use_sim_time': True}
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}
         ]
     )
 
@@ -42,7 +41,8 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(odometry_launch_path),
         launch_arguments={
             'WHEEL_ODOMETRY': LaunchConfiguration('WHEEL_ODOMETRY'),
-            'DRONE_NAME': LaunchConfiguration('DRONE_NAME')
+            'DRONE_NAME': LaunchConfiguration('DRONE_NAME'),
+            'USE_SIM_TIME': LaunchConfiguration("USE_SIM_TIME")
         }.items()
     )
     
@@ -51,7 +51,7 @@ def generate_launch_description():
         executable='rviz2',
         arguments=['-d', rviz_config_path],
         parameters=[
-            {'use_sim_time': True}
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}
         ]
     )
 

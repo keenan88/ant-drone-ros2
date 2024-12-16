@@ -1,7 +1,6 @@
 
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import ExecuteProcess
 from launch.substitutions import LaunchConfiguration
 import os
 
@@ -15,7 +14,7 @@ def generate_launch_description():
         executable='floor_mission_bt',
         parameters=[
             {
-                'use_sim_time': True,
+                'use_sim_time': LaunchConfiguration("USE_SIM_TIME"),
             }
         ]
     )
@@ -25,7 +24,7 @@ def generate_launch_description():
         executable='domain_bridge',
         parameters=[
             {
-                'use_sim_time': True,
+                'use_sim_time': LaunchConfiguration("USE_SIM_TIME"),
             }
         ],
         arguments = [
@@ -40,7 +39,7 @@ def generate_launch_description():
         executable='heartbeat',
         parameters=[
             {
-                'use_sim_time': True,
+                'use_sim_time': LaunchConfiguration("USE_SIM_TIME"),
                 'drone_name': LaunchConfiguration("DRONE_NAME")
             }
         ]

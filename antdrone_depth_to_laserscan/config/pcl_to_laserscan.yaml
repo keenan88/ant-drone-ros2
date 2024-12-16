@@ -12,7 +12,6 @@
     scan_time: 0.03333333333333333
     transform_tolerance: 1.0
     use_inf: false
-    use_sim_time: true
 
 /**/left_rs_pointcloud_to_laserscan:
   ros__parameters:
@@ -28,7 +27,6 @@
     scan_time: 0.03333333333333333
     transform_tolerance: 1.0
     use_inf: false
-    use_sim_time: true
 
 
 /**/rear_rs_left_pointcloud_to_laserscan:
@@ -45,7 +43,6 @@
     scan_time: 0.03333333333333333
     transform_tolerance: 1.0
     use_inf: false
-    use_sim_time: true
 
 /**/rear_rs_right_pointcloud_to_laserscan:
   ros__parameters:
@@ -61,7 +58,6 @@
     scan_time: 0.03333333333333333
     transform_tolerance: 1.0
     use_inf: false
-    use_sim_time: true
 
 /**/right_rs_pointcloud_to_laserscan:
   ros__parameters:
@@ -77,4 +73,3 @@
     scan_time: 0.03333333333333333
     transform_tolerance: 1.0
     use_inf: false
-    use_sim_time: true

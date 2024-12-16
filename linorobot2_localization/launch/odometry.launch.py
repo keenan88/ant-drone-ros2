@@ -3,7 +3,6 @@ from launch.actions import DeclareLaunchArgument
 from launch_ros.actions import Node
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
-import os
 
 def generate_launch_description():
 
@@ -18,7 +17,7 @@ def generate_launch_description():
         executable='wheel_odometry', 
         parameters=[
             {
-                'use_sim_time' : True
+                'use_sim_time' : LaunchConfiguration("USE_SIM_TIME")
             }
         ],
         condition=IfCondition(LaunchConfiguration('WHEEL_ODOMETRY'))
@@ -28,7 +27,7 @@ def generate_launch_description():
         package='linorobot2_localization',
         executable='wheel_unraveller',
         parameters=[
-            {'use_sim_time': True}
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}
         ],
         condition=IfCondition(LaunchConfiguration('WHEEL_ODOMETRY'))
     )
@@ -37,7 +36,7 @@ def generate_launch_description():
         package='linorobot2_localization',
         executable='gz_localization',
         parameters=[
-            {'use_sim_time': True},
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")},
             {'drone_name': LaunchConfiguration("DRONE_NAME")}
         ]
     )
@@ -46,7 +45,7 @@ def generate_launch_description():
         package='linorobot2_localization',
         executable='gz_frame_name_fixer',
         parameters=[
-            {'use_sim_time': True},
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")},
             {'drone_name': LaunchConfiguration("DRONE_NAME")}
         ]
     )

@@ -4,7 +4,6 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
-import os
 
 def generate_launch_description():
 
@@ -22,7 +21,7 @@ def generate_launch_description():
         package = 'nav2_controller',
         executable = 'controller_server',
         parameters = [
-            {'use_sim_time': True}, 
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
             '/home/humble_ws/src/linorobot2_navigation/config/controller.yaml'
         ]
     )
@@ -32,7 +31,7 @@ def generate_launch_description():
         executable='planner_server',
         parameters=[
             '/home/humble_ws/src/linorobot2_navigation/config/planner.yaml',
-            {'use_sim_time': True},
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
         ]
     )
 
@@ -40,7 +39,7 @@ def generate_launch_description():
         package='nav2_behaviors',
         executable='behavior_server',
         parameters=[
-            {'use_sim_time': True}, 
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
             '/home/humble_ws/src/linorobot2_navigation/config/behaviors.yaml',
             
         ],
@@ -51,7 +50,7 @@ def generate_launch_description():
         executable='bt_navigator',
         respawn_delay=2.0,
         parameters=[
-            {'use_sim_time': True},
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
             '/home/humble_ws/src/linorobot2_navigation/config/bt.yaml'
         ],
     )
@@ -61,7 +60,7 @@ def generate_launch_description():
         executable = 'map_server',
         parameters = [
             '/home/humble_ws/src/linorobot2_navigation/config/map_server.yaml',
-            {'use_sim_time' : True}
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
         ]
     )
 
@@ -69,7 +68,7 @@ def generate_launch_description():
         package='nav2_lifecycle_manager',
         executable='lifecycle_manager',
         parameters=[
-            {'use_sim_time': True},
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
             '/home/humble_ws/src/linorobot2_navigation/config/lifecycle_manager.yaml',
         ]
     )
@@ -79,7 +78,7 @@ def generate_launch_description():
         executable='rviz2',
         arguments=['-d', rviz_config_path],
         parameters=[
-            {'use_sim_time': True}
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
         ]
     )
 
@@ -87,7 +86,8 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(odometry_launch_path),
         launch_arguments={
             'WHEEL_ODOMETRY': LaunchConfiguration('WHEEL_ODOMETRY'),
-            'DRONE_NAME': LaunchConfiguration("DRONE_NAME")
+            'DRONE_NAME': LaunchConfiguration("DRONE_NAME"),
+            'USE_SIM_TIME': LaunchConfiguration("USE_SIM_TIME")
         }.items()
     )
 
@@ -97,7 +97,7 @@ def generate_launch_description():
         parameters=[
             '/home/humble_ws/src/linorobot2_navigation/config/amcl.yaml',
             {
-            'use_sim_time': True,
+                {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
             }
         ]
     )
@@ -106,7 +106,7 @@ def generate_launch_description():
         package='linorobot2_localization',
         executable='amcl_visualizer',
         parameters=[
-            {'use_sim_time': True}
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
         ]
     )
 
@@ -117,7 +117,7 @@ def generate_launch_description():
         parameters=[
             '/home/humble_ws/src/linorobot2_navigation/config/filter_mask_server.yaml',
             {
-                'use_sim_time': True,
+                {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
             }
         ]
     )
@@ -129,7 +129,7 @@ def generate_launch_description():
         parameters=[
             '/home/humble_ws/src/linorobot2_navigation/config/filter_mask_server.yaml',
             {
-                'use_sim_time': True,
+                {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
             }
         ]
     )
@@ -139,7 +139,7 @@ def generate_launch_description():
         executable = 'cmd_vel_scale_gz',
         parameters = [
             {
-                'use_sim_time': True
+                {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
             }
         ]
     )
@@ -161,9 +161,6 @@ def generate_launch_description():
     ld.add_action(amcl_pointcloud)
     ld.add_action(wheels_or_body_odometry)
     ld.add_action(cmd_vel_scaler)
-
-
-
 
     return ld
 

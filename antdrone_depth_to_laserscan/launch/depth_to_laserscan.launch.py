@@ -1,8 +1,6 @@
 import launch
 from launch_ros.actions import Node
-from launch.actions import IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-import os
+from launch.substitutions import LaunchConfiguration
 
 def generate_launch_description():
     
@@ -22,7 +20,8 @@ def generate_launch_description():
             ],
             parameters = [
                 config_filepath,
-                {'target_frame': 'base_link'}
+                {'target_frame': 'base_link'},
+                {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}
             ]
         )
 
@@ -40,7 +39,8 @@ def generate_launch_description():
         ],
         parameters = [
             config_filepath,
-            {'target_frame': 'base_link'}
+            {'target_frame': 'base_link'},
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}
         ]
     )
     
@@ -54,7 +54,8 @@ def generate_launch_description():
         ],
         parameters = [
             config_filepath,
-            {'target_frame': 'base_link'}
+            {'target_frame': 'base_link'},
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}
         ]
     )
 
@@ -62,22 +63,12 @@ def generate_launch_description():
         package='antdrone_depth_to_laserscan',
         executable='laser_scan_merger',
         parameters=[
-            {'use_sim_time': True},
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}
         ]
-    )
-
-    rviz_node = Node(
-        package='rviz2',
-        executable='rviz2', 
-        name='rviz2',
-        output='screen',
-        arguments=['-d', '/home/humble_ws/src/antdrone_depth_to_laserscan/config/depth_to_laserscan.rviz'],
     )
 
     ld.add_action(depth_to_scan_rear_rs_left_side)
     ld.add_action(depth_to_scan_rear_rs_right_side)
-    # ld.add_action(rviz_node)
-
     ld.add_action(scan_merger)
 
     return ld

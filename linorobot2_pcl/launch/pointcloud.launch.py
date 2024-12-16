@@ -1,12 +1,9 @@
 import launch
 from launch_ros.actions import Node
-import os
-
+from launch.substitutions import LaunchConfiguration
+from launch.conditions import IfCondition, UnlessCondition
 
 def generate_launch_description():
-
-    use_sim = os.environ.get("USE_SIM_TIME")
-    use_sim = use_sim == "True"
 
     ld = launch.LaunchDescription()
 
@@ -19,7 +16,7 @@ def generate_launch_description():
             output='screen',
             parameters=[
                 {'camera_pos': realsense_placement},
-                {'use_sim_time' : use_sim},
+                {'use_sim_time' : LaunchConfiguration("USE_SIM_TIME")},
             ]
         )
 
@@ -36,7 +33,7 @@ def generate_launch_description():
             parameters=[
                 '/home/humble_ws/src/linorobot2_pcl/config/pcl_filter_crop_box.yaml',
                 {
-                    'use_sim_time' : use_sim,
+                    'use_sim_time' : LaunchConfiguration("USE_SIM_TIME"),
                     "input_frame": realsense_placement + '_depth_optical_frame',
                     "output_frame": realsense_placement + '_depth_optical_frame'
                 },
@@ -54,7 +51,7 @@ def generate_launch_description():
             output='screen',
             parameters=[
                 '/home/humble_ws/src/linorobot2_pcl/config/pcl_downsample_filter.yaml',
-                {'use_sim_time' : use_sim}
+                {'use_sim_time' : LaunchConfiguration("USE_SIM_TIME")}
             ],
             remappings=[
                 ('input', crop_topic),
@@ -67,15 +64,15 @@ def generate_launch_description():
         ld.add_action(pcl_frame_fixer)
 
 
-    # bridge_out_pcl = Node(
-    #     package="domain_bridge",
-    #     executable="domain_bridge",
-    #     name = "bridge_out_pcl",
-    #     arguments = ['/home/humble_ws/src/linorobot2_pcl/config/bridge_out_pcl.yaml']
-    # )
+    bridge_out_pcl = Node(
+        package="domain_bridge",
+        executable="domain_bridge",
+        name = "bridge_out_pcl",
+        arguments = ['/home/humble_ws/src/linorobot2_pcl/config/bridge_out_pcl.yaml'],
+        condition = UnlessCondition(LaunchConfiguration("USE_SIM_TIME"))
+    )
  
-    # if not use_sim:
-    #     ld.add_action(bridge_out_pcl)
+    ld.add_action(bridge_out_pcl)
     
     
     return ld

@@ -1,14 +1,12 @@
 import os
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess
+from launch.actions import IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
-import yaml
 
 def generate_launch_description():
-    use_sim_time = True
     
     drone_description_launch_path = os.path.join(get_package_share_directory('linorobot2_description'), 'launch', 'description.launch.py')
 
@@ -34,7 +32,7 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(drone_description_launch_path),
             launch_arguments={
-                'use_sim_time': str(use_sim_time),
+                'use_sim_time': True,
                 'namespace': LaunchConfiguration('ns')
             }.items()
         )

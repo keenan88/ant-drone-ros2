@@ -2,7 +2,6 @@
   ros__parameters:
     base_frame_id: base_link
     odom_frame_id: odom
-    use_sim_time: True
     alpha1: 0.05
     alpha2: 0.025
     alpha3: 0.05

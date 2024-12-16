@@ -1,5 +1,6 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch.substitutions import LaunchConfiguration
 
 def generate_launch_description():
     
@@ -8,7 +9,7 @@ def generate_launch_description():
         executable='controller_server',
         namespace='nav2',
         parameters=[
-            {'use_sim_time': True}, 
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
             '/home/humble_ws/src/linorobot2_navigation/config/controller.yaml'
         ],
     )
@@ -18,7 +19,7 @@ def generate_launch_description():
         executable='planner_server',
         namespace='nav2',
         parameters=[
-            {'use_sim_time': True},
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")},
             '/home/humble_ws/src/linorobot2_navigation/config/planner.yaml'
         ],
     )
@@ -28,7 +29,7 @@ def generate_launch_description():
         executable='behavior_server',
         namespace='nav2',
         parameters=[
-            {'use_sim_time': True}, 
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
             '/home/humble_ws/src/linorobot2_navigation/config/behaviors.yaml'
         ],
     )
@@ -39,7 +40,7 @@ def generate_launch_description():
         namespace='nav2',
         respawn_delay=2.0,
         parameters=[
-            {'use_sim_time': True},
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")},
             '/home/humble_ws/src/linorobot2_navigation/config/bt.yaml'
         ],
     )
@@ -49,7 +50,7 @@ def generate_launch_description():
         executable='lifecycle_manager',
         namespace='nav2',
         parameters=[
-            {'use_sim_time': True},
+            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")},
             '/home/humble_ws/src/linorobot2_navigation/config/slam_lifecycle_manager.yaml',
         ]
     )

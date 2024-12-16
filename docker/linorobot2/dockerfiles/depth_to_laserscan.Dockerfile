@@ -32,4 +32,4 @@ RUN source /opt/ros/humble/setup.bash && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-            ros2 launch antdrone_depth_to_laserscan depth_to_laserscan.launch.py"
+            ros2 launch antdrone_depth_to_laserscan depth_to_laserscan.launch.py USE_SIM_TIME:=${USE_SIM_TIME}"

@@ -8,7 +8,7 @@ def generate_launch_description():
         package='linorobot2_rmf_client',
         executable='linorobot2_rmf_client',
         parameters = [
-            {'use_sim_time' : True},
+            {'use_sim_time' : LaunchConfiguration("USE_SIM_TIME")},
             {'DRONE_NAME' : LaunchConfiguration('DRONE_NAME')}
         ]
     )
