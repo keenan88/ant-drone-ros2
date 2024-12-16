@@ -21,14 +21,12 @@ setup(
     entry_points={
         'console_scripts': [
             'wheel_odometry = antdrone_localization.wheel_odometry:main',
-            'amcl_visualizer = antdrone_localization.amcl_visualizer:main',
             'slam_image_recorder = antdrone_localization.slam_image_recorder:main',
             'slam_recording_publisher = antdrone_localization.slam_recording_publisher:main',
             'detected_dynamic_obstacles_publisher = antdrone_localization.detected_dynamic_obstacles_publisher:main',
             'gz_localization = antdrone_localization.gz_localization:main',
-            'cmd_vel_scale_gz = antdrone_localization.cmd_vel_scale_gz:main',
+            'gz_cmd_vel_scale = antdrone_localization.gz_cmd_vel_scale:main',
             'gz_frame_name_fixer = antdrone_localization.gz_frame_name_fixer:main',
-
         ],
     },
 )

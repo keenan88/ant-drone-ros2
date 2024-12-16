@@ -94,14 +94,6 @@ def generate_launch_description():
         ]
     )
 
-    amcl_pointcloud = Node(
-        package='antdrone_localization',
-        executable='amcl_visualizer',
-        parameters=[
-            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
-        ]
-    )
-
     keepout_filter_mask_server = Node(
         package='nav2_map_server',
         executable='map_server',
@@ -126,14 +118,13 @@ def generate_launch_description():
         ]
     )
 
-    cmd_vel_scaler = Node(
+    gz_cmd_vel_scale = Node(
         package = 'antdrone_localization',
-        executable = 'cmd_vel_scale_gz',
+        executable = 'gz_cmd_vel_scale',
         parameters = [
             {
                 'use_sim_time': LaunchConfiguration("USE_SIM_TIME")
-            }
-            
+            }   
         ]
     )
 
@@ -151,8 +142,7 @@ def generate_launch_description():
     ld.add_action(rviz)
     ld.add_action(odometry)
     ld.add_action(amcl)
-    ld.add_action(amcl_pointcloud)
-    ld.add_action(cmd_vel_scaler)
+    ld.add_action(gz_cmd_vel_scale)
 
     return ld
 

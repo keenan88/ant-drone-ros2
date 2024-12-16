@@ -24,9 +24,7 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-file(GLOB msg_files RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "msg/*.msg")
 file(GLOB srv_files RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "srv/*.srv")
-file(GLOB action_files RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "action/*.action")
 
 set(rosidl_files ${msg_files} ${srv_files} ${action_files})
 
