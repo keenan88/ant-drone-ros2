@@ -8,9 +8,7 @@ import os
 
 def generate_launch_description():
 
-    drone_name = os.getenv('DRONE_NAME')
-
-    odometry_launch_path = '/home/humble_ws/src/linorobot2_navigation/launch/odometry.launch.py'
+    odometry_launch_path = '/home/humble_ws/src/linorobot2_localization/launch/odometry.launch.py'
 
     wheels_or_body_odometry = DeclareLaunchArgument(
         'WHEEL_ODOMETRY',
@@ -18,47 +16,32 @@ def generate_launch_description():
         description='Whether to determine odometry from mecanum wheels or body (body given by IsaacSim)'
     )
 
-    rviz_config_path = '/home/humble_ws/src/linorobot2_navigation/rviz/linorobot2_slam_' + drone_name + '.rviz'
+    rviz_config_path = '/home/humble_ws/src/linorobot2_navigation/rviz/linorobot2_slam_' + "drone_boris" + '.rviz'
     
     controller = Node(
         package = 'nav2_controller',
         executable = 'controller_server',
-        namespace = drone_name,
         parameters = [
             {'use_sim_time': True}, 
-            {'robot_base_frame': drone_name + '_base_link'},
-            {'local_costmap.local_costmap.keepout_filter_info': '/' + drone_name + '/keepout_filter_info'},
             '/home/humble_ws/src/linorobot2_navigation/config/controller.yaml'
-        ],
-        remappings=[
-                ('keepout_filter_info', '/' + drone_name + '/keepout_filter_info'),
-                ('scan', '/' + drone_name + '/scan'),
         ]
     )
 
     planner = Node(
         package='nav2_planner',
         executable='planner_server',
-        namespace = drone_name,
         parameters=[
             '/home/humble_ws/src/linorobot2_navigation/config/planner.yaml',
             {'use_sim_time': True},
-            {'robot_base_frame': drone_name + '_base_link'}
-        ],
-        remappings=[
-            ('keepout_filter_info', '/' + drone_name + '/keepout_filter_info'),
-            ('scan', '/' + drone_name + '/scan'),
         ]
     )
 
     behaviors = Node(
         package='nav2_behaviors',
         executable='behavior_server',
-        namespace = drone_name,
         parameters=[
             {'use_sim_time': True}, 
             '/home/humble_ws/src/linorobot2_navigation/config/behaviors.yaml',
-            {'robot_base_frame': drone_name + '_base_link'}
             
         ],
     )
@@ -66,11 +49,9 @@ def generate_launch_description():
     bt = Node(
         package='nav2_bt_navigator',
         executable='bt_navigator',
-        namespace = drone_name,
         respawn_delay=2.0,
         parameters=[
             {'use_sim_time': True},
-            {'robot_base_frame': drone_name + '_base_link'},
             '/home/humble_ws/src/linorobot2_navigation/config/bt.yaml'
         ],
     )
@@ -78,7 +59,6 @@ def generate_launch_description():
     map_server = Node(
         package = 'nav2_map_server',
         executable = 'map_server',
-        namespace = drone_name,
         parameters = [
             '/home/humble_ws/src/linorobot2_navigation/config/map_server.yaml',
             {'use_sim_time' : True}
@@ -88,7 +68,6 @@ def generate_launch_description():
     lifecycle_manager = Node(
         package='nav2_lifecycle_manager',
         executable='lifecycle_manager',
-        namespace = drone_name,
         parameters=[
             {'use_sim_time': True},
             '/home/humble_ws/src/linorobot2_navigation/config/lifecycle_manager.yaml',
@@ -99,7 +78,6 @@ def generate_launch_description():
         package='rviz2',
         executable='rviz2',
         arguments=['-d', rviz_config_path],
-        namespace = drone_name,
         parameters=[
             {'use_sim_time': True}
         ]
@@ -109,20 +87,17 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(odometry_launch_path),
         launch_arguments={
             'WHEEL_ODOMETRY': LaunchConfiguration('WHEEL_ODOMETRY'),
-            'DRONE_NAME': drone_name
+            'DRONE_NAME': LaunchConfiguration("DRONE_NAME")
         }.items()
     )
 
     amcl = Node(
         package='nav2_amcl',
         executable='amcl',
-        namespace = drone_name,
         parameters=[
             '/home/humble_ws/src/linorobot2_navigation/config/amcl.yaml',
             {
             'use_sim_time': True,
-            'base_frame_id': drone_name + '_base_link',
-            'odom_frame_id': drone_name + '_odom'
             }
         ]
     )
@@ -130,7 +105,6 @@ def generate_launch_description():
     amcl_pointcloud = Node(
         package='linorobot2_localization',
         executable='amcl_visualizer',
-        namespace = drone_name,
         parameters=[
             {'use_sim_time': True}
         ]
@@ -140,12 +114,10 @@ def generate_launch_description():
         package='nav2_map_server',
         executable='map_server',
         name='filter_mask_server',
-        namespace = drone_name,
         parameters=[
             '/home/humble_ws/src/linorobot2_navigation/config/filter_mask_server.yaml',
             {
                 'use_sim_time': True,
-                'topic_name': '/' + drone_name + '/keepout_filter_mask',
             }
         ]
     )
@@ -154,13 +126,10 @@ def generate_launch_description():
         package='nav2_map_server',
         executable='costmap_filter_info_server',
         name='costmap_filter_info_server',
-        namespace = drone_name,
         parameters=[
             '/home/humble_ws/src/linorobot2_navigation/config/filter_mask_server.yaml',
             {
                 'use_sim_time': True,
-                'filter_info_topic': '/' + drone_name +'/keepout_filter_info',
-                'mask_topic': '/' + drone_name + '/keepout_filter_mask'
             }
         ]
     )
@@ -168,7 +137,6 @@ def generate_launch_description():
     cmd_vel_scaler = Node(
         package = 'linorobot2_localization',
         executable = 'cmd_vel_scale_gz',
-        namespace=drone_name,
         parameters = [
             {
                 'use_sim_time': True

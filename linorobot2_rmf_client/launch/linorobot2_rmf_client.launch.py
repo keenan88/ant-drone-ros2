@@ -11,8 +11,7 @@ def generate_launch_description():
 
     linorobot2_rmf_client = Node(
         package='linorobot2_rmf_client',
-        executable='linorobot2_rmf_client',
-        namespace=LaunchConfiguration('ns'),
+        executable='linorobot2_rmf_client'
         parameters = [
             {'use_sim_time' : True}
         ]

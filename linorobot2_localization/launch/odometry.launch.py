@@ -1,16 +1,11 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch_ros.actions import Node
-from launch.conditions import IfCondition, UnlessCondition
+from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 import os
 
 def generate_launch_description():
-
-    drone_name = os.getenv('DRONE_NAME')
-    
-
-    print(drone_name)
 
     wheels_or_body_odometry = DeclareLaunchArgument(
         'WHEEL_ODOMETRY',
@@ -21,7 +16,6 @@ def generate_launch_description():
     wheel_odometry = Node(
         package='linorobot2_localization',
         executable='wheel_odometry', 
-        namespace = drone_name,
         parameters=[
             {
                 'use_sim_time' : True
@@ -33,20 +27,27 @@ def generate_launch_description():
     wheel_unraveller = Node(
         package='linorobot2_localization',
         executable='wheel_unraveller',
-        namespace = drone_name,
         parameters=[
             {'use_sim_time': True}
         ],
         condition=IfCondition(LaunchConfiguration('WHEEL_ODOMETRY'))
     )
 
-    odom_vel_scale_gz = Node(
+    gz_localization = Node(
         package='linorobot2_localization',
-        executable='odom_vel_scale_gz',
-        namespace = drone_name,
+        executable='gz_localization',
         parameters=[
             {'use_sim_time': True},
-            {'drone_name': drone_name}
+            {'drone_name': LaunchConfiguration("DRONE_NAME")}
+        ]
+    )
+
+    gz_frame_name_fixer = Node(
+        package='linorobot2_localization',
+        executable='gz_frame_name_fixer',
+        parameters=[
+            {'use_sim_time': True},
+            {'drone_name': LaunchConfiguration("DRONE_NAME")}
         ]
     )
 
@@ -57,7 +58,8 @@ def generate_launch_description():
     ld.add_action(wheels_or_body_odometry)
     ld.add_action(wheel_odometry)
     ld.add_action(wheel_unraveller)
-    ld.add_action(odom_vel_scale_gz)
+    ld.add_action(gz_localization)
+    ld.add_action(gz_frame_name_fixer)
 
 
     return ld

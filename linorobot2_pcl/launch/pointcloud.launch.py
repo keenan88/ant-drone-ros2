@@ -5,10 +5,6 @@ import os
 
 def generate_launch_description():
 
-    drone_name = os.environ.get("DRONE_NAME")
-
-    print(drone_name)
-
     use_sim = os.environ.get("USE_SIM_TIME")
     use_sim = use_sim == "True"
 
@@ -20,12 +16,10 @@ def generate_launch_description():
             package='linorobot2_pcl',
             executable='pcl_frame_fixer',
             name = realsense_placement + "_pcl_frame_fixer",
-            namespace = drone_name,
             output='screen',
             parameters=[
                 {'camera_pos': realsense_placement},
                 {'use_sim_time' : use_sim},
-                {'drone_name': drone_name}
             ]
         )
 
@@ -38,14 +32,13 @@ def generate_launch_description():
             package='pcl_ros',
             executable='filter_crop_box_node',
             name = realsense_placement + "_pointcloud_cropper",
-            namespace = drone_name,
             output='screen',
             parameters=[
                 '/home/humble_ws/src/linorobot2_pcl/config/pcl_filter_crop_box.yaml',
                 {
                     'use_sim_time' : use_sim,
-                    "input_frame": drone_name + '_' + realsense_placement + '_depth_optical_frame',
-                    "output_frame": drone_name + '_' + realsense_placement + '_depth_optical_frame'
+                    "input_frame": realsense_placement + '_depth_optical_frame',
+                    "output_frame": realsense_placement + '_depth_optical_frame'
                 },
             ],
             remappings=[
@@ -58,7 +51,6 @@ def generate_launch_description():
             package='pcl_ros',
             executable='filter_voxel_grid_node',
             name = realsense_placement + "_pointcloud_downsampler",
-            namespace = drone_name,
             output='screen',
             parameters=[
                 '/home/humble_ws/src/linorobot2_pcl/config/pcl_downsample_filter.yaml',

@@ -1,5 +1,6 @@
-/**/controller_server:
+/controller_server:
   ros__parameters:
+    robot_base_frame: base_link
     controller_frequency: 30.0
     controller_plugins:
     - FollowPath
@@ -131,7 +132,7 @@
       
       
 
-/**/local_costmap/local_costmap:
+/local_costmap/local_costmap:
   ros__parameters:
 
     footprint_padding: 0.15 # Larger footprint padding will make it hard to navigate to be close to the pipe rail fro dropoff
@@ -153,7 +154,7 @@
     keepout_filter:
       plugin: "nav2_costmap_2d::KeepoutFilter"
       enabled: True
-      filter_info_topic: keepout_filter_info
+      filter_info_topic: /keepout_filter_info
 
     plugins: ["static_layer", "inflation_layer", "obstacle_layer"]
 

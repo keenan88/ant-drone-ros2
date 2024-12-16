@@ -2,7 +2,6 @@
 import rclpy
 from rclpy.node import Node
 from nav_msgs.msg import Odometry
-from geometry_msgs.msg import Twist
 from tf2_ros import TransformBroadcaster
 from geometry_msgs.msg import TransformStamped
 from math import isnan
@@ -12,7 +11,7 @@ from nav2_msgs.srv import SetInitialPose
 
 
 
-class OdomScaler(Node):
+class GZLocalization(Node):
     def __init__(self):
         super().__init__('odom_scaler')
 
@@ -21,7 +20,7 @@ class OdomScaler(Node):
         # Create subscriber for unscaled odometry
         self.odom_sub = self.create_subscription(
             Odometry,
-            'odom_unscaled',
+            'odom_gz',
             self.odom_callback,
             10
         )
@@ -61,9 +60,6 @@ class OdomScaler(Node):
         if self.drone_name == 'drone_boris':
             starting_pose.pose.pose.position.x = 16.5 
             starting_pose.pose.pose.position.y = -18.6 
-        elif self.drone_name == 'drone_yuri':
-            starting_pose.pose.pose.position.x = 16.5
-            starting_pose.pose.pose.position.y = -17.0
 
         req = SetInitialPose.Request()
         req.pose = starting_pose
@@ -142,9 +138,9 @@ class OdomScaler(Node):
 
                     # Create and initialize the static transform
                     map_odom_tf = TransformStamped()
-                    map_odom_tf.header.frame_id = self.drone_name + '_odom'
+                    map_odom_tf.header.frame_id = 'odom'
                     map_odom_tf.header.stamp = msg.header.stamp
-                    map_odom_tf.child_frame_id = self.drone_name + '_base_link'
+                    map_odom_tf.child_frame_id = 'base_link'
                     map_odom_tf.transform.translation.x = scaled_msg.pose.pose.position.x
                     map_odom_tf.transform.translation.y = scaled_msg.pose.pose.position.y
                     map_odom_tf.transform.rotation.x = scaled_msg.pose.pose.orientation.x
@@ -157,15 +153,9 @@ class OdomScaler(Node):
                     # Publish the static transform
                     self.tf_broadcaster.sendTransform(map_odom_tf)
 
-                else:
-
-                    pass
-
-                    # self.get_logger().info('Not publishing scaled odom, {}, {}'.format(round(msg.pose.pose.position.x, 2), round(msg.pose.pose.position.y, 2)))
-
 def main(args=None):
     rclpy.init(args=args)
-    node = OdomScaler()
+    node = GZLocalization()
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()

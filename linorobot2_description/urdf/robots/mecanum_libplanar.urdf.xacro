@@ -41,8 +41,6 @@
     <plugin name="mecanum_wheel_mimic" filename="libgazebo_ros_planar_move.so">
       <ros>
         <namespace>$(arg namespace)</namespace>
-        <remapping>odom:=odom</remapping>
-        <remapping>cmd_vel:=cmd_vel_scaled</remapping>
       </ros>
       <command_topic>cmd_vel</command_topic>
       <odometry_topic>odom</odometry_topic>

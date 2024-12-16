@@ -10,9 +10,6 @@ class LaserScanMerger(Node):
     def __init__(self):
         super().__init__('laser_scan_merger')
 
-        self.declare_parameter('drone_name', '')
-        self.drone_name = self.get_parameter('drone_name').value
-
         slam_or_nav = os.getenv('SLAM_OR_NAV')
         self.tf_tolerance_s = 0.3 if slam_or_nav == 'SLAM' else 0.3
 
@@ -97,7 +94,7 @@ class LaserScanMerger(Node):
                 merged_scan.header.stamp.sec = int(avg_timestamp)
                 merged_scan.header.stamp.nanosec = int((avg_timestamp - int(avg_timestamp)) * 1e9)
                 
-                merged_scan.header.frame_id = self.drone_name + "_base_link"
+                merged_scan.header.frame_id = "base_link"
                 merged_scan.angle_min = -0.7850000262260437
                 merged_scan.angle_max = 5.49499997377
 

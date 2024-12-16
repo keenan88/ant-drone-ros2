@@ -9,8 +9,6 @@ import os
 
 def generate_launch_description():
 
-    drone_name = os.getenv('DRONE_NAME')
-
     wheeled_motion = DeclareLaunchArgument(
         'WHEELED_MOTION',
         default_value='False', 
@@ -21,7 +19,6 @@ def generate_launch_description():
         package = 'joy', 
         executable = 'joy_node', 
         name = 'joy_node',
-        namespace = drone_name,
         parameters = [
             '/home/humble_ws/src/linorobot2_joystick/config/joy_node_config.yaml',
             {'dev': '/dev/input/js0'}
@@ -32,7 +29,6 @@ def generate_launch_description():
         package = 'teleop_twist_joy', 
         executable = 'teleop_node',
         name = 'teleop_twist_joy_node',
-        namespace = drone_name,
         parameters = [
             '/home/humble_ws/src/linorobot2_joystick/config/teleop_twist_joy_config.yaml'
         ]
@@ -41,7 +37,6 @@ def generate_launch_description():
     cmd_vel_to_motor_vel = Node(
         package = 'linorobot2_joystick', 
         executable = 'cmd_vel_to_motor_vel',
-        namespace=drone_name,
         parameters = [
             {
                 'use_sim_time': True

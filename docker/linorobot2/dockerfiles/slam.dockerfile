@@ -51,4 +51,4 @@ RUN source /opt/ros/humble/setup.bash && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-            ros2 launch linorobot2_navigation slam_bringup.launch.py WHEEL_ODOMETRY:=${WHEEL_ODOMETRY}"
+            ros2 launch linorobot2_navigation slam_bringup.launch.py WHEEL_ODOMETRY:=${WHEEL_ODOMETRY} DRONE_NAME:=${DRONE_NAME}"

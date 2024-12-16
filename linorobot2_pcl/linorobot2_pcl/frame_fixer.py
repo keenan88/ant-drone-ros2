@@ -17,9 +17,6 @@ class FrameFixer(Node):
         self.declare_parameter('camera_pos', 'front')
         self.camera_pos = self.get_parameter('camera_pos').get_parameter_value().string_value
 
-        self.declare_parameter('drone_name', '')
-        self.drone_name = self.get_parameter('drone_name').get_parameter_value().string_value
-
         print(self.camera_pos)
 
 
@@ -46,7 +43,7 @@ class FrameFixer(Node):
 
     def pointcloud_callback(self, msg):
         # Change the frame id
-        msg.header.frame_id = self.drone_name + '_' + self.camera_pos + '_depth_optical_frame'
+        msg.header.frame_id = self.camera_pos + '_depth_optical_frame'
         
         # Publish the modified message
         self.publisher.publish(msg)

@@ -6,7 +6,6 @@ from launch.substitutions import LaunchConfiguration
 import os
 
 def generate_launch_description():
-    drone_name = os.getenv('DRONE_NAME')
 
     ld = LaunchDescription()
 
@@ -14,7 +13,6 @@ def generate_launch_description():
     floor_mission_bt = Node(
         package='floor_mission_bt',
         executable='floor_mission_bt',
-        namespace = drone_name,
         parameters=[
             {
                 'use_sim_time': True,
@@ -25,7 +23,6 @@ def generate_launch_description():
     bridge_to_queen_and_rmf = Node(
         package='floor_mission_bt',
         executable='domain_bridge',
-        namespace = drone_name,
         parameters=[
             {
                 'use_sim_time': True,
@@ -41,10 +38,10 @@ def generate_launch_description():
     heartbeat = Node(
         package='floor_mission_helper',
         executable='heartbeat',
-        namespace = drone_name,
         parameters=[
             {
                 'use_sim_time': True,
+                'drone_name': LaunchConfiguration("DRONE_NAME")
             }
         ]
     )
@@ -52,7 +49,6 @@ def generate_launch_description():
     moveout = Node(
         package='floor_mission_helper',
         executable='moveout',
-        namespace = drone_name,
         parameters=[
             {
                 # self.get_clock() does not increment when use_sim_time=True, not sure why.

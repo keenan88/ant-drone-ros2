@@ -1,7 +1,7 @@
 name: bridge_to_queen_and_rmf
 
-from_domain: 1 # Be sure to override from_domain and to_domain in the launch file with the correct domains for the main domain and robot-specific domain
-to_domain: 2 # Be sure to override from_domain and to_domain in the launch file with the correct domains for the main domain and robot-specific domain
+from_domain: 1 # Overwritten in launch file
+to_domain: 2 # Overwritten in launch file
 
 topics:
   /task_api_requests:

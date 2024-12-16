@@ -6,9 +6,6 @@
 #include "nodes.h"
 #include "rclcpp/rclcpp.hpp"
 
-// Purpose-built Bt.CPP nodes for calling ros2 actions and services: https://www.behaviortree.dev/docs/ros2_integration/
-
-
 using namespace std::chrono_literals;
 
 const std::string default_bt_xml_file = "/home/humble_ws/src/floor_mission_bt/behavior_trees/floor_mission.xml";

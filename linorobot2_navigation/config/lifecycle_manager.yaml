@@ -1,4 +1,4 @@
-/**/lifecycle_manager:
+/lifecycle_manager:
   ros__parameters:
     attempt_respawn_reconnection: true
     autostart: true

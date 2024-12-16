@@ -9,10 +9,8 @@ import os
 
 def generate_launch_description():
 
-    drone_name = os.getenv('DRONE_NAME')
-
     slam_config_path = '/home/humble_ws/src/linorobot2_navigation/config/slam.yaml'
-    odometry_launch_path = '/home/humble_ws/src/linorobot2_navigation/launch/odometry.launch.py'
+    odometry_launch_path = '/home/humble_ws/src/linorobot2_localization/launch/odometry.launch.py'
     rviz_config_path = '/home/humble_ws/src/linorobot2_navigation/rviz/linorobot2_slam.rviz'
 
     wheels_or_body_odometry = DeclareLaunchArgument(
@@ -25,17 +23,9 @@ def generate_launch_description():
         package='slam_toolbox',
         executable='async_slam_toolbox_node',
         name='slam_toolbox',
-        namespace = drone_name,
         parameters=[
             slam_config_path,
-            {'use_sim_time': True},
-            {'base_frame': drone_name + '_base_link'},
-            {'odom_frame': drone_name + '_odom'},
-            {'map_frame': drone_name + '_map'},
-        ],
-        remappings = [
-            ('/map', '/' + drone_name + "/map"),
-            ('/map_metadata', '/' + drone_name + "/map_metadata")
+            {'use_sim_time': True}
         ]
 
     )
@@ -43,7 +33,6 @@ def generate_launch_description():
     image_recorder = Node(
         package='linorobot2_localization',
         executable='slam_image_recorder',
-        namespace = drone_name,
         parameters=[
             {'use_sim_time': True}
         ]
@@ -52,7 +41,8 @@ def generate_launch_description():
     odometry = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(odometry_launch_path),
         launch_arguments={
-            'WHEEL_ODOMETRY': LaunchConfiguration('WHEEL_ODOMETRY')  # Pass the argument to child
+            'WHEEL_ODOMETRY': LaunchConfiguration('WHEEL_ODOMETRY'),
+            'DRONE_NAME': LaunchConfiguration('DRONE_NAME')
         }.items()
     )
     
@@ -60,7 +50,6 @@ def generate_launch_description():
         package='rviz2',
         executable='rviz2',
         arguments=['-d', rviz_config_path],
-        namespace = drone_name,
         parameters=[
             {'use_sim_time': True}
         ]
