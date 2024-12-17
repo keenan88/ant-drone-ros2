@@ -9,22 +9,22 @@ def generate_launch_description():
 
     for realsense_placement in ["front_rs", "rear_rs", "left_rs", "right_rs"]:
 
-        pcl_frame_fixer = Node(
+        gz_pcl_frame_fixer = Node(
             package='antdrone_pcl',
-            executable='pcl_frame_fixer',
-            name = realsense_placement + "_pcl_frame_fixer",
+            executable='gz_pcl_frame_fixer',
+            name = realsense_placement + "_gz_pcl_frame_fixer",
             output='screen',
             parameters=[
                 {'camera_pos': realsense_placement},
                 {'use_sim_time' : LaunchConfiguration("USE_SIM_TIME")},
-            ]
+            ],
+            condition = IfCondition(LaunchConfiguration("USE_SIM_TIME"))
         )
 
         input_topic = realsense_placement + '/frame_fixed/points'
         crop_topic = realsense_placement + '/pointcloud_cropped'
         downsample_topic = realsense_placement + '/pointcloud_downsampled'
 
-        
         pointcloud_cropper = Node(
             package='pcl_ros',
             executable='filter_crop_box_node',
@@ -61,7 +61,7 @@ def generate_launch_description():
 
         ld.add_action(pointcloud_cropper)
         ld.add_action(pointcloud_downsampler)
-        ld.add_action(pcl_frame_fixer)
+        ld.add_action(gz_pcl_frame_fixer)
 
 
     bridge_out_pcl = Node(

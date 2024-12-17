@@ -36,6 +36,8 @@
   <gazebo>
     <plugin name="mecanum_wheel_mimic" filename="libgazebo_ros_planar_move.so">
       <ros>
+        <!-- Since all robots exist in gazebo in the MAIN_ROS_DOMAIN_ID, their topics must be namespaced. -->
+        <!-- Namespaces are removed when topics are domain-bridged to each robot, to mimic topic names on physical robots -->
         <namespace>$(arg namespace)</namespace>
       </ros>
       <command_topic>cmd_vel</command_topic>

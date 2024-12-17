@@ -3,22 +3,16 @@ from rclpy.node import Node
 from sensor_msgs.msg import PointCloud2
 from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
 
-# The gazebo/ros camera plugin tries to put the camera frame in the base_link frame.
-# But it doesnt actually do a transform, it just says the frame is base_link, even though the points are still expressed in the camera frame.
-# The easiest solution (instead of a chain of transforms) is to keep the frame as the camera frame, and then change the frame id.
+# The gazebo/ros camera plugin says the points' frame is base_link, even though the points are still expressed in the camera frame.
+# The easiest solution (instead of a chain of transforms) is to keep the frame as the camera frame, and then change the frame id in the pointcloud msg.
 # We use the filter_box_crop_node later to properly transform the points to the base link.
 
 class FrameFixer(Node):
     def __init__(self):
         super().__init__('frame_fixer')
 
-        self.declare_parameter('camera_pos', 'front')
-        self.camera_pos = self.get_parameter('camera_pos').get_parameter_value().string_value
+        self.camera_pos = self.declare_parameter('camera_pos', '').get_parameter_value().string_value
 
-        print(self.camera_pos)
-
-
-        # Create QoS profile for better point cloud handling
         qos_profile = QoSProfile(
             reliability=QoSReliabilityPolicy.BEST_EFFORT,
             history=QoSHistoryPolicy.KEEP_LAST,
@@ -32,7 +26,6 @@ class FrameFixer(Node):
             qos_profile
         )
 
-        # Create publisher
         self.publisher = self.create_publisher(
             PointCloud2,
             self.camera_pos + '/frame_fixed/points',
@@ -40,10 +33,7 @@ class FrameFixer(Node):
         )
 
     def pointcloud_callback(self, msg):
-        # Change the frame id
         msg.header.frame_id = self.camera_pos + '_depth_optical_frame'
-        
-        # Publish the modified message
         self.publisher.publish(msg)
 
 def main(args=None):

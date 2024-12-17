@@ -74,11 +74,10 @@ class GZFrameNameFixer(Node):
         if self.drone_name == 'drone_boris':
             starting_pose.pose.pose.position.x = 16.5 
             starting_pose.pose.pose.position.y = -18.6 
-
-        req = SetInitialPose.Request()
-        req.pose = starting_pose
-        future = self.set_initial_pose_client.call_async(req)
-        rclpy.spin_until_future_complete(self, future)
+            req = SetInitialPose.Request()
+            req.pose = starting_pose
+            future = self.set_initial_pose_client.call_async(req)
+            rclpy.spin_until_future_complete(self, future)
 
     def tf_callback(self, msg):
         filtered_transforms = []

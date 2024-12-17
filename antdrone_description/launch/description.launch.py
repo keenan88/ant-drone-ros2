@@ -1,5 +1,4 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, Command
 from ament_index_python.packages import get_package_share_directory
 from launch_ros.actions import Node
@@ -11,12 +10,6 @@ def generate_launch_description():
     urdf_path = os.path.join(get_package_share_directory('antdrone_description'), 'urdf', 'mecanum_libplanar.urdf.xacro')
 
     return LaunchDescription([
-
-        DeclareLaunchArgument(
-            name='use_sim_time', 
-            default_value='true',
-            description='Use simulation time'
-        ),
 
         Node(
             package='joint_state_publisher',

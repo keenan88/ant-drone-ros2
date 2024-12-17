@@ -1,17 +1,11 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch.conditions import IfCondition
 
 
 def generate_launch_description():
 
-    wheeled_motion = DeclareLaunchArgument(
-        'WHEELED_MOTION',
-        default_value='False', 
-        description='Whether robot moves with wheels or as a teleported block'
-    )
 
     joystick_driver = Node(
         package = 'joy', 
@@ -44,8 +38,6 @@ def generate_launch_description():
     )  
 
     ld = LaunchDescription()
-
-    ld.add_action(wheeled_motion)
 
     ld.add_action(joystick_driver)
     ld.add_action(joystick_twist)

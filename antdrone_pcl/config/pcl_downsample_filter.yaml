@@ -1,56 +1,19 @@
-# PCLs are in base_link frame when downsampled, and are already cropped.
-# So, filter z is basically pointless, just set it to be large enough that no points are removed.
+# Downsampling is in base_link frame on an already-cropped pointcloud
+# Base link orientation:
+# positive x points toward front of robot
+# positive y points to robot's left
+# positive z faces up against gravity
 
-/front_rs_pointcloud_downsampler:
+/**: # Apply same params to all downsample nodes that use this config file
   ros__parameters:
-    # Realsense d435 simple tech specs: https://www.intelrealsense.com/depth-camera-d435i/
-    # Filter field is unused for this filter, cropping is done by dedicated crop filter.
+
+    # Incoming pointcloud is already cropped.
+    # Be sure to set filter_limit_max and filter_limit_min to not apply a second cropping.
     filter_field_name: z
     filter_limit_max: 3.0
-    filter_limit_min: 0.0
+    filter_limit_min: -1.0
     filter_limit_negative: false
-    leaf_size: 0.01
-    max_queue_size: 3
-    min_points_per_voxel: 1
-    transient_local_indices: false
-    use_indices: false
-
-/rear_rs_pointcloud_downsampler:
-  ros__parameters:
-    # Realsense d435 simple tech specs: https://www.intelrealsense.com/depth-camera-d435i/
-    # Filter field is unused for this filter, cropping is done by dedicated crop filter.
-    filter_field_name: z
-    filter_limit_max: 3.0
-    filter_limit_min: 0.0
-    filter_limit_negative: false
-    leaf_size: 0.01
-    max_queue_size: 3
-    min_points_per_voxel: 1
-    transient_local_indices: false
-    use_indices: false
-
-/left_rs_pointcloud_downsampler:
-  ros__parameters:
-    # Realsense d435 simple tech specs: https://www.intelrealsense.com/depth-camera-d435i/
-    # Filter field is unused for this filter, cropping is done by dedicated crop filter.
-    filter_field_name: z
-    filter_limit_max: 3.0
-    filter_limit_min: 0.0
-    filter_limit_negative: false
-    leaf_size: 0.01
-    max_queue_size: 3
-    min_points_per_voxel: 1
-    transient_local_indices: false
-    use_indices: false
-
-/right_rs_pointcloud_downsampler:
-  ros__parameters:
-    # Realsense d435 simple tech specs: https://www.intelrealsense.com/depth-camera-d435i/
-    # Filter field is unused for this filter, cropping is done by dedicated crop filter.
-    filter_field_name: z
-    filter_limit_max: 3.0
-    filter_limit_min: 0.0
-    filter_limit_negative: false
+    
     leaf_size: 0.01
     max_queue_size: 3
     min_points_per_voxel: 1

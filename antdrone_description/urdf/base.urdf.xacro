@@ -35,7 +35,7 @@
     <material>Gazebo/White</material>
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
-    <!-- Be careful!! Changing mu1 and mu2 will prevent gazebo's libplanar movement plugin from executing small velocites -->
+    <!-- Be careful!! Changing mu1 and mu2 will prevent gazebo's libplanar movement plugin from executing small velocites needed at end of Nav2 paths -->
     <mu1>0.05</mu1>
     <mu2>0.05</mu2>
   </gazebo>

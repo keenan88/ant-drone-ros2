@@ -23,7 +23,6 @@ class TransformImagePublisher(Node):
         # Load transforms from CSV
         self.transforms = self.load_transforms()
 
-        # Create publishers for the images and transforms
         self.right_cam_pub = self.create_publisher(Image, '/right_rs/right_rs/color/image_raw', 10)
         self.left_cam_pub = self.create_publisher(Image, '/left_rs/left_rs/color/image_raw', 10)
         self.front_cam_pub = self.create_publisher(Image, '/front_rs/front_rs/color/image_raw', 10)

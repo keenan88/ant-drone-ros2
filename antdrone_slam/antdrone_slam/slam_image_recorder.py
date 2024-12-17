@@ -15,7 +15,6 @@ class MultiCameraListener(Node):
         self.img_save_lock = {'front': False, 'left': False, 'rear': False, 'right': False}
         self.last_save_t = {'front': 0.0, 'left': 0.0, 'rear': 0.0, 'right': 0.0}
 
-        # Create subscribers for the four depth image topics
         self.right_cam_depth_sub = self.create_subscription(Image, '/right_rs/right_rs/depth/image_raw', self.depth_msg_cb, 10)
         self.left_cam_depth_sub = self.create_subscription(Image, '/left_rs/left_rs/depth/image_raw', self.depth_msg_cb, 10)
         self.front_cam_depth_sub = self.create_subscription(Image, '/front_rs/front_rs/depth/image_raw', self.depth_msg_cb, 10)

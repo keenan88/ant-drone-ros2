@@ -21,7 +21,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'pcl_frame_fixer = antdrone_pcl.frame_fixer:main',
+            'gz_pcl_frame_fixer = antdrone_pcl.gz_pcl_frame_fixer:main',
         ],
     },
 )
