@@ -4,7 +4,6 @@ SHELL ["/bin/bash", "-c"]
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Do installs before git clone to avoid needing to do a full image rebuild each time image is built
 RUN apt-get update && apt-get install --no-install-recommends -y \
     nano \
     ros-humble-image-pipeline \
@@ -23,12 +22,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 
 RUN pip install setuptools==58.2.0
 
-WORKDIR /home/humble_ws
-
 COPY ./antdrone_pcl /home/humble_ws/src/antdrone_pcl
 COPY ./perception_pcl /home/humble_ws/src/perception_pcl
 
-# Build the workspace and source the setup files
+WORKDIR /home/humble_ws
+
 RUN source /opt/ros/humble/setup.bash && \
     colcon build --symlink-install && \
     source install/setup.bash && \

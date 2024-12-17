@@ -4,7 +4,6 @@ SHELL ["/bin/bash", "-c"]
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# install bootstrap tools
 RUN apt-get update && apt-get install --no-install-recommends -y \
     ros-humble-gazebo-ros-pkgs \
     ros-humble-joint-state-publisher \

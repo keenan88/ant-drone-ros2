@@ -4,45 +4,21 @@ SHELL ["/bin/bash", "-c"]
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# install bootstrap tools
 RUN apt-get update && apt-get install --no-install-recommends -y \
     build-essential \
     git \
-    python3-colcon-common-extensions \
-    python3-colcon-mixin \
-    python3-rosdep \
-    python3-vcstool \
     python3-pip \
     ros-humble-nav2-bringup \
-    ros-humble-joint-state-publisher \
-    ros-humble-xacro \
-    ros-humble-robot-localization \
-    ros-humble-gazebo-ros-pkgs \
-    ros-humble-image-proc \
-    ros-humble-depth-image-proc \
-    python3-networkx \
-    ros-humble-imu-tools \
-    ros-humble-joy-linux \
-    ros-humble-laser-filters \
-    libglvnd0 \
-    libgl1-mesa-glx \
-    libgl1-mesa-dri \
-    mesa-utils \
-    x11-xserver-utils \
-    ros-humble-robot-localization \
-    ros-humble-rosbridge-server \
-    ros-humble-domain-bridge \
     && rm -rf /var/lib/apt/lists/*
     
 
 RUN pip install setuptools==58.2.0
 
-WORKDIR /home/humble_ws
-
 COPY ./antdrone_navigation /home/humble_ws/src/antdrone_navigation
 COPY ./antdrone_localization /home/humble_ws/src/antdrone_localization
 
-# Build the workspace and source the setup files
+WORKDIR /home/humble_ws
+
 RUN source /opt/ros/humble/setup.bash && \
     colcon build --symlink-install && \
     source install/setup.bash && \

@@ -6,25 +6,16 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -y \
     nano \
-    # ros-humble-realsense2-camera \ 
-    # ros-humble-realsense2-description \
-    # usbutils \
     python3-pip -y \
     ros-humble-pointcloud-to-laserscan \
-    # ros-humble-depthimage-to-laserscan \
-    # ros-humble-joint-state-publisher \
-    # ros-humble-controller-manager \
-    # ros-humble-joint-state-publisher-gui \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install setuptools==58.2.0
 
+COPY ./antdrone_depth_to_laserscan /home/humble_ws/src/antdrone_depth_to_laserscan
+
 WORKDIR /home/humble_ws
 
-COPY ./antdrone_depth_to_laserscan /home/humble_ws/src/antdrone_depth_to_laserscan
-# COPY ./laser_filters /home/humble_ws/src/laser_filters
-
-# Build the workspace and source the setup files
 RUN source /opt/ros/humble/setup.bash && \
     colcon build --symlink-install --packages-select antdrone_depth_to_laserscan && \
     source install/setup.bash && \

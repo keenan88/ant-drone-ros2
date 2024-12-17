@@ -174,7 +174,7 @@ services:
   #   container_name: linorobot2-rmf
   #   build:
   #     context: .
-  #     dockerfile: docker/linorobot2/dockerfiles/drone_rmf.dockerfile
+  #     dockerfile: docker/linorobot2/dockerfiles/queen_client.dockerfile
   #   stdin_open: true
   #   tty: true
   #   environment:

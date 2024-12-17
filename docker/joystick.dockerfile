@@ -13,10 +13,8 @@ RUN apt-get update && apt-get install -y \
 RUN pip install setuptools==58.2.0
 
 WORKDIR /home/humble_ws
-
 COPY ./antdrone_joystick /home/humble_ws/src/antdrone_joystick
 
-# Build the workspace and source the setup files
 RUN source /opt/ros/humble/setup.bash && \
     colcon build --symlink-install && \
     source install/setup.bash && \
