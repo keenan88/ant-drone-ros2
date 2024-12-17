@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionClient
@@ -8,13 +6,10 @@ from rmf_fleet_msgs.msg import RobotState, PathRequest, RobotMode
 from geometry_msgs.msg import PoseStamped, TransformStamped
 from antdrone_interfaces.srv import SuspendReleaseRMFPathing, CheckRMFClientIdle
 from nav2_msgs.action import NavigateToPose
-
 from tf2_ros import Buffer, TransformListener
-
-import math
 from time import sleep
+import math
 
-# Intended to run on each individual robot
 
 class Linorobot2RMF(Node):
 
@@ -24,7 +19,7 @@ class Linorobot2RMF(Node):
         self.drone_name = self.declare_parameter('DRONE_NAME', '').get_parameter_value().string_value
         self.fleet_name = self.declare_parameter('FLEET_NAME', '').get_parameter_value().string_value
 
-        # RMF fleet adapter sends paths to robots over /robot_path_requests topic
+        # RMF fleet manager sends paths to robots over /robot_path_requests topic
         self.rmf_path_request_subscription = self.create_subscription(
             PathRequest,
             '/robot_path_requests',
@@ -32,7 +27,7 @@ class Linorobot2RMF(Node):
             10
         )
 
-        # drone_rmf_state_publisher gives feedback to RMF fleet adapter as drone executes paths from RMF fleet adapter
+        # Feedback sent to RMF fleet manager over /robot_state topic
         rmf_fleet_adapter_robot_state_topic_name = '/robot_state'
         self.drone_rmf_state_publisher = self.create_publisher(RobotState, rmf_fleet_adapter_robot_state_topic_name, 10)
         self.state_timer = self.create_timer(0.1, self.publish_state)
@@ -40,26 +35,24 @@ class Linorobot2RMF(Node):
         self.drone_rmf_state.battery_percent = 100.0 # TODO - implement hardware checking for battery percent
         self.drone_rmf_state.location.level_name = "L1" # TODO - implement level updating later, if need be
         self.drone_rmf_state.location.index = 0
+        self.drone_rmf_state.location.t = -1
         self.drone_rmf_state.name = self.drone_name
         self.drone_rmf_state.mode.mode = RobotMode.MODE_IDLE
         self.drone_rmf_state.seq = 0
 
-        # We need a seperate publisher to inform the drone's behavior tree when the robot is idle after the previous task. drone_rmf_state needs to be set to IDLE to get 
-        # the next waypoint in a string of waypoints, so a seperate state that is only set to IDLE once all movement is completed is necessary.
-        self.drone_queen_state = RobotState()
-        self.drone_queen_state.mode.mode = RobotMode.MODE_IDLE
-        self.last_movement_end_time_s = self.get_clock().now().to_msg().sec
-        self.idle_timeout_s = 3 # If RMF doesnt send a new waypoint within timeout period, inform drone behavior tree that drone is free for new tasks
-        self.check_rmf_client_idle_srv = self.create_service(CheckRMFClientIdle, 'check_rmf_client_idle', self.check_rmf_client_idlee_cb)
-        
         # Robot position is needed for drone_rmf_state
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
         self.timer = self.create_timer(0.25, self.get_transform)
-        self.first_tf_set = False
 
-        self._action_client = ActionClient(self, NavigateToPose, 'navigate_to_pose')
-        while not self._action_client.wait_for_server(timeout_sec=3.0):
+        # drone_rmf_state will go idle between waypoints, so we need a seperate flag to know when a full rmf path is complete (used in behavior tree)
+        self.executing_rmf_path = False
+        self.last_movement_end_time_s = self.get_clock().now().to_msg().sec
+        self.idle_timeout_s = 3 # If RMF doesnt send a new waypoint within timeout period, inform drone behavior tree that drone is free for new tasks
+        self.check_rmf_client_idle_srv = self.create_service(CheckRMFClientIdle, 'check_rmf_client_idle', self.check_rmf_client_idle_cb)
+        
+        self.nav_client = ActionClient(self, NavigateToPose, 'navigate_to_pose')
+        while not self.nav_client.wait_for_server(timeout_sec=3.0):
             self.get_logger().info('Waiting for navigate_to_pose action server to become available...')
         sleep(3) # Navigate to pose server in unknown state for a few seconds after it becomes available
 
@@ -69,20 +62,12 @@ class Linorobot2RMF(Node):
 
         self.get_logger().info("rmf_client started")
     
-    def check_rmf_client_idlee_cb(self, request, response):
-
+    def check_rmf_client_idle_cb(self, request, response):
         response.is_rmf_client_idle = self.drone_queen_state.mode.mode == RobotMode.MODE_IDLE
-
         return response
 
     def suspend_rmf_pathing_cb(self, request, response):
-
         self.is_rmf_pathing_suspended = request.is_rmf_pathing_suspended
-
-        self.get_logger().info(f"self.is_rmf_pathing_suspended: {self.is_rmf_pathing_suspended}")
-
-        response.success = True
-
         return response
         
     def get_transform(self):
@@ -103,21 +88,16 @@ class Linorobot2RMF(Node):
             self.drone_rmf_state.location.yaw = math.atan2(2.0 * (w * z + x * y), 1.0 - 2.0 * (y * y + z * z))
             self.drone_rmf_state.location.t = transform.header.stamp
 
-            # self.drone_queen_state.location = self.drone_rmf_state.location
-            self.first_tf_set = True
-
-            # self.get_logger().info(f"{x}, {y}")
-
         except Exception as e:
             self.get_logger().info(f"Could not get transform: {e}")
 
     def send_nav_to_pose_goal(self, pose):
-        self._action_client.wait_for_server()
+        self.nav_client.wait_for_server()
 
         goal_msg = NavigateToPose.Goal()
         goal_msg.pose = pose
 
-        self._send_goal_future = self._action_client.send_goal_async(goal_msg)
+        self._send_goal_future = self.nav_client.send_goal_async(goal_msg)
 
         self._send_goal_future.add_done_callback(self.nav_to_pose_response_cb)
 
@@ -151,9 +131,12 @@ class Linorobot2RMF(Node):
 
     def execute_path_request(self, path_request):
 
-        if path_request.fleet_name == self.fleet_name and path_request.robot_name == self.drone_name: # Only execute paths intended for this drone
+        # Only execute paths intended for this drone
+        if path_request.fleet_name == self.fleet_name and path_request.robot_name == self.drone_name: 
 
-            if not self.is_rmf_pathing_suspended: # Only execute paths if rmf pathing is not suspended
+            # Only execute paths if rmf pathing is not suspended
+            # RMF will resend paths that do not get executed, so we do not need to store paths.
+            if not self.is_rmf_pathing_suspended: 
 
                 # Do not interrupt task underway. This is NECESSARY since RMF may try sending path requests before the previous path request finished.
                 if self.drone_rmf_state.task_id != path_request.task_id and self.drone_rmf_state.mode.mode == RobotMode.MODE_IDLE: 
@@ -182,12 +165,11 @@ class Linorobot2RMF(Node):
                     self.send_nav_to_pose_goal(pose)
 
                 else:
-
                     self.get_logger().info(f"Ignored path request #{path_request.task_id} x: {path_request.path[0].x} -> {path_request.path[1].x}, y: {path_request.path[0].y} -> {path_request.path[1].y}")
 
     def publish_state(self):
 
-        if self.first_tf_set:
+        if self.drone_rmf_state.location.t >= 0:
 
             self.drone_rmf_state.seq += 1
 

@@ -31,12 +31,7 @@ bool SuspendReleaseRMFPathing::setRequest(Request::SharedPtr& request)
 
 NodeStatus SuspendReleaseRMFPathing::onResponseReceived(const Response::SharedPtr& response)
 {
-  if(response -> success)
-  {
-    return NodeStatus::SUCCESS;
-  }
-
-  return NodeStatus::FAILURE;
+  return NodeStatus::SUCCESS;
 }
 
 NodeStatus SuspendReleaseRMFPathing::onFailure(ServiceNodeErrorCode error)
