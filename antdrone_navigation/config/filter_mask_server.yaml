@@ -1,6 +1,3 @@
-# Parameter descriptions: https://docs.nav2.org/configuration/packages/configuring-map-server.html#configuring-map-server 
-# Parameter values for keepout filter: https://docs.nav2.org/tutorials/docs/navigation2_with_keepout_filter.html
-
 /costmap_filter_info_server:
   ros__parameters:
     type: 0
