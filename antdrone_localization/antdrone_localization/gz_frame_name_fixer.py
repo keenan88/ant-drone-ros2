@@ -2,11 +2,12 @@ import rclpy
 from rclpy.node import Node
 from tf2_msgs.msg import TFMessage
 from geometry_msgs.msg import TransformStamped
+from nav2_msgs.srv import SetInitialPose
+from geometry_msgs.msg import PoseWithCovarianceStamped
 from rclpy.qos import QoSProfile
 from rclpy.qos import QoSHistoryPolicy as History
 from rclpy.qos import QoSDurabilityPolicy as Durability
 from rclpy.qos import QoSReliabilityPolicy as Reliability
-from rclpy.qos import qos_profile_system_default
 
 class GZFrameNameFixer(Node):
     def __init__(self):
@@ -52,6 +53,32 @@ class GZFrameNameFixer(Node):
                 durability=Durability.TRANSIENT_LOCAL
             )
         )
+
+        starting_pose = PoseWithCovarianceStamped()
+        starting_pose.header.stamp = self.get_clock().now().to_msg()
+        starting_pose.header.frame_id = 'map'
+        starting_pose.pose.pose.orientation.x = 0.0
+        starting_pose.pose.pose.orientation.y = 0.0
+        starting_pose.pose.pose.orientation.z = 0.0
+        starting_pose.pose.pose.orientation.w = 1.0
+        
+        starting_pose.pose.pose.position.z = 0.0
+
+        
+
+         # Publishing starting pose is just a convenience measure in simulation
+        self.set_initial_pose_client = self.create_client(SetInitialPose, 'set_initial_pose')
+        while not self.set_initial_pose_client.wait_for_service(timeout_sec=1):
+            self.get_logger().info('set_initial_pose service not available, waiting again...')
+
+        if self.drone_name == 'drone_boris':
+            starting_pose.pose.pose.position.x = 16.5 
+            starting_pose.pose.pose.position.y = -18.6 
+
+        req = SetInitialPose.Request()
+        req.pose = starting_pose
+        future = self.set_initial_pose_client.call_async(req)
+        rclpy.spin_until_future_complete(self, future)
 
     def tf_callback(self, msg):
         filtered_transforms = []
