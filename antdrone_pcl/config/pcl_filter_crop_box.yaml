@@ -1,7 +1,7 @@
 # Cropping is in realsense frame, where:
+# positive x is facing left (when viewing camera from its rear)
 # positive y is facing down (with gravity)
 # positive z is facing out toward the object in view
-# positive x is facing left (when viewing camera from its rear)
 
 /**: # Apply same settings to all crop nodes that use this config file.
   ros__parameters:

@@ -1,6 +1,3 @@
-log
-build
-install
 yolo/yolo11n-seg.pt
 yolo/yolov8n-seg.pt
 yolo/marked

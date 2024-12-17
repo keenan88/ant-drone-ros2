@@ -51,7 +51,7 @@
       gamma: 0.015
       motion_model: "Omni"
       visualize: true
-      reset_period: 1.0 # (only in Humble)
+      reset_period: 1.0
       regenerate_noises: false
       TrajectoryVisualizer:
         trajectory_step: 25
@@ -76,17 +76,6 @@
         cost_power: 1
         cost_weight: 5.0
         threshold_to_consider: 1.4
-      # ObstaclesCritic:
-      #   enabled: true
-      #   cost_power: 1
-      #   repulsion_weight: 1.5
-      #   critical_weight: 20.0
-      #   consider_footprint: false
-      #   collision_cost: 10000.0
-      #   collision_margin_distance: 0.1
-      #   near_goal_distance: 0.5
-      #   inflation_radius: 0.55 # (only in Humble)
-      #   cost_scaling_factor: 10.0 # (only in Humble)
       CostCritic:
         enabled: true
         cost_power: 1
@@ -120,18 +109,7 @@
         threshold_to_consider: 1.4
         max_angle_to_furthest: 1.0
         mode: 0
-      # VelocityDeadbandCritic:
-      #   enabled: true
-      #   cost_power: 1
-      #   cost_weight: 35.0
-      #   deadband_velocities: [0.05, 0.05, 0.05]
-      # TwirlingCritic:
-      #   enabled: true
-      #   twirling_cost_power: 1
-      #   twirling_cost_weight: 10.0
       
-      
-
 /local_costmap/local_costmap:
   ros__parameters:
 
@@ -177,7 +155,6 @@
         marking: True
         data_type: "LaserScan"
         inf_is_valid: false
-        # observation_persistence:  0.0
 
     static_layer:
       plugin: "nav2_costmap_2d::StaticLayer"
@@ -190,7 +167,7 @@
     inflation_layer:
       plugin: "nav2_costmap_2d::InflationLayer"
       enabled: True
-      inflation_radius: 0.5 # Larger inflation radius will make it hard to navigate to be close to the pipe rail fro dropoff
+      inflation_radius: 0.5 # Larger inflation radius will make it hard to navigate to be close to the pipe rail for dropoff
       cost_scaling_factor: 10.0
       inflate_unknown: false
       inflate_around_unknown: false

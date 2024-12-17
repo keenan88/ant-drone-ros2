@@ -4,7 +4,7 @@
     planner_plugins: ["GridBased"]
 
     GridBased:
-      plugin: "nav2_smac_planner/SmacPlanner2D" # In Iron and older versions, "/" was used instead of "::"
+      plugin: "nav2_smac_planner/SmacPlanner2D"
       tolerance: 0.125                      # tolerance for planning if unable to reach exact pose, in meters
       downsample_costmap: false             # whether or not to downsample the map
       downsampling_factor: 1                # multiplier for the resolution of the costmap layer (e.g. 2 on a 5cm costmap would be 10cm)
@@ -74,12 +74,10 @@
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         enabled: True
-        inflation_radius: 0.5  # Robot radius is 0.48m, planner plans with base link, so set to local costmap inflation radius + robot radius
-        cost_scaling_factor: 10.0  # Higher cost scaling factor to heavily penalize keepout zones and obstacles
+        inflation_radius: 0.5 
+        cost_scaling_factor: 10.0
         inflate_unknown: False
         inflate_around_unknown: True
-
-      
 
       always_send_full_costmap: True
 

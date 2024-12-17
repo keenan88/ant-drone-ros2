@@ -11,7 +11,7 @@ from time import sleep
 import math
 
 
-class Linorobot2RMF(Node):
+class AntDroneQueenClient(Node):
 
     def __init__(self):
         super().__init__('antdrone_queen_client')
@@ -35,7 +35,7 @@ class Linorobot2RMF(Node):
         self.drone_rmf_state.battery_percent = 100.0 # TODO - implement hardware checking for battery percent
         self.drone_rmf_state.location.level_name = "L1" # TODO - implement level updating later, if need be
         self.drone_rmf_state.location.index = 0
-        self.drone_rmf_state.location.t = -1
+        self.drone_rmf_state.location.t.sec = -1
         self.drone_rmf_state.name = self.drone_name
         self.drone_rmf_state.mode.mode = RobotMode.MODE_IDLE
         self.drone_rmf_state.seq = 0
@@ -63,7 +63,7 @@ class Linorobot2RMF(Node):
         self.get_logger().info("rmf_client started")
     
     def check_rmf_client_idle_cb(self, request, response):
-        response.is_rmf_client_idle = self.drone_queen_state.mode.mode == RobotMode.MODE_IDLE
+        response.is_rmf_client_idle = not self.executing_rmf_path
         return response
 
     def suspend_rmf_pathing_cb(self, request, response):
@@ -144,7 +144,7 @@ class Linorobot2RMF(Node):
                     self.get_logger().info(f"Accepted path request #{path_request.task_id} x: {path_request.path[0].x} -> {path_request.path[1].x}, y: {path_request.path[0].y} -> {path_request.path[1].y}")
 
                     self.drone_rmf_state.mode.mode = RobotMode.MODE_MOVING
-                    self.drone_queen_state.mode.mode = RobotMode.MODE_MOVING
+                    self.executing_rmf_path = True
                             
                     self.drone_rmf_state.path = [path_request.path[1]]
                     self.drone_rmf_state.task_id = path_request.task_id
@@ -169,7 +169,7 @@ class Linorobot2RMF(Node):
 
     def publish_state(self):
 
-        if self.drone_rmf_state.location.t >= 0:
+        if self.drone_rmf_state.location.t.sec >= 0:
 
             self.drone_rmf_state.seq += 1
 
@@ -179,13 +179,13 @@ class Linorobot2RMF(Node):
 
                 if self.get_clock().now().to_msg().sec >= self.last_movement_end_time_s + self.idle_timeout_s:
 
-                    self.drone_queen_state.mode.mode = RobotMode.MODE_IDLE                
+                    self.executing_rmf_path = False            
     
 
 def main(args=None):
     rclpy.init(args=args)
-    linorobot2_rmf = Linorobot2RMF()
-    rclpy.spin(linorobot2_rmf)
+    ant_drone_queen_client = AntDroneQueenClient()
+    rclpy.spin(ant_drone_queen_client)
     rclpy.shutdown()
 
 if __name__ == '__main__':

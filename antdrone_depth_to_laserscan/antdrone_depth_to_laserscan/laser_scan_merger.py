@@ -108,10 +108,6 @@ class LaserScanMerger(Node):
 
                 self.publisher.publish(merged_scan)
 
-            else:
-
-                self.get_logger().info(f"time diff: {time_diff}")
-
 def main(args=None):
     rclpy.init(args=args)
     node = LaserScanMerger()

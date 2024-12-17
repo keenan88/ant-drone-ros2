@@ -9,7 +9,7 @@ def generate_launch_description():
 
     slam_config_path = '/home/humble_ws/src/antdrone_navigation/config/slam.yaml'
     odometry_launch_path = '/home/humble_ws/src/antdrone_localization/launch/odometry.launch.py'
-    rviz_config_path = '/home/humble_ws/src/antdrone_navigation/rviz/linorobot2_slam.rviz'
+    rviz_config_path = '/home/humble_ws/src/antdrone_navigation/rviz/slam.rviz'
 
     slam_toolbox = Node(
         package='slam_toolbox',

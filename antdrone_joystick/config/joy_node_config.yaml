@@ -5,13 +5,6 @@
     deadzone: 0.3
     device_id: 0
     device_name: ''
-    qos_overrides:
-      /parameter_events:
-        publisher:
-          depth: 1000
-          durability: volatile
-          history: keep_last
-          reliability: reliable
     sticky_buttons: false
 
 

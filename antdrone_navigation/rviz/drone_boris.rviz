@@ -5,8 +5,6 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /TF1
-        - /TF1/Frames1
         - /Static Map1/Topic1
         - /Particle Cloud1/Topic1
         - /Traffic Map1/Topic1
@@ -140,7 +138,7 @@ Visualization Manager:
       Class: rviz_default_plugins/Map
       Color Scheme: map
       Draw Behind: false
-      Enabled: false
+      Enabled: true
       Name: Global Costmap
       Topic:
         Depth: 5
@@ -156,12 +154,12 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: global_costmap/costmap_updates
       Use Timestamp: false
-      Value: false
+      Value: true
     - Alpha: 0.699999988079071
       Class: rviz_default_plugins/Map
       Color Scheme: costmap
       Draw Behind: false
-      Enabled: false
+      Enabled: true
       Name: Local Costmap
       Topic:
         Depth: 5
@@ -177,7 +175,7 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: local_costmap/costmap_updates
       Use Timestamp: false
-      Value: false
+      Value: true
     - Alpha: 0.5
       Class: rviz_default_plugins/Map
       Color Scheme: map
@@ -307,7 +305,9 @@ Visualization Manager:
       Enabled: true
       Name: Map Markers
       Namespaces:
-        {}
+        drone_fleet/labels/L1: true
+        drone_fleet/lanes/L1: true
+        drone_fleet/waypoints/L1: true
       Topic:
         Depth: 5
         Durability Policy: Transient Local
@@ -733,16 +733,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/XYOrbit
-      Distance: 10.916820526123047
+      Distance: 4.911533832550049
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.439758062362671
-        Y: -1.4441545009613037
-        Z: -7.314552931347862e-05
+        X: 0.9435386657714844
+        Y: -0.20655012130737305
+        Z: -6.933083204785362e-05
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false

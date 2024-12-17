@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="linorobot2" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="antdrone" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:arg name="namespace" default=""/>
 

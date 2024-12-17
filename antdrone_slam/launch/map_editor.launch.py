@@ -4,7 +4,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    rviz_config_path = '/home/humble_ws/src/antdrone_navigation/rviz/linorobot2_map_editor.rviz'
+    rviz_config_path = '/home/humble_ws/src/antdrone_navigation/rviz/map_editor.rviz'
 
     tf_image_publisher = Node(
         package='antdrone_localization',

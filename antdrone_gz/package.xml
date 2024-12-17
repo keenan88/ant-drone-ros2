@@ -4,7 +4,7 @@
     <name>antdrone_gz</name>
     <version>0.0.0</version>
     <maintainer email="jimenojmm@gmail.com">Juan Miguel Jimeno</maintainer>
-    <description>Linorobot2 gazebo launch</description>
+    <description>ant drone gazebo launch</description>
     <license>Apache 2.0</license>
     <buildtool_depend>ament_cmake</buildtool_depend>
     <exec_depend>joint_state_publisher</exec_depend>
