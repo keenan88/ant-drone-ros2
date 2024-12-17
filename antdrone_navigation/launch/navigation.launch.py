@@ -118,16 +118,6 @@ def generate_launch_description():
         ]
     )
 
-    gz_cmd_vel_scale = Node(
-        package = 'antdrone_localization',
-        executable = 'gz_cmd_vel_scale',
-        parameters = [
-            {
-                'use_sim_time': LaunchConfiguration("USE_SIM_TIME")
-            }   
-        ]
-    )
-
     ld = LaunchDescription()
 
     ld.add_action(keepout_filter_map_server)
@@ -142,7 +132,6 @@ def generate_launch_description():
     ld.add_action(rviz)
     ld.add_action(odometry)
     ld.add_action(amcl)
-    ld.add_action(gz_cmd_vel_scale)
 
     return ld
 

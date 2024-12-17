@@ -25,14 +25,14 @@
 
       <inertial>
         <origin xyz="0 0 0" rpy="0 0 0"/>
-        <mass value="20"/> <!-- Small, non-zero mass -->
+        <mass value="10"/> <!-- Small, non-zero mass -->
         <inertia
-          ixx="1.14"
+          ixx="0.57"
           ixy="-4.74983711945811E-18"
           ixz="-1.80635263223563E-18"
-          iyy="1.53"
+          iyy="0.765"
           iyz="6.42624983676543E-18"
-          izz="0.43" />
+          izz="0.215" />
       </inertial>
     </link>
 
@@ -40,8 +40,8 @@
     <material>Gazebo/White</material>
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
-    <mu1>0.2</mu1>
-    <mu2>0.2</mu2>
+    <mu1>0.05</mu1>
+    <mu2>0.05</mu2>
   </gazebo>
 
 

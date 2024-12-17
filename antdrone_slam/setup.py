@@ -23,6 +23,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'slam_image_recorder = antdrone_slam.slam_image_recorder:main',
+            'slam_recording_publisher = antdrone_slam.slam_recording_publisher:main',
+            'detected_dynamic_obstacles_publisher = antdrone_slam.detected_dynamic_obstacles_publisher:main',
             
         ],
     },

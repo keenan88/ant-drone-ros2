@@ -23,7 +23,6 @@ setup(
     entry_points={
         "console_scripts": [
             'cmd_vel_to_motor_vel = antdrone_joystick.cmd_vel_to_motor_vel:main',
-            'robot_teleporter = antdrone_joystick.robot_teleporter:main',
         ],
     },
 )

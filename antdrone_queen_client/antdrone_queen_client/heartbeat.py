@@ -1,11 +1,7 @@
-#!/usr/bin/env python3
-
 import rclpy
 from rclpy.node import Node
 from antdrone_interfaces.srv import MissionHeartbeatSrv
 from ant_queen_interfaces.msg import MissionHeartbeatMsg
-from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy, QoSDurabilityPolicy
-from rclpy.executors import MultiThreadedExecutor
 
 
 

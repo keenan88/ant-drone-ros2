@@ -19,11 +19,10 @@ def generate_launch_description():
             slam_config_path,
             {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}
         ]
-
     )
 
     image_recorder = Node(
-        package='antdrone_localization',
+        package='antdrone_slam',
         executable='slam_image_recorder',
         parameters=[
             {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}
