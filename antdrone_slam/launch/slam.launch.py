@@ -3,13 +3,14 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch.substitutions import LaunchConfiguration
+import os
 
 
 def generate_launch_description():
 
-    slam_config_path = '/home/humble_ws/src/antdrone_navigation/config/slam.yaml'
+    slam_config_path = '/home/humble_ws/src/antdrone_slam/config/slam.yaml'
     odometry_launch_path = '/home/humble_ws/src/antdrone_localization/launch/odometry.launch.py'
-    rviz_config_path = '/home/humble_ws/src/antdrone_navigation/rviz/slam.rviz'
+    rviz_config_path = '/home/humble_ws/src/antdrone_slam/rviz/' + os.getenv("DRONE_NAME") + '_slam.rviz'
 
     slam_toolbox = Node(
         package='slam_toolbox',
@@ -17,14 +18,6 @@ def generate_launch_description():
         name='slam_toolbox',
         parameters=[
             slam_config_path,
-            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}
-        ]
-    )
-
-    image_recorder = Node(
-        package='antdrone_slam',
-        executable='slam_image_recorder',
-        parameters=[
             {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}
         ]
     )
@@ -49,7 +42,6 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     ld.add_action(slam_toolbox)
-    ld.add_action(image_recorder)
     ld.add_action(odometry)
     
     ld.add_action(rviz)

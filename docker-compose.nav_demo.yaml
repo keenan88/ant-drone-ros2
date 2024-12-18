@@ -1,0 +1,201 @@
+services:
+
+  ############################################
+  #          ant Sim containers        #
+  ############################################
+
+  ant_fleet_demos_gz:
+    container_name: ant_fleet_demos_gz
+    build:
+      context: .
+      dockerfile: ./docker/gz.dockerfile
+    healthcheck:
+      test: [ "CMD-SHELL", "nc -z localhost 11345 || exit 1" ]
+      interval: 1s
+      timeout: 2s
+      retries: 10
+      start_period: 2s
+    environment:
+      - DISPLAY=${DISPLAY}
+      - ROS_DOMAIN_ID=${MAIN_ROS_DOMAIN_ID}
+    env_file: ./.env
+    volumes:
+      - ./antdrone_gz/:/home/humble_ws/src/antdrone_gz/
+      - ./antdrone_description/:/home/humble_ws/src/antdrone_description
+      - ./simulation:/home/simulation
+    network_mode: host
+    ipc: host
+    pid: host
+    privileged: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+
+  ant_fleet_demos_gz_client:
+    container_name: ant_fleet_demos_gz_client
+    build:
+      context: .
+      dockerfile: ./docker/gz.dockerfile
+    depends_on:
+      ant_fleet_demos_gz:
+        condition: service_healthy
+    environment:
+      - DISPLAY=${DISPLAY}
+      - ROS_DOMAIN_ID=${MAIN_ROS_DOMAIN_ID}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ./simulation:/home/simulation
+    network_mode: host
+    ipc: host
+    pid: host
+    privileged: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    command: gzclient
+
+  ############################################
+  #          ant drone 0 containers          #
+  ############################################
+
+  antdrone0_gz_spawn:
+    container_name: antdrone0_gz_spawn
+    build:
+      context: .
+      dockerfile: ./docker/gz_spawn.dockerfile
+    depends_on:
+      ant_fleet_demos_gz:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "echo", "Healthy" ]
+      interval: 3s
+      timeout: 2s
+      retries: 10
+      start_period: 2s
+    environment:
+      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+      - DRONE_NAME=${DRONE0_NAME}
+      - x0=6.75
+      - y0=-3.72
+      - z0=0.15
+      - yaw0=0.0
+    env_file: ./.env
+    volumes:
+      - ./antdrone_gz/:/home/humble_ws/src/antdrone_gz/
+      - ./antdrone_description/:/home/humble_ws/src/antdrone_description
+    network_mode: host
+    ipc: host
+    pid: host
+
+  antdrone0_nav:
+    container_name: antdrone0_nav
+    build:
+      context: .
+      dockerfile: ./docker/nav.dockerfile
+    healthcheck:
+      # Lifecycle bringup of nav nodes can fail if too many other things start at the same time. Let nav start first.
+      test: [ "CMD", "echo", "Healthy" ]
+      interval: 3s
+      timeout: 2s
+      retries: 10
+      start_period: 5s
+    depends_on:
+      antdrone0_gz_spawn:
+        condition: service_healthy
+    environment:
+      - DISPLAY=${DISPLAY}
+      - DRONE_NAME=${DRONE0_NAME}
+      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+      - USE_SIM_TIME=${USE_SIM_TIME}
+      - x0=16.5
+      - y0=-19.0
+      - z0=0.15
+      - yaw0=0.0
+    volumes:
+      - ./antdrone_navigation:/home/humble_ws/src/antdrone_navigation
+      - ./antdrone_localization:/home/humble_ws/src/antdrone_localization
+    network_mode: host
+    ipc: host
+    pid: host
+
+  antdrone0_joystick:
+    container_name: antdrone0_joystick
+    build:
+      context: .
+      dockerfile: ./docker/joystick.dockerfile
+    depends_on:
+      antdrone0_nav:
+        condition: service_healthy
+    environment:
+      - WHEELED_MOTION=false
+      - DRONE_NAME=${DRONE0_NAME}
+      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+      - USE_SIM_TIME=${USE_SIM_TIME}
+    volumes:
+      - ./antdrone_joystick:/home/humble_ws/src/antdrone_joystick:rw
+    privileged: true
+    network_mode: host
+    ipc: host
+    pid: host
+
+  antdrone0_pcl:
+    container_name: antdrone0_pcl
+    build:
+      context: .
+      dockerfile: ./docker/pointcloud.dockerfile
+    depends_on:
+      antdrone0_nav:
+        condition: service_healthy
+    environment:
+      - DRONE_NAME=${DRONE0_NAME}
+      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+      - USE_SIM_TIME=${USE_SIM_TIME}
+    volumes:
+      - ./antdrone_pcl:/home/humble_ws/src/antdrone_pcl:rw
+      - ./perception_pcl:/home/humble_ws/src/perception_pcl
+    network_mode: host
+    ipc: host
+    pid: host
+    privileged: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [ gpu ]
+    runtime: nvidia
+
+  antdrone0_depth_to_laserscan:
+    container_name: antdrone0_depth_to_laserscan
+    build:
+      context: .
+      dockerfile: ./docker/depth_to_laserscan.Dockerfile
+    depends_on:
+      antdrone0_nav:
+        condition: service_healthy
+    volumes:
+      - ./antdrone_depth_to_laserscan:/home/humble_ws/src/antdrone_depth_to_laserscan
+    environment:
+      - DRONE_NAME=${DRONE0_NAME}
+      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+      - USE_SIM_TIME=${USE_SIM_TIME}
+    network_mode: host
+    ipc: host
+    pid: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [ gpu ]
+    runtime: nvidia
+
+
