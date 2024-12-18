@@ -2,18 +2,16 @@
 
 using namespace BT;
 
-CheckGoToWaypointSuccess::CheckGoToWaypointSuccess(const std::string &name,
-                                             const NodeConfig &conf,
-                                             const RosNodeParams &params)
-    : RosServiceNode<ant_queen_interfaces::srv::LastKnownEndWaypointName>(
-          name, conf, params){};
+CheckGoToWaypointSuccess::CheckGoToWaypointSuccess(const std::string &name, const NodeConfig &conf, const RosNodeParams &params)
+    : RosServiceNode<ant_queen_interfaces::srv::LastKnownEndWaypointName>(name, conf, params){};
 
 PortsList CheckGoToWaypointSuccess::providedPorts() {
 
-  return providedBasicPorts({BT::InputPort<std::string>("vertex_name"),
-                             BT::InputPort<std::string>("drone_name"),
-                             BT::OutputPort<std::string>("error_state"),
-                             });
+  return providedBasicPorts({
+      BT::InputPort<std::string>("vertex_name"),
+      BT::InputPort<std::string>("drone_name"),
+      BT::OutputPort<std::string>("error_state"),
+  });
 }
 
 bool CheckGoToWaypointSuccess::setRequest(Request::SharedPtr &request) {
@@ -23,23 +21,13 @@ bool CheckGoToWaypointSuccess::setRequest(Request::SharedPtr &request) {
   return true;
 }
 
-NodeStatus
-CheckGoToWaypointSuccess::onResponseReceived(const Response::SharedPtr &response) {
+NodeStatus CheckGoToWaypointSuccess::onResponseReceived(const Response::SharedPtr &response) {
   NodeStatus node_status = NodeStatus::FAILURE;
 
   if (response->last_known_waypoint_name == desired_vertex_name) {
     node_status = NodeStatus::SUCCESS;
     if (auto node = node_.lock()) {
-      RCLCPP_INFO(node->get_logger(),
-                  "[%s] Drone has reached desired vertex %s ",
-                  this->name().c_str(), desired_vertex_name.c_str());
-    }
-  } else {
-    if (auto node = node_.lock()) {
-      RCLCPP_INFO(
-          node->get_logger(), "[%s] Last known end vertex: %s, desired: %s ",
-          this->name().c_str(), response->last_known_waypoint_name.c_str(),
-          desired_vertex_name.c_str());
+      RCLCPP_INFO(node->get_logger(), "[%s] Drone has reached desired vertex %s ", this->name().c_str(), desired_vertex_name.c_str());
     }
   }
 
@@ -47,13 +35,12 @@ CheckGoToWaypointSuccess::onResponseReceived(const Response::SharedPtr &response
 }
 
 NodeStatus CheckGoToWaypointSuccess::onFailure(ServiceNodeErrorCode error) {
-  if(error){} // To avoid build warning
+  if (error) {
+  } // To avoid build warning
   NodeStatus node_status = NodeStatus::FAILURE;
 
   if (auto node = node_.lock()) {
-    RCLCPP_INFO(node->get_logger(),
-                "[%s] Error calling drone last_known_end_waypoint_name server ",
-                this->name().c_str());
+    RCLCPP_INFO(node->get_logger(), "[%s] Error calling drone last_known_end_waypoint_name server ", this->name().c_str());
   }
   setOutput("error_state", "last_known_end_waypoint_name_call_failed");
 

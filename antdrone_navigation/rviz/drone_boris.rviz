@@ -303,7 +303,9 @@ Visualization Manager:
       Enabled: true
       Name: Map Markers
       Namespaces:
-        {}
+        drone_fleet/labels/L1: true
+        drone_fleet/lanes/L1: true
+        drone_fleet/waypoints/L1: true
       Topic:
         Depth: 5
         Durability Policy: Transient Local
@@ -729,25 +731,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/XYOrbit
-      Distance: 8.242451667785645
+      Distance: 8.625041961669922
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.2897930145263672
-        Y: -0.009824752807617188
-        Z: -6.742348341504112e-05
+        X: 0.20914936065673828
+        Y: -1.9811339378356934
+        Z: -8.119697304209694e-05
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.3747965097427368
+      Pitch: 1.4697964191436768
       Target Frame: base_link
       Value: XYOrbit (rviz_default_plugins)
-      Yaw: 4.759252548217773
+      Yaw: 4.779253005981445
     Saved: ~
 Window Geometry:
   Displays:

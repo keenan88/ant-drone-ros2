@@ -149,7 +149,7 @@ class SendDropoffPosition : public RosServiceNode<ant_queen_interfaces::srv::Dro
 public:
   std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
   std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
-  geometry_msgs::msg::TransformStamped getTransform(std::string drone_name);
+  geometry_msgs::msg::TransformStamped getTransform();
 
   SendDropoffPosition(const std::string &name, const NodeConfig &conf, const RosNodeParams &params);
   static PortsList providedPorts();
