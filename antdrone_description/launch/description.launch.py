@@ -15,7 +15,6 @@ def generate_launch_description():
             package='joint_state_publisher',
             executable='joint_state_publisher',
             name='joint_state_publisher',
-            namespace=LaunchConfiguration('DRONE_NAME'),
             parameters=[
                 {'use_sim_time': LaunchConfiguration('use_sim_time')}
             ]
@@ -25,7 +24,6 @@ def generate_launch_description():
             package='robot_state_publisher',
             executable='robot_state_publisher',
             name='robot_state_publisher',
-            namespace=LaunchConfiguration('DRONE_NAME'),
             output='screen',
             parameters=[
                 {

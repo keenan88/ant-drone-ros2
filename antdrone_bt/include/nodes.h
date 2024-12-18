@@ -59,10 +59,18 @@ public:
   static BT::PortsList providedPorts();
 };
 
-using SendPickupCmd_srv_t = linkattacher_msgs::srv::AttachLink;
-class LowerPickupWorker : public RosServiceNode<SendPickupCmd_srv_t> {
+class LowerWorker : public RosServiceNode<linkattacher_msgs::srv::DetachLink> {
 public:
-  LowerPickupWorker(const std::string &name, const NodeConfig &conf, const RosNodeParams &params);
+  LowerWorker(const std::string &name, const NodeConfig &conf, const RosNodeParams &params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr &request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr &response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};
+
+class PickupWorker : public RosServiceNode<linkattacher_msgs::srv::AttachLink> {
+public:
+  PickupWorker(const std::string &name, const NodeConfig &conf, const RosNodeParams &params);
   static PortsList providedPorts();
   bool setRequest(Request::SharedPtr &request) override;
   NodeStatus onResponseReceived(const Response::SharedPtr &response) override;

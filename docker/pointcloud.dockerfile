@@ -22,16 +22,25 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 
 RUN pip install setuptools==58.2.0
 
-COPY ./antdrone_pcl /home/humble_ws/src/antdrone_pcl
-COPY ./perception_pcl /home/humble_ws/src/perception_pcl
-
+WORKDIR /home/humble_ws/src
+RUN git clone https://github.com/ros-perception/perception_pcl.git 
+RUN cd perception_pcl && git checkout f127921
 WORKDIR /home/humble_ws
 
+# Do a build of just the perception_pcl library first. Hopefully this will let it rebuild less.
 RUN source /opt/ros/humble/setup.bash && \
     colcon build --symlink-install && \
     source install/setup.bash && \
     echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
+COPY ./antdrone_pcl /home/humble_ws/src/antdrone_pcl
+
+RUN source /opt/ros/humble/setup.bash && \
+    colcon build --symlink-install --packages-select antdrone_pcl && \
+    source install/setup.bash && \
+    echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
+    echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
+
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-            ros2 launch antdrone_pcl pointcloud.launch.py USE_SIM_TIME:=${USE_SIM_TIME}"
+    ros2 launch antdrone_pcl pointcloud.launch.py USE_SIM_TIME:=${USE_SIM_TIME}"

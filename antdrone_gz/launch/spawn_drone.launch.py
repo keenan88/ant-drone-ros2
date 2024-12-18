@@ -10,30 +10,60 @@ def generate_launch_description():
     
     drone_description_launch_path = os.path.join(get_package_share_directory('antdrone_description'), 'launch', 'description.launch.py')
 
-    return LaunchDescription([        
+    gz_spawn = Node(
+        package='gazebo_ros',
+        executable='spawn_entity.py',
+        name='urdf_spawner',
+        output='screen',
+        arguments=[
+            '-topic', 'robot_description', 
+            '-entity', LaunchConfiguration('DRONE_NAME'), 
+            '-x', LaunchConfiguration('x0'),
+            '-y', LaunchConfiguration('y0'),
+            '-z', LaunchConfiguration('z0'),
+            '-Y', LaunchConfiguration('yaw0'),
 
-        Node(
-            package='gazebo_ros',
-            executable='spawn_entity.py',
-            name='urdf_spawner',
-            output='screen',
-            namespace=LaunchConfiguration('DRONE_NAME'),
-            arguments=[
-                '-topic', 'robot_description', 
-                '-entity', LaunchConfiguration('DRONE_NAME'), 
-                '-x', LaunchConfiguration('x0'),
-                '-y', LaunchConfiguration('y0'),
-                '-z', LaunchConfiguration('z0'),
-                '-Y', LaunchConfiguration('yaw0'),
+        ]
+    )     
 
-            ]
-        ),       
+    drone_gz_ros_domain_bridge = Node(
+        package="antdrone_gz",
+        executable="gz_ros_domain_bridge",
+        arguments = [
+            '--from', os.getenv('MAIN_ROS_DOMAIN_ID'), '--to', os.getenv('ROS_DOMAIN_ID'),
+            '/home/humble_ws/src/antdrone_gz/config/drone_gz_ros_domain_bridge.yaml'
+        ],
+        parameters = [
+            {
+                'DRONE_NAME': LaunchConfiguration('DRONE_NAME'),
+                'from': int(os.getenv('MAIN_ROS_DOMAIN_ID')),
+                'to': int(os.getenv('ROS_DOMAIN_ID'))
+            }
+        ]
+    )
 
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(drone_description_launch_path),
-            launch_arguments={
-                'use_sim_time': 'True',
+    gz_frame_name_fixer = Node(
+        package="antdrone_gz",
+        executable="gz_frame_name_fixer",
+        parameters = [
+            {
+                'use_sim_time': True,
                 'DRONE_NAME': LaunchConfiguration('DRONE_NAME')
-            }.items()
-        )
+            }
+        ]
+    )
+
+    drone_description = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(drone_description_launch_path),
+        launch_arguments={
+            'use_sim_time': 'True',
+            'DRONE_NAME': LaunchConfiguration('DRONE_NAME')
+        }.items()
+    )
+    
+    return LaunchDescription([        
+        gz_spawn,
+        drone_gz_ros_domain_bridge,
+        gz_frame_name_fixer,
+        drone_description
     ])

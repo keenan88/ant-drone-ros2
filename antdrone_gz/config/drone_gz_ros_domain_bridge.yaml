@@ -1,0 +1,38 @@
+from_domain: 1 # Overwritten in launch file
+to_domain: 2 # Overwritten in launch file
+
+topics:
+  /clock:
+    type: rosgraph_msgs/msg/Clock
+
+  # /drone_boris/odom_gz:
+  #   type: nav_msgs/msg/Odometry
+
+  # /drone_boris/front_rs/points:
+  #   type: sensor_msgs/msg/PointCloud2
+  #   remap: /front_rs/front_rs/depth/color/points
+
+  # /drone_boris/left_rs/points:
+  #   type: sensor_msgs/msg/PointCloud2
+  #   remap: /left_rs/left_rs/depth/color/points
+
+  # /drone_boris/rear_rs/points:
+  #   type: sensor_msgs/msg/PointCloud2
+  #   remap: /rear_rs/rear_rs/depth/color/points
+
+  # /drone_boris/right_rs/points:
+  #   type: sensor_msgs/msg/PointCloud2
+  #   remap: /right_rs/right_rs/depth/color/points
+
+  # /tf:
+  #   remap: /tf_gz
+  #   type: tf2_msgs/msg/TFMessage
+
+  # /tf_static:
+  #   remap: /tf_static_gz
+  #   type: tf2_msgs/msg/TFMessage
+
+  # /cmd_vel:
+  #   type: geometry_msgs/msg/Twist
+  #   remap: /drone_boris/cmd_vel
+  #   reversed: True

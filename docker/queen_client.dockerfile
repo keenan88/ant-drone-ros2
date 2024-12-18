@@ -13,9 +13,9 @@ RUN apt-get update && \
 
 RUN python3 -m pip install flask-socketio fastapi uvicorn setuptools==58.2.0
 
-COPY ./linorobot2/antdrone_queen_client /home/humble_ws/src/antdrone_queen_client
-COPY ./linorobot2/antdrone_interfaces /home/humble_ws/src/antdrone_interfaces
-COPY ./ant_queen/ant_queen_interfaces /home/humble_ws/src/ant_queen_interfaces
+COPY ./ant-drone-ros2/antdrone_queen_client /home/humble_ws/src/antdrone_queen_client
+COPY ./ant-drone-ros2/antdrone_interfaces /home/humble_ws/src/antdrone_interfaces
+COPY ./ant-queen-ros2/ant_queen_interfaces /home/humble_ws/src/ant_queen_interfaces
 
 WORKDIR /home/humble_ws/
 

@@ -1,82 +1,82 @@
 <?xml version="1.0"?>
 <robot name="antdrone_camera" xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:macro name="camera" params="namespace camera_pos x y z r_rs p_rs yaw_rs r_cam p_cam yaw_cam">
+  <xacro:macro name="camera" params="drone_name camera_pos x y z r_rs p_rs yaw_rs r_cam p_cam yaw_cam">
 
-    <xacro:property name="rs_pcl_topic" value="/${namespace}/${camera_pos}_rs/${camera_pos}_rs/depth/color/points" />
+    <gazebo reference="${drone_name}_${camera_pos}_gazebo_camera_frame">
 
-    <gazebo reference="${namespace}_${camera_pos}_gazebo_camera_frame">
-    <sensor type="depth" name="${camera_pos}_rs">
-      <update_rate>15.0</update_rate> <!-- Gazebo does not necessarily respect this update rate when publishing the camera data to ros2 -->
-      
-      <camera>
-        <horizontal_fov>1.517</horizontal_fov>
-        <image>
-          <width>100</width>
-          <height>56</height>
-          <format>R8G8B8</format>
-        </image>
-        <clip>
-          <near>0.05</near>
-          <!--  Be sure to set far clip greater than cropbox node's cutoff distance.
-            The camera generates a grey plane at this distance that will be interpreted in nav2 as an obstacle-->
-          <far>5</far> 
-        </clip>
-        <noise>
-          <type>gaussian</type>
-          <mean>0.0</mean>
-          <stddev>0.007</stddev>
-        </noise>
-      </camera>
-
-
-      <plugin name="${camera_pos}_camera_controller" filename="libgazebo_ros_camera.so">
-        <ros>
-            <namespace>${namespace}</namespace>
-            <remapping>/${namespace}/${camera_pos}_rs/points:=${rs_pcl_topic}</remapping>
-        </ros>
-       
-        <alwaysOn>true</alwaysOn>
-        <updateRate>0.0</updateRate>
-        <cameraName>${namespace}_${camera_pos}_camera</cameraName>
-        <pointsTopicName>points</pointsTopicName>
-        <imageTopicName>image_raw</imageTopicName>
-        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-        <frameName>/${namespace}_${camera_pos}_rs_gazebo_camera_frame</frameName>
-        <hackBaseline>0.07</hackBaseline>
-        <distortionK1>0.0</distortionK1>
-        <distortionK2>0.0</distortionK2>
-        <distortionK3>0.0</distortionK3>
-        <distortionT1>0.0</distortionT1>
-        <distortionT2>0.0</distortionT2>
-
+      <sensor type="depth" name="${camera_pos}_rs">
+        <update_rate>15.0</update_rate> <!-- Gazebo does not necessarily respect this update rate when publishing the camera data to ros2 -->
         
-      </plugin>
-    </sensor>
-  </gazebo>
+        <camera>
+          <horizontal_fov>1.517</horizontal_fov>
+          <image>
+            <width>100</width>
+            <height>56</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.05</near>
+            <!--  Be sure to set far clip greater than cropbox node's cutoff distance.
+              The camera generates a grey plane at this distance that will be interpreted in nav2 as an obstacle-->
+            <far>5</far> 
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
 
-    <link name="${namespace}_${camera_pos}_rs_depth_optical_frame">
+
+        <plugin name="${camera_pos}_camera_controller" filename="libgazebo_ros_camera.so">
+          <ros>
+              <namespace>${drone_name}</namespace>
+          </ros>
+        
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>${camera_pos}_camera</cameraName>
+          <pointsTopicName>points</pointsTopicName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>${camera_pos}_rs_gazebo_camera_frame</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+
+          
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <!-- Links must have drone_name at the start in case there is another drone -->
+
+    <link name="${drone_name}_${camera_pos}_rs_depth_optical_frame">
     </link>
 
     <joint
-      name="${namespace}_base_link_to_${camera_pos}_rs" type="fixed">
+      name="${drone_name}_base_link_to_${camera_pos}_rs" type="fixed">
       <origin
         xyz="${x} ${y} ${z}"
         rpy="${r_rs} ${p_rs} ${yaw_rs}" />
-      <parent link="${namespace}_base_link" />
-      <child link="${namespace}_${camera_pos}_rs_depth_optical_frame" />
+      <parent link="${drone_name}_base_link" />
+      <child link="${drone_name}_${camera_pos}_rs_depth_optical_frame" />
     </joint>
 
-    <link name="${namespace}_${camera_pos}_gazebo_camera_frame">
+    <link name="${drone_name}_${camera_pos}_gazebo_camera_frame">
     </link>
 
     <joint
-      name="${namespace}_base_link_to_${camera_pos}_gazebo_camera_frame" type="fixed">
+      name="${drone_name}_base_link_to_${camera_pos}_gazebo_camera_frame" type="fixed">
       <origin
         xyz="${x} ${y} ${z}"
         rpy="${r_cam} ${p_cam} ${yaw_cam}" />
-      <parent link="${namespace}_base_link" />
-      <child link="${namespace}_${camera_pos}_gazebo_camera_frame" />
+      <parent link="${drone_name}_base_link" />
+      <child link="${drone_name}_${camera_pos}_gazebo_camera_frame" />
     </joint>
 
     

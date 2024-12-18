@@ -6,16 +6,24 @@
 
 /**: # Apply same params to all downsample nodes that use this config file
   ros__parameters:
-
-    # Incoming pointcloud is already cropped.
-    # Be sure to set filter_limit_max and filter_limit_min to not apply a second cropping.
-    filter_field_name: z
-    filter_limit_max: 3.0
-    filter_limit_min: -1.0
-    filter_limit_negative: false
-    
+    approximate_sync: false
+    filter_limit_negative: true
     leaf_size: 0.01
     max_queue_size: 3
     min_points_per_voxel: 1
     transient_local_indices: false
     use_indices: false
+    qos_overrides:
+      /clock:
+        subscription:
+          depth: 1
+          durability: volatile
+          history: keep_last
+          reliability: best_effort
+      /parameter_events:
+        publisher:
+          depth: 1000
+          durability: volatile
+          history: keep_last
+          reliability: reliable
+

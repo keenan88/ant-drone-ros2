@@ -13,13 +13,14 @@ RUN apt-get update && \
     ros-humble-generate-parameter-library \
     ros-humble-domain-bridge \
     ros-humble-nav2-msgs \
+    ros-humble-gazebo-ros-pkgs \
     && rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m pip install setuptools==58.2.0
 
-COPY ./linorobot2/antdrone_bt /home/humble_ws/src/antdrone_bt
-COPY ./linorobot2/antdrone_interfaces /home/humble_ws/src/antdrone_interfaces
-COPY ./ant_queen/ant_queen_interfaces /home/humble_ws/src/ant_queen_interfaces
+COPY ./ant-drone-ros2/antdrone_bt /home/humble_ws/src/antdrone_bt
+COPY ./ant-drone-ros2/antdrone_interfaces /home/humble_ws/src/antdrone_interfaces
+COPY ./ant-queen-ros2/ant_queen_interfaces /home/humble_ws/src/ant_queen_interfaces
 
 WORKDIR /home/humble_ws/src
 RUN git clone https://github.com/keenan88/IFRA_LinkAttacher
@@ -35,4 +36,4 @@ RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-            ros2 launch antdrone_bt bt.launch.py DRONE_NAME:=${DRONE_NAME} USE_SIM_TIME:=${USE_SIM_TIME}"
+    ros2 launch antdrone_bt bt.launch.py DRONE_NAME:=${DRONE_NAME} USE_SIM_TIME:=${USE_SIM_TIME}"
