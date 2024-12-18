@@ -3,12 +3,13 @@ from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
+import os
 
 def generate_launch_description():
 
     odometry_launch_path = '/home/humble_ws/src/antdrone_localization/launch/odometry.launch.py'
 
-    rviz_config_path = '/home/humble_ws/src/antdrone_navigation/rviz/' + "drone_boris" + '.rviz'
+    rviz_config_path = '/home/humble_ws/src/antdrone_navigation/rviz/' + os.getenv('DRONE_NAME') + '.rviz'
     
     controller = Node(
         package = 'nav2_controller',

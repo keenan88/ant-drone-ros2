@@ -16,8 +16,6 @@
 
 ![image](https://github.com/user-attachments/assets/aad7d61e-92ad-4c15-9a90-82a8ed1b8f70)
 
-8. When you are happy with your map, run `docker exec -it linorobot2-slam bash` and `ros2 run nav2_map_server map_saver_cli -t /nav2/map -f /home/humble_ws/src/antdrone_navigation/maps/greenhouse`
-
 9. Be sure the robot is in the map bounds or the map will not save.
 
 10. You can view your map in the [map folder](/antdrone_navigation/maps/)  

@@ -1,4 +1,4 @@
-# linorobot2
+# Ant drone
 
 # SLAM (map generation)
 
@@ -16,7 +16,6 @@
 
 ![image](https://github.com/user-attachments/assets/aad7d61e-92ad-4c15-9a90-82a8ed1b8f70)
 
-8. When you are happy with your map, run `docker exec -it linorobot2-slam bash` and `ros2 run nav2_map_server map_saver_cli -t /nav2/map -f /home/humble_ws/src/antdrone_navigation/maps/greenhouse`
 
 9. Be sure the robot is in the map bounds or the map will not save.
 
@@ -76,8 +75,6 @@ Nav2 critic scale: https://robotics.stackexchange.com/questions/105749/dwb-plann
 To get RMF fleet manager to recognize completed task, robot state must have empty path, and mode set to idle or charging
 
 
-Forked from [linorobot2](https://github.com/linorobot/linorobot2).
-
 ## Startup Instructions
 
 1. Run `xhost +local:docker` to allow RVIZ to display from Docker containers.
@@ -86,9 +83,6 @@ Forked from [linorobot2](https://github.com/linorobot/linorobot2).
 4. Run `docker compose build`.
 5. Run `docker compose up`. It may take 1-2 minutes for Gazebo to load. A `teleop twist` terminal window will open for you to drive the robot.
 6. If running NAV, set the robot's starting position in RVIZ2 with the "2D pose estimate" button. Spin the robot a few times until the scans and map line up in RVIZ2.
-7. Drive the robot using:
-   - Xbox controller (Hold the right bumper and toggle the right joystick to move), **or**
-   - Run `docker exec -it linorobot2-nav-slam bash` and `ros2 run teleop_twist_keyboard teleop_twist_keyboard` to control the robot via keyboard.
 
 ## Expected Results
 
