@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     python3-pip \
     ros-humble-nav2-bringup \
     && rm -rf /var/lib/apt/lists/*
-    
+
 
 RUN pip install setuptools==58.2.0
 
@@ -26,4 +26,4 @@ RUN source /opt/ros/humble/setup.bash && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-            ros2 launch antdrone_navigation navigation.launch.py DRONE_NAME:=${DRONE_NAME} USE_SIM_TIME:=${USE_SIM_TIME}"
+    ros2 launch antdrone_navigation navigation.launch.py DRONE_NAME:=${DRONE_NAME} USE_SIM_TIME:=${USE_SIM_TIME} x0:=${x0} y0:=${y0} z0:=${z0} yaw0:=${yaw0}"

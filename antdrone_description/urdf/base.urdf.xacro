@@ -2,9 +2,7 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:macro name="base" params="drone_name length width height">
 
-    <!-- Links must have drone_name at the start in case there is another drone -->
-
-    <link name="${drone_name}_base_link">
+    <link name="base_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
@@ -33,7 +31,7 @@
       </inertial>
     </link>
 
-  <gazebo reference="${drone_name}_base_link">
+  <gazebo reference="base_link">
     <material>Gazebo/White</material>
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
@@ -43,7 +41,7 @@
   </gazebo>
 
 
-  <link name="${drone_name}_attachment_point">
+  <link name="attachment_point">
 
       <inertial>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -58,23 +56,13 @@
       </inertial>
     </link>
 
-
-
-  <!-- <gazebo reference="${drone_name}_attachment_point">
-    <material>Gazebo/Gray</material>
-    <turnGravityOff>false</turnGravityOff>
-    <selfCollide>true</selfCollide>
-  </gazebo> -->
-
-
-
-  <joint name="${drone_name}_attachment_to_base" type="fixed">
-    <parent link="${drone_name}_base_link"/>
-    <child link="${drone_name}_attachment_point"/>
+  <joint name="attachment_to_base" type="fixed">
+    <parent link="base_link"/>
+    <child link="attachment_point"/>
     <origin xyz="0 0 0.6" rpy="0 0 1.57"/>
   </joint>
 
-  <gazebo reference='${drone_name}_attachment_to_base'>
+  <gazebo reference='attachment_to_base'>
     <preserveFixedJoint>true</preserveFixedJoint>
   </gazebo>
 

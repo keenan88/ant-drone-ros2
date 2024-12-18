@@ -30,7 +30,7 @@ def generate_launch_description():
                     'use_sim_time': LaunchConfiguration('use_sim_time'),
                     'robot_description': Command([
                         'xacro ', urdf_path,
-                        ' namespace:=', LaunchConfiguration('DRONE_NAME')
+                        ' drone_name:=', LaunchConfiguration('DRONE_NAME')
                     ])
                 }
             ]

@@ -89,7 +89,14 @@ def generate_launch_description():
         parameters=[
             '/home/humble_ws/src/antdrone_navigation/config/amcl.yaml',
             {
-                'use_sim_time': LaunchConfiguration("USE_SIM_TIME")
+                'use_sim_time': LaunchConfiguration("USE_SIM_TIME"),
+                "set_initial_pose": True,
+                "initial_pose": {
+                    'x': LaunchConfiguration("x0"), 
+                    'y': LaunchConfiguration("y0"), 
+                    'z': LaunchConfiguration("z0"), 
+                    'yaw': LaunchConfiguration("yaw0")
+                }
             }
         ]
     )

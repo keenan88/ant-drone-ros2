@@ -3,7 +3,7 @@
 
   <xacro:macro name="camera" params="drone_name camera_pos x y z r_rs p_rs yaw_rs r_cam p_cam yaw_cam">
 
-    <gazebo reference="${drone_name}_${camera_pos}_gazebo_camera_frame">
+    <gazebo reference="${camera_pos}_gazebo_camera_frame">
 
       <sensor type="depth" name="${camera_pos}_rs">
         <update_rate>15.0</update_rate> <!-- Gazebo does not necessarily respect this update rate when publishing the camera data to ros2 -->
@@ -53,36 +53,29 @@
       </sensor>
     </gazebo>
 
-    <!-- Links must have drone_name at the start in case there is another drone -->
-
-    <link name="${drone_name}_${camera_pos}_rs_depth_optical_frame">
+    <link name="${camera_pos}_rs_depth_optical_frame">
     </link>
 
     <joint
-      name="${drone_name}_base_link_to_${camera_pos}_rs" type="fixed">
+      name="base_link_to_${camera_pos}_rs" type="fixed">
       <origin
         xyz="${x} ${y} ${z}"
         rpy="${r_rs} ${p_rs} ${yaw_rs}" />
-      <parent link="${drone_name}_base_link" />
-      <child link="${drone_name}_${camera_pos}_rs_depth_optical_frame" />
+      <parent link="base_link" />
+      <child link="${camera_pos}_rs_depth_optical_frame" />
     </joint>
 
-    <link name="${drone_name}_${camera_pos}_gazebo_camera_frame">
+    <link name="${camera_pos}_gazebo_camera_frame">
     </link>
 
     <joint
-      name="${drone_name}_base_link_to_${camera_pos}_gazebo_camera_frame" type="fixed">
+      name="base_link_to_${camera_pos}_gazebo_camera_frame" type="fixed">
       <origin
         xyz="${x} ${y} ${z}"
         rpy="${r_cam} ${p_cam} ${yaw_cam}" />
-      <parent link="${drone_name}_base_link" />
-      <child link="${drone_name}_${camera_pos}_gazebo_camera_frame" />
+      <parent link="base_link" />
+      <child link="${camera_pos}_gazebo_camera_frame" />
     </joint>
-
-    
-
-
-    
 
   </xacro:macro>
 </robot>

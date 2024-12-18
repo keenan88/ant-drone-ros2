@@ -21,7 +21,6 @@ setup(
     entry_points={
         'console_scripts': [
             'wheel_odometry = antdrone_localization.wheel_odometry:main',
-            'gz_frame_name_fixer = antdrone_localization.gz_frame_name_fixer:main',
         ],
     },
 )
