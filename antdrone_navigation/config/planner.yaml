@@ -24,7 +24,7 @@
 /global_costmap:
   global_costmap:
     ros__parameters:
-      footprint_padding: 0.15 # Larger footprint padding will make it hard to navigate to be close to the pipe rail fro dropoff
+      footprint_padding: 0.1 # Larger footprint padding will make it hard to navigate to be close to the pipe rail fro dropoff
       footprint: "[ [0.41, 0.25], [-0.41, 0.25], [-0.41, -0.25], [0.41, -0.25] ]"  # Full footprint dimensions of the robot
 
       update_frequency: 1.0
