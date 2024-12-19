@@ -13,14 +13,15 @@ RUN apt-get update && \
 RUN pip install setuptools==58.2.0
 
 COPY ./antdrone_depth_to_laserscan /home/humble_ws/src/antdrone_depth_to_laserscan
+COPY ./antdrone_bringup /home/humble_ws/src/antdrone_bringup
 
 WORKDIR /home/humble_ws
 
 RUN source /opt/ros/humble/setup.bash && \
-    colcon build --symlink-install --packages-select antdrone_depth_to_laserscan && \
+    colcon build --symlink-install && \
     source install/setup.bash && \
     echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-            ros2 launch antdrone_depth_to_laserscan depth_to_laserscan.launch.py USE_SIM_TIME:=${USE_SIM_TIME}"
+            ros2 launch antdrone_bringup depth_to_laserscan.launch.py USE_SIM_TIME:=${USE_SIM_TIME}"

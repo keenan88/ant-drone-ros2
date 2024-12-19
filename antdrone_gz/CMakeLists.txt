@@ -35,10 +35,6 @@ install(TARGETS
     DESTINATION lib/${PROJECT_NAME}
 )
 
-install(DIRECTORY launch
-  DESTINATION share/${PROJECT_NAME}
-)
-
 ament_target_dependencies(gz_ros_domain_bridge ${TARGET_DEPENDS})
 ament_target_dependencies(gz_frame_name_fixer ${TARGET_DEPENDS})
 

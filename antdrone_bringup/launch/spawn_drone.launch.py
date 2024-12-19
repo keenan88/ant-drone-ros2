@@ -8,7 +8,7 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     
-    drone_description_launch_path = os.path.join(get_package_share_directory('antdrone_description'), 'launch', 'description.launch.py')
+    drone_description_launch_path = os.path.join(get_package_share_directory('antdrone_bringup'), 'launch', 'description.launch.py')
 
     gz_spawn = Node(
         package='gazebo_ros',

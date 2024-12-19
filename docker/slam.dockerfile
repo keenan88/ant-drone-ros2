@@ -17,6 +17,7 @@ WORKDIR /home/humble_ws
 
 COPY ./antdrone_slam /home/humble_ws/src/antdrone_slam
 COPY ./antdrone_localization /home/humble_ws/src/antdrone_localization
+COPY ./antdrone_bringup /home/humble_ws/src/antdrone_bringup
 
 
 RUN source /opt/ros/humble/setup.bash && \
@@ -26,4 +27,4 @@ RUN source /opt/ros/humble/setup.bash && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-            ros2 launch antdrone_slam slam.launch.py DRONE_NAME:=${DRONE_NAME} USE_SIM_TIME:=${USE_SIM_TIME}"
+            ros2 launch antdrone_bringup slam.launch.py DRONE_NAME:=${DRONE_NAME} USE_SIM_TIME:=${USE_SIM_TIME}"

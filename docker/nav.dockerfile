@@ -16,6 +16,7 @@ RUN pip install setuptools==58.2.0
 
 COPY ./antdrone_navigation /home/humble_ws/src/antdrone_navigation
 COPY ./antdrone_localization /home/humble_ws/src/antdrone_localization
+COPY ./antdrone_bringup /home/humble_ws/src/antdrone_bringup
 
 WORKDIR /home/humble_ws
 
@@ -26,4 +27,4 @@ RUN source /opt/ros/humble/setup.bash && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-    ros2 launch antdrone_navigation navigation.launch.py DRONE_NAME:=${DRONE_NAME} USE_SIM_TIME:=${USE_SIM_TIME} x0:=${x0} y0:=${y0} z0:=${z0} yaw0:=${yaw0}"
+    ros2 launch antdrone_bringup navigation.launch.py DRONE_NAME:=${DRONE_NAME} USE_SIM_TIME:=${USE_SIM_TIME} x0:=${x0} y0:=${y0} z0:=${z0} yaw0:=${yaw0}"

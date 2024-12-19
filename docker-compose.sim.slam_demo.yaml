@@ -20,7 +20,6 @@ services:
       - ROS_DOMAIN_ID=${MAIN_ROS_DOMAIN_ID}
     env_file: ./.env
     volumes:
-      - ./antdrone_gz/:/home/humble_ws/src/antdrone_gz/
       - ./antdrone_description/:/home/humble_ws/src/antdrone_description
       - ./simulation:/home/simulation
     network_mode: host

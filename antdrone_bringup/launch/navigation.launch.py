@@ -7,7 +7,7 @@ import os
 
 def generate_launch_description():
 
-    odometry_launch_path = '/home/humble_ws/src/antdrone_localization/launch/odometry.launch.py'
+    odometry_launch_path = '/home/humble_ws/src/antdrone_bringup/launch/localization.launch.py'
 
     rviz_config_path = '/home/humble_ws/src/antdrone_navigation/rviz/' + os.getenv('DRONE_NAME') + '.rviz'
     

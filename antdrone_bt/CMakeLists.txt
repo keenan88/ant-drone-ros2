@@ -67,11 +67,6 @@ install(TARGETS
     DESTINATION lib/${PROJECT_NAME}
 )
 
-install(
-  DIRECTORY launch
-  DESTINATION share/${PROJECT_NAME}
-)
-
 ament_target_dependencies(antdrone_bt ${TARGET_DEPENDS})
 
 ament_target_dependencies(queen_domain_bridge ${TARGET_DEPENDS})

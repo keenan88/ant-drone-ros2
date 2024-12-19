@@ -21,7 +21,6 @@ WORKDIR /home/models/
 RUN git clone https://github.com/osrf/gazebo_models.git
 
 
-COPY ./antdrone_gz/ /home/humble_ws/src/antdrone_gz/
 COPY ./antdrone_description/ /home/humble_ws/src/antdrone_description
 RUN git clone https://github.com/keenan88/IFRA_LinkAttacher /home/humble_ws/src/IFRA_LinkAttacher
 COPY ./simulation /home/simulation

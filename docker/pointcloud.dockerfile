@@ -35,12 +35,13 @@ RUN source /opt/ros/humble/setup.bash && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
 COPY ./antdrone_pcl /home/humble_ws/src/antdrone_pcl
+COPY ./antdrone_bringup /home/humble_ws/src/antdrone_bringup
 
 RUN source /opt/ros/humble/setup.bash && \
-    colcon build --symlink-install --packages-select antdrone_pcl && \
+    colcon build --symlink-install --packages-select antdrone_pcl antdrone_bringup && \
     source install/setup.bash && \
     echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-    ros2 launch antdrone_pcl pointcloud.launch.py USE_SIM_TIME:=${USE_SIM_TIME}"
+    ros2 launch antdrone_bringup pcl.launch.py USE_SIM_TIME:=${USE_SIM_TIME}"
