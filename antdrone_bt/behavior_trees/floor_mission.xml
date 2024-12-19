@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="3"
+      main_tree_to_execute="main_loop">
+  <BehaviorTree ID="dropoff_sequence">
+    <Sequence>
+      <SuspendReleaseRMFPathing set_state="suspend"/>
+      <SendDropoffPosition drone_name="{drone_name}"/>
+      <LowerWorker drone_name="{drone_name}"
+                   worker_name="{worker_name}"/>
+      <UpdateFootprint is_carrying_worker="False"/>
+      <SetLocalCostmapParams is_carrying_worker="False"/>
+      <SetGlobalCostmapParams is_carrying_worker="False"/>
+      <UpdateFootprint is_carrying_worker="False"/>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="floor_mission">
+    <Sequence>
+      <ClearLocalCostmap/>
+      <ClearGlobalCostmap/>
+      <SubTree ID="go_to_vertex_w_feedback"
+               vertex_name="{pickup_location_name}"
+               orientation="{pickup_orientation}"
+               drone_name="{drone_name}"/>
+      <SubTree ID="pickup_sequence"
+               drone_name="{drone_name}"
+               worker_name="{worker_name}"/>
+      <SubTree ID="go_to_vertex_w_feedback"
+               vertex_name="{dropoff_location_name}"
+               orientation="{dropoff_orientation}"
+               drone_name="{drone_name}"/>
+      <SubTree ID="dropoff_sequence"
+               drone_name="{drone_name}"
+               worker_name="{worker_name}"/>
+      <SubTree ID="go_to_vertex_w_feedback"
+               vertex_name="{post_dropoff_location_name}"
+               orientation="{dropoff_orientation}"
+               drone_name="{drone_name}"/>
+      <ClearLocalCostmap/>
+      <ClearGlobalCostmap/>
+      <SucceedFloorMission drone_name="{drone_name}"/>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="go_to_vertex_w_feedback">
+    <Sequence>
+      <GoToWaypoint vertex_name="{vertex_name}"
+                    orientation="{orientation}"
+                    drone_name="{drone_name}"/>
+      <RetryUntilSuccessful num_attempts="-1">
+        <Delay delay_msec="250">
+          <CheckGoToWaypointSuccess vertex_name="{vertex_name}"
+                                    error_state=""
+                                    drone_name="{drone_name}"/>
+        </Delay>
+      </RetryUntilSuccessful>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="main_loop">
+    <Sequence>
+      <RetryUntilSuccessful num_attempts="-1">
+        <Delay delay_msec="250">
+          <RegisterDrone drone_name="{drone_name}"/>
+        </Delay>
+      </RetryUntilSuccessful>
+      <Repeat num_cycles="-1">
+        <Sequence>
+          <RetryUntilSuccessful num_attempts="-1">
+            <Delay delay_msec="1000">
+              <Sequence>
+                <CheckHeartbeat/>
+                <CheckRMFClientIdle/>
+                <CheckIfFloorMissionTriggered drone_name="{drone_name}"
+                                              worker_name="{worker_name}"
+                                              pickup_location_name="{pickup_location_name}"
+                                              pickup_orientation="{pickup_orientation}"
+                                              dropoff_location_name="{dropoff_location_name}"
+                                              dropoff_orientation="{dropoff_orientation}"
+                                              post_dropoff_location_name="{post_dropoff_location_name}"/>
+              </Sequence>
+            </Delay>
+          </RetryUntilSuccessful>
+          <SubTree ID="floor_mission"
+                   drone_name="{drone_name}"
+                   worker_name="{worker_name}"
+                   pickup_location_name="{pickup_location_name}"
+                   pickup_orientation="{pickup_orientation}"
+                   dropoff_location_name="{dropoff_location_name}"
+                   dropoff_orientation="{dropoff_orientation}"
+                   post_dropoff_location_name="{post_dropoff_location_name}"/>
+        </Sequence>
+      </Repeat>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="pickup_sequence">
+    <Sequence>
+      <SuspendReleaseRMFPathing set_state="suspend"/>
+      <TriggerWorkerComeout worker_name="{worker_name}"/>
+      <RetryUntilSuccessful num_attempts="-1">
+        <Delay delay_msec="1000">
+          <CheckComeOutComplete worker_name="{worker_name}"/>
+        </Delay>
+      </RetryUntilSuccessful>
+      <PickupWorker drone_name="{drone_name}"
+                    worker_name="{worker_name}"/>
+      <ClearLocalCostmap/>
+      <ClearGlobalCostmap/>
+      <UpdateFootprint is_carrying_worker="True"/>
+      <SetLocalCostmapParams is_carrying_worker="True"/>
+      <SetGlobalCostmapParams is_carrying_worker="True"/>
+      <SuspendReleaseRMFPathing set_state="release"/>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="repeat_idle_check">
+    <RetryUntilSuccessful num_attempts="-1">
+      <Delay delay_msec="3000">
+        <CheckRMFClientIdle/>
+      </Delay>
+    </RetryUntilSuccessful>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="CheckComeOutComplete"
+            editable="true">
+      <input_port name="worker_name"/>
+    </Action>
+    <Action ID="CheckGoToWaypointSuccess"
+            editable="true">
+      <input_port name="vertex_name"/>
+      <input_port name="error_state"/>
+      <input_port name="drone_name"/>
+    </Action>
+    <Action ID="CheckHeartbeat"
+            editable="true"/>
+    <Action ID="CheckIfFloorMissionTriggered"
+            editable="true">
+      <input_port name="drone_name"/>
+      <output_port name="worker_name"/>
+      <output_port name="pickup_location_name"/>
+      <output_port name="pickup_orientation"/>
+      <output_port name="dropoff_location_name"/>
+      <output_port name="dropoff_orientation"/>
+      <output_port name="post_dropoff_location_name"/>
+    </Action>
+    <Action ID="CheckRMFClientIdle"
+            editable="true"/>
+    <Action ID="ClearGlobalCostmap"
+            editable="true"/>
+    <Action ID="ClearLocalCostmap"
+            editable="true"/>
+    <Action ID="GoToWaypoint"
+            editable="true">
+      <input_port name="vertex_name"/>
+      <input_port name="orientation"/>
+      <input_port name="drone_name"/>
+    </Action>
+    <Action ID="LowerWorker"
+            editable="true">
+      <input_port name="drone_name"/>
+      <input_port name="worker_name"/>
+    </Action>
+    <Action ID="PickupWorker"
+            editable="true">
+      <input_port name="drone_name"/>
+      <input_port name="worker_name"/>
+    </Action>
+    <Action ID="RegisterDrone"
+            editable="true">
+      <inout_port name="drone_name"/>
+    </Action>
+    <Action ID="SendDropoffPosition"
+            editable="true">
+      <input_port name="drone_name"/>
+    </Action>
+    <Action ID="SetGlobalCostmapParams"
+            editable="true">
+      <input_port name="is_carrying_worker"/>
+    </Action>
+    <Action ID="SetLocalCostmapParams"
+            editable="true">
+      <input_port name="is_carrying_worker"/>
+    </Action>
+    <Action ID="SucceedFloorMission"
+            editable="true">
+      <input_port name="drone_name"/>
+    </Action>
+    <Action ID="SuspendReleaseRMFPathing"
+            editable="true">
+      <input_port name="set_state"/>
+    </Action>
+    <Action ID="TriggerWorkerComeout"
+            editable="true">
+      <input_port name="worker_name"/>
+    </Action>
+    <Action ID="UpdateFootprint"
+            editable="true">
+      <input_port name="is_carrying_worker"/>
+    </Action>
+  </TreeNodesModel>
+
+</root>

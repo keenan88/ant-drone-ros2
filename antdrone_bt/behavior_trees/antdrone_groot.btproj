@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="3" project_name="Project">
+    <include path="drone_bt.xml"/>
+    <!-- Description of Node Models (used by Groot) -->
+    <TreeNodesModel>
+        <Action ID="CheckComeOutComplete" editable="true">
+            <input_port name="worker_name"/>
+        </Action>
+        <Action ID="CheckGoToWaypointSuccess" editable="true">
+            <input_port name="vertex_name"/>
+            <input_port name="error_state"/>
+            <input_port name="drone_name"/>
+        </Action>
+        <Action ID="CheckHeartbeat" editable="true"/>
+        <Action ID="CheckIfFloorMissionTriggered" editable="true">
+            <input_port name="drone_name"/>
+            <output_port name="worker_name"/>
+            <output_port name="pickup_location_name"/>
+            <output_port name="pickup_orientation"/>
+            <output_port name="dropoff_location_name"/>
+            <output_port name="dropoff_orientation"/>
+            <output_port name="post_dropoff_location_name"/>
+        </Action>
+        <Action ID="CheckRMFClientIdle" editable="true"/>
+        <Action ID="ClearGlobalCostmap" editable="true"/>
+        <Action ID="ClearLocalCostmap" editable="true"/>
+        <Action ID="GoToWaypoint" editable="true">
+            <input_port name="vertex_name"/>
+            <input_port name="orientation"/>
+            <input_port name="drone_name"/>
+        </Action>
+        <Action ID="LowerWorker" editable="true">
+            <input_port name="drone_name"/>
+            <input_port name="worker_name"/>
+        </Action>
+        <Action ID="PickupWorker" editable="true">
+            <input_port name="drone_name"/>
+            <input_port name="worker_name"/>
+        </Action>
+        <Action ID="RegisterDrone" editable="true">
+            <inout_port name="drone_name"/>
+        </Action>
+        <Action ID="SendDropoffPosition" editable="true">
+            <input_port name="drone_name"/>
+        </Action>
+        <Action ID="SetGlobalCostmapParams" editable="true">
+            <input_port name="is_carrying_worker"/>
+        </Action>
+        <Action ID="SetLocalCostmapParams" editable="true">
+            <input_port name="is_carrying_worker"/>
+        </Action>
+        <Action ID="SucceedFloorMission" editable="true">
+            <input_port name="drone_name"/>
+        </Action>
+        <Action ID="SuspendReleaseRMFPathing" editable="true">
+            <input_port name="set_state"/>
+        </Action>
+        <Action ID="TriggerWorkerComeout" editable="true">
+            <input_port name="worker_name"/>
+        </Action>
+        <Action ID="UpdateFootprint" editable="true">
+            <input_port name="is_carrying_worker"/>
+        </Action>
+    </TreeNodesModel>
+</root>

@@ -63,16 +63,6 @@ def generate_launch_description():
         ld.add_action(pointcloud_downsampler)
         ld.add_action(gz_pcl_frame_fixer)
 
-
-    bridge_out_pcl = Node(
-        package="domain_bridge",
-        executable="domain_bridge",
-        name = "bridge_out_pcl",
-        arguments = ['/home/humble_ws/src/antdrone_pcl/config/bridge_out_pcl.yaml'],
-        condition = UnlessCondition(LaunchConfiguration("USE_SIM_TIME"))
-    )
- 
-    ld.add_action(bridge_out_pcl)
     
     
     return ld

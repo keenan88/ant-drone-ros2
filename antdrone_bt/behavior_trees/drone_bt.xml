@@ -15,39 +15,44 @@
 
       <!-- Main loop, repeat forever -->
       <Repeat num_cycles = "-1">
-
-        <Sequence>
-        
-          <RetryUntilSuccessful num_attempts="-1">
-            <Delay delay_msec="1000">
-              <Sequence>
-                <CheckHeartbeat />
-                <CheckRMFClientIdle/> 
-                <CheckIfFloorMissionTriggered
-                  drone_name = "{drone_name}"
-                  worker_name = "{worker_name}"
-                  pickup_location_name = "{pickup_location_name}"
-                  pickup_orientation = "{pickup_orientation}"
-                  dropoff_location_name = "{dropoff_location_name}"
-                  dropoff_orientation = "{dropoff_orientation}"
-                  post_dropoff_location_name = "{post_dropoff_location_name}"
-                />
-              </Sequence>
-            </Delay>
-          </RetryUntilSuccessful>
-
-          <SubTree ID="floor_mission" 
-            drone_name = "{drone_name}"
-            worker_name = "{worker_name}"
-            pickup_location_name = "{pickup_location_name}"
-            pickup_orientation = "{pickup_orientation}"
-            dropoff_location_name = "{dropoff_location_name}"
-            dropoff_orientation = "{dropoff_orientation}"
-            post_dropoff_location_name = "{post_dropoff_location_name}"
-          />
-
-        </Sequence>
+        <SubTree ID="execute_missions" 
+          drone_name = "{drone_name}"
+        />
       </Repeat>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="execute_missions">
+    <Sequence>
+        
+      <RetryUntilSuccessful num_attempts="-1">
+        <Delay delay_msec="1000">
+          <Sequence>
+            <CheckHeartbeat />
+            <CheckRMFClientIdle/> 
+            <CheckIfFloorMissionTriggered
+              drone_name = "{drone_name}"
+              worker_name = "{worker_name}"
+              pickup_location_name = "{pickup_location_name}"
+              pickup_orientation = "{pickup_orientation}"
+              dropoff_location_name = "{dropoff_location_name}"
+              dropoff_orientation = "{dropoff_orientation}"
+              post_dropoff_location_name = "{post_dropoff_location_name}"
+            />
+          </Sequence>
+        </Delay>
+      </RetryUntilSuccessful>
+
+      <SubTree ID="floor_mission" 
+        drone_name = "{drone_name}"
+        worker_name = "{worker_name}"
+        pickup_location_name = "{pickup_location_name}"
+        pickup_orientation = "{pickup_orientation}"
+        dropoff_location_name = "{dropoff_location_name}"
+        dropoff_orientation = "{dropoff_orientation}"
+        post_dropoff_location_name = "{post_dropoff_location_name}"
+      />
+
     </Sequence>
   </BehaviorTree>
 
