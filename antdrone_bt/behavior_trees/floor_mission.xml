@@ -17,7 +17,7 @@
       <Repeat num_cycles = "-1">
 
         <Sequence>
-          <!-- Keep checking if drone is idle w/ heartbeat, and triggered for a floor mission -->
+        
           <RetryUntilSuccessful num_attempts="-1">
             <Delay delay_msec="1000">
               <Sequence>
@@ -36,7 +36,6 @@
             </Delay>
           </RetryUntilSuccessful>
 
-          <!-- Execute the floor mission -->
           <SubTree ID="floor_mission" 
             drone_name = "{drone_name}"
             worker_name = "{worker_name}"
@@ -59,18 +58,63 @@
       <ClearLocalCostmap/>
       <ClearGlobalCostmap/>
 
-      <GoToWaypoint 
-        vertex_name="{pickup_location_name}" 
-        orientation="{pickup_orientation}"
-        drone_name="{drone_name}" 
+      <SubTree ID="go_to_vertex_w_feedback" 
+        vertex_name = "{pickup_location_name}"
+        orientation = "{pickup_orientation}"
+        drone_name = "{drone_name}"
       />
 
+      <SubTree ID="pickup_sequence" 
+        drone_name = "{drone_name}"
+        worker_name = "{worker_name}"
+      />
+
+      <SubTree ID="go_to_vertex_w_feedback" 
+        vertex_name = "{dropoff_location_name}"
+        orientation = "{dropoff_orientation}"
+        drone_name = "{drone_name}"
+      />
+
+      <SubTree ID="dropoff_sequence" 
+        drone_name = "{drone_name}"
+        worker_name = "{worker_name}"
+      />
+
+      <SubTree ID="go_to_vertex_w_feedback" 
+        vertex_name = "{post_dropoff_location_name}"
+        orientation = "{dropoff_orientation}"
+        drone_name = "{drone_name}"
+      />
+
+      <ClearLocalCostmap/>
+      <ClearGlobalCostmap/>
+
+      <SucceedFloorMission drone_name="{drone_name}"/>
+
+
+    </Sequence>
+  </BehaviorTree>
+
+
+  <BehaviorTree ID="go_to_vertex_w_feedback">
+    <Sequence>
+      <GoToWaypoint 
+        vertex_name="{vertex_name}" 
+        orientation="{orientation}"
+        drone_name="{drone_name}" 
+      />
+      
       <RetryUntilSuccessful num_attempts="-1">
         <Delay delay_msec="250">
-          <CheckGoToWaypointSuccess vertex_name="{pickup_location_name}" error_state="{error_state}" drone_name="{drone_name}"/>
+          <CheckGoToWaypointSuccess vertex_name="{vertex_name}" drone_name="{drone_name}"/>
         </Delay>            
       </RetryUntilSuccessful>
+    </Sequence>
+  </BehaviorTree>
 
+
+  <BehaviorTree ID="pickup_sequence">
+    <Sequence>
       <SuspendReleaseRMFPathing set_state="suspend"/>
       <TriggerWorkerComeout worker_name="{worker_name}"/>
 
@@ -87,51 +131,24 @@
       <SetLocalCostmapParams is_carrying_worker="True"/>
       <SetGlobalCostmapParams is_carrying_worker="True"/>
       <SuspendReleaseRMFPathing set_state="release"/>
+    </Sequence>
+  </BehaviorTree>
 
+  <BehaviorTree ID="dropoff_sequence">
 
-      <GoToWaypoint 
-        vertex_name="{dropoff_location_name}" 
-        orientation="{dropoff_orientation}"
-        drone_name="{drone_name}" 
-      />
-      
-      <RetryUntilSuccessful num_attempts="-1">
-        <Delay delay_msec="250">
-          <CheckGoToWaypointSuccess vertex_name="{dropoff_location_name}" error_state="{error_state}" drone_name="{drone_name}"/>
-        </Delay>            
-      </RetryUntilSuccessful>
-
-      <SendDropoffPosition drone_name="{drone_name}"/>
-
+    <Sequence>
       <SuspendReleaseRMFPathing set_state="suspend"/>
+      <SendDropoffPosition drone_name="{drone_name}"/>
       <LowerWorker drone_name="{drone_name}" worker_name="{worker_name}"/>
       <UpdateFootprint is_carrying_worker="False"/>
       <SetLocalCostmapParams is_carrying_worker="False"/>
       <SetGlobalCostmapParams is_carrying_worker="False"/>
       <UpdateFootprint is_carrying_worker="False"/>
-
-      <SuspendReleaseRMFPathing set_state="release"/>
-
-      <GoToWaypoint 
-        vertex_name="{post_dropoff_location_name}" 
-        orientation="{dropoff_orientation}"
-        drone_name="{drone_name}" 
-      />
-
-      <RetryUntilSuccessful num_attempts="-1">
-        <Delay delay_msec="250">
-          <CheckGoToWaypointSuccess vertex_name="{post_dropoff_location_name}" error_state="{error_state}" drone_name="{drone_name}"/>
-        </Delay>            
-      </RetryUntilSuccessful>
-
-      <ClearLocalCostmap/>
-      <ClearGlobalCostmap/>
-
-      <SucceedFloorMission drone_name="{drone_name}"/>
-
-
     </Sequence>
+
   </BehaviorTree>
+
+  
 
   <BehaviorTree ID="repeat_idle_check">
 

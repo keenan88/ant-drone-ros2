@@ -20,7 +20,7 @@ def generate_launch_description():
         ]
     )
 
-    bridge_to_queen_and_rmf = Node(
+    bridge_to_queen = Node(
         package='antdrone_bt',
         executable='queen_domain_bridge',
         parameters=[
@@ -35,7 +35,7 @@ def generate_launch_description():
     )
 
     ld.add_action(antdrone_bt)
-    ld.add_action(bridge_to_queen_and_rmf)
+    ld.add_action(bridge_to_queen)
 
     return ld
 

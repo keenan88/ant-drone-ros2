@@ -14,7 +14,7 @@ import math
 class AntDroneQueenClient(Node):
 
     def __init__(self):
-        super().__init__('antdrone_queen_client')
+        super().__init__('queen_client')
 
         self.drone_name = self.declare_parameter('DRONE_NAME', '').get_parameter_value().string_value
         self.fleet_name = self.declare_parameter('FLEET_NAME', '').get_parameter_value().string_value

@@ -1,4 +1,4 @@
-name: bridge_to_queen_and_rmf
+name: bridge_to_queen
 
 from_domain: 1 # Overwritten in launch file
 to_domain: 2 # Overwritten in launch file
