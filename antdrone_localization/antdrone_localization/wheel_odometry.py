@@ -23,7 +23,6 @@ class MecanumStateEstimator(Node):
         self.vy = 0.0
         self.vtheta = 0.0
 
-        # Subscriber for joint state (wheel velocities)
         self.subscription = self.create_subscription(
             JointState,
             'wheel_joint_states',
@@ -37,7 +36,7 @@ class MecanumStateEstimator(Node):
         self.odom_base_link_tf.header.frame_id = 'odom'
         self.odom_base_link_tf.child_frame_id = 'base_link'
         
-        self.odometry_publisher = self.create_publisher(Odometry, '/nav2/odom', 10)
+        self.odometry_publisher = self.create_publisher(Odometry, 'odom', 10)
         
         self.last_time = -1
         self.first_time_set = False
@@ -93,10 +92,6 @@ class MecanumStateEstimator(Node):
         pseudo_inv = np.linalg.pinv(A)
         vxytheta = np.matmul(pseudo_inv, w) * r
 
-        #vxytheta[1] /= 1.2 # Scaled y velocity, based on observations in simulation
-        vxytheta[2] *= 2 / 1.02 # Scaled angular velocity, based on observations in simulation
-
-
         return vxytheta
 
     def quaternion_from_euler_0_0(self, theta):
@@ -146,7 +141,6 @@ class MecanumStateEstimator(Node):
         asdf.header.stamp = self.get_clock().now().to_msg()
         asdf.transform.translation.x = 5.0
         asdf.transform.translation.y = -3.5
-        # self.tf_static_broadcaster.sendTransform(asdf)
 
 
 

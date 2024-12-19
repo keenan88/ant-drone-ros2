@@ -1,13 +1,8 @@
 #include "nodes.h"
 
-SetCostmapParams::SetCostmapParams(const std::string &name,
-                                   const NodeConfig &conf,
-                                   const RosNodeParams &params)
-    : RosServiceNode<rcl_interfaces::srv::SetParameters>(name, conf, params) {}
+SetCostmapParams::SetCostmapParams(const std::string &name, const NodeConfig &conf, const RosNodeParams &params) : RosServiceNode<rcl_interfaces::srv::SetParameters>(name, conf, params) {}
 
-PortsList SetCostmapParams::providedPorts() {
-  return {BT::InputPort<bool>("is_carrying_worker")};
-}
+PortsList SetCostmapParams::providedPorts() { return {BT::InputPort<bool>("is_carrying_worker")}; }
 
 bool SetCostmapParams::setRequest(Request::SharedPtr &request) {
 
@@ -35,9 +30,7 @@ bool SetCostmapParams::setRequest(Request::SharedPtr &request) {
     request->parameters = {inflation_radius_param};
 
     if (auto node = node_.lock()) {
-      RCLCPP_INFO(node->get_logger(),
-                  "[%s] Sending costmap set inflation request ",
-                  this->name().c_str());
+      RCLCPP_INFO(node->get_logger(), "[%s] Sending costmap set inflation request ", this->name().c_str());
     }
 
     return true;
@@ -46,12 +39,9 @@ bool SetCostmapParams::setRequest(Request::SharedPtr &request) {
   return false;
 }
 
-NodeStatus
-SetCostmapParams::onResponseReceived(const Response::SharedPtr &response) {
+NodeStatus SetCostmapParams::onResponseReceived(const Response::SharedPtr &response) {
   if (auto node = node_.lock()) {
-    RCLCPP_INFO(node->get_logger(), "[%s] Costmap set results:  %d, %s",
-                this->name().c_str(), response->results[0].successful,
-                response->results[0].reason.c_str());
+    RCLCPP_INFO(node->get_logger(), "[%s] Costmap set results:  %d, %s", this->name().c_str(), response->results[0].successful, response->results[0].reason.c_str());
   }
 
   if (response->results[0].successful) {
@@ -62,6 +52,7 @@ SetCostmapParams::onResponseReceived(const Response::SharedPtr &response) {
 }
 
 NodeStatus SetCostmapParams::onFailure(ServiceNodeErrorCode error) {
-  if(error){} // To avoid build warning
+  if (error) {
+  } // To avoid build warning
   return NodeStatus::FAILURE;
 }

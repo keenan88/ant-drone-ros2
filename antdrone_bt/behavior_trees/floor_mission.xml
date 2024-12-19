@@ -52,8 +52,6 @@
     </Sequence>
   </BehaviorTree>
 
-
-
   <BehaviorTree ID="floor_mission">
 
     <Sequence>

@@ -4,3 +4,12 @@ yolo/marked
 yolo/slam_images
 yolo/new_dir
 yolo/datasets/*
+
+./antdrone_depth_to_laserscan/antdrone_depth_to_laserscan/__pycache__
+./antdrone_queen_client/antdrone_queen_client/__pycache__
+./simulation/gazebo/__pycache__
+./antdrone_localization/antdrone_localization/__pycache__
+./antdrone_navigation/antdrone_navigation/__pycache__
+./antdrone_joystick/antdrone_joystick/__pycache__
+./antdrone_pcl/antdrone_pcl/__pycache__
+./antdrone_bringup/launch/__pycache__
