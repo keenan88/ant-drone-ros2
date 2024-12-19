@@ -82,10 +82,10 @@ services:
     environment:
       - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
       - DRONE_NAME=${DRONE0_NAME}
-      - x0=6.75
-      - y0=-3.72
-      - z0=0.15
-      - yaw0=0.0
+      - x0=${DRONE0_GZ_X0}
+      - y0=${DRONE0_GZ_Y0}
+      - z0=${DRONE0_GZ_Z0}
+      - yaw0=${DRONE0_GZ_YAW0}
     env_file: ./.env
     volumes:
       - ./antdrone_gz/:/home/humble_ws/src/antdrone_gz/

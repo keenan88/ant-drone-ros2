@@ -36,8 +36,8 @@
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
     <!-- Be careful!! Increasing mu1 and mu2 will prevent gazebo's libplanar movement plugin from executing small velocites needed at end of Nav2 paths -->
-    <mu1>0.01</mu1>
-    <mu2>0.01</mu2>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
   </gazebo>
 
 
