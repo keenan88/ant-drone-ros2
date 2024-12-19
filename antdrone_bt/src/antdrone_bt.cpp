@@ -8,7 +8,7 @@
 
 using namespace std::chrono_literals;
 
-const std::string default_bt_xml_file = "/home/humble_ws/src/antdrone_bt/behavior_trees/floor_mission.xml";
+const std::string default_bt_xml_file = "/home/humble_ws/src/antdrone_bt/behavior_trees/drone_bt.xml";
 
 class FloorMissionNode : public rclcpp::Node {
 public:

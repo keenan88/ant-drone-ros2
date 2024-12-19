@@ -144,6 +144,7 @@
       <SetLocalCostmapParams is_carrying_worker="False"/>
       <SetGlobalCostmapParams is_carrying_worker="False"/>
       <UpdateFootprint is_carrying_worker="False"/>
+      <SuspendReleaseRMFPathing set_state="release"/>
     </Sequence>
 
   </BehaviorTree>
