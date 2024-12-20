@@ -45,3 +45,5 @@ flowchart TD
     bt <-- Mission coordination --> queen_domain_bridge
     queen_domain_bridge -- Mission requests --> bt
 ```
+
+See further [documentation of the behavior tree](docs/bt.md).
