@@ -5,7 +5,7 @@
 1. Run `xhost +local:docker`.
 2. Plugin the `Microsoft Corp. Xbox Wireless Controller (model 1914)` to the computer. 
 3. Run `docker compose -f docker-compose.sim.slam_demo.yaml up`. The first time will take longer for the containers to build.
-4.  RVIZ2 will open a view of the robot, including its base frame, laser scans, and the map being generated.
+4. RVIZ2 will open a view of the robot, including its base frame, laser scans, and the map being generated.
 
 ![image](https://github.com/user-attachments/assets/46f9765e-67b2-4c94-81f8-cf27c6a01253)
 
@@ -18,37 +18,19 @@
 12. Gimp can be used to cleanup any noise or moveable obstalces in the map, and rotate the map to be aligned with it's image coordinates.
 13. Follow [this tutorial](https://docs.nav2.org/tutorials/docs/navigation2_with_keepout_filter.html) to add keepout zones to the map.
 
+## Navigation Startup - Simulation
+
+1. Run `xhost +local:docker`.
+2. Plugin the `Microsoft Corp. Xbox Wireless Controller (model 1914)` to the computer. 
+3. Run `docker compose -f docker-compose.sim.nav_demo.yaml up`. The first time will take longer for the containers to build.
+4. RVIZ2 will open a view of the robot, including its base frame, laser scans, and the map being generated.
+5. Drive the robot around with the xbox controller. The robot should stay well-localizaed and the scans should stay aligned with the map.
+6. Send a nav2 goal with rviz. The robot should automatically drive itself to the goal position.
+
+![image](https://github.com/user-attachments/assets/0fc7edd3-e9e9-4f7a-86c6-1e48aa4bf5e2)
 
 
-## Startup Instructions
-
-1. Run `xhost +local:docker` to allow RVIZ to display from Docker containers.
-<!-- 2. In `.env`, set _SLAM_OR_NAV_ to either _NAV_ or _SLAM_. -->
-3. (Optional) Plug in a Microsoft Xbox controller (Model 1914) to USB.
-4. Run `docker compose build`.
-5. Run `docker compose up`. It may take 1-2 minutes for Gazebo to load. A `teleop twist` terminal window will open for you to drive the robot.
-6. If running NAV, set the robot's starting position in RVIZ2 with the "2D pose estimate" button. Spin the robot a few times until the scans and map line up in RVIZ2.
-
-## Expected Results
-
-- Gazebo will display a view of the robot and the world, including all the lidar scans.
-  
-  ![Gazebo View](https://github.com/user-attachments/assets/fb57d7c8-b000-4d7e-bef2-c3fcf2c7c44f)
-
-- SLAM: RVIZ will open with the robot's view of the world and should begin auto-generating a map using SLAM.
-  
-  ![RVIZ Map View](https://github.com/user-attachments/assets/4be799ff-4d3a-48c9-b58a-216c756eebee)
-
-- NAV: RVIZ will open the robots view of the world with the pre-generated map.
-
-![image](https://github.com/user-attachments/assets/ab75c0cb-3a92-4946-96fa-c2bac89121b6)
-
-- NAV: Nav2 goal sent using RVIZ
-![image](https://github.com/user-attachments/assets/3130b8f3-9c7c-4197-aa68-da44a7812d5c)
-
-
-
-Drone mermaid diagram
+## High-level interaction with Queen
 
 ```mermaid
 flowchart TD
