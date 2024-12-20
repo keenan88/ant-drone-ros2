@@ -41,7 +41,7 @@ flowchart TD
     queen_client -- robot rmf state --> queen_domain_bridge
     gz_domain_bridge -- pointclouds --> pointcloud_filtering["pointcloud filtering"]
     pointcloud_filtering -- scan --> nav2
-    queen_domain_bridge -- "Mission vertices" --> queen_client
+    queen_domain_bridge -- "Mission waypoints" --> queen_client
     bt <-- Mission coordination --> queen_domain_bridge
     queen_domain_bridge -- Mission requests --> bt
 ```
