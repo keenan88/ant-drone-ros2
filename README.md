@@ -1,25 +1,19 @@
 # Ant drone
 
-# SLAM (map generation)
+## SLAM Startup - Simulation
 
-1. (first time only) Run `gitmodule init` from the repo root.
-2. (first time only) Run `docker compose -f docker-compose.slam.yaml build`
+1. Run `xhost +local:docker`.
+2. Plugin the `Microsoft Corp. Xbox Wireless Controller (model 1914)` to the computer. 
+3. Run `docker compose -f docker-compose.sim.slam_demo.yaml up`. The first time will take longer for the containers to build.
+4.  RVIZ2 will open a view of the robot, including its base frame, laser scans, and the map being generated.
 
-
-4. Run `docker compose -f docker-compose.slam.yaml up`.
-5. RVIZ2 will open a view of the robot, including its base frame, laser scans, and the map being generated.
-
-![image](https://github.com/user-attachments/assets/9cd74e48-2e57-49d6-a1e9-6bf72832615f)
+![image](https://github.com/user-attachments/assets/46f9765e-67b2-4c94-81f8-cf27c6a01253)
 
 6. Drive the robot around with the teleop terminal or xbox controller.
 7. The map will expand as the robot drives around. The robot should stay well-localized to the map, and the scans should stay aligned to the map.
-
-![image](https://github.com/user-attachments/assets/aad7d61e-92ad-4c15-9a90-82a8ed1b8f70)
-
-
+8. To save a map, run `docker exec -it antdrone0_slam` and `ros2 run nav2_map_server map_saver_cli -f /home/humble_ws/src/antdrone_slam/maps/`.
 9. Be sure the robot is in the map bounds or the map will not save.
-
-10. You can view your map in the [map folder](/antdrone_navigation/maps/)  
+10. You can view your map in the [map folder](/antdrone_slam/maps/).
 
 
 
