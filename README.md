@@ -46,4 +46,31 @@ flowchart TD
     queen_domain_bridge -- Mission requests --> bt
 ```
 
+
+
+## Package Descriptions
+
+### `antdrone_bringup`
+Launch files to start drone subsystems
+
+
+### `antdrone_bt`
+Behavior tree to organize drone actions and interact with Ant queen.
 See further [documentation of the behavior tree](docs/bt.md).
+
+### `antdrone_depth_to_laserscan`
+Converts drone's 4 pointcloud streams to lidar scans, and merges them into a single scan for Nav2 AMCL and SLAM.
+
+### `antdrone_description`
+URDF description of drone. Very simple single box with 4 depth cameras and lib planar movement plugin.
+
+### `antdrone_gz`
+Spawn of drone for gazebo, including bridging and renaming topics from gazebo ros domain to drone's ros domain id.
+
+### `antdrone_interfaces`
+Datatypes used by the behavior tree for interacting with the queen.
+
+
+
+
+
