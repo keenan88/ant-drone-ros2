@@ -34,7 +34,7 @@ The Ant Drone navigates through greenhouses, receives missions from the [Ant Que
 
 
 
-## High-level interaction with Queen
+## High-level Queen, Gazebo, & Nav2 Interactions
 
 ```mermaid
 flowchart TD
