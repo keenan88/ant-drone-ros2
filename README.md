@@ -36,6 +36,8 @@ The Ant Drone navigates through greenhouses, receives missions from the [Ant Que
 
 ## High-level Queen, Gazebo, & Nav2 Interactions
 
+The drone is inteded to coordinate missions with the queen.
+
 ```mermaid
 flowchart TD
     subgraph Drone
@@ -47,7 +49,6 @@ flowchart TD
     bt -- Navigation Commands --> Nav2
     Gazebo -- Pointclouds --> Nav2
     bt <-- Mission coordination --> Queen
-    Queen -- Mission requests --> bt
 
 ```
 
