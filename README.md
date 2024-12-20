@@ -38,16 +38,17 @@ The Ant Drone navigates through greenhouses, receives missions from the [Ant Que
 
 ```mermaid
 flowchart TD
-    nav2["nav2"] -- cmd_vel --> gz_domain_bridge["gz_domain_bridge"]
-    gz_domain_bridge -- odom --> nav2
-    gz_domain_bridge -- TF: odom to base link --> nav2
-    queen_client -- navigate to pose --> nav2
-    queen_client -- robot rmf state --> queen_domain_bridge
-    gz_domain_bridge -- pointclouds --> pointcloud_filtering["pointcloud filtering"]
-    pointcloud_filtering -- scan --> nav2
-    queen_domain_bridge -- "Mission waypoints" --> queen_client
-    bt <-- Mission coordination --> queen_domain_bridge
-    queen_domain_bridge -- Mission requests --> bt
+    subgraph Drone
+        Nav2["Nav2"]
+        bt["Behavior Tree"]
+    end
+    Nav2 -- Robot Velocities --> Gazebo["Gazebo"]
+    Gazebo -- Odometry --> Nav2
+    bt -- Navigation Commands --> Nav2
+    Gazebo -- Pointclouds --> Nav2
+    bt <-- Mission coordination --> Queen
+    Queen -- Mission requests --> bt
+
 ```
 
 
