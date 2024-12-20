@@ -23,11 +23,13 @@
 1. Run `xhost +local:docker`.
 2. Plugin the `Microsoft Corp. Xbox Wireless Controller (model 1914)` to the computer. 
 3. Run `docker compose -f docker-compose.sim.nav_demo.yaml up`. The first time will take longer for the containers to build.
-4. RVIZ2 will open a view of the robot, including its base frame, laser scans, and the map being generated.
+
+![image](https://github.com/user-attachments/assets/0fc7edd3-e9e9-4f7a-86c6-1e48aa4bf5e2)
+
 5. Drive the robot around with the xbox controller. The robot should stay well-localizaed and the scans should stay aligned with the map.
 6. Send a nav2 goal with rviz. The robot should automatically drive itself to the goal position.
 
-![image](https://github.com/user-attachments/assets/0fc7edd3-e9e9-4f7a-86c6-1e48aa4bf5e2)
+
 
 
 ## High-level interaction with Queen
