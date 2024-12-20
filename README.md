@@ -27,7 +27,7 @@
 ![image](https://github.com/user-attachments/assets/0fc7edd3-e9e9-4f7a-86c6-1e48aa4bf5e2)
 
 5. Drive the robot around with the xbox controller. The robot should stay well-localizaed and the scans should stay aligned with the map.
-6. Send a nav2 goal with rviz. The robot should automatically drive itself to the goal position.
+6. Send a `2D Goal Pose` with Rviz. The robot will automatically drive itself to the goal position.
 
 
 
