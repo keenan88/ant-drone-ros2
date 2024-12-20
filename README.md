@@ -1,6 +1,6 @@
 # Ant drone
 
-The Ant Drone navigates through greenhouses and delivers [Ant Workers](https://github.com/keenan88/ant-worker-ros2) to piperails and chargers.
+The Ant Drone navigates through greenhouses, receives missions from the [Ant Queen](https://github.com/keenan88/ant-queen-ros2), and delivers [Ant Workers](https://github.com/keenan88/ant-worker-ros2) to piperails and chargers. 
 
 ## SLAM Startup - Simulation
 
