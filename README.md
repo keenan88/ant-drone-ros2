@@ -1,5 +1,7 @@
 # Ant drone
 
+The Ant Drone navigates through greenhouses and delivers [Ant Workers](https://github.com/keenan88/ant-worker-ros2) to piperails and chargers.
+
 ## SLAM Startup - Simulation
 
 1. Run `xhost +local:docker`.
