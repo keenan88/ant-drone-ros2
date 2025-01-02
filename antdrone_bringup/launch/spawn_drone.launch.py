@@ -11,13 +11,19 @@ def generate_launch_description():
     
     drone_description_launch_path = os.path.join(get_package_share_directory('antdrone_bringup'), 'launch', 'description.launch.py')
 
+    world_name = os.environ.get('world_name')
+    drone_name = os.environ.get('DRONE_NAME')
+
     spawn_poses_path = os.path.join(get_package_share_directory('antdrone_gz'), 'config', 'spawn_poses.yaml')
     with open(spawn_poses_path, 'r') as f:
         spawn_poses = yaml.load(f, Loader=yaml.SafeLoader)
-    world_name = os.environ.get('world_name')
+    
     if world_name not in spawn_poses.keys():
-        raise Exception("Drone spawn pos for Gazebo world: [" + world_name + "] must be specified in " + spawn_poses_path)
-    spawn_pos = spawn_poses[world_name]
+        raise Exception("Drones' spawn poses for Gazebo world: [" + world_name + "] must be specified in " + spawn_poses_path)
+    if drone_name not in spawn_poses[world_name].keys():
+        raise Exception("Drone [" + drone_name + "] spawn pos for Gazebo world: [" + world_name + "] must be specified in " + spawn_poses_path)
+
+    spawn_pos = spawn_poses[world_name][drone_name]
 
     gz_spawn = Node(
         package='gazebo_ros',

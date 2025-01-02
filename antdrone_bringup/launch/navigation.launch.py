@@ -2,14 +2,19 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from ament_index_python.packages import get_package_share_directory
 from launch.substitutions import LaunchConfiguration
-import os
+import os, yaml
+from yaml.loader import SafeLoader
 
 def generate_launch_description():
 
+    world_name = os.environ.get('world_name')
+    drone_name = os.getenv('DRONE_NAME')
+
     odometry_launch_path = '/home/humble_ws/src/antdrone_bringup/launch/localization.launch.py'
 
-    rviz_config_path = '/home/humble_ws/src/antdrone_navigation/rviz/' + os.getenv('DRONE_NAME') + '.rviz'
+    rviz_config_path = '/home/humble_ws/src/antdrone_navigation/rviz/' + drone_name + '.rviz'
     
     controller = Node(
         package = 'nav2_controller',
@@ -54,7 +59,10 @@ def generate_launch_description():
         executable = 'map_server',
         parameters = [
             '/home/humble_ws/src/antdrone_navigation/config/map_server.yaml',
-            {'use_sim_time': LaunchConfiguration("USE_SIM_TIME")}, 
+            {
+                'use_sim_time': LaunchConfiguration("USE_SIM_TIME"),
+                'yaml_filename': os.path.join(get_package_share_directory('antdrone_navigation'), 'maps', world_name+'.yaml')
+            }, 
         ]
     )
 
@@ -84,6 +92,17 @@ def generate_launch_description():
         }.items()
     )
 
+    start_poses_path = os.path.join(get_package_share_directory('antdrone_navigation'), 'config', 'start_poses.yaml')
+    with open(start_poses_path, 'r') as f:
+        start_poses = yaml.load(f, Loader=yaml.SafeLoader)
+    
+    if world_name not in start_poses.keys():
+        raise Exception("Drones' Nav2 start poses in world: [" + world_name + "] must be specified in " + start_poses_path)
+    if drone_name not in start_poses[world_name].keys():
+        raise Exception("Drone [" + drone_name + "] Nav2 start pos in world: [" + world_name + "] must be specified in " + start_poses_path)
+        
+    start_pos = start_poses[world_name][drone_name]
+
     amcl = Node(
         package='nav2_amcl',
         executable='amcl',
@@ -93,10 +112,10 @@ def generate_launch_description():
                 'use_sim_time': LaunchConfiguration("USE_SIM_TIME"),
                 "set_initial_pose": True,
                 "initial_pose": {
-                    'x': LaunchConfiguration("x0"), 
-                    'y': LaunchConfiguration("y0"), 
-                    'z': LaunchConfiguration("z0"), 
-                    'yaw': LaunchConfiguration("yaw0")
+                    'x': start_pos["x0"], 
+                    'y': start_pos["y0"], 
+                    'z': start_pos["z0"], 
+                    'yaw': start_pos["yaw0"]
                 }
             }
         ]
@@ -107,9 +126,10 @@ def generate_launch_description():
         executable='map_server',
         name='filter_mask_server',
         parameters=[
-            '/home/humble_ws/src/antdrone_navigation/config/filter_mask_server.yaml',
+            '/home/humble_ws/src/antdrone_navigation/config/keepout_filter.yaml',
             {
-                'use_sim_time': LaunchConfiguration("USE_SIM_TIME")
+                'use_sim_time': LaunchConfiguration("USE_SIM_TIME"),
+                'yaml_filename': os.path.join(get_package_share_directory('antdrone_navigation'), 'maps', world_name+'_keepout.yaml')
             }
         ]
     )
@@ -119,7 +139,7 @@ def generate_launch_description():
         executable='costmap_filter_info_server',
         name='costmap_filter_info_server',
         parameters=[
-            '/home/humble_ws/src/antdrone_navigation/config/filter_mask_server.yaml',
+            '/home/humble_ws/src/antdrone_navigation/config/keepout_filter.yaml',
             {
                 'use_sim_time': LaunchConfiguration("USE_SIM_TIME")
             }

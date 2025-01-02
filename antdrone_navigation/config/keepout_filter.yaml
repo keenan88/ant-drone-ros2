@@ -9,6 +9,5 @@
 /filter_mask_server:
   ros__parameters:
     frame_id: "map"
-    yaml_filename: "/home/humble_ws/src/antdrone_navigation/maps/greenhouse_keepout.yaml"
     topic_name: /keepout_filter_mask
 

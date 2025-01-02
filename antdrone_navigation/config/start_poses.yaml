@@ -1,0 +1,15 @@
+# Nav spawn is descriptive - it is the robots understanding of its placement in a nav2 map.
+
+greenhouse:
+  drone_boris:
+    x0: 16.5
+    y0: -19.0
+    z0: 0.15
+    yaw0: 0.0
+
+lab:
+  drone_boris:
+    x0: 0.0
+    y0: 0.0
+    z0: 0.3
+    yaw0: 0.0

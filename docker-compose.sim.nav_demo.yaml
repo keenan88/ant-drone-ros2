@@ -82,10 +82,6 @@ services:
     environment:
       - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
       - DRONE_NAME=${DRONE0_NAME}
-      - x0=${DRONE0_GZ_X0}
-      - y0=${DRONE0_GZ_Y0}
-      - z0=${DRONE0_GZ_Z0}
-      - yaw0=${DRONE0_GZ_YAW0}
     env_file: ./.env
     volumes:
       - ./antdrone_gz/:/home/humble_ws/src/antdrone_gz/
@@ -114,12 +110,10 @@ services:
       - DRONE_NAME=${DRONE0_NAME}
       - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
       - USE_SIM_TIME=${USE_SIM_TIME}
-      - x0=${DRONE0_NAV_X0}
-      - y0=${DRONE0_NAV_Y0}
-      - z0=${DRONE0_NAV_Z0}
-      - yaw0=${DRONE0_NAV_YAW0}
+      - world_name=${world_name}
     volumes:
       - ./antdrone_navigation:/home/humble_ws/src/antdrone_navigation
+      - ./antdrone_slam/maps:/home/humble_ws/src/antdrone_navigation/maps
       - ./antdrone_localization:/home/humble_ws/src/antdrone_localization
     network_mode: host
     ipc: host

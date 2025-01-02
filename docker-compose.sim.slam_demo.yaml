@@ -82,7 +82,6 @@ services:
     environment:
       - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
       - DRONE_NAME=${DRONE0_NAME}
-      - world_name=${world_name}
     env_file: ./.env
     volumes:
       - ./antdrone_gz/:/home/humble_ws/src/antdrone_gz/
