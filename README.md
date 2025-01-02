@@ -1,5 +1,7 @@
 # Ant drone
 
+The Ant Drone navigates through greenhouses, receives missions from the [Ant Queen](https://github.com/keenan88/ant-queen-ros2), and delivers [Ant Workers](https://github.com/keenan88/ant-worker-ros2) to piperails and chargers. 
+
 ## SLAM Startup - Simulation
 
 1. Run `xhost +local:docker`.
@@ -23,27 +25,31 @@
 1. Run `xhost +local:docker`.
 2. Plugin the `Microsoft Corp. Xbox Wireless Controller (model 1914)` to the computer. 
 3. Run `docker compose -f docker-compose.sim.nav_demo.yaml up`. The first time will take longer for the containers to build.
-4. RVIZ2 will open a view of the robot, including its base frame, laser scans, and the map being generated.
-5. Drive the robot around with the xbox controller. The robot should stay well-localizaed and the scans should stay aligned with the map.
-6. Send a nav2 goal with rviz. The robot should automatically drive itself to the goal position.
 
 ![image](https://github.com/user-attachments/assets/0fc7edd3-e9e9-4f7a-86c6-1e48aa4bf5e2)
 
+5. Drive the robot around with the xbox controller. The robot should stay well-localizaed and the scans should stay aligned with the map.
+6. Send a `2D Goal Pose` with Rviz. The robot will automatically drive itself to the goal position.
 
-## High-level interaction with Queen
+
+
+
+## High-level Queen, Gazebo, & Nav2 Interactions
+
+The drone is inteded to coordinate missions with the queen.
 
 ```mermaid
 flowchart TD
-    nav2["nav2"] -- cmd_vel --> gz_domain_bridge["gz_domain_bridge"]
-    gz_domain_bridge -- odom --> nav2
-    gz_domain_bridge -- TF: odom to base link --> nav2
-    queen_client -- navigate to pose --> nav2
-    queen_client -- robot rmf state --> queen_domain_bridge
-    gz_domain_bridge -- pointclouds --> pointcloud_filtering["pointcloud filtering"]
-    pointcloud_filtering -- scan --> nav2
-    queen_domain_bridge -- "Mission waypoints" --> queen_client
-    bt <-- Mission coordination --> queen_domain_bridge
-    queen_domain_bridge -- Mission requests --> bt
+    subgraph Drone
+        Nav2["Nav2"]
+        bt["Behavior Tree"]
+    end
+    Nav2 -- Robot Velocities --> Gazebo["Gazebo"]
+    Gazebo -- Odometry --> Nav2
+    bt -- Navigation Commands --> Nav2
+    Gazebo -- Pointclouds --> Nav2
+    bt <-- Mission coordination --> Queen
+
 ```
 
 
