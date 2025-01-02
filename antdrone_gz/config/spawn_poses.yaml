@@ -1,0 +1,7 @@
+# GZ Spawn is prescriptive - it is where (in the gazebo frame of reference) the drone will be spawned in gazebo.
+
+greenhouse:
+  x0: 6.75
+  y0: -3.72
+  z0: 0.15
+  yaw0: 0.0

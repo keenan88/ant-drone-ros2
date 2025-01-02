@@ -1,4 +1,5 @@
-import os
+import os, yaml
+from yaml.loader import SafeLoader
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration
@@ -10,6 +11,15 @@ def generate_launch_description():
     
     drone_description_launch_path = os.path.join(get_package_share_directory('antdrone_bringup'), 'launch', 'description.launch.py')
 
+    spawn_poses_path = os.path.join(get_package_share_directory('antdrone_gz'), 'config', 'spawn_poses.yaml')
+    with open(spawn_poses_path, 'r') as f:
+        spawn_poses = yaml.load(f, Loader=yaml.SafeLoader)
+    print(type(spawn_poses))
+    world_name = os.environ.get('world_name')
+    if world_name not in spawn_poses.keys():
+        raise Exception("Drone spawn pos for Gazebo world: [" + world_name + "] must be specified in " + spawn_poses_path)
+    spawn_pos = spawn_poses[world_name]
+
     gz_spawn = Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
@@ -18,10 +28,10 @@ def generate_launch_description():
         arguments=[
             '-topic', 'robot_description', 
             '-entity', LaunchConfiguration('DRONE_NAME'), 
-            '-x', LaunchConfiguration('x0'),
-            '-y', LaunchConfiguration('y0'),
-            '-z', LaunchConfiguration('z0'),
-            '-Y', LaunchConfiguration('yaw0'),
+            '-x', str(spawn_pos['x0']),
+            '-y', str(spawn_pos['y0']),
+            '-z', str(spawn_pos['z0']),
+            '-Y', str(spawn_pos['yaw0']),
 
         ]
     )     

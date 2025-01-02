@@ -30,4 +30,4 @@ RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-    ros2 launch antdrone_bringup spawn_drone.launch.py x0:=${x0} y0:=${y0} z0:=${z0} yaw0:=${yaw0} DRONE_NAME:=${DRONE_NAME}"
+    ros2 launch antdrone_bringup spawn_drone.launch.py world_name:=${world_name} DRONE_NAME:=${DRONE_NAME}"
