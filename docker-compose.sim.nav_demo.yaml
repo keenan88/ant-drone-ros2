@@ -4,8 +4,8 @@ services:
   #          ant Sim containers        #
   ############################################
 
-  ant_fleet_demos_gz:
-    container_name: ant_fleet_demos_gz
+  ant_drone_demos_gz:
+    container_name: ant_drone_demos_gz
     build:
       context: .
       dockerfile: ./docker/gz.dockerfile
@@ -34,13 +34,13 @@ services:
               count: 1
               capabilities: [ gpu ]
 
-  ant_fleet_demos_gz_client:
-    container_name: ant_fleet_demos_gz_client
+  ant_drone_demos_gz_client:
+    container_name: ant_drone_demos_gz_client
     build:
       context: .
       dockerfile: ./docker/gz.dockerfile
     depends_on:
-      ant_fleet_demos_gz:
+      ant_drone_demos_gz:
         condition: service_healthy
     environment:
       - DISPLAY=${DISPLAY}
@@ -71,7 +71,7 @@ services:
       context: .
       dockerfile: ./docker/gz_spawn.dockerfile
     depends_on:
-      ant_fleet_demos_gz:
+      ant_drone_demos_gz:
         condition: service_healthy
     healthcheck:
       test: [ "CMD", "echo", "Healthy" ]

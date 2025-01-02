@@ -89,28 +89,11 @@
       <elevation>0</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
-    <model name='lab'>
-      <static>1</static>
-      <link name='link'>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <scale>1 1 1</scale>
-              <uri>model://lab/meshes/lab.STL</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-      <pose>-0.48297 -0.284884 0 0 -0 0</pose>
-    </model>
     <state world_name='default'>
-      <sim_time>67 487000000</sim_time>
-      <real_time>67 587040519</real_time>
-      <wall_time>1734724317 878118167</wall_time>
-      <iterations>67487</iterations>
+      <sim_time>153 896000000</sim_time>
+      <real_time>87 4012458</real_time>
+      <wall_time>1735833735 354025172</wall_time>
+      <iterations>86409</iterations>
       <model name='ground_plane'>
         <pose>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -122,10 +105,10 @@
         </link>
       </model>
       <model name='lab'>
-        <pose>0 0 0 0 -0 0</pose>
+        <pose>0.788676 -1.77419 0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>0 0 0 0 -0 0</pose>
+          <pose>0.788676 -1.77419 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -137,10 +120,48 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>12.7847 -9.74848 11.708 -0 0.731643 2.49219</pose>
+        <pose>10.2961 -9.16495 9.56375 -0 0.731643 2.49219</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
+    <model name='lab'>
+      <static>1</static>
+      <link name='link'>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://lab/meshes/lab.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://lab/meshes/lab.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>0.617703 -1.86732 0 0 -0 0</pose>
+    </model>
   </world>
 </sdf>

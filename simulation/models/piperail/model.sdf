@@ -3,14 +3,6 @@
   <model name="piperail">
     <static>true</static>
     <link name="link">
-      <!-- <collision name="collision">
-        <geometry>
-          <mesh>
-            <scale>0.001 0.001 0.001</scale>
-            <uri>model://piperail/meshes/piperail.STL</uri>
-          </mesh>
-        </geometry>
-      </collision> -->
       <visual name="visual">
         <geometry>
           <mesh>

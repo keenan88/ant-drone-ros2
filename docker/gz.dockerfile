@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     netcat \
     ros-humble-domain-bridge \
     ros-humble-nav2-msgs \
+    nvidia-driver-535 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install setuptools==58.2.0
@@ -38,4 +39,4 @@ RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
 ENV GAZEBO_MODEL_PATH=/home/humble_ws/src/:/home/simulation/models:/home/models/gazebo_models:/home/humble_ws/build/
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-             gzserver --verbose -s libgazebo_ros_init.so -s libgazebo_ros_factory.so /home/simulation/gazebo/greenhouse.world"
+             gzserver --verbose -s libgazebo_ros_init.so -s libgazebo_ros_factory.so /home/simulation/gazebo/${world_name}.world"
