@@ -9,7 +9,7 @@ greenhouse:
 
 lab:
   drone_boris:
-    x0: 0.0
+    x0: 1.4
     y0: 0.0
     z0: 0.3
     yaw0: 0.0

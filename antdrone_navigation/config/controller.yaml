@@ -113,7 +113,7 @@
 /local_costmap/local_costmap:
   ros__parameters:
 
-    footprint_padding: 0.1 # Larger footprint padding will make it hard to navigate to be close to the pipe rail fro dropoff
+    footprint_padding: 0.05 # Larger footprint padding will make it hard to navigate to be close to the pipe rail fro dropoff
     footprint: "[ [0.41, 0.25], [-0.41, 0.25], [-0.41, -0.25], [0.41, -0.25] ]"
 
     # Larger costmap gives robot more heads up about incoming obstacles, but uses more computation. 

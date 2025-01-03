@@ -24,6 +24,10 @@ NodeStatus TriggerWorkerComeout::onResponseReceived(const Response::SharedPtr& r
 
 NodeStatus TriggerWorkerComeout::onFailure(ServiceNodeErrorCode error)
 {
-  if(error){} // To avoid build warning
+  if(error){
+    if (auto node = node_.lock()) {
+      RCLCPP_INFO(node->get_logger(), "[%s] Error calling service", this->name().c_str());
+    }
+  }
   return NodeStatus::FAILURE;
 }

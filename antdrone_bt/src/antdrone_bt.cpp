@@ -39,6 +39,7 @@ public:
     factory.registerNodeType<SetCostmapParams>("SetLocalCostmapParams", BT::RosNodeParams(shared_from_this(), "/local_costmap/local_costmap/set_parameters"));
     factory.registerNodeType<SetCostmapParams>("SetGlobalCostmapParams", BT::RosNodeParams(shared_from_this(), "/global_costmap/global_costmap/set_parameters"));
     factory.registerNodeType<LowerWorker>("LowerWorker", BT::RosNodeParams(shared_from_this(), "/DETACHLINK"));
+    factory.registerNodeType<SetNav2ControllerParams>("SetNav2ControllerParams", BT::RosNodeParams(shared_from_this(), "/controller_server/set_parameters"));
     factory.registerNodeType<SendDropoffPosition>("SendDropoffPosition", BT::RosNodeParams(shared_from_this(), "/queen/dropoff_pos"));
     factory.registerNodeType<SucceedFloorMission>("SucceedFloorMission", BT::RosNodeParams(shared_from_this(), "/queen/mission_success"));
 

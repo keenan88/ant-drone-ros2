@@ -24,7 +24,7 @@
 
   <BehaviorTree ID="execute_missions">
     <Sequence>
-        
+  
       <RetryUntilSuccessful num_attempts="-1">
         <Delay delay_msec="1000">
           <Sequence>
@@ -85,11 +85,18 @@
         worker_name = "{worker_name}"
       />
 
+      <!-- Limit lateral and rotation velocity while moving out from under work -->
+      <!-- Lesser accuracy is tolerable,  really just need to get out from under worker-->
+      <SetNav2ControllerParams vy_max="0.01" wz_max="0.01" xy_goal_tolerance="0.125" yaw_goal_tolerance="3.14"/>
+
       <SubTree ID="go_to_vertex_w_feedback" 
         vertex_name = "{post_dropoff_location_name}"
         orientation = "{dropoff_orientation}"
         drone_name = "{drone_name}"
       />
+
+      <!-- Re-enable lateral and rotational velocity, re-set tighter goal tolerance -->
+      <SetNav2ControllerParams vy_max="0.5" wz_max="1.9" xy_goal_tolerance="0.075" yaw_goal_tolerance="0.05"/>
 
       <ClearLocalCostmap/>
       <ClearGlobalCostmap/>

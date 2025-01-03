@@ -36,6 +36,10 @@ NodeStatus SuspendReleaseRMFPathing::onResponseReceived(const Response::SharedPt
 
 NodeStatus SuspendReleaseRMFPathing::onFailure(ServiceNodeErrorCode error)
 {
-  if(error){} // To avoid build warning
+  if(error){
+    if (auto node = node_.lock()) {
+      RCLCPP_INFO(node->get_logger(), "[%s] Error calling service", this->name().c_str());
+    }
+  }
   return NodeStatus::FAILURE;
 }

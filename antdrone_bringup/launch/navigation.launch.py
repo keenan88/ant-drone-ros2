@@ -25,6 +25,7 @@ def generate_launch_description():
         ]
     )
 
+
     planner = Node(
         package='nav2_planner',
         executable='planner_server',

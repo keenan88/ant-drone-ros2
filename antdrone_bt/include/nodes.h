@@ -158,6 +158,19 @@ public:
   virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
+class SetNav2ControllerParams : public RosServiceNode<rcl_interfaces::srv::SetParameters> {
+public:
+  std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
+  std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
+  geometry_msgs::msg::TransformStamped getTransform();
+
+  SetNav2ControllerParams(const std::string &name, const NodeConfig &conf, const RosNodeParams &params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr &request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr &response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};
+
 class CheckIfFloorMissionTriggered : public RosServiceNode<ant_queen_interfaces::srv::CheckIfFloorMissionTriggered> {
 public:
   CheckIfFloorMissionTriggered(const std::string &name, const NodeConfig &conf, const RosNodeParams &params);
