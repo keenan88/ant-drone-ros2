@@ -5,6 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /Grid1
         - /TF1/Frames1
         - /Static Map1/Topic1
         - /Particle Cloud1/Topic1
@@ -37,7 +38,7 @@ Visualization Manager:
   Class: ""
   Displays:
     - Alpha: 0.20000000298023224
-      Cell Size: 1
+      Cell Size: 0.25
       Class: rviz_default_plugins/Grid
       Color: 0; 0; 0
       Enabled: true
@@ -137,7 +138,7 @@ Visualization Manager:
       Class: rviz_default_plugins/Map
       Color Scheme: map
       Draw Behind: false
-      Enabled: true
+      Enabled: false
       Name: Global Costmap
       Topic:
         Depth: 5
@@ -153,7 +154,7 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: global_costmap/costmap_updates
       Use Timestamp: false
-      Value: true
+      Value: false
     - Alpha: 0.699999988079071
       Class: rviz_default_plugins/Map
       Color Scheme: costmap
@@ -732,25 +733,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/XYOrbit
-      Distance: 4.319916248321533
+      Distance: 4.94040584564209
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.09721183776855469
-        Y: -1.0745739936828613
-        Z: -5.262404010863975e-05
+        X: -0.5689946413040161
+        Y: -1.6335773468017578
+        Z: -4.9524598580319434e-05
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.509796380996704
+      Pitch: 1.5547963380813599
       Target Frame: base_link
       Value: XYOrbit (rviz_default_plugins)
-      Yaw: 4.709251403808594
+      Yaw: 4.744250774383545
     Saved: ~
 Window Geometry:
   Displays:

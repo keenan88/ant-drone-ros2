@@ -14,12 +14,12 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 
 RUN pip install setuptools==58.2.0
 
+WORKDIR /home/humble_ws
+
 COPY ./antdrone_navigation /home/humble_ws/src/antdrone_navigation
 COPY ./antdrone_slam/maps /home/humble_ws/src/antdrone_navigation/maps
 COPY ./antdrone_localization /home/humble_ws/src/antdrone_localization
 COPY ./antdrone_bringup /home/humble_ws/src/antdrone_bringup
-
-WORKDIR /home/humble_ws
 
 RUN source /opt/ros/humble/setup.bash && \
     colcon build --symlink-install && \

@@ -152,7 +152,6 @@
       <SuspendReleaseRMFPathing set_state="suspend"/>
       <SendDropoffPosition drone_name="{drone_name}"/>
       <LowerWorker drone_name="{drone_name}" worker_name="{worker_name}"/>
-      <UpdateFootprint is_carrying_worker="False"/>
       <SetLocalCostmapParams is_carrying_worker="False"/>
       <SetGlobalCostmapParams is_carrying_worker="False"/>
       <UpdateFootprint is_carrying_worker="False"/>

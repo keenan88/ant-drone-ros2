@@ -43,21 +43,22 @@ BT::NodeStatus UpdateFootprint::onRunning()
 
         if(is_carrying_worker)
         {   
+            // Set drone's footprint to worker's footprint, rotated 90 degrees
             polygon.points.push_back(geometry_msgs::msg::Point32());
             polygon.points[0].x = 0.4;
-            polygon.points[0].y = 0.7;
+            polygon.points[0].y = 0.5;
             polygon.points[0].z = 0.0;
             polygon.points.push_back(geometry_msgs::msg::Point32());
             polygon.points[1].x = 0.4;
-            polygon.points[1].y = -0.7;
+            polygon.points[1].y = -0.5;
             polygon.points[1].z = 0.0;
             polygon.points.push_back(geometry_msgs::msg::Point32());
             polygon.points[2].x = -0.4;
-            polygon.points[2].y = -0.7;
+            polygon.points[2].y = -0.5;
             polygon.points[2].z = 0.0;
             polygon.points.push_back(geometry_msgs::msg::Point32());
             polygon.points[3].x = -0.4;
-            polygon.points[3].y = 0.7;
+            polygon.points[3].y = 0.5;
             polygon.points[3].z = 0.0;
         }
         else

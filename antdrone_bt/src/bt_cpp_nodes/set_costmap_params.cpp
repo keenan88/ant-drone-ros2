@@ -20,7 +20,7 @@ bool SetCostmapParams::setRequest(Request::SharedPtr &request) {
 
     if (is_carrying_worker) {
       inflation_radius_param_value.type = 3;
-      inflation_radius_param_value.double_value = 0.8;
+      inflation_radius_param_value.double_value = 0.75;
     } else {
       inflation_radius_param_value.type = 3;
       inflation_radius_param_value.double_value = 0.5;

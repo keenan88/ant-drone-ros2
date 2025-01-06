@@ -83,9 +83,9 @@
         critical_cost: 300.0
         consider_footprint: true
         collision_cost: 1000000.0
-        near_goal_distance: 0.5
+        near_goal_distance: 0.25
         trajectory_point_step: 2
-        inflation_layer_name: ""
+        inflation_layer_name: inflation_layer
       PathAlignCritic:
         enabled: true
         cost_power: 1
@@ -113,7 +113,7 @@
 /local_costmap/local_costmap:
   ros__parameters:
 
-    footprint_padding: 0.05 # Larger footprint padding will make it hard to navigate to be close to the pipe rail fro dropoff
+    footprint_padding: 0.0 # Larger footprint padding will make it hard to navigate to be close to the pipe rail for dropoff
     footprint: "[ [0.41, 0.25], [-0.41, 0.25], [-0.41, -0.25], [0.41, -0.25] ]"
 
     # Larger costmap gives robot more heads up about incoming obstacles, but uses more computation. 
@@ -167,7 +167,7 @@
     inflation_layer:
       plugin: "nav2_costmap_2d::InflationLayer"
       enabled: True
-      inflation_radius: 0.5 # Larger inflation radius will make it hard to navigate to be close to the pipe rail for dropoff
+      inflation_radius: 0.55 # Larger inflation radius will make it hard to navigate to be close to the pipe rail for dropoff
       cost_scaling_factor: 10.0
       inflate_unknown: false
       inflate_around_unknown: false

@@ -21,7 +21,6 @@
   <test_depend>launch_ros</test_depend>
 
   <depend>teleop_twist_joy</depend>
-  <depend>domain_bridge</depend>
 
   <export>
     <build_type>ament_python</build_type>
