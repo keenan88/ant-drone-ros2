@@ -59,6 +59,7 @@ BT::NodeStatus GoToWaypoint::onStart() {
   RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] going to vertex %s", this->name().c_str(), vertex_name.c_str());
 
 
+  // https://osrf.github.io/ros2multirobotbook/task_new.html
   nlohmann::json composed_task = {
     {"type", "robot_task_request"},
     {"robot", drone_name},
@@ -70,24 +71,21 @@ BT::NodeStatus GoToWaypoint::onStart() {
             {"phases", {
                 {
                     {"activity", {
-                        {"category", "sequence"},
+
+                        {"category", "go_to_place"},
                         {"description", {
-                            {"activities", {
-                                {
-                                    {"category", "go_to_place"},
-                                    {"description", {
-                                        {"waypoint", vertex_name},
-                                        {"orientation", orientation}
-                                    }}
-                                }
-                            }}
+                            {"waypoint", vertex_name},
+                            {"orientation", orientation}
                         }}
+                        
                     }}
                 }
             }}
         }}
     }}
   };
+
+
 
   rmf_task_msgs::msg::ApiRequest api_request;
 

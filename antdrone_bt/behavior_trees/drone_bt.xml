@@ -87,7 +87,7 @@
 
       <!-- Limit lateral and rotation velocity while moving out from under work -->
       <!-- Lesser accuracy is tolerable,  really just need to get out from under worker-->
-      <SetNav2ControllerParams vy_max="0.01" wz_max="0.01" xy_goal_tolerance="0.125" yaw_goal_tolerance="3.14"/>
+      <SetNav2ControllerParams vy_max="0.01" wz_max="0.01" xy_goal_tolerance="0.1" yaw_goal_tolerance="3.14"/>
 
       <SubTree ID="go_to_vertex_w_feedback" 
         vertex_name = "{post_dropoff_location_name}"
