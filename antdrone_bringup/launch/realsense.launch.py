@@ -8,13 +8,10 @@ import os
 
 def generate_launch_description():
 
-    # front_and_rear_rs_launch = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource('/home/humble_ws/src/antdrone_bringup/launch/realsenses.launch.py'),
-    #     launch_arguments={
-    #         'serial_no1': "'207522073046'", # 
-    #         'serial_no2': "'207522073816'"
-    #     }.items()
-    # )
+    color_profile = '640x480x15'
+    depth_profile = '640x480x15'
+    infra_profile = '640x480x15'
+    
 
     front_rs_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -24,6 +21,9 @@ def generate_launch_description():
             'serial_no': "'207522073046'",
             'camera_name':'front_rs',
             'camera_namespace':'front_rs',
+            'rgb_camera.color_profile' : color_profile,
+            'depth_module.depth_profile' : depth_profile,
+            'depth_module.infra_profile': infra_profile,
         }.items()
     )
 
@@ -35,6 +35,9 @@ def generate_launch_description():
             'serial_no': "'207522073816'",
             'camera_name':'rear_rs',
             'camera_namespace':'rear_rs',
+            'rgb_camera.color_profile' : color_profile,
+            'depth_module.depth_profile' : depth_profile,
+            'depth_module.infra_profile': infra_profile,
         }.items()
     )
 
@@ -46,6 +49,9 @@ def generate_launch_description():
             'serial_no': "'108222250264'",
             'camera_name':'left_rs',
             'camera_namespace':'left_rs',
+            'rgb_camera.color_profile' : color_profile,
+            'depth_module.depth_profile' : depth_profile,
+            'depth_module.infra_profile': infra_profile,
         }.items()
     )
 
@@ -87,7 +93,7 @@ def generate_launch_description():
     left_rs_tf = Node(
         package="tf2_ros",
         executable="static_transform_publisher",
-        name="base_link_to_front_rs",
+        name="base_link_to_left_rs",
         output="log",
         arguments = [
             "0.5", "0.0", "-0.18",
