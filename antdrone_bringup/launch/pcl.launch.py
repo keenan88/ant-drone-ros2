@@ -21,7 +21,7 @@ def generate_launch_description():
             condition = IfCondition(LaunchConfiguration("USE_SIM_TIME"))
         )
 
-        input_topic = realsense_placement + '/frame_fixed/points'
+        input_topic = realsense_placement + '/' + realsense_placement + '/depth/color/points', 
         crop_topic = realsense_placement + '/pointcloud_cropped'
         downsample_topic = realsense_placement + '/pointcloud_downsampled'
 

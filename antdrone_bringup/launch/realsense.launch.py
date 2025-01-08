@@ -21,6 +21,7 @@ def generate_launch_description():
             'serial_no': "'207522073046'",
             'camera_name':'front_rs',
             'camera_namespace':'front_rs',
+            'pointcloud.enable':'True',
             'rgb_camera.color_profile' : color_profile,
             'depth_module.depth_profile' : depth_profile,
             'depth_module.infra_profile': infra_profile,
@@ -35,6 +36,7 @@ def generate_launch_description():
             'serial_no': "'207522073816'",
             'camera_name':'rear_rs',
             'camera_namespace':'rear_rs',
+            'pointcloud.enable':'True',
             'rgb_camera.color_profile' : color_profile,
             'depth_module.depth_profile' : depth_profile,
             'depth_module.infra_profile': infra_profile,
@@ -49,6 +51,7 @@ def generate_launch_description():
             'serial_no': "'108222250264'",
             'camera_name':'left_rs',
             'camera_namespace':'left_rs',
+            'pointcloud.enable':'True',
             'rgb_camera.color_profile' : color_profile,
             'depth_module.depth_profile' : depth_profile,
             'depth_module.infra_profile': infra_profile,
@@ -70,7 +73,7 @@ def generate_launch_description():
         name="base_link_to_front_rs",
         output="log",
         arguments = [
-            "0.5", "0.0", "-0.18",
+            "0.407", "0.0", "0.0",
             "0.0", "0.0", "0.0",
             "base_link",
             "front_rs_link",
@@ -116,13 +119,13 @@ def generate_launch_description():
 
     # ld.add_action(front_and_rear_rs_launch)
     ld.add_action(front_rs_launch)
-    ld.add_action(rear_rs_launch)
-    ld.add_action(left_rs_launch)
+    # ld.add_action(rear_rs_launch)
+    # ld.add_action(left_rs_launch)
     ld.add_action(rviz)
     # ld.add_action(bridge_out_tf)
     ld.add_action(front_rs_tf)
-    ld.add_action(rear_rs_tf)
-    ld.add_action(left_rs_tf)
+    # ld.add_action(rear_rs_tf)
+    # ld.add_action(left_rs_tf)
     
     return ld
 

@@ -28,7 +28,7 @@ class FrameFixer(Node):
 
         self.publisher = self.create_publisher(
             PointCloud2,
-            self.camera_pos + '/frame_fixed/points',
+            self.camera_pos + '/' + self.camera_pos + '/depth/color/points', 
             qos_profile
         )
 
