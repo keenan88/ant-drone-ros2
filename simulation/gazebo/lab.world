@@ -90,10 +90,20 @@
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
     <state world_name='default'>
-      <sim_time>153 896000000</sim_time>
-      <real_time>87 4012458</real_time>
-      <wall_time>1735833735 354025172</wall_time>
-      <iterations>86409</iterations>
+      <sim_time>281 547000000</sim_time>
+      <real_time>129 198932036</real_time>
+      <wall_time>1736372626 622882680</wall_time>
+      <iterations>127651</iterations>
+      <model name='Apriltag36_11_00000'>
+        <pose>-0.927587 -2.56492 0.714116 0 1.57 0</pose>
+        <scale>0.238999 0.223148 1</scale>
+        <link name='main'>
+          <pose>-0.927587 -2.56492 0.714116 0 1.57 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
       <model name='ground_plane'>
         <pose>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -120,7 +130,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>10.2961 -9.16495 9.56375 -0 0.731643 2.49219</pose>
+        <pose>2.53086 -6.36287 3.43659 -0 0.547643 2.13219</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
@@ -162,6 +172,30 @@
         <kinematic>0</kinematic>
       </link>
       <pose>0.617703 -1.86732 0 0 -0 0</pose>
+    </model>
+    <model name='Apriltag36_11_00000'>
+      <link name='main'>
+        <pose>0 0 0 0 -0 0</pose>
+        <visual name='main_Visual'>
+          <geometry>
+            <box>
+              <size>0.999997 1 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://Apriltag36_11_00000/materials/scripts</uri>
+              <uri>model://Apriltag36_11_00000/materials/textures</uri>
+              <name>Apriltag36_11_00000</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <static>1</static>
+      <pose>-1.94023 -4.72109 0 0 -0 0</pose>
     </model>
   </world>
 </sdf>
