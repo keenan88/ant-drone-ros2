@@ -39,7 +39,7 @@ class LaserScanMerger(Node):
 
         self.subscriber_4 = self.create_subscription(
             LaserScan,
-            'right_rs/scan',
+            'left_rs/scan', # changed to left_rs while I only have 3 realsenes, TODO change back to right_rs
             self.record_right_scan,
             qos_best_effort
         )

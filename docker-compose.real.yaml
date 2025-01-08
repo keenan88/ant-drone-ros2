@@ -47,6 +47,31 @@ services:
               capabilities: [ gpu ]
     runtime: nvidia
 
+  antdrone0_depth_to_laserscan:
+    container_name: antdrone0_depth_to_laserscan
+    build:
+      context: .
+      dockerfile: ./docker/depth_to_laserscan.Dockerfile
+    # depends_on:
+    #   antdrone0_slam:
+    #     condition: service_healthy
+    volumes:
+      - ./antdrone_depth_to_laserscan:/home/humble_ws/src/antdrone_depth_to_laserscan
+    environment:
+      - DRONE_NAME=${DRONE0_NAME}
+      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+      - USE_SIM_TIME=${USE_SIM_TIME}
+    network_mode: host
+    ipc: host
+    pid: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [ gpu ]
+    runtime: nvidia
+
   # antdrone0_slam:
   #   container_name: antdrone0_slam
   #   build:
@@ -96,29 +121,6 @@ services:
 
   
 
-  # antdrone0_depth_to_laserscan:
-  #   container_name: antdrone0_depth_to_laserscan
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/depth_to_laserscan.Dockerfile
-  #   depends_on:
-  #     antdrone0_slam:
-  #       condition: service_healthy
-  #   volumes:
-  #     - ./antdrone_depth_to_laserscan:/home/humble_ws/src/antdrone_depth_to_laserscan
-  #   environment:
-  #     - DRONE_NAME=${DRONE0_NAME}
-  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-  #     - USE_SIM_TIME=${USE_SIM_TIME}
-  #   network_mode: host
-  #   ipc: host
-  #   pid: host
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #           - driver: nvidia
-  #             capabilities: [ gpu ]
-  #   runtime: nvidia
+
 
 
