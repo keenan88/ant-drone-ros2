@@ -8,9 +8,7 @@ Panels:
         - /Status1
         - /Camera1/Topic1
         - /Camera2/Visibility1
-        - /TF1/Frames1
         - /TF1/Tree1
-        - /PointCloud22/Status1
       Splitter Ratio: 0.5
     Tree Height: 301
   - Class: rviz_common/Selection
@@ -129,9 +127,31 @@ Visualization Manager:
           Value: true
         front_rs_link:
           Value: false
+        left_rs_color_frame:
+          Value: false
+        left_rs_color_optical_frame:
+          Value: false
+        left_rs_depth_frame:
+          Value: false
+        left_rs_depth_optical_frame:
+          Value: true
+        left_rs_link:
+          Value: false
+        rear_rs_color_frame:
+          Value: false
+        rear_rs_color_optical_frame:
+          Value: false
+        rear_rs_depth_frame:
+          Value: false
+        rear_rs_depth_optical_frame:
+          Value: true
+        rear_rs_link:
+          Value: false
+        right_rs_link:
+          Value: false
       Marker Scale: 1
       Name: TF
-      Show Arrows: true
+      Show Arrows: false
       Show Axes: true
       Show Names: true
       Tree:
@@ -143,6 +163,22 @@ Visualization Manager:
             front_rs_depth_frame:
               front_rs_depth_optical_frame:
                 {}
+          left_rs_link:
+            left_rs_color_frame:
+              left_rs_color_optical_frame:
+                {}
+            left_rs_depth_frame:
+              left_rs_depth_optical_frame:
+                {}
+          rear_rs_link:
+            rear_rs_color_frame:
+              rear_rs_color_optical_frame:
+                {}
+            rear_rs_depth_frame:
+              rear_rs_depth_optical_frame:
+                {}
+          right_rs_link:
+            {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -247,6 +283,74 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz_default_plugins/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.009999999776482582
+      Style: Flat Squares
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /left_rs/pointcloud_downsampled
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz_default_plugins/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.009999999776482582
+      Style: Flat Squares
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /rear_rs/pointcloud_downsampled
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -293,25 +397,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 7.223601341247559
+      Distance: 11.041479110717773
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 2.1522743701934814
-        Y: -0.5561484098434448
-        Z: -0.5745689868927002
+        X: 0.7917493581771851
+        Y: -0.9427587985992432
+        Z: -1.4721200466156006
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6947965025901794
+      Pitch: 0.5897967219352722
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.6003928184509277
+      Yaw: 5.355412483215332
     Saved: ~
 Window Geometry:
   Camera:

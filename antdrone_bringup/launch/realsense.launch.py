@@ -80,31 +80,46 @@ def generate_launch_description():
         ],
     )
 
-    rear_rs_tf = Node(
-        package="tf2_ros",
-        executable="static_transform_publisher",
-        name="base_link_to_rear_rs",
-        output="log",
-        arguments = [
-            "-0.5", "0.0", "-0.18",
-            "3.14", "0.0", "0.0",
-            "base_link",
-            "rear_rs_link",
-        ],
-    )
-
     left_rs_tf = Node(
         package="tf2_ros",
         executable="static_transform_publisher",
         name="base_link_to_left_rs",
         output="log",
         arguments = [
-            "0.5", "0.0", "-0.18",
-            "0.0", "0.0", "0.0",
+            "0.0", "0.247", "0.0",
+            "1.57", "0.0", "0.0",
             "base_link",
             "left_rs_link",
         ],
     )
+
+    rear_rs_tf = Node(
+        package="tf2_ros",
+        executable="static_transform_publisher",
+        name="base_link_to_rear_rs",
+        output="log",
+        arguments = [
+            "-0.407", "0.0", "0.0",
+            "3.14", "0.0", "0.0",
+            "base_link",
+            "rear_rs_link",
+        ],
+    )
+
+    right_rs_tf = Node(
+        package="tf2_ros",
+        executable="static_transform_publisher",
+        name="base_link_to_right_rs",
+        output="log",
+        arguments = [
+            "0.0", "-0.247", "0.0",
+            "-1.57", "0.0", "0.0",
+            "base_link",
+            "right_rs_link",
+        ],
+    )
+
+    
 
     rviz = Node(
         package='rviz2',
@@ -119,13 +134,17 @@ def generate_launch_description():
 
     # ld.add_action(front_and_rear_rs_launch)
     ld.add_action(front_rs_launch)
-    # ld.add_action(rear_rs_launch)
-    # ld.add_action(left_rs_launch)
+    ld.add_action(left_rs_launch)
+    ld.add_action(rear_rs_launch)
+    # ld.add_action(right_rs_launch)
+
     ld.add_action(rviz)
     # ld.add_action(bridge_out_tf)
     ld.add_action(front_rs_tf)
-    # ld.add_action(rear_rs_tf)
-    # ld.add_action(left_rs_tf)
+    ld.add_action(left_rs_tf)
+    ld.add_action(rear_rs_tf)
+    ld.add_action(right_rs_tf)
+    
     
     return ld
 
