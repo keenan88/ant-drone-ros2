@@ -61,9 +61,9 @@ Visualization Manager:
         base_link:
           Value: true
         front_gazebo_camera_frame:
-          Value: false
-        front_rs_depth_optical_frame:
           Value: true
+        front_rs_depth_optical_frame:
+          Value: false
         left_gazebo_camera_frame:
           Value: false
         left_rs_depth_optical_frame:
@@ -80,8 +80,6 @@ Visualization Manager:
           Value: false
         tag36h11:0:
           Value: true
-        tag36h11:1:
-          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: false
@@ -95,8 +93,6 @@ Visualization Manager:
             {}
           front_rs_depth_optical_frame:
             tag36h11:0:
-              {}
-            tag36h11:1:
               {}
           left_gazebo_camera_frame:
             {}
@@ -178,25 +174,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 4.2509541511535645
+      Distance: 4.4926981925964355
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.6157948970794678
-        Y: -0.6660833954811096
-        Z: 1.4226576089859009
+        X: 0.17979054152965546
+        Y: -0.5004300475120544
+        Z: 1.2424123287200928
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6903979778289795
+      Pitch: 0.030398115515708923
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.103566646575928
+      Yaw: 4.053567886352539
     Saved: ~
 Window Geometry:
   Camera:
