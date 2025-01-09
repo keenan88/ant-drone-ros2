@@ -56,27 +56,17 @@ Visualization Manager:
       Frame Timeout: 1
       Frames:
         All Enabled: false
-        attachment_point:
-          Value: false
         base_link:
           Value: true
-        front_gazebo_camera_frame:
-          Value: true
+        front_rs_color_frame:
+          Value: false
+        front_rs_color_optical_frame:
+          Value: false
+        front_rs_depth_frame:
+          Value: false
         front_rs_depth_optical_frame:
           Value: false
-        left_gazebo_camera_frame:
-          Value: false
-        left_rs_depth_optical_frame:
-          Value: false
-        odom:
-          Value: true
-        rear_gazebo_camera_frame:
-          Value: false
-        rear_rs_depth_optical_frame:
-          Value: false
-        right_gazebo_camera_frame:
-          Value: false
-        right_rs_depth_optical_frame:
+        front_rs_link:
           Value: false
         tag36h11:0:
           Value: true
@@ -87,27 +77,14 @@ Visualization Manager:
       Show Names: true
       Tree:
         base_link:
-          attachment_point:
-            {}
-          front_gazebo_camera_frame:
-            {}
-          front_rs_depth_optical_frame:
-            tag36h11:0:
-              {}
-          left_gazebo_camera_frame:
-            {}
-          left_rs_depth_optical_frame:
-            {}
-          rear_gazebo_camera_frame:
-            {}
-          rear_rs_depth_optical_frame:
-            {}
-          right_gazebo_camera_frame:
-            {}
-          right_rs_depth_optical_frame:
-            {}
-        odom:
-          {}
+          front_rs_link:
+            front_rs_color_frame:
+              front_rs_color_optical_frame:
+                tag36h11:0:
+                  {}
+            front_rs_depth_frame:
+              front_rs_depth_optical_frame:
+                {}
       Update Interval: 0
       Value: true
     - Class: rviz_default_plugins/Camera

@@ -18,37 +18,55 @@ services:
     ipc: host
     pid: host
 
-  antdrone0_pcl:
-    container_name: antdrone0_pcl
+  antdrone0_apriltag:
+    container_name: antdrone0_apriltag
     build:
       context: .
-      dockerfile: ./docker/pointcloud.dockerfile
+      dockerfile: ./docker/apriltag.dockerfile
     environment:
       - DRONE_NAME=${DRONE0_NAME}
       - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
       - USE_SIM_TIME=False
-    # volumes:
-    #   - ./antdrone_pcl:/home/humble_ws/src/antdrone_pcl:rw
-    #   - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - ./antdrone_apriltag:/home/humble_ws/src/antdrone_apriltag:rw
+      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
     network_mode: host
     ipc: host
     pid: host
-    privileged: true
+    # command: sleep infinity
 
-  antdrone0_depth_to_laserscan:
-    container_name: antdrone0_depth_to_laserscan
-    build:
-      context: .
-      dockerfile: ./docker/depth_to_laserscan.Dockerfile
-    # volumes:
-    #   - ./antdrone_depth_to_laserscan:/home/humble_ws/src/antdrone_depth_to_laserscan
-    environment:
-      - DRONE_NAME=${DRONE0_NAME}
-      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-      - USE_SIM_TIME=${USE_SIM_TIME}
-    network_mode: host
-    ipc: host
-    pid: host
+  # antdrone0_pcl:
+  #   container_name: antdrone0_pcl
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/pointcloud.dockerfile
+  #   environment:
+  #     - DRONE_NAME=${DRONE0_NAME}
+  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+  #     - USE_SIM_TIME=False
+  #   # volumes:
+  #   #   - ./antdrone_pcl:/home/humble_ws/src/antdrone_pcl:rw
+  #   #   - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
+  #   privileged: true
+
+  # antdrone0_depth_to_laserscan:
+  #   container_name: antdrone0_depth_to_laserscan
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/depth_to_laserscan.Dockerfile
+  #   # volumes:
+  #   #   - ./antdrone_depth_to_laserscan:/home/humble_ws/src/antdrone_depth_to_laserscan
+  #   environment:
+  #     - DRONE_NAME=${DRONE0_NAME}
+  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+  #     - USE_SIM_TIME=${USE_SIM_TIME}
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
 
   # antdrone0_slam:
   #   container_name: antdrone0_slam
