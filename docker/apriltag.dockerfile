@@ -28,5 +28,5 @@ RUN source /opt/ros/humble/setup.bash && \
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
-# CMD bash -c "source /home/humble_ws/install/setup.bash && \
-#     ros2 launch antdrone_bringup apriltag.launch.py"
+CMD bash -c "source /home/humble_ws/install/setup.bash && \
+    ros2 launch antdrone_bringup apriltag.launch.py USE_SIM_TIME:=${USE_SIM_TIME}"

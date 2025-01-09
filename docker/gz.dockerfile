@@ -37,7 +37,11 @@ RUN source /opt/ros/humble/setup.bash && \
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
-ENV GAZEBO_MODEL_PATH=/home/humble_ws/src/:/home/simulation/models:/home/models/gazebo_models:/home/models/gazebo_apriltag/models:/home/humble_ws/build/
+ENV GAZEBO_MODEL_PATH=${GAZEBO_MODEL_PATH}:/home/humble_ws/src
+ENV GAZEBO_MODEL_PATH=${GAZEBO_MODEL_PATH}:/home/simulation/models
+ENV GAZEBO_MODEL_PATH=${GAZEBO_MODEL_PATH}:/home/models/gazebo_models
+ENV GAZEBO_MODEL_PATH=${GAZEBO_MODEL_PATH}:/home/models/gazebo_apriltag/models
+ENV GAZEBO_MODEL_PATH=${GAZEBO_MODEL_PATH}:/models:/home/humble_ws/build
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
              gzserver --verbose -s libgazebo_ros_init.so -s libgazebo_ros_factory.so /home/simulation/gazebo/${world_name}.world"

@@ -21,6 +21,7 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
+            'gz_img_frame_fixer = antdrone_apriltag.gz_img_frame_fixer:main',
         ],
     },
 )

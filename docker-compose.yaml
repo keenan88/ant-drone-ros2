@@ -1,8 +1,6 @@
-services:
+version: '2.4' # Version 2.4 is compatable with belena
 
-  # ############################################
-  # #          ant drone 0 containers          #
-  # ############################################
+services:
 
   antdrone_realsense:
     container_name: antdrone_realsense
@@ -12,9 +10,9 @@ services:
     environment:
       - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
       - DISPLAY=${DISPLAY}
-    volumes:
-      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
-      - ./antdrone_realsense:/home/humble_ws/src/antdrone_realsense
+    # volumes:
+    #   - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
+    #   - ./antdrone_realsense:/home/humble_ws/src/antdrone_realsense
     privileged: True
     network_mode: host
     ipc: host
@@ -25,38 +23,25 @@ services:
     build:
       context: .
       dockerfile: ./docker/pointcloud.dockerfile
-    # depends_on:
-    #   antdrone0_slam:
-    #     condition: service_healthy
     environment:
       - DRONE_NAME=${DRONE0_NAME}
       - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
       - USE_SIM_TIME=False
-    volumes:
-      - ./antdrone_pcl:/home/humble_ws/src/antdrone_pcl:rw
-      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
+    # volumes:
+    #   - ./antdrone_pcl:/home/humble_ws/src/antdrone_pcl:rw
+    #   - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
     network_mode: host
     ipc: host
     pid: host
     privileged: true
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              capabilities: [ gpu ]
-    runtime: nvidia
 
   antdrone0_depth_to_laserscan:
     container_name: antdrone0_depth_to_laserscan
     build:
       context: .
       dockerfile: ./docker/depth_to_laserscan.Dockerfile
-    # depends_on:
-    #   antdrone0_slam:
-    #     condition: service_healthy
-    volumes:
-      - ./antdrone_depth_to_laserscan:/home/humble_ws/src/antdrone_depth_to_laserscan
+    # volumes:
+    #   - ./antdrone_depth_to_laserscan:/home/humble_ws/src/antdrone_depth_to_laserscan
     environment:
       - DRONE_NAME=${DRONE0_NAME}
       - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
@@ -64,13 +49,6 @@ services:
     network_mode: host
     ipc: host
     pid: host
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              capabilities: [ gpu ]
-    runtime: nvidia
 
   # antdrone0_slam:
   #   container_name: antdrone0_slam
@@ -84,9 +62,6 @@ services:
   #     timeout: 2s
   #     retries: 10
   #     start_period: 5s
-  #   depends_on:
-  #     antdrone0_gz_spawn:
-  #       condition: service_healthy
   #   environment:
   #     - DISPLAY=${DISPLAY}
   #     - DRONE_NAME=${DRONE0_NAME}
@@ -104,9 +79,6 @@ services:
   #   build:
   #     context: .
   #     dockerfile: ./docker/joystick.dockerfile
-  #   depends_on:
-  #     antdrone0_slam:
-  #       condition: service_healthy
   #   environment:
   #     - WHEELED_MOTION=false
   #     - DRONE_NAME=${DRONE0_NAME}
