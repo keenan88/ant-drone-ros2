@@ -35,6 +35,10 @@ class GoUnder(Node):
         self.angle_tol = 0.05
         self.t_tol = 0.5
 
+        self.vy_max = 0.05
+        self.vx_max = 0.05
+        self.vyaw_max = 5 / 180 * 3.14
+
     def get_transform(self):
         try:
             now = rclpy.time.Time()
@@ -82,10 +86,12 @@ class GoUnder(Node):
 
         angle_vel = 0.0
 
-        if self.angle_alignment > self.angle_tol:
-            angle_vel = 5/180*3.14
-        elif self.angle_alignment < -self.angle_tol:
-            angle_vel = -5/180*3.14
+        if abs(self.angle_alignment) < 1 / 180 * 3.14:
+            pass
+        elif self.angle_alignment > 0:
+            angle_vel = min(self.vyaw_max, 1.0 * self.angle_alignment)
+        elif self.angle_alignment < 0:
+            angle_vel = max(-self.vyaw_max, 1.0 * self.angle_alignment)
 
         return angle_vel
     
@@ -95,10 +101,12 @@ class GoUnder(Node):
         y_vel = 0.0
         y_err = self.y_to_tag - self.y_goal
 
-        if y_err > self.y_tol:
-            y_vel = 0.05
-        elif y_err < - self.y_tol:
-            y_vel = -0.05
+        if y_err < 0.01:
+            pass
+        elif y_err > self.y_tol:
+            y_vel = min(0.05, 1.0 * y_err)
+        elif y_err < -self.y_tol:
+            y_vel = max(-0.05, 1.0 * y_err)
 
         return y_vel
     
@@ -109,7 +117,7 @@ class GoUnder(Node):
         x_err = self.x_to_tag - self.x_goal
 
         if x_err > self.x_tol:
-            x_vel = 0.05
+            x_vel = np.sqrt(x_err)
 
         return x_vel
 
@@ -128,12 +136,15 @@ class GoUnder(Node):
             twist.angular.z = self.get_corrective_angle_vel()
             twist.linear.y = self.get_corrective_y_vel()
 
-            if twist.angular.z == 0 and twist.linear.y == 0: # Only go forward if well-aligned
-                twist.linear.x = self.get_x_vel()
-                in_position = twist.linear.x == 0
+            # Only go forward if well-aligned
+            if abs(self.angle_alignment) <= self.angle_tol:
+                if abs(self.y_to_tag - self.y_goal) <= self.y_tol: 
+
+                    twist.linear.x = 0.2 * self.get_x_vel()
+
+                    in_position = abs(self.x_to_tag - self.x_goal) <= self.x_tol
 
             self.cmd_vel_pub.publish(twist)
-
 
         res.success = True
 
