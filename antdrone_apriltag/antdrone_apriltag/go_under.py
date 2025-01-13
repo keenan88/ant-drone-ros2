@@ -23,12 +23,13 @@ class GoUnder(Node):
 
         self.go_under_service = self.create_service(SetBool, 'go_under', self.go_under)
 
-        self.x = None
-        self.y = None
-        self.base_link_yaw = None
+        self.x_to_tag = None
+        self.y_to_tag = None
+        self.angle_alignment = None
         self.t = None
 
         self.x_tol = 0.03
+        self.x_goal = 0.3
         self.y_tol = 0.02
         self.y_goal = 0.4
         self.angle_tol = 0.05
@@ -66,17 +67,18 @@ class GoUnder(Node):
 
             self.angle_alignment = sign * angle
 
-            self.x = round(transform.transform.translation.x, 2)
-            self.y = round(transform.transform.translation.y, 2)
+            self.x_to_tag = round(transform.transform.translation.x, 2)
+            self.y_to_tag = round(transform.transform.translation.y, 2)
             self.t = round(transform.header.stamp.sec + transform.header.stamp.nanosec / 1e9, 2)
 
-            self.get_logger().info(f"angle_difference: {self.angle_alignment}, y: {self.y}")
+            self.get_logger().info(f"angle_difference: {self.angle_alignment}, y: {self.y_to_tag}, x: {self.x_to_tag}")
 
         except Exception as e:
             self.get_logger().info(f"Could not get transform: {e}")
 
 
     def get_corrective_angle_vel(self):
+        # TODO - potentially turn movements into a PID controlled movement, might be necessary, might not.
 
         angle_vel = 0.0
 
@@ -88,9 +90,10 @@ class GoUnder(Node):
         return angle_vel
     
     def get_corrective_y_vel(self):
+        # TODO - potentially turn movements into a PID controlled movement, might be necessary, might not.
 
         y_vel = 0.0
-        y_err = self.y - self.y_goal
+        y_err = self.y_to_tag - self.y_goal
 
         if y_err > self.y_tol:
             y_vel = 0.05
@@ -98,27 +101,39 @@ class GoUnder(Node):
             y_vel = -0.05
 
         return y_vel
+    
+    def get_x_vel(self):
+        # TODO - potentially turn movements into a PID controlled movement, might be necessary, might not.
+
+        x_vel = 0.0
+        x_err = self.x_to_tag - self.x_goal
+
+        if x_err > self.x_tol:
+            x_vel = 0.05
+
+        return x_vel
 
 
 
     def go_under(self, req, res):
-        # TODO - potentially turn movements into a PID controlled movement, might be necessary, might not.
+        # Assumes the apriltag is in view of front camera when called.
 
         twist = Twist()
-        check_angle = True
-        check_y = True
+        in_position = False
 
-        while check_angle or check_y:
+        while not in_position:
 
             self.get_transform()
 
             twist.angular.z = self.get_corrective_angle_vel()
             twist.linear.y = self.get_corrective_y_vel()
 
-            check_angle = twist.angular.z != 0
-            check_y = twist.linear.y != 0
+            if twist.angular.z == 0 and twist.linear.y == 0: # Only go forward if well-aligned
+                twist.linear.x = self.get_x_vel()
+                in_position = twist.linear.x == 0
 
             self.cmd_vel_pub.publish(twist)
+
 
         res.success = True
 
