@@ -4,14 +4,14 @@
 
     <link name="base_link">
       <visual>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 ${height/2}" rpy="0 0 0"/>
         <geometry>
           <box size="${length} ${width} ${height}"/>
         </geometry>
       </visual>
       
       <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 ${height/2}" rpy="0 0 0"/>
         <geometry>
           <box size="${length} ${width} ${height}"/>
         </geometry>
@@ -19,7 +19,7 @@
       </collision>
 
       <inertial>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 ${height/2}" rpy="0 0 0"/>
         <mass value="10"/> <!-- Small, non-zero mass -->
         <inertia
           ixx="0.57"

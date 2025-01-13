@@ -10,9 +10,7 @@ from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
 class FrameFixer(Node):
     def __init__(self):
         super().__init__('frame_fixer')
-
-        self.camera_pos = self.declare_parameter('camera_pos', '').get_parameter_value().string_value
-
+        
         qos_profile = QoSProfile(
             reliability=QoSReliabilityPolicy.BEST_EFFORT,
             history=QoSHistoryPolicy.KEEP_LAST,
@@ -21,39 +19,37 @@ class FrameFixer(Node):
 
         self.camera_info_sub = self.create_subscription(
             CameraInfo,
-            self.camera_pos + '/' + self.camera_pos + '/color/camera_info_wrong_frame',
+            'apriltag_cam/apriltag_cam/color/camera_info_wrong_frame',
             self.camera_info_cb,
             qos_profile
         )
 
         self.camera_info_pub = self.create_publisher(
             CameraInfo,
-            self.camera_pos + '/' + self.camera_pos + '/color/camera_info', 
-            # qos_profile
+            'apriltag_cam/apriltag_cam/color/camera_info',
             10
         )
 
 
         self.color_img_sub = self.create_subscription(
             Image,
-            self.camera_pos + '/' + self.camera_pos + '/color/image_raw_wrong_frame',
+            'apriltag_cam/apriltag_cam/color/image_raw_wrong_frame',
             self.color_img_cb,
             qos_profile
         )
 
         self.color_img_pub = self.create_publisher(
             Image,
-            self.camera_pos + '/' + self.camera_pos + '/color/image_raw', 
-            # qos_profile,
+            'apriltag_cam/apriltag_cam/color/image_raw',
             10
         )
 
     def camera_info_cb(self, msg):
-        msg.header.frame_id = self.camera_pos + '_depth_optical_frame'
+        msg.header.frame_id = 'apriltag_cam_depth_optical_frame'
         self.camera_info_pub.publish(msg)
 
     def color_img_cb(self, msg):
-        msg.header.frame_id = self.camera_pos + '_depth_optical_frame'
+        msg.header.frame_id = 'apriltag_cam_depth_optical_frame'
         self.color_img_pub.publish(msg)
 
 def main(args=None):

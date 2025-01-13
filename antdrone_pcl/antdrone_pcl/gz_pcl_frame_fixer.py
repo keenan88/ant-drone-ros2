@@ -21,7 +21,7 @@ class FrameFixer(Node):
 
         self.subscription = self.create_subscription(
             PointCloud2,
-            self.camera_pos + '/' + self.camera_pos + '/depth/color/points',
+            self.camera_pos + '/' + self.camera_pos + '/depth/color/points_wrong_frame',
             self.pointcloud_callback,
             qos_profile
         )

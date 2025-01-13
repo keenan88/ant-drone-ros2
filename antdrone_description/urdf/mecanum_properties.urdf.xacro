@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:property name="base_length" value="0.82" />
+  <xacro:property name="base_length" value="0.82" /> 
   <xacro:property name="base_width" value="0.495" />
-  <xacro:property name="base_height" value="0.116" />
+  <xacro:property name="base_height" value="0.116" /> <!-- 0.116 is height from ground to top of drone rail-->
 </robot>

@@ -9,7 +9,7 @@ class LaserScanMerger(Node):
     def __init__(self):
         super().__init__('laser_scan_merger')
 
-        self.tf_tolerance_s = 0.3
+        self.tf_tolerance_s = 0.15
 
         qos_best_effort = QoSProfile(
             reliability=QoSReliabilityPolicy.BEST_EFFORT,
@@ -39,7 +39,7 @@ class LaserScanMerger(Node):
 
         self.subscriber_4 = self.create_subscription(
             LaserScan,
-            'left_rs/scan', # changed to left_rs while I only have 3 realsenes, TODO change back to right_rs
+            'right_rs/scan',
             self.record_right_scan,
             qos_best_effort
         )

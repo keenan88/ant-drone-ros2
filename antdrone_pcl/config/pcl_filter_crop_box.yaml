@@ -12,7 +12,7 @@
     max_x: 5.0 # Set max_x large enough to cover view in front of robot
     min_x: -5.0 # Set max_x large enough to cover view in front of robot
 
-    max_y: 0.16 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
+    max_y: 0.13 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
     min_y: -0.5 # Set min_y low enough to see all of worker
 
     max_z: 4.0 # Physical realsense starts to get noisy past 4m.

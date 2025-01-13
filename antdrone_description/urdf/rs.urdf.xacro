@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot name="antdrone_camera" xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:macro name="camera" params="drone_name camera_name x y z r_rs p_rs yaw_rs r_cam p_cam yaw_cam">
+  <xacro:macro name="rs" params="drone_name camera_name x y z r_rs p_rs yaw_rs r_cam p_cam yaw_cam">
 
     <gazebo reference="${camera_name}_gazebo_camera_frame">
 
@@ -9,14 +9,15 @@
         <update_rate>15.0</update_rate> <!-- Gazebo does not necessarily respect this update rate when publishing the camera data to ros2 -->
         
         <camera>
-          <horizontal_fov>1.57</horizontal_fov>
+          <horizontal_fov>1.51</horizontal_fov> <!-- Set horizontal FOV to realsense d435i horizontal color FOV (69 degrees)-->
           <!-- There is not a control for vertical FOV, it is set automatically as height / width * horizontal_fov -->
           <image>
-            <width>640</width>
-            <height>389</height>
+            <width>100</width>
+            <height>56</height> <!-- Set pixel height so that vertical FOV matches realsense d435i -->
             <format>R8G8B8</format>
           </image>
           <clip>
+            <!-- Physical realsense cuts off around 10cm, sim camera seems to cutoff at 30cm no matter what. -->
             <near>0.1</near>
             <!--  Be sure to set far clip greater than cropbox node's cutoff distance.
               The camera generates a grey plane at this distance that will be interpreted in nav2 as an obstacle-->

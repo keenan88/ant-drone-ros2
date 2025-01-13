@@ -1,7 +1,6 @@
 
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from ament_index_python.packages import get_package_share_directory
 from launch.substitutions import LaunchConfiguration
 from launch.conditions import IfCondition
 import os
@@ -10,21 +9,18 @@ def generate_launch_description():
 
     ld = LaunchDescription()
 
-    for realsense_placement in ["front_rs", "rear_rs", "left_rs", "right_rs"]:
+    gz_img_frame_fixer = Node(
+        package='antdrone_apriltag',
+        executable='gz_img_frame_fixer',
+        name =  "apriltag_cam_gz_img_frame_fixer",
+        output='screen',
+        parameters=[
+            {'use_sim_time' : LaunchConfiguration("USE_SIM_TIME")},
+        ],
+        condition = IfCondition(LaunchConfiguration("USE_SIM_TIME"))
+    )
 
-        gz_img_frame_fixer = Node(
-            package='antdrone_apriltag',
-            executable='gz_img_frame_fixer',
-            name = realsense_placement + "_gz_img_frame_fixer",
-            output='screen',
-            parameters=[
-                {'camera_pos': realsense_placement},
-                {'use_sim_time' : LaunchConfiguration("USE_SIM_TIME")},
-            ],
-            condition = IfCondition(LaunchConfiguration("USE_SIM_TIME"))
-        )
-
-        ld.add_action(gz_img_frame_fixer)
+    
 
 
     antdrone_apriltag = Node(
@@ -34,8 +30,8 @@ def generate_launch_description():
             '/home/humble_ws/src/antdrone_apriltag/config/apriltag.yaml'
         ],
         remappings = [
-            ('/camera_info', '/front_rs/front_rs/color/camera_info'),
-            ('/image_rect',  '/front_rs/front_rs/color/image_raw')
+            ('/camera_info', '/apriltag_cam/apriltag_cam/color/camera_info'),
+            ('/image_rect',  '/apriltag_cam/apriltag_cam/color/image_raw')
         ]
     )
 
@@ -60,6 +56,7 @@ def generate_launch_description():
         executable='go_under'
     )
 
+    ld.add_action(gz_img_frame_fixer)
     ld.add_action(antdrone_apriltag)
     # ld.add_action(localizer_to_apriltag)
     ld.add_action(rviz)
