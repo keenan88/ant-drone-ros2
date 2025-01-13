@@ -7,12 +7,12 @@
   <xacro:include filename="$(find antdrone_description)/urdf/base.urdf.xacro" />
   <xacro:include filename="$(find antdrone_description)/urdf/camera.urdf.xacro" />
 
-  <xacro:property name="rs_height" value="${base_height/2 + 0.107}" />
+  <xacro:property name="rs_height" value="${0.37 - base_height/2}" />
 
   <xacro:camera drone_name="$(arg drone_name)" camera_pos="front" 
-                x="0.410335" y="0" z="${rs_height}" 
-                r_rs= "-1.57" p_rs="0" yaw_rs="-1.57" 
-                r_cam="1.57" p_cam="-1.1" yaw_cam="0"/>
+                x="${base_length/2 - 0.0575}" y="-0.195" z="${rs_height}" 
+                r_rs= "-1.57" p_rs="0" yaw_rs="${(60-90)/180*3.14}" 
+                r_cam="0" p_cam="0" yaw_cam="${60/180*3.14}"/>
   
 
   <xacro:camera drone_name="$(arg drone_name)" camera_pos="left" 

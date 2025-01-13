@@ -6,10 +6,12 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /Grid1
         - /TF1
         - /TF1/Frames1
-        - /Camera1
         - /Camera1/Visibility1
+        - /RobotModel1
+        - /RobotModel1/Description Topic1
       Splitter Ratio: 0.5
     Tree Height: 484
   - Class: rviz_common/Selection
@@ -34,7 +36,7 @@ Visualization Manager:
   Class: ""
   Displays:
     - Alpha: 0.5
-      Cell Size: 1
+      Cell Size: 0.20000000298023224
       Class: rviz_default_plugins/Grid
       Color: 160; 160; 164
       Enabled: true
@@ -48,7 +50,7 @@ Visualization Manager:
         Y: 0
         Z: 0
       Plane: XY
-      Plane Cell Count: 10
+      Plane Cell Count: 20
       Reference Frame: <Fixed Frame>
       Value: true
     - Class: rviz_default_plugins/TF
@@ -56,19 +58,29 @@ Visualization Manager:
       Frame Timeout: 1
       Frames:
         All Enabled: false
+        attachment_point:
+          Value: false
         base_link:
           Value: true
-        front_rs_color_frame:
-          Value: false
-        front_rs_color_optical_frame:
-          Value: false
-        front_rs_depth_frame:
+        front_gazebo_camera_frame:
           Value: false
         front_rs_depth_optical_frame:
+          Value: true
+        left_gazebo_camera_frame:
           Value: false
-        front_rs_link:
+        left_rs_depth_optical_frame:
           Value: false
-        tag36h11:0:
+        odom:
+          Value: true
+        rear_gazebo_camera_frame:
+          Value: false
+        rear_rs_depth_optical_frame:
+          Value: false
+        right_gazebo_camera_frame:
+          Value: false
+        right_rs_depth_optical_frame:
+          Value: false
+        tag36h11:1:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -77,14 +89,27 @@ Visualization Manager:
       Show Names: true
       Tree:
         base_link:
-          front_rs_link:
-            front_rs_color_frame:
-              front_rs_color_optical_frame:
-                tag36h11:0:
-                  {}
-            front_rs_depth_frame:
-              front_rs_depth_optical_frame:
-                {}
+          attachment_point:
+            {}
+          front_gazebo_camera_frame:
+            {}
+          front_rs_depth_optical_frame:
+            tag36h11:1:
+              {}
+          left_gazebo_camera_frame:
+            {}
+          left_rs_depth_optical_frame:
+            {}
+          rear_gazebo_camera_frame:
+            {}
+          rear_rs_depth_optical_frame:
+            {}
+          right_gazebo_camera_frame:
+            {}
+          right_rs_depth_optical_frame:
+            {}
+        odom:
+          {}
       Update Interval: 0
       Value: true
     - Class: rviz_default_plugins/Camera
@@ -102,9 +127,36 @@ Visualization Manager:
       Value: true
       Visibility:
         Grid: false
+        RobotModel: true
         TF: true
         Value: true
       Zoom Factor: 1
+    - Alpha: 1
+      Class: rviz_default_plugins/RobotModel
+      Collision Enabled: false
+      Description File: ""
+      Description Source: Topic
+      Description Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /robot_description
+      Enabled: false
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+      Mass Properties:
+        Inertia: false
+        Mass: false
+      Name: RobotModel
+      TF Prefix: ""
+      Update Interval: 0
+      Value: false
+      Visual Enabled: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -151,25 +203,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 4.4926981925964355
+      Distance: 4.021581172943115
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.17979054152965546
-        Y: -0.5004300475120544
-        Z: 1.2424123287200928
+        X: 0.6330943703651428
+        Y: 0.4588159918785095
+        Z: 0.5754451751708984
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.030398115515708923
+      Pitch: 1.5697963237762451
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.053567886352539
+      Yaw: 3.1335513591766357
     Saved: ~
 Window Geometry:
   Camera:

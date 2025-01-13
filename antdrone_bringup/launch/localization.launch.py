@@ -6,7 +6,7 @@ from launch.substitutions import LaunchConfiguration
 def generate_launch_description():
 
     
-    wheel_odometry = Node(
+    gz_wheel_odometry = Node(
         package='antdrone_localization',
         executable='wheel_odometry', 
         parameters=[
@@ -17,9 +17,14 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration('USE_SIM_TIME'))
     )
 
+    
+
+    
+
     ld = LaunchDescription()
 
-    ld.add_action(wheel_odometry)
+    
+    ld.add_action(gz_wheel_odometry)
 
 
     return ld

@@ -1,6 +1,7 @@
 
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from ament_index_python.packages import get_package_share_directory
 from launch.substitutions import LaunchConfiguration
 from launch.conditions import IfCondition
 import os
@@ -38,14 +39,31 @@ def generate_launch_description():
         ]
     )
 
+    # localizer_to_apriltag = Node(
+    #     package='robot_localization',
+    #     executable='ekf_node',
+    #     name='ekf_filter_node',
+    #     parameters=[
+    #         os.path.join(get_package_share_directory("antdrone_apriltag"), 'config', 'ekf.yaml'),
+    #         # {'use_sim_time' : LaunchConfiguration("USE_SIM_TIME")}
+    #     ],
+    # )
+
     rviz = Node(
         package='rviz2',
         executable='rviz2',
         arguments=['-d', '/home/humble_ws/src/antdrone_apriltag/config/apriltag.rviz']
     )
 
+    go_under = Node(
+        package='antdrone_apriltag',
+        executable='go_under'
+    )
+
     ld.add_action(antdrone_apriltag)
+    # ld.add_action(localizer_to_apriltag)
     ld.add_action(rviz)
+    ld.add_action(go_under)
 
 
     return ld

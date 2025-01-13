@@ -9,7 +9,7 @@
         <update_rate>15.0</update_rate> <!-- Gazebo does not necessarily respect this update rate when publishing the camera data to ros2 -->
         
         <camera>
-          <horizontal_fov>1.92</horizontal_fov> <!-- Set horizontal FOV to realsense d435i horizontal color FOV (69 degrees)-->
+          <horizontal_fov>1.57</horizontal_fov> <!-- Set horizontal FOV to realsense d435i horizontal color FOV (69 degrees)-->
           <!-- There is not a control for vertical FOV, it is set automatically as height / width * horizontal_fov -->
           <image>
             <!-- Set width & height to match settings on physical realsense -->

@@ -6,6 +6,8 @@ from launch.substitutions import LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
+from launch.conditions import IfCondition
+
 
 def generate_launch_description():
     
@@ -62,8 +64,18 @@ def generate_launch_description():
         executable="gz_frame_name_fixer",
         parameters = [
             {
-                'use_sim_time': True,
+                'use_sim_time':True,
                 'DRONE_NAME': LaunchConfiguration('DRONE_NAME')
+            }
+        ]
+    )
+
+    gz_odom_frame_fixer = Node(
+        package='antdrone_localization',
+        executable='gz_odom_frame_fixer', 
+        parameters=[
+            {
+                'use_sim_time' : True,
             }
         ]
     )
@@ -80,5 +92,6 @@ def generate_launch_description():
         gz_spawn,
         drone_gz_ros_domain_bridge,
         gz_frame_name_fixer,
-        drone_description
+        drone_description,
+        gz_odom_frame_fixer
     ])

@@ -18,6 +18,7 @@ RUN pip install setuptools==58.2.0
 COPY ./antdrone_gz/ /home/humble_ws/src/antdrone_gz/
 COPY ./antdrone_description/ /home/humble_ws/src/antdrone_description
 COPY ./antdrone_bringup /home/humble_ws/src/antdrone_bringup
+COPY ./antdrone_localization/ /home/humble_ws/src/antdrone_localization
 RUN git clone https://github.com/keenan88/IFRA_LinkAttacher /home/humble_ws/src/IFRA_LinkAttacher
 
 WORKDIR /home/humble_ws

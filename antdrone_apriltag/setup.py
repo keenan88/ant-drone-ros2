@@ -17,11 +17,12 @@ setup(
     zip_safe=True,
     maintainer="Ecoation Labs",
     maintainer_email="support@ecoationlabs.ca",
-    description="xbox joystick controls",
+    description="gets drone under worker for pickup",
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
             'gz_img_frame_fixer = antdrone_apriltag.gz_img_frame_fixer:main',
+            'go_under = antdrone_apriltag.go_under:main'
         ],
     },
 )

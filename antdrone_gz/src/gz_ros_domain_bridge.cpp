@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
   domain_bridge::TopicBridgeOptions cmd_vel_bridge_options;
 
   // Easier to identify namespaced topics in cpp rather than yaml config file
-  odom_bridge_options.remap_name("/odom");
+  odom_bridge_options.remap_name("/odom_wrong_frame");
   tf_bridge_options.remap_name("tf_gz");
 
   // Pointclouds remap options to match realsense topic names
