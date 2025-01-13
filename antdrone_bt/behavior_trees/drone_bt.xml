@@ -136,7 +136,10 @@
         </Delay>
       </RetryUntilSuccessful>
 
+      <GoUnderWorker/>
+
       <PickupWorker drone_name="{drone_name}" worker_name="{worker_name}" />
+
       <ClearLocalCostmap/>
       <ClearGlobalCostmap/>
       <UpdateFootprint is_carrying_worker="True"/>

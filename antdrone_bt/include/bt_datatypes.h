@@ -14,6 +14,7 @@
 #include "antdrone_interfaces/srv/suspend_release_rmf_pathing.hpp"
 #include "antdrone_interfaces/srv/check_rmf_client_idle.hpp"
 #include "antdrone_interfaces/srv/mission_heartbeat_srv.hpp"
+#include "antdrone_interfaces/srv/go_under.hpp"
 
 #include "geometry_msgs/msg/polygon.hpp"
 #include "rcl_interfaces/srv/set_parameters.hpp"

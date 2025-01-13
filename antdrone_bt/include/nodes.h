@@ -68,6 +68,15 @@ public:
   virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
 };
 
+class GoUnderWorker : public RosServiceNode<antdrone_interfaces::srv::GoUnder> {
+public:
+  GoUnderWorker(const std::string &name, const NodeConfig &conf, const RosNodeParams &params);
+  static PortsList providedPorts();
+  bool setRequest(Request::SharedPtr &request) override;
+  NodeStatus onResponseReceived(const Response::SharedPtr &response) override;
+  virtual NodeStatus onFailure(ServiceNodeErrorCode error) override;
+};
+
 class PickupWorker : public RosServiceNode<linkattacher_msgs::srv::AttachLink> {
 public:
   PickupWorker(const std::string &name, const NodeConfig &conf, const RosNodeParams &params);

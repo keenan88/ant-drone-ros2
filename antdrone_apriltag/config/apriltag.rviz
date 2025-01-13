@@ -6,9 +6,9 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /Grid1
-        - /TF1
         - /TF1/Frames1
+        - /Camera1
+        - /Camera1/Visibility1
       Splitter Ratio: 0.6029411554336548
     Tree Height: 470
   - Class: rviz_common/Selection
@@ -71,6 +71,8 @@ Visualization Manager:
           Value: false
         left_rs_gazebo_camera_frame:
           Value: false
+        map:
+          Value: true
         odom:
           Value: true
         rear_rs_depth_optical_frame:
@@ -81,8 +83,6 @@ Visualization Manager:
           Value: false
         right_rs_gazebo_camera_frame:
           Value: false
-        tag36h11:1:
-          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: false
@@ -91,8 +91,7 @@ Visualization Manager:
       Tree:
         base_link:
           apriltag_cam_depth_optical_frame:
-            tag36h11:1:
-              {}
+            {}
           apriltag_cam_gazebo_camera_frame:
             {}
           attachment_point:
@@ -131,7 +130,7 @@ Visualization Manager:
         Value: /apriltag_cam/apriltag_cam/color/image_raw
       Value: true
       Visibility:
-        Grid: true
+        Grid: false
         TF: true
         Value: true
       Zoom Factor: 1

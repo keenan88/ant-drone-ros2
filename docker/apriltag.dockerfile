@@ -19,6 +19,8 @@ WORKDIR /home/humble_ws/src
 RUN git clone https://github.com/christianrauch/apriltag_ros.git
 COPY ./antdrone_apriltag /home/humble_ws/src/antdrone_apriltag
 COPY ./antdrone_bringup /home/humble_ws/src/antdrone_bringup
+COPY ./antdrone_interfaces /home/humble_ws/src/antdrone_interfaces
+
 
 WORKDIR /home/humble_ws/
 

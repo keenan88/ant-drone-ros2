@@ -21,6 +21,7 @@
   <test_depend>launch_ros</test_depend>
 
   <depend>teleop_twist_joy</depend>
+  <depend>antdrone_interfaces</depend>
   <depend>domain_bridge</depend>
 
   <export>

@@ -26,11 +26,10 @@ endif()
 
 file(GLOB srv_files RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "srv/*.srv")
 
-set(rosidl_files ${msg_files} ${srv_files} ${action_files})
+set(rosidl_files ${srv_files})
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   ${rosidl_files}
 )
-
 
 ament_package()

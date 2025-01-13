@@ -34,6 +34,7 @@ public:
     factory.registerNodeType<ClearCostmap>("ClearGlobalCostmap", BT::RosNodeParams(shared_from_this(), "/global_costmap/clear_entirely_global_costmap"));
     factory.registerNodeType<TriggerWorkerComeout>("TriggerWorkerComeout", BT::RosNodeParams(shared_from_this(), "/queen/worker_comeout"));
     factory.registerNodeType<CheckComeOutComplete>("CheckComeOutComplete", BT::RosNodeParams(shared_from_this(), "/queen/worker_comeout"));
+    factory.registerNodeType<GoUnderWorker>("GoUnderWorker", BT::RosNodeParams(shared_from_this(), "/go_under_worker"));
     factory.registerNodeType<PickupWorker>("PickupWorker", BT::RosNodeParams(shared_from_this(), "/ATTACHLINK"));
     factory.registerNodeType<UpdateFootprint>("UpdateFootprint", shared_from_this());
     factory.registerNodeType<SetCostmapParams>("SetLocalCostmapParams", BT::RosNodeParams(shared_from_this(), "/local_costmap/local_costmap/set_parameters"));
