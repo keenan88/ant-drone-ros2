@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 from tf2_ros import Buffer, TransformListener
 from geometry_msgs.msg import TransformStamped, Twist
-from antdrone_interfaces.srv import CheckRMFClientIdle, GoUnder
+from antdrone_interfaces.srv import GoUnder
 from rclpy.executors import MultiThreadedExecutor
 from scipy.spatial.transform import Rotation as R
 import numpy as np
@@ -24,7 +24,7 @@ class GoUnderWorker(Node):
         self.x_tol = 0.03
         self.x_goal = 0.3
         self.y_tol = 0.02
-        self.y_goal = 0.4
+        self.y_goal = 0.2
         self.angle_tol = 0.05
         self.t_tol = 0.5
 
@@ -155,7 +155,7 @@ class GoUnderWorker(Node):
             if abs(angle_to_tag) <= self.angle_tol:
                 if abs(y_to_tag - self.y_goal) <= self.y_tol: 
 
-                    twist.linear.x = self.get_x_vel()
+                    twist.linear.x = self.get_x_vel(x_to_tag)
 
                     in_position = abs(x_to_tag - self.x_goal) <= self.x_tol
 
