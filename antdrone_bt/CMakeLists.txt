@@ -14,7 +14,6 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(behaviortree_cpp REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(std_srvs REQUIRED)
 find_package(rmf_task_msgs REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(ant_queen_interfaces REQUIRED)
@@ -41,7 +40,6 @@ set(TARGET_DEPENDS
     rclcpp_action
     behaviortree_cpp 
     std_msgs
-    std_srvs
     rmf_task_msgs
     nlohmann_json
     ant_queen_interfaces

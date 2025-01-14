@@ -34,7 +34,13 @@ public:
     factory.registerNodeType<ClearCostmap>("ClearGlobalCostmap", BT::RosNodeParams(shared_from_this(), "/global_costmap/clear_entirely_global_costmap"));
     factory.registerNodeType<TriggerWorkerComeout>("TriggerWorkerComeout", BT::RosNodeParams(shared_from_this(), "/queen/worker_comeout"));
     factory.registerNodeType<CheckComeOutComplete>("CheckComeOutComplete", BT::RosNodeParams(shared_from_this(), "/queen/worker_comeout"));
-    factory.registerNodeType<GoUnderWorker>("GoUnderWorker", BT::RosNodeParams(shared_from_this(), "/go_under_worker"));
+
+     
+    auto asdf = BT::RosNodeParams(shared_from_this(), "/go_under_worker");
+    asdf.server_timeout = std::chrono::milliseconds(30000); // go under can take some time, give it extra execution time to avoid timeout errors
+    factory.registerNodeType<GoUnderWorker>("GoUnderWorker", asdf);
+
+    
     factory.registerNodeType<PickupWorker>("PickupWorker", BT::RosNodeParams(shared_from_this(), "/ATTACHLINK"));
     factory.registerNodeType<UpdateFootprint>("UpdateFootprint", shared_from_this());
     factory.registerNodeType<SetCostmapParams>("SetLocalCostmapParams", BT::RosNodeParams(shared_from_this(), "/local_costmap/local_costmap/set_parameters"));

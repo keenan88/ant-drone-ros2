@@ -22,11 +22,10 @@ class GoUnderWorker(Node):
         self.go_under_service = self.create_service(GoUnder, 'go_under_worker', self.go_under_worker)
 
         self.x_tol = 0.03
-        self.x_goal = 0.3
-        self.y_tol = 0.02
-        self.y_goal = 0.2
+        self.x_goal = 0.31
+        self.y_tol = 0.01
+        self.y_goal = 0.56/2
         self.angle_tol = 0.05
-        self.t_tol = 0.5
 
         self.vy_max = 0.05
         self.vx_max = 0.05
@@ -40,7 +39,7 @@ class GoUnderWorker(Node):
 
         try:
             now = rclpy.time.Time()
-            timeout = rclpy.duration.Duration(seconds=0.1)
+            timeout = rclpy.duration.Duration(seconds=0.05)
             transform: TransformStamped = self.tf_buffer.lookup_transform(
                 'base_link', 'tag36h11:' + str(tag_id), now, timeout
             )
@@ -63,7 +62,7 @@ class GoUnderWorker(Node):
             cross_product = np.cross(original_x, rotated_x)
             sign = np.sign(cross_product[2]) 
 
-            angle_to_tag = sign * angle
+            angle_to_tag = round(sign * angle, 2)
 
             x_to_tag = round(transform.transform.translation.x, 2)
             y_to_tag = round(transform.transform.translation.y, 2)
@@ -78,8 +77,6 @@ class GoUnderWorker(Node):
 
 
     def get_corrective_angle_vel(self, angle_to_tag):
-        # TODO - potentially turn movements into a PID controlled movement, might be necessary, might not.
-
         angle_vel = 0.0
 
         if abs(angle_to_tag) < 1 / 180 * 3.14:
@@ -91,11 +88,8 @@ class GoUnderWorker(Node):
 
         return angle_vel
     
-    def get_corrective_y_vel(self, y_to_tag):
-        # TODO - potentially turn movements into a PID controlled movement, might be necessary, might not.
-
+    def get_corrective_y_vel(self, y_err):
         y_vel = 0.0
-        y_err = y_to_tag - self.y_goal
 
         if y_err < 0.01:
             pass
@@ -106,14 +100,12 @@ class GoUnderWorker(Node):
 
         return y_vel
     
-    def get_x_vel(self, x_to_tag):
-        # TODO - potentially turn movements into a PID controlled movement, might be necessary, might not.
+    def get_x_vel(self, x_err):
 
         x_vel = 0.0
-        x_err = x_to_tag - self.x_goal
-
+    
         if x_err > self.x_tol:
-            x_vel = 0.2 * np.sqrt(x_err)
+            x_vel = 0.1 * np.sqrt(abs(x_err))
 
         return x_vel
 
@@ -124,6 +116,9 @@ class GoUnderWorker(Node):
 
         res.success = False
 
+        self.tf_buffer = Buffer() # Clear buffer
+        self.tf_listener = TransformListener(self.tf_buffer, self)
+        time.sleep(3) # Allow a few seconds to find tags
         x_to_tag0, y_to_tag0, angle_to_tag0, t_tag0 = self.get_transform(tag_id=0)
         x_to_tag1, y_to_tag1, angle_to_tag1, t_tag1 = self.get_transform(tag_id=1)
 
@@ -134,7 +129,7 @@ class GoUnderWorker(Node):
 
         elif t_tag1 != None:
             side_to_enter = 'R'
-            tag_id=1
+            tag_id = 1
             self.get_logger().info("Found tag 1")
 
         else:
@@ -148,19 +143,25 @@ class GoUnderWorker(Node):
 
             x_to_tag, y_to_tag, angle_to_tag, t = self.get_transform(tag_id)
 
+            y_err = y_to_tag - self.y_goal
+            x_err = x_to_tag - self.x_goal
+
             twist.angular.z = self.get_corrective_angle_vel(angle_to_tag)
-            twist.linear.y = self.get_corrective_y_vel(y_to_tag)
+            twist.linear.y = self.get_corrective_y_vel(y_err)
 
             # Only go forward if well-aligned
             if abs(angle_to_tag) <= self.angle_tol:
-                if abs(y_to_tag - self.y_goal) <= self.y_tol: 
+                if abs(y_err) <= self.y_tol: 
+                    twist.linear.x = self.get_x_vel(x_err)
 
-                    twist.linear.x = self.get_x_vel(x_to_tag)
-
-                    in_position = abs(x_to_tag - self.x_goal) <= self.x_tol
+            in_position = abs(x_err) <= self.x_tol
 
             self.cmd_vel_pub.publish(twist)
-            time.sleep(0.05)
+            time.sleep(0.01)
+
+        # Send stop command
+        twist = Twist()
+        self.cmd_vel_pub.publish(twist)
 
         res.success = True
         res.side_entered = side_to_enter
