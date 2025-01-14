@@ -68,8 +68,6 @@ class GoUnderWorker(Node):
             y_to_tag = round(transform.transform.translation.y, 2)
             t = round(transform.header.stamp.sec + transform.header.stamp.nanosec / 1e9, 2)
 
-            self.get_logger().info(f"angle_difference: {angle_to_tag}, y: {y_to_tag}, x: {x_to_tag}")
-
         except Exception as e:
             self.get_logger().info(f"Could not get transform: {e}")
 
@@ -79,9 +77,7 @@ class GoUnderWorker(Node):
     def get_corrective_angle_vel(self, angle_to_tag):
         angle_vel = 0.0
 
-        if abs(angle_to_tag) < 1 / 180 * 3.14:
-            pass
-        elif angle_to_tag > 0:
+        if angle_to_tag > 0:
             angle_vel = min(self.vyaw_max, 1.0 * angle_to_tag)
         elif angle_to_tag < 0:
             angle_vel = max(-self.vyaw_max, 1.0 * angle_to_tag)
@@ -91,9 +87,7 @@ class GoUnderWorker(Node):
     def get_corrective_y_vel(self, y_err):
         y_vel = 0.0
 
-        if y_err < 0.01:
-            pass
-        elif y_err > self.y_tol:
+        if y_err > self.y_tol:
             y_vel = min(0.05, 1.0 * y_err)
         elif y_err < -self.y_tol:
             y_vel = max(-0.05, 1.0 * y_err)
@@ -105,7 +99,7 @@ class GoUnderWorker(Node):
         x_vel = 0.0
     
         if x_err > self.x_tol:
-            x_vel = 0.1 * np.sqrt(abs(x_err))
+            x_vel = 0.15 * np.sqrt(abs(x_err))
 
         return x_vel
 
@@ -123,12 +117,12 @@ class GoUnderWorker(Node):
         x_to_tag1, y_to_tag1, angle_to_tag1, t_tag1 = self.get_transform(tag_id=1)
 
         if t_tag0 != None:
-            side_to_enter = 'L'
+            side_to_enter = 'R'
             tag_id = 0
             self.get_logger().info("Found tag 0")
 
         elif t_tag1 != None:
-            side_to_enter = 'R'
+            side_to_enter = 'L'
             tag_id = 1
             self.get_logger().info("Found tag 1")
 
@@ -143,8 +137,8 @@ class GoUnderWorker(Node):
 
             x_to_tag, y_to_tag, angle_to_tag, t = self.get_transform(tag_id)
 
-            y_err = y_to_tag - self.y_goal
-            x_err = x_to_tag - self.x_goal
+            y_err = round(y_to_tag - self.y_goal, 2)
+            x_err = round(x_to_tag - self.x_goal, 2)
 
             twist.angular.z = self.get_corrective_angle_vel(angle_to_tag)
             twist.linear.y = self.get_corrective_y_vel(y_err)
@@ -165,6 +159,7 @@ class GoUnderWorker(Node):
 
         res.success = True
         res.side_entered = side_to_enter
+        self.get_logger().info(f"side entered: {res.side_entered}")
 
         return res
 

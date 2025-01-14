@@ -9,11 +9,14 @@ SendDropoffPosition::SendDropoffPosition(const std::string &name, const NodeConf
   }
 }
 
-PortsList SendDropoffPosition::providedPorts() { return {InputPort<std::string>("drone_name")}; }
+PortsList SendDropoffPosition::providedPorts() { return {InputPort<std::string>("drone_name"), InputPort<std::string>("pickup_side")}; }
 
 geometry_msgs::msg::TransformStamped SendDropoffPosition::getTransform() {
+  std::string pickup_side;
+  getInput("pickup_side", pickup_side);
+
   const std::string target_frame = "map";
-  const std::string source_frame = "attachment_point";
+  const std::string source_frame = "attachment_point_" + pickup_side;
 
   geometry_msgs::msg::TransformStamped transform_stamped;
 

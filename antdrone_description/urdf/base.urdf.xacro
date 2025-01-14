@@ -41,7 +41,7 @@
   </gazebo>
 
 
-  <link name="attachment_point">
+  <link name="attachment_point_R">
 
       <inertial>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -56,15 +56,68 @@
       </inertial>
     </link>
 
-  <joint name="attachment_to_base" type="fixed">
+  <joint name="attachment_point_R_to_base" type="fixed">
     <parent link="base_link"/>
-    <child link="attachment_point"/>
+    <child link="attachment_point_R"/>
+    <origin xyz="0 0 0.6" rpy="0 0 -1.57"/>
+  </joint>
+
+  <gazebo reference='attachment_point_R_to_base'>
+    <preserveFixedJoint>true</preserveFixedJoint>
+  </gazebo>
+
+  <link name="attachment_point_L">
+
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.01"/> <!-- Small, non-zero mass -->
+        <inertia
+          ixx="0.0001"
+          ixy="0"
+          ixz="0"
+          iyy="0.0001"
+          iyz="0"
+          izz="0.0001" />
+      </inertial>
+    </link>
+
+  <joint name="attachment_point_L_to_base" type="fixed">
+    <parent link="base_link"/>
+    <child link="attachment_point_L"/>
     <origin xyz="0 0 0.6" rpy="0 0 1.57"/>
   </joint>
 
-  <gazebo reference='attachment_to_base'>
+  <gazebo reference='attachment_point_L_to_base'>
     <preserveFixedJoint>true</preserveFixedJoint>
   </gazebo>
+
+  <link name="front_marker">
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.05"/>
+      </geometry>
+    </visual>
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.01"/> <!-- Small, non-zero mass -->
+      <inertia
+        ixx="0.0001"
+        ixy="0"
+        ixz="0"
+        iyy="0.0001"
+        iyz="0"
+        izz="0.0001" />
+    </inertial>
+  </link>
+
+  <joint name="front_marker_to_base" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_marker"/>
+    <origin xyz="${base_length / 2 - 0.05} 0 ${base_height}" rpy="0 0 0"/>
+  </joint>
 
 
   </xacro:macro>

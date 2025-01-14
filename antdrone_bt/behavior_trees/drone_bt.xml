@@ -67,22 +67,26 @@
         vertex_name = "{pickup_location_name}"
         orientation = "{pickup_orientation}"
         drone_name = "{drone_name}"
+        pickup_side = ""
       />
 
       <SubTree ID="pickup_sequence" 
         drone_name = "{drone_name}"
         worker_name = "{worker_name}"
+        pickup_side = "{pickup_side}"
       />
 
       <SubTree ID="go_to_vertex_w_feedback" 
         vertex_name = "{dropoff_location_name}"
         orientation = "{dropoff_orientation}"
         drone_name = "{drone_name}"
+        pickup_side = "{pickup_side}"
       />
 
       <SubTree ID="dropoff_sequence" 
         drone_name = "{drone_name}"
         worker_name = "{worker_name}"
+        pickup_side = "{pickup_side}"
       />
 
       <!-- Limit lateral and rotation velocity while moving out from under work -->
@@ -93,6 +97,7 @@
         vertex_name = "{post_dropoff_location_name}"
         orientation = "{dropoff_orientation}"
         drone_name = "{drone_name}"
+        pickup_side = "{pickup_side}"
       />
 
       <!-- Re-enable lateral and rotational velocity, re-set tighter goal tolerance -->
@@ -113,6 +118,7 @@
       <GoToWaypoint 
         vertex_name="{vertex_name}" 
         orientation="{orientation}"
+        pickup_side = "{pickup_side}"
         drone_name="{drone_name}" 
       />
       
@@ -136,9 +142,9 @@
         </Delay>
       </RetryUntilSuccessful>
 
-      <GoUnderWorker/>
+      <GoUnderWorker pickup_side="{pickup_side}"/>
 
-      <PickupWorker drone_name="{drone_name}" worker_name="{worker_name}" />
+      <PickupWorker drone_name="{drone_name}" worker_name="{worker_name}" pickup_side="{pickup_side}"/>
 
       <ClearLocalCostmap/>
       <ClearGlobalCostmap/>
@@ -153,8 +159,8 @@
 
     <Sequence>
       <SuspendReleaseRMFPathing set_state="suspend"/>
-      <SendDropoffPosition drone_name="{drone_name}"/>
-      <LowerWorker drone_name="{drone_name}" worker_name="{worker_name}"/>
+      <SendDropoffPosition drone_name="{drone_name}" pickup_side="{pickup_side}"/>
+      <LowerWorker drone_name="{drone_name}" worker_name="{worker_name}" pickup_side="{pickup_side}"/>
       <SetLocalCostmapParams is_carrying_worker="False"/>
       <SetGlobalCostmapParams is_carrying_worker="False"/>
       <UpdateFootprint is_carrying_worker="False"/>

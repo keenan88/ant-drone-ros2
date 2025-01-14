@@ -51,10 +51,23 @@ BT::NodeStatus GoToWaypoint::onStart() {
       return BT::NodeStatus::FAILURE;
   }
 
+  auto pickup_side_result = getInput<std::string>("pickup_side");
+  if (!pickup_side_result)
+  {
+      RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] Could not read pickup_side from blackboard", this->name().c_str());
+      
+      return BT::NodeStatus::FAILURE;
+  }
+
   
   float orientation = orientation_result.value();
   std::string drone_name = drone_name_result.value();
   std::string vertex_name = vertex_name_result.value();
+  std::string pickup_side = pickup_side_result.value();
+
+  if (pickup_side == "L"){
+    orientation += 3.14;
+  }
 
   RCLCPP_INFO(ros2_node_ptr->get_logger(), "[%s] going to vertex %s", this->name().c_str(), vertex_name.c_str());
 
@@ -119,7 +132,8 @@ BT::PortsList GoToWaypoint::providedPorts() {
   BT::PortsList ports_list = {
       BT::InputPort<std::string>("vertex_name"),
       BT::InputPort<std::string>("drone_name"),
-      BT::InputPort<float>("orientation")
+      BT::InputPort<float>("orientation"),
+      BT::InputPort<std::string>("pickup_side")
   };
     
   return ports_list;

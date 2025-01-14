@@ -2,7 +2,9 @@
 
 GoUnderWorker::GoUnderWorker(const std::string &name, const NodeConfig &conf, const RosNodeParams &params) : RosServiceNode<antdrone_interfaces::srv::GoUnder>(name, conf, params) {}
 
-PortsList GoUnderWorker::providedPorts() { return {}; }
+PortsList GoUnderWorker::providedPorts() { 
+  return {OutputPort<std::string>("pickup_side")};
+ }
 
 bool GoUnderWorker::setRequest(Request::SharedPtr &request) {
   
@@ -16,6 +18,7 @@ NodeStatus GoUnderWorker::onResponseReceived(const Response::SharedPtr &response
   }
 
   if (response->success) {
+    setOutput("pickup_side", response -> side_entered);
     return NodeStatus::SUCCESS;
   } else {
     return NodeStatus::FAILURE;
