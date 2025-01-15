@@ -1,0 +1,20 @@
+#include <Arduino.h>
+
+#include "encoder.h"
+
+Encoder* my_encoder = nullptr;
+
+void setup() {
+  my_encoder = new Encoder(DI6, DI7);
+  Serial.begin(9600);
+  uint32_t timeout = 5000;
+  uint32_t startTime = millis();
+  while (!Serial && millis() - startTime < timeout) {
+    continue;
+  }
+}
+
+void loop() {
+  delay(100);
+  Serial.println(my_encoder->read());
+}
