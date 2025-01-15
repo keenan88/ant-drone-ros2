@@ -104,7 +104,7 @@ void PublishDiagnosticsCallback(rcl_timer_t *timer, int64_t last_call_time_ns) {
   }
 }
 
-void InitializeDiagnosticss(rclc_support_t *ros_support,
+void InitializeDiagnostics(rclc_support_t *ros_support,
                                             rcl_node_t *ros_node,
                                             rclc_executor_t *ros_executor) {
   InitializeDiagnosticMessages();                                            

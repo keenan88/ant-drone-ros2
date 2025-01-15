@@ -9,7 +9,7 @@ constexpr uint8_t kDiagnosticsMaxMessages = 4;
 constexpr uint16_t kDiagnosticsPublisherPeriodMs = 1000;  // 1Hz
 
 void InitializeDiagnosticMessages();
-void InitializeDiagnosticss(rclc_support_t *ros_support,
+void InitializeDiagnostics(rclc_support_t *ros_support,
                                             rcl_node_t *ros_node,
                                             rclc_executor_t *ros_executor);
 void DeinitializeDiagnostics(rcl_node_t *ros_node);

@@ -11,6 +11,7 @@
 #include "uros_pub_diagnostic.h"
 #include "uros_pub_wheel_state.h"
 #include "uros_sub_motor_vel.h"
+#include <sensor_msgs/msg/joint_state.h>
 
 
 enum class AgentStates {
@@ -31,17 +32,9 @@ static rcl_allocator_t ros_allocator;
 rcl_init_options_t ros_init_options;
 uint64_t agent_time_offset = 0;
 
-// timers
 rcl_timer_t system_state_update_timer;
 
-double prev_rad;
-int64_t prev_time_ns;
-
 void InitializeMicroRosTransport() {
-
-  prev_rad = 0;
-  prev_time_ns = rmw_uros_epoch_nanos();
-
 
   Serial.begin(kSerialBaudRate);
   set_microros_serial_transports(Serial);
@@ -49,22 +42,23 @@ void InitializeMicroRosTransport() {
   agent_state = AgentStates::kWaitingForConnection;
 }
 
-
-
 void UpdateSystemStateCallback(rcl_timer_t *timer, int64_t last_call_time_ns) {
   if (timer != NULL) {
 
     int64_t curr_t_ns = rmw_uros_epoch_nanos();
     bool is_rmw_time_initted = curr_t_ns != 0;
 
-    if (is_rmw_time_initted) { // rmw_uros_epoch_synchronized()
-      // double dt = 1.0 * (curr_t_ns - prev_time_ns) / k_ns_per_s;
+    if (is_rmw_time_initted) {
 
+      // sensor_msgs__msg__JointState motor_vel_setpoints = get_motor_setpoints();
 
-      // PublishWheelState(curr_rad, curr_rad_per_s, g_motor_controller.curr_throttle, curr_t_ns);
+      // TODO - send desired wheel velocities to teknic clearcore here
+
+      // TODO - get wheel position & velocity from teknic clearcore here
+      // sensor_msgs__msg__JointState motor_vels = read_motor_states();
+      // PublishWheelState(motor_vels);
     }
 
-    prev_time_ns = curr_t_ns;
   }
 }
 
@@ -95,19 +89,18 @@ bool CreateEntities() {
   rclc_support_init_with_options(&ros_support, 0, NULL, &ros_init_options,
                                  &ros_allocator);
 
-  RC_CHECK(
-      rclc_node_init_default(&ros_node, kNodeName, kNamespace, &ros_support));
+  RC_CHECK(rclc_node_init_default(&ros_node, kNodeName, kNamespace, &ros_support));
 
   ros_executor = rclc_executor_get_zero_initialized_executor();
   RC_CHECK(rclc_executor_init(&ros_executor, &ros_support.context,
                               kNumberOfHandles, &ros_allocator));
 
-  InitializeDiagnosticss(&ros_support, &ros_node,
+  InitializeDiagnostics(&ros_support, &ros_node,
                                          &ros_executor);
 
   InitializeSystemState();
-  InitializeWheelState(&ros_node);
-  InitializeCmdVel(&ros_node, &ros_executor);
+  // InitializeWheelState(&ros_node);
+  // InitializeMotorVelSub(&ros_node, &ros_executor);
 
   UpdateTimeOffsetFromAgent();
   return true;
@@ -132,32 +125,35 @@ void ManageAgentLifecycle() {
   // auto reconnect to agent
   switch (agent_state) {
     case AgentStates::kWaitingForConnection:
-      EXECUTE_EVERY_N_MS(
-          500, agent_state = (RMW_RET_OK == rmw_uros_ping_agent(100, 1))
+      EXECUTE_EVERY_N_MS(500, agent_state = (RMW_RET_OK == rmw_uros_ping_agent(100, 1))
                                  ? AgentStates::kAvailable
                                  : AgentStates::kWaitingForConnection;);
       break;
+
     case AgentStates::kAvailable:
-      agent_state = (true == CreateEntities())
-                        ? AgentStates::kConnected
-                        : AgentStates::kWaitingForConnection;
+      agent_state = CreateEntities() ? AgentStates::kConnected : AgentStates::kWaitingForConnection;
+
       if (agent_state == AgentStates::kWaitingForConnection) {
         DestroyEntities();
       };
+
       break;
+
     case AgentStates::kConnected:
-      EXECUTE_EVERY_N_MS(
-          200, agent_state = (RMW_RET_OK == rmw_uros_ping_agent(100, 1))
+      EXECUTE_EVERY_N_MS(200, agent_state = (RMW_RET_OK == rmw_uros_ping_agent(100, 1))
                                  ? AgentStates::kConnected
                                  : AgentStates::kDisconnected;);
+
       if (agent_state == AgentStates::kConnected) {
         rclc_executor_spin_some(&ros_executor, RCL_MS_TO_NS(100));
       }
       break;
+
     case AgentStates::kDisconnected:
       DestroyEntities();
       agent_state = AgentStates::kWaitingForConnection;
       break;
+
     default:
       break;
   }
