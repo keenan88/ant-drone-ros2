@@ -14,6 +14,8 @@
 #include <sensor_msgs/msg/joint_state.h>
 
 
+
+
 enum class AgentStates {
   kWaitingForConnection,
   kAvailable,
@@ -34,13 +36,20 @@ uint64_t agent_time_offset = 0;
 
 rcl_timer_t system_state_update_timer;
 
+
+
 void InitializeMicroRosTransport() {
+
+  
+  
 
   Serial.begin(kSerialBaudRate);
   set_microros_serial_transports(Serial);
   delay(2000);
   agent_state = AgentStates::kWaitingForConnection;
 }
+
+
 
 void UpdateSystemStateCallback(rcl_timer_t *timer, int64_t last_call_time_ns) {
   if (timer != NULL) {

@@ -1,7 +1,6 @@
 #ifndef MICRO_ROS_CMD_VEL_H
 #define MICRO_ROS_CMD_VEL_H
 
-#include <std_msgs/msg/float32.h>
 #include <micro_ros_platformio.h>
 #include <rcl/error_handling.h>
 #include <rcl/rcl.h>
