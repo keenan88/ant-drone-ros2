@@ -7,19 +7,12 @@ RUN apt-get update && \
     apt-get install -y \
     python3-pip \
     curl \
-    ros-humble-apriltag-msgs \ 
-    ros-humble-apriltag \
-    ros-humble-ament-cmake-clang-format \
+    ros-humble-usb-cam \
     && rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m pip install numpy scipy setuptools==58.2.0
 
-WORKDIR /home/humble_ws/src
-RUN git clone https://github.com/christianrauch/apriltag_ros.git
-COPY ./antdrone_apriltag /home/humble_ws/src/antdrone_apriltag
 COPY ./antdrone_bringup /home/humble_ws/src/antdrone_bringup
-COPY ./antdrone_interfaces /home/humble_ws/src/antdrone_interfaces
-
 
 WORKDIR /home/humble_ws/
 

@@ -2,39 +2,54 @@ version: '2.4' # Version 2.4 is compatable with belena
 
 services:
 
-  antdrone_realsense:
-    container_name: antdrone_realsense
-    build:
-      context: .
-      dockerfile: ./docker/realsense.dockerfile
-    environment:
-      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-      - DISPLAY=${DISPLAY}
-    # volumes:
-    #   - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
-    #   - ./antdrone_realsense:/home/humble_ws/src/antdrone_realsense
-    privileged: True
-    network_mode: host
-    ipc: host
-    pid: host
+  # antdrone_realsense:
+  #   container_name: antdrone_realsense
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/realsense.dockerfile
+  #   environment:
+  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+  #     - DISPLAY=${DISPLAY}
+  #   # volumes:
+  #   #   - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
+  #   #   - ./antdrone_realsense:/home/humble_ws/src/antdrone_realsense
+  #   privileged: True
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
 
-  antdrone0_apriltag:
-    container_name: antdrone0_apriltag
+  # antdrone0_apriltag:
+  #   container_name: antdrone0_apriltag
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/apriltag.dockerfile
+  #   environment:
+  #     - DRONE_NAME=${DRONE0_NAME}
+  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+  #     - USE_SIM_TIME=False
+  #     - DISPLAY=${DISPLAY}
+  #   volumes:
+  #     - ./antdrone_apriltag:/home/humble_ws/src/antdrone_apriltag:rw
+  #     - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
+
+  antdrone0_usbcam:
+    container_name: antdrone0_usbcam
     build:
       context: .
-      dockerfile: ./docker/apriltag.dockerfile
+      dockerfile: ./docker/usbcam.dockerfile
     environment:
-      - DRONE_NAME=${DRONE0_NAME}
       - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
       - USE_SIM_TIME=False
       - DISPLAY=${DISPLAY}
     volumes:
-      - ./antdrone_apriltag:/home/humble_ws/src/antdrone_apriltag:rw
       - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
     network_mode: host
     ipc: host
     pid: host
-    # command: sleep infinity
+    command: sleep infinity
 
   # antdrone0_pcl:
   #   container_name: antdrone0_pcl
