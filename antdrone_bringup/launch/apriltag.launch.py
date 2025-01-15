@@ -20,9 +20,6 @@ def generate_launch_description():
         condition = IfCondition(LaunchConfiguration("USE_SIM_TIME"))
     )
 
-    
-
-
     antdrone_apriltag = Node(
         package='apriltag_ros',
         executable='apriltag_node',
@@ -34,16 +31,6 @@ def generate_launch_description():
             ('/image_rect',  '/apriltag_cam/apriltag_cam/color/image_raw')
         ]
     )
-
-    # localizer_to_apriltag = Node(
-    #     package='robot_localization',
-    #     executable='ekf_node',
-    #     name='ekf_filter_node',
-    #     parameters=[
-    #         os.path.join(get_package_share_directory("antdrone_apriltag"), 'config', 'ekf.yaml'),
-    #         # {'use_sim_time' : LaunchConfiguration("USE_SIM_TIME")}
-    #     ],
-    # )
 
     rviz = Node(
         package='rviz2',
@@ -58,7 +45,6 @@ def generate_launch_description():
 
     ld.add_action(gz_img_frame_fixer)
     ld.add_action(antdrone_apriltag)
-    # ld.add_action(localizer_to_apriltag)
     ld.add_action(rviz)
     ld.add_action(go_under)
 

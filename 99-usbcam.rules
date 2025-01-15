@@ -1,0 +1,1 @@
+SUBSYSTEM=="video4linux", KERNEL=="video*", ATTR{name}=="Integrated Camera: Integrated C", ATTRS{idVendor}=="174f", ATTRS{idProduct}=="2459", SYMLINK+="integrated_camera"
