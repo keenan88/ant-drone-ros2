@@ -1,6 +1,21 @@
-version: '2.4' # Version 2.4 is compatable with belena
+# version: '2.4' # Version 2.4 is compatable with belena
 
 services:
+
+  antdrone_clearcore_uros_agent:
+    image: microros/micro-ros-agent:humble
+    container_name: antdrone_clearcore_uros_agent
+    stdin_open: true
+    tty: true
+    ports:
+      - 8888:8888/udp
+    environment:
+      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+    command: serial --dev /dev/ttyACM0 -v2
+    privileged: true
+    network_mode: host
+    ipc: host
+    pid: host
 
   # antdrone_realsense:
   #   container_name: antdrone_realsense
@@ -35,22 +50,22 @@ services:
   #   ipc: host
   #   pid: host
 
-  antdrone0_usbcam:
-    container_name: antdrone0_usbcam
-    build:
-      context: .
-      dockerfile: ./docker/usbcam.dockerfile
-    environment:
-      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-      - USE_SIM_TIME=False
-      - DISPLAY=${DISPLAY}
-    volumes:
-      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
-      - /dev:/dev
-    network_mode: host
-    privileged: true
-    ipc: host
-    pid: host
+  # antdrone0_usbcam:
+  #   container_name: antdrone0_usbcam
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/usbcam.dockerfile
+  #   environment:
+  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+  #     - USE_SIM_TIME=False
+  #     - DISPLAY=${DISPLAY}
+  #   volumes:
+  #     - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
+  #     - /dev:/dev
+  #   network_mode: host
+  #   privileged: true
+  #   ipc: host
+  #   pid: host
     # command: sleep infinity
 
   # antdrone0_pcl:

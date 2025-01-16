@@ -8,9 +8,11 @@
 #include "ClearCore.h"
 #include "constants.h"
 #include "macros.h"
+#include <std_msgs/msg/float64_multi_array.h>
+#include "motor_interface.h"
 
 
-
+double wheel_speeds[4] = {0, 0, 0, 0};
 
 rcl_publisher_t wheels_state_publisher;
 sensor_msgs__msg__JointState wheels_state_msg;
@@ -26,51 +28,44 @@ float get_wheel_speed_pct(MotorDriver motor){
   return hlfbPercent;
 }
 
-void PublishWheelState(sensor_msgs__msg__JointState commanded_velocities) {
+void PublishWheelState() {
 
-  if (rmw_uros_epoch_synchronized()) {
+  // if (rmw_uros_epoch_synchronized()) {
 
-    float fl_wheel_speed_pct = get_wheel_speed_pct(ConnectorM0);
-    float fr_wheel_speed_pct = get_wheel_speed_pct(ConnectorM1);
-    float rl_wheel_speed_pct = get_wheel_speed_pct(ConnectorM2);
-    float rr_wheel_speed_pct = get_wheel_speed_pct(ConnectorM3);
+    // float fl_wheel_speed_pct = get_wheel_speed_pct(ConnectorM0);
+    // float fr_wheel_speed_pct = get_wheel_speed_pct(ConnectorM1);
+    // float rl_wheel_speed_pct = get_wheel_speed_pct(ConnectorM2);
+    // float rr_wheel_speed_pct = get_wheel_speed_pct(ConnectorM3);
 
-    bool all_speeds_read = fl_wheel_speed_pct >= 0 && 
-                           fr_wheel_speed_pct >= 0 && 
-                           fr_wheel_speed_pct >= 0 && 
-                           rr_wheel_speed_pct >= 0;
+    // bool all_speeds_read = fl_wheel_speed_pct >= 0 && 
+    //                        fr_wheel_speed_pct >= 0 && 
+    //                        fr_wheel_speed_pct >= 0 && 
+    //                        rr_wheel_speed_pct >= 0;
 
-    if(all_speeds_read)
-    {
+    // if(all_speeds_read )
+    // {
       // Use commanded velocities to determine direction of rotation. Possibly innacurate around 0 velocity, but saves us from needing external wheel encoders.
-      sensor_msgs__msg__JointState commanded_motor_vels = get_motor_setpoints();
 
-      float fl_wheel_speed = fl_wheel_speed_pct * max_speed_rpm * (commanded_motor_vels.velocity.data[0] > 0 ? 1 : -1);
-      float fr_wheel_speed = fr_wheel_speed_pct * max_speed_rpm * (commanded_motor_vels.velocity.data[1] > 0 ? 1 : -1);
-      float rl_wheel_speed = rl_wheel_speed_pct * max_speed_rpm * (commanded_motor_vels.velocity.data[2] > 0 ? 1 : -1);
-      float rr_wheel_speed = rr_wheel_speed_pct * max_speed_rpm * (commanded_motor_vels.velocity.data[3] > 0 ? 1 : -1);
+      // float fl_wheel_speed = fl_wheel_speed_pct * max_speed_rpm * (commanded_motor_vels.data.data[0] > 0 ? 1 : -1);
+      // float fr_wheel_speed = fr_wheel_speed_pct * max_speed_rpm * (commanded_motor_vels.data.data[1] > 0 ? 1 : -1);
+      // float rl_wheel_speed = rl_wheel_speed_pct * max_speed_rpm * (commanded_motor_vels.data.data[2] > 0 ? 1 : -1);
+      // float rr_wheel_speed = rr_wheel_speed_pct * max_speed_rpm * (commanded_motor_vels.data.data[3] > 0 ? 1 : -1);
 
-      wheels_state_msg.velocity.data[0] = fl_wheel_speed;
-      wheels_state_msg.velocity.data[1] = fr_wheel_speed;
-      wheels_state_msg.velocity.data[2] = rl_wheel_speed;
-      wheels_state_msg.velocity.data[3] = rr_wheel_speed;
+      wheels_state_msg.velocity.data[0] = get_v1();
+      wheels_state_msg.velocity.data[1] = get_v2();
+      wheels_state_msg.velocity.data[2] = get_v3();
+      wheels_state_msg.velocity.data[3] = get_v4();
 
       RC_CHECK(rcl_publish(&wheels_state_publisher, &wheels_state_msg, NULL));
-    }
-  }
+    // }
+  // }
 }
 
 void InitializeWheelState(rcl_node_t *ros_node) {
   sensor_msgs__msg__JointState__init(&wheels_state_msg);
 
-  ConnectorM0.HlfbMode(MotorDriver::HLFB_MODE_HAS_PWM);
-  ConnectorM0.HlfbCarrier(MotorDriver::HLFB_CARRIER_482_HZ);
-
-  wheels_state_msg.position.size = 4;
-  wheels_state_msg.position.data = (double *)malloc(sizeof(double) * wheels_state_msg.position.size);
-
   wheels_state_msg.velocity.size = 4;
-  wheels_state_msg.velocity.data = (double *)malloc(sizeof(double) * wheels_state_msg.velocity.size);
+  wheels_state_msg.velocity.data = wheel_speeds;
 
   RC_CHECK(rclc_publisher_init_default(
       &wheels_state_publisher, ros_node,

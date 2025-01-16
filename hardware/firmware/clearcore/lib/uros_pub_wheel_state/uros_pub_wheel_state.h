@@ -7,6 +7,6 @@
 
 void InitializeWheelState(rcl_node_t* ros_node);
 void DeinitializeWheelState(rcl_node_t* ros_node);
-void PublishWheelState(sensor_msgs__msg__JointState commanded_velocities);
+void PublishWheelState();
 
 #endif

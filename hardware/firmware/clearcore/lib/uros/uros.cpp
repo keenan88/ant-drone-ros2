@@ -13,9 +13,6 @@
 #include "uros_sub_motor_vel.h"
 #include <sensor_msgs/msg/joint_state.h>
 
-
-
-
 enum class AgentStates {
   kWaitingForConnection,
   kAvailable,
@@ -40,9 +37,6 @@ rcl_timer_t system_state_update_timer;
 
 void InitializeMicroRosTransport() {
 
-  
-  
-
   Serial.begin(kSerialBaudRate);
   set_microros_serial_transports(Serial);
   delay(2000);
@@ -58,14 +52,7 @@ void UpdateSystemStateCallback(rcl_timer_t *timer, int64_t last_call_time_ns) {
     bool is_rmw_time_initted = curr_t_ns != 0;
 
     if (is_rmw_time_initted) {
-
-      // sensor_msgs__msg__JointState motor_vel_setpoints = get_motor_setpoints();
-
-      // TODO - send desired wheel velocities to teknic clearcore here
-
-      // TODO - get wheel position & velocity from teknic clearcore here
-      // sensor_msgs__msg__JointState motor_vels = read_motor_states();
-      // PublishWheelState(motor_vels);
+      PublishWheelState();
     }
 
   }
@@ -108,8 +95,8 @@ bool CreateEntities() {
                                          &ros_executor);
 
   InitializeSystemState();
-  // InitializeWheelState(&ros_node);
-  // InitializeMotorVelSub(&ros_node, &ros_executor);
+  InitializeWheelState(&ros_node);
+  InitializeMotorVelSub(&ros_node, &ros_executor);
 
   UpdateTimeOffsetFromAgent();
   return true;
@@ -123,7 +110,7 @@ void DestroyEntities() {
   DeinitializeDiagnostics(&ros_node);
   DeInitializeSystemState();
   DeinitializeWheelState(&ros_node);
-  DeinitializeCmdVel(&ros_node);
+  DeinitializeMotorVelSub(&ros_node);
 
   rclc_executor_fini(&ros_executor);
   RC_CHECK(rcl_node_fini(&ros_node));
