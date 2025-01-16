@@ -1,11 +1,24 @@
 #include "motor_interface.h"
+#include "constants.h"
 
 
-double maxSpeed = 2000;
+double maxSpeedRPM = 1342; // Max speed in RPM is set in Clearpath Motor Setup Program (https://teknic.com/downloads/ Clearpath -> MC -> Nema 23/24 -> Software -> motor_setup.zip)
 #define INPUT_A_FILTER 20
+#define GEARBOX_REDUCTION 10.71
+#define RPM_PER_RADPERS 9.549297
 
 void initialize_motors(){
   MotorMgr.MotorModeSet(MotorManager::MOTOR_ALL, Connector::CPM_MODE_A_DIRECT_B_PWM);
+
+  ConnectorM0.HlfbMode(MotorDriver::HLFB_MODE_HAS_PWM);
+  ConnectorM1.HlfbMode(MotorDriver::HLFB_MODE_HAS_PWM);
+  ConnectorM2.HlfbMode(MotorDriver::HLFB_MODE_HAS_PWM);
+  ConnectorM3.HlfbMode(MotorDriver::HLFB_MODE_HAS_PWM);
+
+  ConnectorM0.HlfbCarrier(MotorDriver::HLFB_CARRIER_482_HZ);
+  ConnectorM1.HlfbCarrier(MotorDriver::HLFB_CARRIER_482_HZ);
+  ConnectorM2.HlfbCarrier(MotorDriver::HLFB_CARRIER_482_HZ);
+  ConnectorM3.HlfbCarrier(MotorDriver::HLFB_CARRIER_482_HZ);
 
   ConnectorM0.EnableRequest(true);
   ConnectorM1.EnableRequest(true);
@@ -13,12 +26,17 @@ void initialize_motors(){
   ConnectorM3.EnableRequest(true);
 }
 
-bool CommandVelocity(MotorDriver motor, double commandedRPM) {
-    if (commandedRPM > maxSpeed) {
-      commandedRPM = maxSpeed * 0.95;
+bool CommandVelocity(MotorDriver motor, double cmdWheelRadPerS) {
+    double cmdWheelRPM = cmdWheelRadPerS * RPM_PER_RADPERS;
+    double commandedRPM = cmdWheelRPM * GEARBOX_REDUCTION;
+
+    commandedRPM = cmdWheelRadPerS;
+
+    if (commandedRPM > maxSpeedRPM) {
+      commandedRPM = maxSpeedRPM * 0.95;
     }
-    else if(commandedRPM < -maxSpeed){
-      commandedRPM = -maxSpeed * 0.95;
+    else if(commandedRPM < -maxSpeedRPM){
+      commandedRPM = -maxSpeedRPM * 0.95;
     }
  
     // Check if an alert is currently preventing motion
@@ -42,7 +60,7 @@ bool CommandVelocity(MotorDriver motor, double commandedRPM) {
     Delay_ms(20 + INPUT_A_FILTER);
  
     // Scale the velocity command to our duty cycle range.
-    uint8_t dutyRequest = 1.0 * abs(commandedRPM) / maxSpeed * 255;
+    uint8_t dutyRequest = 1.0 * abs(commandedRPM) / maxSpeedRPM * 255;
  
     // Command the move.
     motor.MotorInBDuty(dutyRequest);
@@ -50,16 +68,36 @@ bool CommandVelocity(MotorDriver motor, double commandedRPM) {
     return true;
 }
 
-float get_motor_speed(MotorDriver motor)
+
+double get_wheel_abs_radpers(MotorDriver motor, bool is_fl_motor=false)
 {
   MotorDriver::HlfbStates hlfbState = motor.HlfbState();
 
-  float motor_abs_speed = -1;
+  double hlfbPercent = -1;
 
   if (hlfbState == MotorDriver::HLFB_HAS_MEASUREMENT) {
-      float hlfbPercent = motor.HlfbPercent();
-      motor_abs_speed = hlfbPercent * maxSpeed;
+      hlfbPercent = motor.HlfbPercent();
+
+      if(is_fl_motor)
+      {
+        hlfbPercent -= 1.48;
+      }
+      else {
+        hlfbPercent -= 1.3; // Percent speed has a roughly 1.3 percent offset. TODO - add calibration to get rid of this.
+      }
+      
+
+      if(hlfbPercent < 0)
+      {
+        hlfbPercent = 0;
+      }
   }
 
-  return motor_abs_speed;
+  double motor_abs_rpm = hlfbPercent * maxSpeedRPM;
+  double wheel_abs_rpm = motor_abs_rpm / GEARBOX_REDUCTION;
+  double wheel_abs_radpers = wheel_abs_rpm / RPM_PER_RADPERS;
+
+  
+
+  return hlfbPercent;
 }

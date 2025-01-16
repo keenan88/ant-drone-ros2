@@ -8,26 +8,26 @@ rcl_subscription_t motor_vel_subscriber;
 sensor_msgs__msg__JointState motor_vels_msg;
 int64_t previous_cmd_vel_time_ms = 0;
 
-#define FL_MOTOR ConnectorM0
-#define FR_MOTOR ConnectorM2
-#define RL_MOTOR ConnectorM3
-#define RR_MOTOR ConnectorM1
 
-double v1;
-double v2;
-double v3;
-double v4;
+double cmd_wheel_radpers_fl;
+double cmd_wheel_radpers_fr;
+double cmd_wheel_radpers_rl;
+double cmd_wheel_radpers_rr;
 
 void MotorVelCallback(const void* msgin) {
   // previous_cmd_vel_time_ms = rmw_uros_epoch_nanos();
 
   const sensor_msgs__msg__JointState *msg = (const sensor_msgs__msg__JointState *)msgin;
-  
-  CommandVelocity(FL_MOTOR, msg->velocity.data[0]);
-  CommandVelocity(FR_MOTOR, msg->velocity.data[1]);
-  CommandVelocity(RL_MOTOR, msg->velocity.data[2]);
-  CommandVelocity(RR_MOTOR, msg->velocity.data[3]);
 
+  cmd_wheel_radpers_fl = msg->velocity.data[0];
+  cmd_wheel_radpers_fr = msg->velocity.data[1];
+  cmd_wheel_radpers_rl = msg->velocity.data[2];
+  cmd_wheel_radpers_rr = msg->velocity.data[3];
+  
+  CommandVelocity(FL_MOTOR, cmd_wheel_radpers_fl);
+  CommandVelocity(FR_MOTOR, cmd_wheel_radpers_fr);
+  CommandVelocity(RL_MOTOR, cmd_wheel_radpers_rl);
+  CommandVelocity(RR_MOTOR, cmd_wheel_radpers_rr);
 }
 
 void InitializeMotorVelSub(rcl_node_t* ros_node, rclc_executor_t* ros_executor) {
@@ -53,7 +53,7 @@ void InitializeMotorVelSub(rcl_node_t* ros_node, rclc_executor_t* ros_executor) 
       &motor_vel_subscriber, 
       ros_node,
       ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, JointState), 
-      "motor_vel_setpoint"
+      "wheel_joint_cmds"
     )
   );
 
@@ -71,22 +71,22 @@ void DeinitializeMotorVelSub(rcl_node_t* ros_node) {
   RC_CHECK(rcl_subscription_fini(&motor_vel_subscriber, ros_node));
 }
 
-double get_v1()
+double get_cmd_wheel_radpers_fl()
 {
-  return v1;
+  return cmd_wheel_radpers_fl;
 }
 
-double get_v2()
+double get_cmd_wheel_radpers_fr()
 {
-  return v2;
+  return cmd_wheel_radpers_fr;
 }
 
-double get_v3()
+double get_cmd_wheel_radpers_rl()
 {
-  return v3;
+  return cmd_wheel_radpers_rl;
 }
 
-double get_v4()
+double get_cmd_wheel_radpers_rr()
 {
-  return v4;
+  return cmd_wheel_radpers_rr;
 }

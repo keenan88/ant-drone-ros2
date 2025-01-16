@@ -15,12 +15,9 @@ const uint32_t kControlCommandTimeoutMs = 2000;
 void InitializeMotorVelSub(rcl_node_t* ros_node, rclc_executor_t* ros_executor);
 void DeinitializeMotorVelSub(rcl_node_t* ros_node);
 
-double get_v1();
-
-double get_v2();
-
-double get_v3();
-
-double get_v4();
+double get_cmd_wheel_radpers_fl();
+double get_cmd_wheel_radpers_fr();
+double get_cmd_wheel_radpers_rl();
+double get_cmd_wheel_radpers_rr();
 
 #endif
