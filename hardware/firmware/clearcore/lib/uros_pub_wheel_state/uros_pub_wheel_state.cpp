@@ -45,6 +45,11 @@ void PublishWheelState() {
       // wheels_state_msg.velocity.data[1] = get_cmd_wheel_radpers_fr();
       // wheels_state_msg.velocity.data[2] = get_cmd_wheel_radpers_rl();
       // wheels_state_msg.velocity.data[3] = get_cmd_wheel_radpers_rr();
+
+      int64_t t_ns = rmw_uros_epoch_nanos();
+
+      wheels_state_msg.header.stamp.sec = t_ns / (1000 * 1000 * 1000);
+      wheels_state_msg.header.stamp.nanosec = t_ns % (1000 * 1000 * 1000);
       
       wheels_state_msg.velocity.data[0] = fl_wheel_abs_radpers;
       wheels_state_msg.velocity.data[1] = fr_wheel_abs_radpers;

@@ -13,7 +13,6 @@ class MecanumRobotController(Node):
         self.wheel_radius_m = 0.0762
         self.lx = 0.193
         self.ly = 0.258
-        
 
         # Subscriber for cmd_vel
         self.cmd_vel_subscriber = self.create_subscription(
@@ -30,11 +29,15 @@ class MecanumRobotController(Node):
         )
 
     def cmd_vel_callback(self, msg):
+        vx = msg.linear.x
+        vy = msg.linear.y
+        wz = msg.angular.z
+
         body_vels = np.matrix(
             [
-                [msg.linear.x],
-                [msg.linear.y],
-                [msg.angular.z]
+                [vx],
+                [vy],
+                [wz]
             ]
         )        
 
@@ -49,8 +52,9 @@ class MecanumRobotController(Node):
 
         wheel_rad_vels = np.matmul(inv_kin_mat, body_vels)
     
+        t = self.get_clock().now().to_msg()
         joint_state = JointState()
-        joint_state.header.stamp = self.get_clock().now().to_msg()
+        joint_state.header.stamp = t
         joint_state.velocity = [
              wheel_rad_vels[0, 0],
             -wheel_rad_vels[1, 0],

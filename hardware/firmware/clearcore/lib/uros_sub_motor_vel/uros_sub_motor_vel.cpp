@@ -3,11 +3,13 @@
 #include "macros.h"
 #include "constants.h"
 
+constexpr uint16_t max_speed_rpm = 510;
+int64_t motor_timeout_ms = 500;
+
 rcl_subscription_t motor_vel_subscriber;
 
 sensor_msgs__msg__JointState motor_vels_msg;
 int64_t previous_cmd_vel_time_ms = 0;
-
 
 double cmd_wheel_radpers_fl;
 double cmd_wheel_radpers_fr;
@@ -15,7 +17,7 @@ double cmd_wheel_radpers_rl;
 double cmd_wheel_radpers_rr;
 
 void MotorVelCallback(const void* msgin) {
-  // previous_cmd_vel_time_ms = rmw_uros_epoch_nanos();
+  previous_cmd_vel_time_ms = rmw_uros_epoch_nanos();
 
   const sensor_msgs__msg__JointState *msg = (const sensor_msgs__msg__JointState *)msgin;
 
@@ -84,4 +86,11 @@ double get_cmd_wheel_radpers_rl()
 double get_cmd_wheel_radpers_rr()
 {
   return cmd_wheel_radpers_rr;
+}
+
+bool prev_wheel_cmd_within_timeout()
+{
+  int64_t curr_time = rmw_uros_epoch_millis();
+  // curr_time && 
+  return (curr_time <= previous_cmd_vel_time_ms + motor_timeout_ms);
 }

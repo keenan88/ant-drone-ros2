@@ -45,24 +45,34 @@ void InitializeMicroRosTransport() {
   agent_state = AgentStates::kWaitingForConnection;
 }
 
-
+void stop_motors()
+{
+  CommandVelocity(FL_MOTOR, 0);
+  CommandVelocity(FR_MOTOR, 0);
+  CommandVelocity(RL_MOTOR, 0);
+  CommandVelocity(RR_MOTOR, 0);
+}
 
 void UpdateSystemStateCallback(rcl_timer_t *timer, int64_t last_call_time_ns) {
   if (timer != NULL) {
 
-    int64_t curr_t_ns = rmw_uros_epoch_nanos();
-    bool is_rmw_time_initted = curr_t_ns != 0;
-
-    if (is_rmw_time_initted) {
+    if (prev_wheel_cmd_within_timeout()) {
       CommandVelocity(FL_MOTOR, get_cmd_wheel_radpers_fl());
       CommandVelocity(FR_MOTOR, get_cmd_wheel_radpers_fr());
       CommandVelocity(RL_MOTOR, get_cmd_wheel_radpers_rl());
       CommandVelocity(RR_MOTOR, get_cmd_wheel_radpers_rr());
-
-      PublishWheelState();
+    }
+    else
+    {
+      stop_motors();
     }
 
+    PublishWheelState();
   }
+  else
+    {
+      stop_motors();
+    }
 }
 
 void InitSystemTimer() {

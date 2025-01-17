@@ -19,5 +19,6 @@ double get_cmd_wheel_radpers_fl();
 double get_cmd_wheel_radpers_fr();
 double get_cmd_wheel_radpers_rl();
 double get_cmd_wheel_radpers_rr();
+bool prev_wheel_cmd_within_timeout();
 
 #endif
