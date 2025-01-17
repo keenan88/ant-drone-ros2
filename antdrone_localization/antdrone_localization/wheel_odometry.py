@@ -7,15 +7,16 @@ import numpy as np
 from tf2_ros.static_transform_broadcaster import StaticTransformBroadcaster
 from geometry_msgs.msg import TransformStamped
 
-
+# Kinematics source: https://www.researchgate.net/publication/308570348_Inverse_kinematic_implementation_of_four-wheels_mecanum_drive_mobile_robot_using_stepper_motors
+        
 class MecanumStateEstimator(Node):
     def __init__(self):
         super().__init__('mecanum_state_estimator')
 
         self.wheel_radius_m = 0.0762
-        self.wheel_seperation_width_m = 0.3871
-        self.wheel_seperation_length_m = 0.51714
-        
+        self.lx = 0.193
+        self.ly = 0.258
+
         self.x = 0.0 
         self.y = 0.0
         self.theta = 0.0
@@ -38,13 +39,11 @@ class MecanumStateEstimator(Node):
         
         self.odometry_publisher = self.create_publisher(Odometry, 'odom', 10)
         
-        self.last_time = -1
-        self.first_time_set = False
+        self.prev_ns = None
 
     def joint_state_callback(self, msg):
-        if not self.first_time_set:
-            self.last_time = self.get_clock().now()
-            self.first_time_set = True
+        if not self.prev_ns:
+            self.prev_ns = self.get_clock().now().nanoseconds
             self.x = 0.0 
             self.y = 0.0
             self.theta = 0.0
@@ -54,19 +53,32 @@ class MecanumStateEstimator(Node):
         else:
             # Assuming joint names are ordered: front_left, front_right, back_left, back_right
             wheels_rad_vels = np.array(msg.velocity[0:4])
+
+            
             
             self.vx, self.vy, self.vtheta = self.inverse_kinematics(wheels_rad_vels)
 
+            self.get_logger().info(f"vx: {round(self.vx, 2)}, vy: {round(self.vy, 2)}, wz: {round(self.vtheta, 2)}, x: {round(self.x, 2)}, y: {round(self.y, 2)}, yaw: {round(self.theta, 2)}")
+
             # Integrate velocities to update position
-            current_time = self.get_clock().now()
-            dt = (current_time - self.last_time).nanoseconds / 1e9  # Convert to seconds
-            print(dt)
-            self.last_time = current_time
+            curr_ns = self.get_clock().now().nanoseconds
+            dt = (curr_ns - self.prev_ns) / 1e9
+            self.prev_ns = curr_ns
 
             # Update the robot's position based on the velocities
-            delta_x = (self.vx * math.cos(self.theta) - self.vy * math.sin(self.theta)) * dt
-            delta_y = (self.vx * math.sin(self.theta) + self.vy * math.cos(self.theta)) * dt
-            delta_theta = self.vtheta * dt
+            # delta_x = (self.vx * math.cos(self.theta) - self.vy * math.sin(self.theta)) * dt
+            # delta_y = (self.vx * math.sin(self.theta) + self.vy * math.cos(self.theta)) * dt
+            # delta_theta = self.vtheta * dt
+
+            z_rot_matrix = np.array([
+                [np.cos(self.theta), -np.sin(self.theta), 0],
+                [np.sin(self.theta),  np.cos(self.theta), 0],
+                [0,                  0,                   1]
+            ])
+
+            velocity_vector = np.array([self.vx, self.vy, self.vtheta])
+
+            delta_x, delta_y, delta_theta = np.dot(z_rot_matrix, velocity_vector) * dt
 
             self.x += delta_x
             self.y += delta_y
@@ -75,22 +87,25 @@ class MecanumStateEstimator(Node):
             self.publish_odometry()
 
     def inverse_kinematics(self, wheels_rad_vels):
-        # Kinematics source: https://www.researchgate.net/publication/308570348_Inverse_kinematic_implementation_of_four-wheels_mecanum_drive_mobile_robot_using_stepper_motors
         fl, fr, bl, br = wheels_rad_vels
 
-        l = self.wheel_seperation_length_m
-        w = self.wheel_seperation_width_m
-        r = self.wheel_radius_m
+        # Right side wheels have negative rotation when drone driving forward.
+        fr = -fr
+        br = -br
 
-        A = np.array([[1, -1, -(l+w)],
-                      [1, 1, (l+w)],
-                      [1, 1, -(l+w)],
-                      [1, -1, (l+w)]])
+        # self.get_logger().info(f"{round(fl, 2), round(fr, 2), round(bl, 2), round(br, 2)}")
+
+        inv_kin_mat = np.array([
+            [1, -1, -(self.lx + self.ly)],
+            [1,  1,  (self.lx + self.ly)],
+            [1,  1, -(self.lx + self.ly)],
+            [1, -1,  (self.lx + self.ly)]
+        ])
         
         w = np.array([fl, fr, bl, br])
         
-        pseudo_inv = np.linalg.pinv(A)
-        vxytheta = np.matmul(pseudo_inv, w) * r
+        pseudo_inv = np.linalg.pinv(inv_kin_mat)
+        vxytheta = np.matmul(pseudo_inv, w) * self.wheel_radius_m
 
         return vxytheta
 

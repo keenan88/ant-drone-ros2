@@ -41,7 +41,7 @@ class MecanumRobotController(Node):
             ]
         )        
 
-        inv_kin_mat = np.matrix(
+        forward_kin_mat = np.matrix(
             [
                 [1, -1, -(self.lx + self.ly)],
                 [1,  1,  (self.lx + self.ly)],
@@ -50,19 +50,16 @@ class MecanumRobotController(Node):
             ]
         ) / self.wheel_radius_m
 
-        wheel_rad_vels = np.matmul(inv_kin_mat, body_vels)
+        wheel_rad_vels = np.matmul(forward_kin_mat, body_vels)
     
-        t = self.get_clock().now().to_msg()
         joint_state = JointState()
-        joint_state.header.stamp = t
+        joint_state.header.stamp = self.get_clock().now().to_msg()
         joint_state.velocity = [
              wheel_rad_vels[0, 0],
             -wheel_rad_vels[1, 0],
              wheel_rad_vels[2, 0],
             -wheel_rad_vels[3, 0],
         ]
-        
-        self.get_logger().info(f" {joint_state.velocity}")
 
         self.joint_state_publisher.publish(joint_state)
 

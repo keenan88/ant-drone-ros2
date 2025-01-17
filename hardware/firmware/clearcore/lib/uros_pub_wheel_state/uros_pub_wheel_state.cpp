@@ -17,6 +17,25 @@ double wheel_speeds[4] = {0, 0, 0, 0};
 rcl_publisher_t wheels_state_publisher;
 sensor_msgs__msg__JointState wheels_state_msg;
 
+double prev_fl_cmd_wheel_dir;
+double prev_fr_cmd_wheel_dir;
+double prev_rl_cmd_wheel_dir;
+double prev_rr_cmd_wheel_dir;
+
+double determine_wheel_dir(double prev_dir, double commanded_velocity)
+{
+  // If 0 velocity command sent, assume wheel keeps going same direction until opposite direction is sent.
+  double wheel_dir = prev_dir;
+
+  if(commanded_velocity > 0){ 
+    wheel_dir = 1;
+  }
+  else if(commanded_velocity < 0){
+    wheel_dir = -1;
+  }
+
+  return wheel_dir;
+}
 
 void PublishWheelState() {
     double fl_wheel_abs_radpers = get_wheel_abs_radpers(FL_MOTOR, true);
@@ -24,11 +43,7 @@ void PublishWheelState() {
     double rl_wheel_abs_radpers = get_wheel_abs_radpers(RL_MOTOR, false);
     double rr_wheel_abs_radpers = get_wheel_abs_radpers(RR_MOTOR, false);
 
-    double fl_cmd_wheel_dir = get_cmd_wheel_radpers_fl() > 0 ? 1 : -1;
-    double fr_cmd_wheel_dir = get_cmd_wheel_radpers_fr() > 0 ? 1 : -1;
-    double rl_cmd_wheel_dir = get_cmd_wheel_radpers_rl() > 0 ? 1 : -1;
-    double rr_cmd_wheel_dir = get_cmd_wheel_radpers_rr() > 0 ? 1 : -1;
-
+    // Since wheel can only read abs velocity, we can use a -1 flag to indicate failed read
     bool all_speeds_read = fl_wheel_abs_radpers >= 0 && 
                            fr_wheel_abs_radpers >= 0 && 
                            rl_wheel_abs_radpers >= 0 && 
@@ -36,6 +51,11 @@ void PublishWheelState() {
 
     if(all_speeds_read)
     {
+      double fl_cmd_wheel_dir = determine_wheel_dir(prev_fl_cmd_wheel_dir, get_cmd_wheel_radpers_fl());
+      double fr_cmd_wheel_dir = determine_wheel_dir(prev_fr_cmd_wheel_dir, get_cmd_wheel_radpers_fr());
+      double rl_cmd_wheel_dir = determine_wheel_dir(prev_rl_cmd_wheel_dir, get_cmd_wheel_radpers_rl());
+      double rr_cmd_wheel_dir = determine_wheel_dir(prev_rr_cmd_wheel_dir, get_cmd_wheel_radpers_rr());
+
       // Use commanded velocities to determine direction of rotation. Possibly innacurate around 0 velocity, but saves us from needing external wheel encoders.
 
       int64_t t_ns = rmw_uros_epoch_nanos();
@@ -43,13 +63,20 @@ void PublishWheelState() {
       wheels_state_msg.header.stamp.sec = t_ns / (1000 * 1000 * 1000);
       wheels_state_msg.header.stamp.nanosec = t_ns % (1000 * 1000 * 1000);
       
-      wheels_state_msg.velocity.data[0] = fl_cmd_wheel_dir;
+      wheels_state_msg.velocity.data[0] = fl_cmd_wheel_dir * fl_wheel_abs_radpers;
       wheels_state_msg.velocity.data[1] = fr_cmd_wheel_dir * fr_wheel_abs_radpers;
       wheels_state_msg.velocity.data[2] = rl_cmd_wheel_dir * rl_wheel_abs_radpers;
       wheels_state_msg.velocity.data[3] = rr_cmd_wheel_dir * rr_wheel_abs_radpers;
 
+      prev_fl_cmd_wheel_dir = fl_cmd_wheel_dir;
+      prev_fr_cmd_wheel_dir = fr_cmd_wheel_dir;
+      prev_rl_cmd_wheel_dir = rl_cmd_wheel_dir;
+      prev_rr_cmd_wheel_dir = rr_cmd_wheel_dir;
+
       RC_CHECK(rcl_publish(&wheels_state_publisher, &wheels_state_msg, NULL));
     }
+
+    
 }
 
 void InitWheelVelPub(rcl_node_t *ros_node) {

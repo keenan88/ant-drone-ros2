@@ -31,7 +31,8 @@ def generate_launch_description():
         executable = 'cmd_vel_to_motor_vel',
         parameters = [
             {
-                'use_sim_time': LaunchConfiguration("USE_SIM_TIME")
+                'use_sim_time': LaunchConfiguration("USE_SIM_TIME") 
+                
             }
         ],
         condition=UnlessCondition(LaunchConfiguration('USE_SIM_TIME'))
