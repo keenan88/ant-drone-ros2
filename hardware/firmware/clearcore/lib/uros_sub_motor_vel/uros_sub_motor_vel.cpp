@@ -90,7 +90,7 @@ double get_cmd_wheel_radpers_rr()
 
 bool prev_wheel_cmd_within_timeout()
 {
+  // Deadman switch works if clearcore unplugged from computer, but not if docker containers crash
   int64_t curr_time = rmw_uros_epoch_millis();
-  // curr_time && 
-  return (curr_time <= previous_cmd_vel_time_ms + motor_timeout_ms);
+  return curr_time && (curr_time <= previous_cmd_vel_time_ms + motor_timeout_ms);
 }

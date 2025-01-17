@@ -56,6 +56,7 @@ void stop_motors()
 void UpdateSystemStateCallback(rcl_timer_t *timer, int64_t last_call_time_ns) {
   if (timer != NULL) {
 
+    // Deadman switch works if clearcore unplugged from computer, but not if docker containers crash
     if (prev_wheel_cmd_within_timeout()) {
       CommandVelocity(FL_MOTOR, get_cmd_wheel_radpers_fl());
       CommandVelocity(FR_MOTOR, get_cmd_wheel_radpers_fr());

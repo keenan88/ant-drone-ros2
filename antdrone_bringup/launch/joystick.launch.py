@@ -22,7 +22,7 @@ def generate_launch_description():
         executable = 'teleop_node',
         name = 'teleop_twist_joy_node',
         parameters = [
-            '/home/humble_ws/src/antdrone_joystick/config/teleop_twist_joy_config.yaml'
+            '/home/humble_ws/src/antdrone_joystick/config/intuitive.yaml'
         ]
     )
 

@@ -28,6 +28,7 @@ services:
       - USE_SIM_TIME=${USE_SIM_TIME}
     volumes:
       - ./antdrone_joystick:/home/humble_ws/src/antdrone_joystick:rw
+      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
     privileged: true
     network_mode: host
     ipc: host
