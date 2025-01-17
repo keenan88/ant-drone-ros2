@@ -23,14 +23,9 @@ void MotorVelCallback(const void* msgin) {
   cmd_wheel_radpers_fr = msg->velocity.data[1];
   cmd_wheel_radpers_rl = msg->velocity.data[2];
   cmd_wheel_radpers_rr = msg->velocity.data[3];
-  
-  CommandVelocity(FL_MOTOR, cmd_wheel_radpers_fl);
-  CommandVelocity(FR_MOTOR, cmd_wheel_radpers_fr);
-  CommandVelocity(RL_MOTOR, cmd_wheel_radpers_rl);
-  CommandVelocity(RR_MOTOR, cmd_wheel_radpers_rr);
 }
 
-void InitializeMotorVelSub(rcl_node_t* ros_node, rclc_executor_t* ros_executor) {
+void InitWheelVelSub(rcl_node_t* ros_node, rclc_executor_t* ros_executor) {
 
   MotorMgr.MotorModeSet(MotorManager::MOTOR_ALL, Connector::CPM_MODE_A_DIRECT_B_PWM);
 
@@ -67,7 +62,7 @@ void InitializeMotorVelSub(rcl_node_t* ros_node, rclc_executor_t* ros_executor) 
   );
 }
 
-void DeinitializeMotorVelSub(rcl_node_t* ros_node) {
+void DeInitWheelVelSub(rcl_node_t* ros_node) {
   RC_CHECK(rcl_subscription_fini(&motor_vel_subscriber, ros_node));
 }
 

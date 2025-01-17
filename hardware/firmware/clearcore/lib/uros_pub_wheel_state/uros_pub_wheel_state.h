@@ -5,8 +5,8 @@
 #include <sensor_msgs/msg/joint_state.h>
 
 
-void InitializeWheelState(rcl_node_t* ros_node);
-void DeinitializeWheelState(rcl_node_t* ros_node);
+void InitWheelVelPub(rcl_node_t* ros_node);
+void DeInitWheelVelPub(rcl_node_t* ros_node);
 void PublishWheelState();
 
 #endif

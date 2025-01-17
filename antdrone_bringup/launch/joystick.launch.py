@@ -1,7 +1,7 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.substitutions import LaunchConfiguration
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 
 
 def generate_launch_description():
@@ -34,7 +34,7 @@ def generate_launch_description():
                 'use_sim_time': LaunchConfiguration("USE_SIM_TIME")
             }
         ],
-        condition=IfCondition(LaunchConfiguration('WHEELED_MOTION'))
+        condition=UnlessCondition(LaunchConfiguration('USE_SIM_TIME'))
     )  
 
     ld = LaunchDescription()

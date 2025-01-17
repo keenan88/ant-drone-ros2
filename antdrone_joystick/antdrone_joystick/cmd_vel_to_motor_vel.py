@@ -2,12 +2,18 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import JointState
+import numpy as np
+
+# Forward/Inverse kinematics for mecanum wheeled robot: https://research.ijcaonline.org/volume113/number3/pxc3901586.pdf
 
 class MecanumRobotController(Node):
     def __init__(self):
         super().__init__('mecanum_robot_controller')
 
         self.wheel_radius_m = 0.0762
+        self.lx = 0.193
+        self.ly = 0.258
+        
 
         # Subscriber for cmd_vel
         self.cmd_vel_subscriber = self.create_subscription(
@@ -19,36 +25,40 @@ class MecanumRobotController(Node):
 
         self.joint_state_publisher = self.create_publisher(
             JointState,
-            'wheel_joints_command',
+            'wheel_joint_cmds',
             10
         )
 
-        self.wheel_names = [
-            'base_link_to_front_left_wheel', 
-            'base_link_to_front_right_wheel', 
-            'base_link_to_rear_left_wheel', 
-            'base_link_to_rear_right_wheel'
-        ]
-
     def cmd_vel_callback(self, msg):
-        linear_x = msg.linear.x
-        linear_y = msg.linear.y
-        angular_z = 5 / 3 * msg.angular.z
+        body_vels = np.matrix(
+            [
+                [msg.linear.x],
+                [msg.linear.y],
+                [msg.angular.z]
+            ]
+        )        
 
-        v_fl = linear_x - linear_y - (angular_z * 0.5)  # Front Left
-        v_fr = linear_x + linear_y + (angular_z * 0.5)  # Front Right
-        v_rl = linear_x + linear_y - (angular_z * 0.5)  # Rear Left
-        v_rr = linear_x - linear_y + (angular_z * 0.5)  # Rear Right
+        inv_kin_mat = np.matrix(
+            [
+                [1, -1, -(self.lx + self.ly)],
+                [1,  1,  (self.lx + self.ly)],
+                [1,  1, -(self.lx + self.ly)],
+                [1, -1,  (self.lx + self.ly)]
+            ]
+        ) / self.wheel_radius_m
 
-        w_fl = v_fl / self.wheel_radius_m
-        w_fr = v_fr / self.wheel_radius_m
-        w_rl = v_rl / self.wheel_radius_m
-        w_rr = v_rr / self.wheel_radius_m
-
+        wheel_rad_vels = np.matmul(inv_kin_mat, body_vels)
+    
         joint_state = JointState()
         joint_state.header.stamp = self.get_clock().now().to_msg()
-        joint_state.name = self.wheel_names
-        joint_state.velocity = [w_fl, w_fr, w_rl, w_rr]
+        joint_state.velocity = [
+             wheel_rad_vels[0, 0],
+            -wheel_rad_vels[1, 0],
+             wheel_rad_vels[2, 0],
+            -wheel_rad_vels[3, 0],
+        ]
+        
+        self.get_logger().info(f" {joint_state.velocity}")
 
         self.joint_state_publisher.publish(joint_state)
 

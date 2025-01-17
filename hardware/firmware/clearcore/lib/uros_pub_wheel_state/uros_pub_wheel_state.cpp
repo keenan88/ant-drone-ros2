@@ -56,7 +56,7 @@ void PublishWheelState() {
   // }
 }
 
-void InitializeWheelState(rcl_node_t *ros_node) {
+void InitWheelVelPub(rcl_node_t *ros_node) {
   sensor_msgs__msg__JointState__init(&wheels_state_msg);
 
   wheels_state_msg.velocity.size = 4;
@@ -68,7 +68,7 @@ void InitializeWheelState(rcl_node_t *ros_node) {
       "wheel_joint_states"));
 }
 
-void DeinitializeWheelState(rcl_node_t *ros_node) {
+void DeInitWheelVelPub(rcl_node_t *ros_node) {
   sensor_msgs__msg__JointState__fini(&wheels_state_msg);
   RC_CHECK(rcl_publisher_fini(&wheels_state_publisher, ros_node));
 }

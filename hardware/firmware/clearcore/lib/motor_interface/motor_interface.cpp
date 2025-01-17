@@ -30,8 +30,6 @@ bool CommandVelocity(MotorDriver motor, double cmdWheelRadPerS) {
     double cmdWheelRPM = cmdWheelRadPerS * RPM_PER_RADPERS;
     double commandedRPM = cmdWheelRPM * GEARBOX_REDUCTION;
 
-    commandedRPM = cmdWheelRadPerS;
-
     if (commandedRPM > maxSpeedRPM) {
       commandedRPM = maxSpeedRPM * 0.95;
     }
@@ -45,10 +43,6 @@ bool CommandVelocity(MotorDriver motor, double cmdWheelRadPerS) {
     //     return false;
     // }
  
-    // Change ClearPath's Input A state to change direction.
-    // Note: this section of code was included so this commandVelocity function 
-    // could be used to command negative (opposite direction) velocity. However the 
-    // analog signal used by this example only commands positive velocities.
     if (commandedRPM >= 0) {
         motor.MotorInAState(false);
     }
@@ -57,7 +51,8 @@ bool CommandVelocity(MotorDriver motor, double cmdWheelRadPerS) {
     }
  
     // Delays to send the correct filtered direction.
-    Delay_ms(20 + INPUT_A_FILTER);
+    // TODO - determine if this delay is necessary. It really slows down the system.
+    // Delay_ms(20 + INPUT_A_FILTER);
  
     // Scale the velocity command to our duty cycle range.
     uint8_t dutyRequest = 1.0 * abs(commandedRPM) / maxSpeedRPM * 255;
@@ -78,15 +73,15 @@ double get_wheel_abs_radpers(MotorDriver motor, bool is_fl_motor=false)
   if (hlfbState == MotorDriver::HLFB_HAS_MEASUREMENT) {
       hlfbPercent = motor.HlfbPercent();
 
+      // Percent speed feedback has a roughly 1.3 to 1.48 percent offset. TODO - add calibration to get rid of this.
       if(is_fl_motor)
       {
         hlfbPercent -= 1.48;
       }
       else {
-        hlfbPercent -= 1.3; // Percent speed has a roughly 1.3 percent offset. TODO - add calibration to get rid of this.
+        hlfbPercent -= 1.3; 
       }
       
-
       if(hlfbPercent < 0)
       {
         hlfbPercent = 0;
@@ -97,7 +92,5 @@ double get_wheel_abs_radpers(MotorDriver motor, bool is_fl_motor=false)
   double wheel_abs_rpm = motor_abs_rpm / GEARBOX_REDUCTION;
   double wheel_abs_radpers = wheel_abs_rpm / RPM_PER_RADPERS;
 
-  
-
-  return hlfbPercent;
+  return wheel_abs_radpers;
 }

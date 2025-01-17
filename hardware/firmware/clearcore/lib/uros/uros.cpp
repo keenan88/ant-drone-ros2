@@ -12,6 +12,8 @@
 #include "uros_pub_wheel_state.h"
 #include "uros_sub_motor_vel.h"
 #include <sensor_msgs/msg/joint_state.h>
+#include "motor_interface.h"
+
 
 enum class AgentStates {
   kWaitingForConnection,
@@ -52,20 +54,25 @@ void UpdateSystemStateCallback(rcl_timer_t *timer, int64_t last_call_time_ns) {
     bool is_rmw_time_initted = curr_t_ns != 0;
 
     if (is_rmw_time_initted) {
+      CommandVelocity(FL_MOTOR, get_cmd_wheel_radpers_fl());
+      CommandVelocity(FR_MOTOR, get_cmd_wheel_radpers_fr());
+      CommandVelocity(RL_MOTOR, get_cmd_wheel_radpers_rl());
+      CommandVelocity(RR_MOTOR, get_cmd_wheel_radpers_rr());
+
       PublishWheelState();
     }
 
   }
 }
 
-void InitializeSystemState() {
+void InitSystemTimer() {
   RC_CHECK(rclc_timer_init_default(&system_state_update_timer, &ros_support,
                                    RCL_MS_TO_NS(kUpdateSystemStatePeriodMs),
                                    UpdateSystemStateCallback));
   RC_CHECK(rclc_executor_add_timer(&ros_executor, &system_state_update_timer));
 }
 
-void DeInitializeSystemState() {
+void DeInitSystemTimer() {
   RC_CHECK(rcl_timer_fini(&system_state_update_timer));
 }
 
@@ -94,9 +101,9 @@ bool CreateEntities() {
   InitializeDiagnostics(&ros_support, &ros_node,
                                          &ros_executor);
 
-  InitializeSystemState();
-  InitializeWheelState(&ros_node);
-  InitializeMotorVelSub(&ros_node, &ros_executor);
+  InitSystemTimer();
+  InitWheelVelPub(&ros_node);
+  InitWheelVelSub(&ros_node, &ros_executor);
 
   UpdateTimeOffsetFromAgent();
   return true;
@@ -108,9 +115,9 @@ void DestroyEntities() {
   (void)rmw_uros_set_context_entity_destroy_session_timeout(rmw_context, 0);
 
   DeinitializeDiagnostics(&ros_node);
-  DeInitializeSystemState();
-  DeinitializeWheelState(&ros_node);
-  DeinitializeMotorVelSub(&ros_node);
+  DeInitSystemTimer();
+  DeInitWheelVelPub(&ros_node);
+  DeInitWheelVelSub(&ros_node);
 
   rclc_executor_fini(&ros_executor);
   RC_CHECK(rcl_node_fini(&ros_node));

@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install setuptools==58.2.0
+RUN pip install numpy setuptools==58.2.0
 
 WORKDIR /home/humble_ws
 COPY ./antdrone_joystick /home/humble_ws/src/antdrone_joystick
@@ -23,4 +23,4 @@ RUN source /opt/ros/humble/setup.bash && \
     echo "source /home/humble_ws/install/setup.bash" >> ~/.bashrc
 
 CMD bash -c "source /home/humble_ws/install/setup.bash && \
-    ros2 launch antdrone_bringup joystick.launch.py USE_SIM_TIME:=${USE_SIM_TIME} WHEELED_MOTION:=${WHEELED_MOTION}"
+    ros2 launch antdrone_bringup joystick.launch.py USE_SIM_TIME:=${USE_SIM_TIME}"
