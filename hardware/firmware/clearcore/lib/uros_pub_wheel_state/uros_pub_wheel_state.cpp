@@ -19,46 +19,37 @@ sensor_msgs__msg__JointState wheels_state_msg;
 
 
 void PublishWheelState() {
-
-  // if (rmw_uros_epoch_synchronized()) {
-
     double fl_wheel_abs_radpers = get_wheel_abs_radpers(FL_MOTOR, true);
     double fr_wheel_abs_radpers = get_wheel_abs_radpers(FR_MOTOR, false);
     double rl_wheel_abs_radpers = get_wheel_abs_radpers(RL_MOTOR, false);
     double rr_wheel_abs_radpers = get_wheel_abs_radpers(RR_MOTOR, false);
+
+    double fl_cmd_wheel_dir = get_cmd_wheel_radpers_fl() > 0 ? 1 : -1;
+    double fr_cmd_wheel_dir = get_cmd_wheel_radpers_fr() > 0 ? 1 : -1;
+    double rl_cmd_wheel_dir = get_cmd_wheel_radpers_rl() > 0 ? 1 : -1;
+    double rr_cmd_wheel_dir = get_cmd_wheel_radpers_rr() > 0 ? 1 : -1;
 
     bool all_speeds_read = fl_wheel_abs_radpers >= 0 && 
                            fr_wheel_abs_radpers >= 0 && 
                            rl_wheel_abs_radpers >= 0 && 
                            rr_wheel_abs_radpers >= 0;
 
-    // if(all_speeds_read )
-    // {
+    if(all_speeds_read)
+    {
       // Use commanded velocities to determine direction of rotation. Possibly innacurate around 0 velocity, but saves us from needing external wheel encoders.
-
-      // float fl_wheel_speed = fl_wheel_speed_pct * max_speed_rpm * (commanded_motor_vels.data.data[0] > 0 ? 1 : -1);
-      // float fr_wheel_speed = fr_wheel_speed_pct * max_speed_rpm * (commanded_motor_vels.data.data[1] > 0 ? 1 : -1);
-      // float rl_wheel_speed = rl_wheel_speed_pct * max_speed_rpm * (commanded_motor_vels.data.data[2] > 0 ? 1 : -1);
-      // float rr_wheel_speed = rr_wheel_speed_pct * max_speed_rpm * (commanded_motor_vels.data.data[3] > 0 ? 1 : -1);
-
-      // wheels_state_msg.velocity.data[0] = get_cmd_wheel_radpers_fl();
-      // wheels_state_msg.velocity.data[1] = get_cmd_wheel_radpers_fr();
-      // wheels_state_msg.velocity.data[2] = get_cmd_wheel_radpers_rl();
-      // wheels_state_msg.velocity.data[3] = get_cmd_wheel_radpers_rr();
 
       int64_t t_ns = rmw_uros_epoch_nanos();
 
       wheels_state_msg.header.stamp.sec = t_ns / (1000 * 1000 * 1000);
       wheels_state_msg.header.stamp.nanosec = t_ns % (1000 * 1000 * 1000);
       
-      wheels_state_msg.velocity.data[0] = fl_wheel_abs_radpers;
-      wheels_state_msg.velocity.data[1] = fr_wheel_abs_radpers;
-      wheels_state_msg.velocity.data[2] = rl_wheel_abs_radpers;
-      wheels_state_msg.velocity.data[3] = rr_wheel_abs_radpers;
+      wheels_state_msg.velocity.data[0] = fl_cmd_wheel_dir;
+      wheels_state_msg.velocity.data[1] = fr_cmd_wheel_dir * fr_wheel_abs_radpers;
+      wheels_state_msg.velocity.data[2] = rl_cmd_wheel_dir * rl_wheel_abs_radpers;
+      wheels_state_msg.velocity.data[3] = rr_cmd_wheel_dir * rr_wheel_abs_radpers;
 
       RC_CHECK(rcl_publish(&wheels_state_publisher, &wheels_state_msg, NULL));
-    // }
-  // }
+    }
 }
 
 void InitWheelVelPub(rcl_node_t *ros_node) {

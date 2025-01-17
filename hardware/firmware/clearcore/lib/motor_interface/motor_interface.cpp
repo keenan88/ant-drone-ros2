@@ -88,6 +88,8 @@ double get_wheel_abs_radpers(MotorDriver motor, bool is_fl_motor=false)
       }
   }
 
+  hlfbPercent /= 100; // Percent comes from 0 to 100, we need 0 to 1.
+
   double motor_abs_rpm = hlfbPercent * maxSpeedRPM;
   double wheel_abs_rpm = motor_abs_rpm / GEARBOX_REDUCTION;
   double wheel_abs_radpers = wheel_abs_rpm / RPM_PER_RADPERS;
