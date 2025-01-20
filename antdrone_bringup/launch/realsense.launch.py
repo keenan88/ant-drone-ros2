@@ -48,9 +48,24 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('realsense2_camera'), 'launch', 'rs_launch.py')
         ),
         launch_arguments={
-            'serial_no': "'108222250264'",
+            'serial_no': "'207122078912'",
             'camera_name':'left_rs',
             'camera_namespace':'left_rs',
+            'pointcloud.enable':'True',
+            'rgb_camera.color_profile' : color_profile,
+            'depth_module.depth_profile' : depth_profile,
+            'depth_module.infra_profile': infra_profile,
+        }.items()
+    )
+
+    right_rs_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory('realsense2_camera'), 'launch', 'rs_launch.py')
+        ),
+        launch_arguments={
+            'serial_no': "'109122070837'",
+            'camera_name':'right_rs',
+            'camera_namespace':'right_rs',
             'pointcloud.enable':'True',
             'rgb_camera.color_profile' : color_profile,
             'depth_module.depth_profile' : depth_profile,
@@ -132,18 +147,17 @@ def generate_launch_description():
     
     ld = launch.LaunchDescription()
 
-    # ld.add_action(front_and_rear_rs_launch)
     ld.add_action(front_rs_launch)
-    # ld.add_action(left_rs_launch)
-    # ld.add_action(rear_rs_launch)
-    # ld.add_action(right_rs_launch)
+    ld.add_action(left_rs_launch)
+    ld.add_action(rear_rs_launch)
+    ld.add_action(right_rs_launch)
 
-    # ld.add_action(rviz)
+    ld.add_action(rviz)
     # ld.add_action(bridge_out_tf)
     ld.add_action(front_rs_tf)
-    # ld.add_action(left_rs_tf)
-    # ld.add_action(rear_rs_tf)
-    # ld.add_action(right_rs_tf)
+    ld.add_action(left_rs_tf)
+    ld.add_action(rear_rs_tf)
+    ld.add_action(right_rs_tf)
     
     
     return ld
