@@ -22,7 +22,9 @@ setup(
     entry_points={
         "console_scripts": [
             'gz_img_frame_fixer = antdrone_apriltag.gz_img_frame_fixer:main',
-            'go_under = antdrone_apriltag.go_under:main'
+            'go_under = antdrone_apriltag.go_under:main',
+            'frame_debug = antdrone_apriltag.frame_debug:main',
+            'calibrate_img_publisher = antdrone_apriltag.calibrate_img_publisher:main',
         ],
     },
 )

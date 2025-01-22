@@ -32,6 +32,25 @@ def generate_launch_description():
         ]
     )
 
+    apriltag_cam = Node(
+        package='usb_cam',
+        executable='usb_cam_node_exe',
+        name =  "front_usb_cam",
+        parameters=[
+            {
+                'use_sim_time' : LaunchConfiguration("USE_SIM_TIME"),
+                'camera_name' : 'apriltag_cam',
+                'video_device' : '/dev/apriltag_cam',
+                'brightness': 100
+            },
+            '/home/humble_ws/src/antdrone_apriltag/config/usb_cam.yaml',
+        ],
+        remappings = [
+            ('/camera_info', '/apriltag_cam/apriltag_cam/color/camera_info'),
+            ('/image_raw',  '/apriltag_cam/apriltag_cam/color/image_raw')
+        ]
+    )
+
     rviz = Node(
         package='rviz2',
         executable='rviz2',
@@ -43,10 +62,32 @@ def generate_launch_description():
         executable='go_under'
     )
 
+    base_link_tf = Node(
+        package="tf2_ros",
+        executable="static_transform_publisher",
+        name="base_link_to_camera",
+        output="log",
+        arguments = [
+            "0.407", "-0.2", "0.3",
+            "-0.55", "0", "-1.57",
+            "base_link",
+            "camera",
+        ],
+    )
+
+    frame_debug = Node(
+        package='antdrone_apriltag',
+        executable='frame_debug'
+    )
+
     ld.add_action(gz_img_frame_fixer)
     ld.add_action(antdrone_apriltag)
+    ld.add_action(apriltag_cam)
     ld.add_action(rviz)
-    ld.add_action(go_under)
+    ld.add_action(base_link_tf)
+    ld.add_action(frame_debug)
+    # ld.add_action(go_under)    
+
 
 
     return ld

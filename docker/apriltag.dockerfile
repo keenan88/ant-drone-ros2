@@ -9,6 +9,8 @@ RUN apt-get update && \
     curl \
     ros-humble-apriltag-msgs \ 
     ros-humble-apriltag \
+    ros-humble-usb-cam \
+    ros-humble-camera-calibration \
     ros-humble-ament-cmake-clang-format \
     && rm -rf /var/lib/apt/lists/*
 
