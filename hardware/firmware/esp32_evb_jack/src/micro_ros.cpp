@@ -1,5 +1,8 @@
 #include "micro_ros.h"
 #include <std_msgs/msg/string.h>
+#include "jack.hpp"
+#include "uros_pub_jack_pos.h"
+#include "uros_sub_jack_pos.h"
 
 enum AgentStates g_agent_state;
 
@@ -13,11 +16,6 @@ uint64_t g_agent_time_offset = 0;
 std_msgs__msg__String debug_msg;
 rcl_publisher_t debug_publisher;
 
-
-
-void HandleReturnCodeError(rcl_ret_t error_code) {
-  esp_restart();
-}
 
 struct timespec GetTime() {
   struct timespec time;
@@ -41,6 +39,7 @@ void UpdateTimeOffsetFromAgent() {
 }
 
 void InitializeMicroRosTransport() {
+  
   Serial.begin(kSerialBaudRate);
   set_microros_serial_transports(Serial);
 
@@ -71,12 +70,15 @@ void send_debug_str(const char *format, ...) {
 
 }
 
-void timer_callback(rcl_timer_t * timer, int64_t last_call_time)
+void update_state(rcl_timer_t * timer, int64_t last_call_time)
 {
 	RCLC_UNUSED(last_call_time);
 	if (timer != NULL) {
 		send_debug_str("hey");
 
+    tick_jack();
+
+    PublishJackPos();
 	}
 }
 
@@ -102,16 +104,20 @@ bool CreateEntities() {
   RC_CHECK(rclc_publisher_init_default(
     &debug_publisher, &g_ros_node,
     ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String),
-    "/VL53L4CD/debug")
+    "/jack_debug")
   );
 
   RC_CHECK(
     rclc_timer_init_default(
       &timer, &g_ros_support,
-      RCL_MS_TO_NS(kStatePublisherPeriodMs), 
-      timer_callback
+      RCL_MS_TO_NS(kStateUpdateMs), 
+      update_state
     )
   );
+
+  InitJackPosPub(&g_ros_node);
+  InitJackPosSub(&g_ros_node, &g_ros_executor);
+
 
   RC_CHECK(rclc_executor_add_timer(&g_ros_executor, &timer));
 
@@ -125,6 +131,8 @@ void DestroyEntities() {
 
   RC_CHECK(rcl_timer_fini(&timer));
   RC_CHECK(rcl_publisher_fini(&debug_publisher, &g_ros_node));
+  DeInitJackPosPub(&g_ros_node);
+  DeInitJackPosSub(&g_ros_node);
 
   rclc_executor_fini(&g_ros_executor);
   RC_CHECK(rcl_node_fini(&g_ros_node));
@@ -140,7 +148,6 @@ void ManageAgentLifecycle() {
     prev_state = g_agent_state;
   }
 
-  // auto reconnect to agent
   switch (g_agent_state) {
     
     case AgentStates::kWaitingForConnection:

@@ -12,9 +12,9 @@ constexpr uint32_t kNanosecondsInAMillisecond = 1000000;
 constexpr uint32_t kNanosecondsInASecond = 1000000000;
 constexpr int8_t kDomainId = 10;
 constexpr char kNodeName[] = "uros_client";
-constexpr char kNamespace[] = "VL53L4CD";
+constexpr char kNamespace[] = "";
 
-constexpr uint16_t kStatePublisherPeriodMs = 100;   
+constexpr uint16_t kStateUpdateMs = 100;   
 constexpr uint8_t kStringLength = 140;
 constexpr uint8_t kNumberOfHandles = 2;  // # subscriptions + # timers
 

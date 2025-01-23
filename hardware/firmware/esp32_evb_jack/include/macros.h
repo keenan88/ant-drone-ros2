@@ -2,12 +2,14 @@
 #define MACROS_H_
 
 #include <Arduino.h>
+#include "micro_ros.h"
+
 
 #define RC_CHECK(fn)                           \
   {                                            \
     rcl_ret_t temp_rc = fn;                    \
     if ((temp_rc != RCL_RET_OK)) {             \
-      HandleReturnCodeError(temp_rc);          \
+      esp_restart();                           \
     }                                          \
   }
 

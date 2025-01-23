@@ -14,7 +14,7 @@
 #include <std_msgs/msg/string.h>
 
 #include "config.h"
-#include "ethernet/micro_ros_transport.h"
+// #include "ethernet/micro_ros_transport.h"
 #include "helpers.hpp"
 #include "macros.h"
 
@@ -30,7 +30,6 @@ extern enum AgentStates g_agent_state;
 
 extern StringMessage g_debug_message;
 
-void HandleReturnCodeError(rcl_ret_t error_code);
 struct timespec GetTime();
 void UpdateTimeOffsetFromAgent();
 
