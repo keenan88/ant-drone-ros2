@@ -45,73 +45,75 @@ services:
   #   ipc: host
   #   pid: host
 
-  # antdrone_realsense:
-  #   container_name: antdrone_realsense
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/realsense.dockerfile
-  #   environment:
-  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-  #     - DISPLAY=${DISPLAY}
-  #   volumes:
-  #     - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
-  #     - ./antdrone_realsense:/home/humble_ws/src/antdrone_realsense
-  #   privileged: True
-  #   network_mode: host
-  #   ipc: host
-  #   pid: host
-
-  antdrone0_apriltag:
-    container_name: antdrone0_apriltag
+  antdrone0_pcl:
+    container_name: antdrone0_pcl
     build:
       context: .
-      dockerfile: ./docker/apriltag.dockerfile
+      dockerfile: ./docker/pointcloud.dockerfile
     environment:
       - DRONE_NAME=${DRONE0_NAME}
       - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
       - USE_SIM_TIME=False
-      - DISPLAY=${DISPLAY}
     volumes:
-      - ./antdrone_apriltag:/home/humble_ws/src/antdrone_apriltag:rw
-      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
-      - /dev:/dev
-    privileged: true
+      - ./antdrone_pcl:/home/humble_ws/src/antdrone_pcl:rw
+      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
     network_mode: host
     ipc: host
     pid: host
-    # command: sleep infinity
+    privileged: true
 
-  # antdrone0_pcl:
-  #   container_name: antdrone0_pcl
+  antdrone0_realsense:
+    container_name: antdrone0_realsense
+    build:
+      context: .
+      dockerfile: ./docker/realsense.dockerfile
+    environment:
+      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
+      - ./antdrone_realsense:/home/humble_ws/src/antdrone_realsense
+    privileged: True
+    network_mode: host
+    ipc: host
+    pid: host
+
+  # antdrone0_apriltag:
+  #   container_name: antdrone0_apriltag
   #   build:
   #     context: .
-  #     dockerfile: ./docker/pointcloud.dockerfile
+  #     dockerfile: ./docker/apriltag.dockerfile
   #   environment:
   #     - DRONE_NAME=${DRONE0_NAME}
   #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
   #     - USE_SIM_TIME=False
-  #   # volumes:
-  #   #   - ./antdrone_pcl:/home/humble_ws/src/antdrone_pcl:rw
-  #   #   - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
-  #   network_mode: host
-  #   ipc: host
-  #   pid: host
+  #     - DISPLAY=${DISPLAY}
+  #   volumes:
+  #     - ./antdrone_apriltag:/home/humble_ws/src/antdrone_apriltag:rw
+  #     - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
+  #     - /dev:/dev
   #   privileged: true
-
-  # antdrone0_depth_to_laserscan:
-  #   container_name: antdrone0_depth_to_laserscan
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/depth_to_laserscan.Dockerfile
-  #   # volumes:
-  #   #   - ./antdrone_depth_to_laserscan:/home/humble_ws/src/antdrone_depth_to_laserscan
-  #   environment:
-  #     - DRONE_NAME=${DRONE0_NAME}
-  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-  #     - USE_SIM_TIME=${USE_SIM_TIME}
   #   network_mode: host
   #   ipc: host
   #   pid: host
+    # command: sleep infinity
+
+  
+
+  antdrone0_laserscan:
+    container_name: antdrone0_laserscan
+    build:
+      context: .
+      dockerfile: ./docker/laserscan.Dockerfile
+    volumes:
+      - ./antdrone_laserscan:/home/humble_ws/src/antdrone_laserscan
+    environment:
+      - DRONE_NAME=${DRONE0_NAME}
+      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+      - USE_SIM_TIME=${USE_SIM_TIME}
+    network_mode: host
+    ipc: host
+    pid: host
 
   # antdrone0_slam:
   #   container_name: antdrone0_slam

@@ -63,7 +63,7 @@ Launch files to start drone subsystems.
 Behavior tree to organize drone actions and interact with Ant queen.
 See further [documentation of the behavior tree](docs/bt.md).
 
-### `antdrone_depth_to_laserscan`
+### `antdrone_laserscan`
 Converts drone's 4 pointcloud streams to lidar scans, and merges them into a single scan for Nav2 AMCL and SLAM.
 
 ### `antdrone_description`

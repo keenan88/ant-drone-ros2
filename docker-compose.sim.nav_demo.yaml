@@ -183,16 +183,16 @@ services:
   #             capabilities: [ gpu ]
   #   runtime: nvidia
 
-  # antdrone0_depth_to_laserscan:
-  #   container_name: antdrone0_depth_to_laserscan
+  # antdrone0_laserscan:
+  #   container_name: antdrone0_laserscan
   #   build:
   #     context: .
-  #     dockerfile: ./docker/depth_to_laserscan.Dockerfile
+  #     dockerfile: ./docker/laserscan.Dockerfile
   #   depends_on:
   #     antdrone0_nav:
   #       condition: service_healthy
   #   volumes:
-  #     - ./antdrone_depth_to_laserscan:/home/humble_ws/src/antdrone_depth_to_laserscan
+  #     - ./antdrone_laserscan:/home/humble_ws/src/antdrone_laserscan
   #   environment:
   #     - DRONE_NAME=${DRONE0_NAME}
   #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}

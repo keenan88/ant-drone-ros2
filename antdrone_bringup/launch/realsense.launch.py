@@ -11,6 +11,8 @@ def generate_launch_description():
     color_profile = '640x480x15'
     depth_profile = '640x480x15'
     infra_profile = '640x480x15'
+
+    
     
 
     front_rs_launch = IncludeLaunchDescription(
@@ -18,7 +20,7 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('realsense2_camera'), 'launch', 'rs_launch.py')
         ),
         launch_arguments={
-            'serial_no': "'207522073046'",
+            'serial_no': "'207522073816'",
             'camera_name':'front_rs',
             'camera_namespace':'front_rs',
             'pointcloud.enable':'True',
@@ -33,13 +35,13 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('realsense2_camera'), 'launch', 'rs_launch.py')
         ),
         launch_arguments={
-            'serial_no': "'207522073816'",
+            'serial_no': "'207122078912'",
             'camera_name':'rear_rs',
             'camera_namespace':'rear_rs',
-            'pointcloud.enable':'False',
-            'rgb_camera.color_profile' : '1280x720x6',
-            # 'depth_module.depth_profile' : depth_profile,
-            # 'depth_module.infra_profile': infra_profile,
+            'pointcloud.enable':'True',
+            'rgb_camera.color_profile' : color_profile,
+            'depth_module.depth_profile' : depth_profile,
+            'depth_module.infra_profile': infra_profile,
         }.items()
     )
 
@@ -48,7 +50,7 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('realsense2_camera'), 'launch', 'rs_launch.py')
         ),
         launch_arguments={
-            'serial_no': "'207122078912'",
+            'serial_no': "'109122070837'",
             'camera_name':'left_rs',
             'camera_namespace':'left_rs',
             'pointcloud.enable':'True',
@@ -63,7 +65,7 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('realsense2_camera'), 'launch', 'rs_launch.py')
         ),
         launch_arguments={
-            'serial_no': "'109122070837'",
+            'serial_no': "'207522073046'",
             'camera_name':'right_rs',
             'camera_namespace':'right_rs',
             'pointcloud.enable':'True',
@@ -147,17 +149,17 @@ def generate_launch_description():
     
     ld = launch.LaunchDescription()
 
-    # ld.add_action(front_rs_launch)
-    # ld.add_action(left_rs_launch)
+    ld.add_action(front_rs_launch)
+    ld.add_action(left_rs_launch)
     ld.add_action(rear_rs_launch)
-    # ld.add_action(right_rs_launch)
+    ld.add_action(right_rs_launch)
 
-    # ld.add_action(rviz)
-    # ld.add_action(bridge_out_tf)
-    # ld.add_action(front_rs_tf)
-    # ld.add_action(left_rs_tf)
-    # ld.add_action(rear_rs_tf)
-    # ld.add_action(right_rs_tf)
+    ld.add_action(rviz)
+    ld.add_action(bridge_out_tf)
+    ld.add_action(front_rs_tf)
+    ld.add_action(left_rs_tf)
+    ld.add_action(rear_rs_tf)
+    ld.add_action(right_rs_tf)
     
     
     return ld
