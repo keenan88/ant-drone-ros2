@@ -57,12 +57,36 @@ Visualization Manager:
       Frame Timeout: 1
       Frames:
         All Enabled: false
+        apriltag_cam_depth_optical_frame:
+          Value: true
+        apriltag_cam_gazebo_camera_frame:
+          Value: false
+        attachment_point_L:
+          Value: false
+        attachment_point_R:
+          Value: false
         base_link:
           Value: true
-        camera:
-          Value: true
-        tag16h5:2:
-          Value: true
+        front_marker:
+          Value: false
+        front_rs_depth_optical_frame:
+          Value: false
+        front_rs_gazebo_camera_frame:
+          Value: false
+        left_rs_depth_optical_frame:
+          Value: false
+        left_rs_gazebo_camera_frame:
+          Value: false
+        odom:
+          Value: false
+        rear_rs_depth_optical_frame:
+          Value: false
+        rear_rs_gazebo_camera_frame:
+          Value: false
+        right_rs_depth_optical_frame:
+          Value: false
+        right_rs_gazebo_camera_frame:
+          Value: false
       Marker Scale: 1
       Name: TF
       Show Arrows: false
@@ -70,9 +94,29 @@ Visualization Manager:
       Show Names: true
       Tree:
         base_link:
-          camera:
-            tag16h5:2:
+          apriltag_cam_depth_optical_frame:
+            apriltag_cam_gazebo_camera_frame:
               {}
+          attachment_point_L:
+            {}
+          attachment_point_R:
+            {}
+          front_marker:
+            {}
+          front_rs_depth_optical_frame:
+            front_rs_gazebo_camera_frame:
+              {}
+          left_rs_depth_optical_frame:
+            left_rs_gazebo_camera_frame:
+              {}
+          rear_rs_depth_optical_frame:
+            rear_rs_gazebo_camera_frame:
+              {}
+          right_rs_depth_optical_frame:
+            right_rs_gazebo_camera_frame:
+              {}
+        odom:
+          {}
       Update Interval: 0
       Value: true
     - Class: rviz_default_plugins/Camera
@@ -154,10 +198,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.3397975265979767
+      Pitch: 0.39979755878448486
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.1367287635803223
+      Yaw: 3.171743631362915
     Saved: ~
 Window Geometry:
   Camera:
