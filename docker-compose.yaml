@@ -1,17 +1,32 @@
-version: '2.4' # Version 2.4 is compatable with belena
+# version: '2.4' # Version 2.4 is compatable with belena
 
 services:
 
-  antdrone_clearcore_uros_agent:
+  # antdrone_clearcore_uros_agent:
+  #   image: microros/micro-ros-agent:humble
+  #   container_name: antdrone_clearcore_uros_agent
+  #   stdin_open: true
+  #   tty: true
+  #   ports:
+  #     - 8888:8888/udp
+  #   environment:
+  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+  #   command: serial --dev /dev/ttyACM0 -v2 
+  #   privileged: true
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
+
+  antdrone_espevb_uros_agent:
     image: microros/micro-ros-agent:humble
-    container_name: antdrone_clearcore_uros_agent
+    container_name: antdrone_espevb_uros_agent
     stdin_open: true
     tty: true
     ports:
       - 8888:8888/udp
     environment:
       - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-    command: serial --dev /dev/ttyACM0 -v2 
+    command: serial --dev /dev/ttyUSB0 -v2 
     privileged: true
     network_mode: host
     ipc: host

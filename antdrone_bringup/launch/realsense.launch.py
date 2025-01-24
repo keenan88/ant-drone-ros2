@@ -36,10 +36,10 @@ def generate_launch_description():
             'serial_no': "'207522073816'",
             'camera_name':'rear_rs',
             'camera_namespace':'rear_rs',
-            'pointcloud.enable':'True',
-            'rgb_camera.color_profile' : color_profile,
-            'depth_module.depth_profile' : depth_profile,
-            'depth_module.infra_profile': infra_profile,
+            'pointcloud.enable':'False',
+            'rgb_camera.color_profile' : '1280x720x6',
+            # 'depth_module.depth_profile' : depth_profile,
+            # 'depth_module.infra_profile': infra_profile,
         }.items()
     )
 
@@ -118,7 +118,7 @@ def generate_launch_description():
             "3.14", "0.0", "0.0",
             "base_link",
             "rear_rs_link",
-        ],
+        ]
     )
 
     right_rs_tf = Node(
@@ -147,17 +147,17 @@ def generate_launch_description():
     
     ld = launch.LaunchDescription()
 
-    ld.add_action(front_rs_launch)
-    ld.add_action(left_rs_launch)
+    # ld.add_action(front_rs_launch)
+    # ld.add_action(left_rs_launch)
     ld.add_action(rear_rs_launch)
-    ld.add_action(right_rs_launch)
+    # ld.add_action(right_rs_launch)
 
-    ld.add_action(rviz)
+    # ld.add_action(rviz)
     # ld.add_action(bridge_out_tf)
-    ld.add_action(front_rs_tf)
-    ld.add_action(left_rs_tf)
-    ld.add_action(rear_rs_tf)
-    ld.add_action(right_rs_tf)
+    # ld.add_action(front_rs_tf)
+    # ld.add_action(left_rs_tf)
+    # ld.add_action(rear_rs_tf)
+    # ld.add_action(right_rs_tf)
     
     
     return ld

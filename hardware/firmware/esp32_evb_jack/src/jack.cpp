@@ -9,7 +9,7 @@
 int32_t jack_start_pos_ticks;
 int32_t jack_pos_ticks;
 int32_t tolerance_ticks = 250;
-bool jack_at_target = false;
+bool new_pos_saved = true;
 
 
 Encoder* encoder = nullptr;
@@ -23,26 +23,26 @@ void tick_jack() {
 
     if(desired_pos < jack_pos_ticks - tolerance_ticks)
     {
+        new_pos_saved = false;
         // TODO - write positive 24V to motor controller
-        jack_at_target = false;
     }
     else if(desired_pos > jack_pos_ticks + tolerance_ticks)
     {
+        new_pos_saved = false;
         // TODO - negative 24V to motor controller
-        jack_at_target = false;
     }
     else
     {
         // TODO - 0V to motor controller
-
-        if(!jack_at_target)
+        if(!new_pos_saved)
         { // Write jack position once, at the end of every movement
             preferences -> putInt("last_jack_pos", jack_pos_ticks);
+            new_pos_saved = true;
         }
-        jack_at_target = true;
-    }
 
+    }
 }
+
 
 void init_jack(){
     encoder = new Encoder(ENC_P1, ENC_P2);

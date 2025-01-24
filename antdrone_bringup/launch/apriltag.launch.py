@@ -29,6 +29,13 @@ def generate_launch_description():
         remappings = [
             ('/camera_info', '/apriltag_cam/apriltag_cam/color/camera_info'),
             ('/image_rect',  '/apriltag_cam/apriltag_cam/color/image_raw')
+
+            # ('/camera_info', '/rear_rs/rear_rs/color/camera_info'),
+            # ('/image_rect',  '/rear_rs/rear_rs/color/image_raw')
+
+            
+
+            
         ]
     )
 
@@ -68,8 +75,8 @@ def generate_launch_description():
         name="base_link_to_camera",
         output="log",
         arguments = [
-            "0.407", "-0.2", "0.3",
-            "-0.55", "0", "-1.57",
+            "0.0", "0.2", "0.3",
+            "1.57", "0", "0",
             "base_link",
             "camera",
         ],
