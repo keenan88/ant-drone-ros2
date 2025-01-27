@@ -40,7 +40,7 @@ class GoUnderWorker(Node):
             '4': 0,
             '5': 0,
         }
-        self.target_y_dist = 0.56/2 # Worker underbelly is 0.56m wide, aim for drone base link to be in middle        
+        self.target_y_dist = 0.2 # Worker tags are centered 20cm away from center of underbelly
 
         self.x_tol = 0.03
         self.y_tol = 0.01
@@ -75,8 +75,6 @@ class GoUnderWorker(Node):
             rotation = R.from_quat([qx, qy, qz, qw])
 
             euler_angles = rotation.as_euler('xyz', degrees=False)
-
-            # self.get_logger().info(f"{tag_id}: {euler_angles}")
             
             x_to_tag = round(transform.transform.translation.x, 2)
             y_to_tag = round(transform.transform.translation.y, 2)
@@ -90,7 +88,6 @@ class GoUnderWorker(Node):
 
         except Exception as e:
             pass
-            # self.get_logger().info(f"Could not get transform: {e}")
 
 
 
@@ -170,8 +167,6 @@ class GoUnderWorker(Node):
                     found_tags_cnt += 1
                 else:
                     pass
-                    # self.get_logger().info(f"{tag_id} angular outlier")
-                    # self.get_logger().info(f"{round(self.transforms[tag_id]['pitch'],2 ), round(self.transforms[tag_id]['roll'],2 )}")
 
         if found_tags_cnt > 0:
             x_avg_err /= found_tags_cnt
@@ -208,7 +203,7 @@ class GoUnderWorker(Node):
 
         if approach_side != 'N':
 
-            twist = Twist()
+            
 
             in_position = False
             while not in_position:
@@ -217,8 +212,8 @@ class GoUnderWorker(Node):
                 self.update_transforms(useable_tags)
 
                 n_tags_found, x_err, y_err, yaw_err = self.get_goal_err(useable_tags)
-
-                
+ 
+                twist = Twist() # Refresh twist every time
 
                 if n_tags_found > 0:
 
@@ -226,22 +221,21 @@ class GoUnderWorker(Node):
 
                     twist.linear.y = self.get_corrective_y_vel(y_err)
 
-                    self.get_logger().info(f"{round(y_err, 2), round(twist.linear.y, 2)}")
+                    # Only go forward if well-aligned
+                    if abs(yaw_err) <= self.angle_tol:
+                        if abs(y_err) <= self.y_tol: 
+                            # pass
+                            twist.linear.x = self.get_x_vel(x_err)
 
-                    # # Only go forward if well-aligned
-                    # if abs(yaw_err) <= self.angle_tol:
-                    #     if abs(y_err) <= self.y_tol: 
-                    #         twist.linear.x = self.get_x_vel(x_err)
-
-                    # in_position = (abs(x_err) <= self.x_tol) and (abs(yaw_err) <= self.angle_tol) and (abs(y_err) <= self.y_tol)
-
-                    self.cmd_vel_pub.publish(twist)
+                    in_position = (abs(x_err) <= self.x_tol) and (abs(yaw_err) <= self.angle_tol) and (abs(y_err) <= self.y_tol)
 
                 else:
                     self.get_logger().info(f"No tags found")
+
                     # TODO - trigger recovery behaviors
                     pass
 
+                self.cmd_vel_pub.publish(twist)
                 time.sleep(0.01)
 
             # Send stop command
