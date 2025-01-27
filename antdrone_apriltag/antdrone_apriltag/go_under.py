@@ -159,8 +159,11 @@ class GoUnderWorker(Node):
 
                 angular_outlier = abs(self.transforms[tag_id]['pitch']) >= 15/180*3.14 or \
                                   abs(self.transforms[tag_id]['roll'])  <= 170/180*3.14
+                
+                linear_outlier = abs(self.transforms[tag_id]['x']) >= 2.0 or \
+                                 abs(self.transforms[tag_id]['y']) >= 1.0
 
-                if not angular_outlier:
+                if not (angular_outlier or linear_outlier):
                     x_avg_err += self.transforms[tag_id]['x'] - self.target_x_dists[tag_id]
                     y_avg_err += self.transforms[tag_id]['y'] - self.target_y_dist
                     yaw_avg_err += self.transforms[tag_id]['yaw'] # Target yaw is 0, no subtraction necessary
@@ -221,9 +224,9 @@ class GoUnderWorker(Node):
 
                     twist.angular.z = self.get_corrective_angle_vel(yaw_err)
 
-                    self.get_logger().info(f"{round(yaw_err, 2), round(twist.angular.z, 2)}")
+                    twist.linear.y = self.get_corrective_y_vel(y_err)
 
-                    # twist.linear.y = self.get_corrective_y_vel(y_err)
+                    self.get_logger().info(f"{round(y_err, 2), round(twist.linear.y, 2)}")
 
                     # # Only go forward if well-aligned
                     # if abs(yaw_err) <= self.angle_tol:

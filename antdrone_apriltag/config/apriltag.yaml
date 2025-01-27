@@ -4,7 +4,7 @@ apriltag:                 # node name
     image_transport: raw  # image format: "raw" or "compressed"
     family: 16h5         # tag family name: 16h5, 25h9, 36h11
     size: 0.106 #0.136             # Beware - tags included from https://github.com/koide3/gazebo_apriltag/tree/master have a white border, so the tag size is smaller than the image size.
-    profile: true        # print profiling information to stdout
+    profile: false        # print profiling information to stdout
 
     # tuning of detection (defaults)
     max_hamming: 1        # maximum allowed hamming distance (corrected bits)
@@ -14,11 +14,11 @@ apriltag:                 # node name
       blur: 0.0           # sigma of Gaussian blur for quad detection
       refine: True           # snap to strong gradients
       sharpening: 1.0    # sharpening of decoded images
-      debug: True            # write additional debugging images to current working directory
+      debug: false            # write additional debugging images to current working directory
 
     # (optional) list of tags
     # If defined, 'frames' and 'sizes' must have the same length as 'ids'.
-    # tag:
-    #   ids:    [<id1>, <id2>, ...]         # tag IDs for which to publish transform
-    #   frames: [<frame1>, <frame2>, ...]   # frame names
-    #   sizes:  [<size1>, <size1>, ...]     # tag-specific edge size, overrides the default 'size'
+    tag:
+      ids:    [0,1,2,3,4,5]         # tag IDs for which to publish transform
+      frames: [tag16h5:0, tag16h5:1, tag16h5:2, tag16h5:3, tag16h5:4, tag16h5:5]   # frame names
+      sizes:  [0.106, 0.106, 0.106, 0.106, 0.106, 0.106]     # tag-specific edge size, overrides the default 'size'
