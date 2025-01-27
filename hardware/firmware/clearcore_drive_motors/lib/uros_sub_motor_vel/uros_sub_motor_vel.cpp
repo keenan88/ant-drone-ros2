@@ -19,22 +19,15 @@ double cmd_wheel_radpers_rr;
 void MotorVelCallback(const void* msgin) {
   previous_cmd_vel_time_ms = rmw_uros_epoch_nanos();
 
-  const sensor_msgs__msg__JointState *msg = (const sensor_msgs__msg__JointState *)msgin;
+  // const sensor_msgs__msg__JointState *msg = (const sensor_msgs__msg__JointState *)msgin;
 
-  cmd_wheel_radpers_fl = msg->velocity.data[0];
-  cmd_wheel_radpers_fr = msg->velocity.data[1];
-  cmd_wheel_radpers_rl = msg->velocity.data[2];
-  cmd_wheel_radpers_rr = msg->velocity.data[3];
+  // cmd_wheel_radpers_fl = msg->velocity.data[0];
+  // cmd_wheel_radpers_fr = msg->velocity.data[1];
+  // cmd_wheel_radpers_rl = msg->velocity.data[2];
+  // cmd_wheel_radpers_rr = msg->velocity.data[3];
 }
 
 void InitWheelVelSub(rcl_node_t* ros_node, rclc_executor_t* ros_executor) {
-
-  MotorMgr.MotorModeSet(MotorManager::MOTOR_ALL, Connector::CPM_MODE_A_DIRECT_B_PWM);
-
-  ConnectorM0.EnableRequest(true);
-  ConnectorM1.EnableRequest(true);
-  ConnectorM2.EnableRequest(true);
-  ConnectorM3.EnableRequest(true);
 
   motor_vel_subscriber = rcl_get_zero_initialized_subscription();
 
@@ -70,22 +63,26 @@ void DeInitWheelVelSub(rcl_node_t* ros_node) {
 
 double get_cmd_wheel_radpers_fl()
 {
-  return cmd_wheel_radpers_fl;
+  // return cmd_wheel_radpers_fl;
+  return motor_vels_msg.velocity.data[0];
 }
 
 double get_cmd_wheel_radpers_fr()
 {
-  return cmd_wheel_radpers_fr;
+  // return cmd_wheel_radpers_fr;
+  return motor_vels_msg.velocity.data[1];
 }
 
 double get_cmd_wheel_radpers_rl()
 {
-  return cmd_wheel_radpers_rl;
+  // return cmd_wheel_radpers_rl;
+  return motor_vels_msg.velocity.data[2];
 }
 
 double get_cmd_wheel_radpers_rr()
 {
-  return cmd_wheel_radpers_rr;
+  // return cmd_wheel_radpers_rr;
+  return motor_vels_msg.velocity.data[3];
 }
 
 bool prev_wheel_cmd_within_timeout()

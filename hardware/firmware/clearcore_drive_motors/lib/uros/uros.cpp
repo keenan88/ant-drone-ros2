@@ -6,9 +6,8 @@
 
 #include "constants.h"
 #include "macros.h"
-#include "pins.h"
 #include "uros_config.h"
-#include "uros_pub_diagnostic.h"
+// #include "uros_pub_diagnostic.h"
 #include "uros_pub_wheel_state.h"
 #include "uros_sub_motor_vel.h"
 #include <sensor_msgs/msg/joint_state.h>
@@ -45,19 +44,13 @@ void InitializeMicroRosTransport() {
   agent_state = AgentStates::kWaitingForConnection;
 }
 
-void stop_motors()
-{
-  CommandVelocity(FL_MOTOR, 0);
-  CommandVelocity(FR_MOTOR, 0);
-  CommandVelocity(RL_MOTOR, 0);
-  CommandVelocity(RR_MOTOR, 0);
-}
+
 
 void UpdateSystemStateCallback(rcl_timer_t *timer, int64_t last_call_time_ns) {
   if (timer != NULL) {
 
     // Deadman switch works if clearcore unplugged from computer, but not if docker containers crash
-    if (prev_wheel_cmd_within_timeout()) {
+    if (prev_wheel_cmd_within_timeout() && !digitalReadClearCore(E_STOP_INPUT)) {
       CommandVelocity(FL_MOTOR, get_cmd_wheel_radpers_fl());
       CommandVelocity(FR_MOTOR, get_cmd_wheel_radpers_fr());
       CommandVelocity(RL_MOTOR, get_cmd_wheel_radpers_rl());
@@ -109,8 +102,8 @@ bool CreateEntities() {
   RC_CHECK(rclc_executor_init(&ros_executor, &ros_support.context,
                               kNumberOfHandles, &ros_allocator));
 
-  InitializeDiagnostics(&ros_support, &ros_node,
-                                         &ros_executor);
+  // InitializeDiagnostics(&ros_support, &ros_node,
+  //                                        &ros_executor);
 
   InitSystemTimer();
   InitWheelVelPub(&ros_node);
@@ -125,7 +118,7 @@ void DestroyEntities() {
       rcl_context_get_rmw_context(&ros_support.context);
   (void)rmw_uros_set_context_entity_destroy_session_timeout(rmw_context, 0);
 
-  DeinitializeDiagnostics(&ros_node);
+  // DeinitializeDiagnostics(&ros_node);
   DeInitSystemTimer();
   DeInitWheelVelPub(&ros_node);
   DeInitWheelVelSub(&ros_node);
@@ -139,12 +132,14 @@ void ManageAgentLifecycle() {
   // auto reconnect to agent
   switch (agent_state) {
     case AgentStates::kWaitingForConnection:
+      stop_motors();
       EXECUTE_EVERY_N_MS(500, agent_state = (RMW_RET_OK == rmw_uros_ping_agent(100, 1))
                                  ? AgentStates::kAvailable
                                  : AgentStates::kWaitingForConnection;);
       break;
 
     case AgentStates::kAvailable:
+      stop_motors();
       agent_state = CreateEntities() ? AgentStates::kConnected : AgentStates::kWaitingForConnection;
 
       if (agent_state == AgentStates::kWaitingForConnection) {
@@ -164,17 +159,13 @@ void ManageAgentLifecycle() {
       break;
 
     case AgentStates::kDisconnected:
+      stop_motors();
       DestroyEntities();
       agent_state = AgentStates::kWaitingForConnection;
       break;
 
     default:
+      stop_motors();
       break;
-  }
-
-  if (agent_state == AgentStates::kConnected) {
-    // digitalWrite(kHeartBeatLedPin, 1);
-  } else {
-    // digitalWrite(kHeartBeatLedPin, 0);
   }
 }

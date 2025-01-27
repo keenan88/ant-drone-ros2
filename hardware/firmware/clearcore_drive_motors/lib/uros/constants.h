@@ -1,12 +1,13 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#include <rclc/rclc.h>
+#include "ClearCore.h"
 
 #define FL_MOTOR ConnectorM0
 #define FR_MOTOR ConnectorM2
 #define RL_MOTOR ConnectorM3
 #define RR_MOTOR ConnectorM1
+#define E_STOP_INPUT CLEARCORE_PIN_DI6
 
 
 constexpr uint16_t k_ms_per_s = 1000;

@@ -12,4 +12,6 @@ bool CommandVelocity(MotorDriver motor, double commandedRPM);
 
 double get_wheel_abs_radpers(MotorDriver motor, bool is_fl_motor);
 
+void stop_motors();
+
 #endif

@@ -1,16 +1,19 @@
 #include <Arduino.h>
 
-#include "pins.h"
 #include "uros.h"
 #include "motor_interface.h"
+#include "constants.h"
 
 void setup() {
-
   initialize_motors();
 
   InitializeMicroRosTransport();
-
-  // pinMode(kHeartBeatLedPin, OUTPUT);
 }
 
-void loop() { ManageAgentLifecycle(); }
+void loop() { 
+  if(digitalReadClearCore(E_STOP_INPUT))
+  {
+    stop_motors();
+  }
+  ManageAgentLifecycle(); 
+}

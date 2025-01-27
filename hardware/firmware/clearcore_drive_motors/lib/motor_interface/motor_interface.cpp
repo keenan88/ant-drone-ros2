@@ -1,6 +1,7 @@
 #include "motor_interface.h"
 #include "constants.h"
-
+#include "ClearCore.h"
+#include <Arduino.h>
 
 double maxSpeedRPM = 1342; // Max speed in RPM is set in Clearpath Motor Setup Program (https://teknic.com/downloads/ Clearpath -> MC -> Nema 23/24 -> Software -> motor_setup.zip)
 #define INPUT_A_FILTER 20
@@ -24,41 +25,47 @@ void initialize_motors(){
   ConnectorM1.EnableRequest(true);
   ConnectorM2.EnableRequest(true);
   ConnectorM3.EnableRequest(true);
+
+  pinModeClearCore(E_STOP_INPUT, INPUT);
 }
 
 bool CommandVelocity(MotorDriver motor, double cmdWheelRadPerS) {
     double cmdWheelRPM = cmdWheelRadPerS * RPM_PER_RADPERS;
     double commandedRPM = cmdWheelRPM * GEARBOX_REDUCTION;
 
-    if (commandedRPM > maxSpeedRPM) {
-      commandedRPM = maxSpeedRPM * 0.95;
+    if(!digitalReadClearCore(E_STOP_INPUT) || cmdWheelRadPerS == 0)
+    {
+      if (commandedRPM > maxSpeedRPM) {
+        commandedRPM = maxSpeedRPM * 0.95;
+      }
+      else if(commandedRPM < -maxSpeedRPM){
+        commandedRPM = -maxSpeedRPM * 0.95;
+      }
+  
+      // Check if an alert is currently preventing motion
+      // if (motor.StatusReg().bit.AlertsPresent) {
+      //     SerialPort.SendLine("Motor status: 'In Alert'. Move Canceled.");
+      //     return false;
+      // }
+  
+      if (commandedRPM >= 0) {
+          motor.MotorInAState(false);
+      }
+      else {
+          motor.MotorInAState(true);
+      }
+  
+      // Delays to send the correct filtered direction.
+      // TODO - determine if this delay is necessary. It really slows down the system.
+      // Delay_ms(20 + INPUT_A_FILTER);
+  
+      // Scale the velocity command to our duty cycle range.
+      uint8_t dutyRequest = 1.0 * abs(commandedRPM) / maxSpeedRPM * 255;
+  
+      // Command the move.
+      motor.MotorInBDuty(dutyRequest);
     }
-    else if(commandedRPM < -maxSpeedRPM){
-      commandedRPM = -maxSpeedRPM * 0.95;
-    }
- 
-    // Check if an alert is currently preventing motion
-    // if (motor.StatusReg().bit.AlertsPresent) {
-    //     SerialPort.SendLine("Motor status: 'In Alert'. Move Canceled.");
-    //     return false;
-    // }
- 
-    if (commandedRPM >= 0) {
-        motor.MotorInAState(false);
-    }
-    else {
-        motor.MotorInAState(true);
-    }
- 
-    // Delays to send the correct filtered direction.
-    // TODO - determine if this delay is necessary. It really slows down the system.
-    // Delay_ms(20 + INPUT_A_FILTER);
- 
-    // Scale the velocity command to our duty cycle range.
-    uint8_t dutyRequest = 1.0 * abs(commandedRPM) / maxSpeedRPM * 255;
- 
-    // Command the move.
-    motor.MotorInBDuty(dutyRequest);
+
  
     return true;
 }
@@ -95,4 +102,12 @@ double get_wheel_abs_radpers(MotorDriver motor, bool is_fl_motor=false)
   double wheel_abs_radpers = wheel_abs_rpm / RPM_PER_RADPERS;
 
   return wheel_abs_radpers;
+}
+
+void stop_motors()
+{
+  CommandVelocity(FL_MOTOR, 0);
+  CommandVelocity(FR_MOTOR, 0);
+  CommandVelocity(RL_MOTOR, 0);
+  CommandVelocity(RR_MOTOR, 0);
 }
