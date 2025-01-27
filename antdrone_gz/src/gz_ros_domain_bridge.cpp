@@ -93,20 +93,11 @@ int main(int argc, char **argv) {
   rear_pcl_bridge_options.remap_name("/rear_rs/rear_rs/depth/color/points_wrong_frame");
   right_pcl_bridge_options.remap_name("/right_rs/right_rs/depth/color/points_wrong_frame");
 
-  // Camera info remap options to match realsense topic names
+  //Apriltag cam topics
   apriltag_cam_info_bridge_options.remap_name("/apriltag_cam/apriltag_cam/color/camera_info_wrong_frame");
-  // left_camera_info_bridge_options.remap_name("/left_rs/left_rs/color/camera_info_wrong_frame");
-  // rear_camera_info_bridge_options.remap_name("/rear_rs/rear_rs/color/camera_info_wrong_frame");
-  // right_camera_info_bridge_options.remap_name("/right_rs/right_rs/color/camera_info_wrong_frame");
-
-  // Raw colour images remap options to match realsense topic names
   apriltag_cam_colour_img_bridge_options.remap_name("/apriltag_cam/apriltag_cam/color/image_raw_wrong_frame");
-  // left_colour_img_bridge_options.remap_name("/left_rs/left_rs/color/image_raw_wrong_frame");
-  // rear_colour_img_bridge_options.remap_name("/rear_rs/rear_rs/color/image_raw_wrong_frame");
-  // right_colour_img_bridge_options.remap_name("/right_rs/right_rs/color/image_raw_wrong_frame");
 
   cmd_vel_bridge_options.remap_name("/" + drone_name + "/cmd_vel");
-
   domain_bridge.bridge_topic("/" + drone_name + "/odom", "nav_msgs/msg/Odometry", main_ros_domain_id, drone_ros_domain_id, odom_bridge_options);
   domain_bridge.bridge_topic("/tf", "tf2_msgs/msg/TFMessage", main_ros_domain_id, drone_ros_domain_id, tf_bridge_options);
   
@@ -116,18 +107,9 @@ int main(int argc, char **argv) {
   domain_bridge.bridge_topic("/" + drone_name + "/rear_rs/points", "sensor_msgs/msg/PointCloud2", main_ros_domain_id, drone_ros_domain_id, rear_pcl_bridge_options);
   domain_bridge.bridge_topic("/" + drone_name + "/right_rs/points", "sensor_msgs/msg/PointCloud2", main_ros_domain_id, drone_ros_domain_id, right_pcl_bridge_options);
   
-  // Camera infos
+  // Apriltag cam topics
   domain_bridge.bridge_topic("/" + drone_name + "/apriltag_cam/camera_info", "sensor_msgs/msg/CameraInfo", main_ros_domain_id, drone_ros_domain_id, apriltag_cam_info_bridge_options);
-  // domain_bridge.bridge_topic("/" + drone_name + "/left_rs/camera_info", "sensor_msgs/msg/CameraInfo", main_ros_domain_id, drone_ros_domain_id, left_camera_info_bridge_options);
-  // domain_bridge.bridge_topic("/" + drone_name + "/rear_rs/camera_info", "sensor_msgs/msg/CameraInfo", main_ros_domain_id, drone_ros_domain_id, rear_camera_info_bridge_options);
-  // domain_bridge.bridge_topic("/" + drone_name + "/right_rs/camera_info", "sensor_msgs/msg/CameraInfo", main_ros_domain_id, drone_ros_domain_id, right_camera_info_bridge_options);
-
-  // Raw colour images
   domain_bridge.bridge_topic("/" + drone_name + "/apriltag_cam/image_raw", "sensor_msgs/msg/Image", main_ros_domain_id, drone_ros_domain_id, apriltag_cam_colour_img_bridge_options);
-  // domain_bridge.bridge_topic("/" + drone_name + "/left_rs/image_raw", "sensor_msgs/msg/Image", main_ros_domain_id, drone_ros_domain_id, left_colour_img_bridge_options);
-  // domain_bridge.bridge_topic("/" + drone_name + "/rear_rs/image_raw", "sensor_msgs/msg/Image", main_ros_domain_id, drone_ros_domain_id, rear_colour_img_bridge_options);
-  // domain_bridge.bridge_topic("/" + drone_name + "/right_rs/image_raw", "sensor_msgs/msg/Image", main_ros_domain_id, drone_ros_domain_id, right_colour_img_bridge_options);
-  
   
   domain_bridge.bridge_topic("/cmd_vel", "geometry_msgs/msg/Twist", drone_ros_domain_id, main_ros_domain_id, cmd_vel_bridge_options);
 

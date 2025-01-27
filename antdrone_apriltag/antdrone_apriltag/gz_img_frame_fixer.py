@@ -45,11 +45,11 @@ class FrameFixer(Node):
         )
 
     def camera_info_cb(self, msg):
-        msg.header.frame_id = 'apriltag_cam_depth_optical_frame'
+        msg.header.frame_id = 'apriltag_cam'
         self.camera_info_pub.publish(msg)
 
     def color_img_cb(self, msg):
-        msg.header.frame_id = 'apriltag_cam_depth_optical_frame'
+        msg.header.frame_id = 'apriltag_cam'
         self.color_img_pub.publish(msg)
 
 def main(args=None):

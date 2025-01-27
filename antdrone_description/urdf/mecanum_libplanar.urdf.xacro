@@ -10,7 +10,7 @@
 
   <xacro:property name="rs_height" value="${base_height + 0.025}" />
 
-  <xacro:camera drone_name="$(arg drone_name)" camera_name="apriltag" 
+  <xacro:camera drone_name="$(arg drone_name)" camera_name="apriltag_cam" 
                 x="0" y="0.215" z="0.195" 
                 roll= "${-55/180*3.14}" pitch="0" yaw="-1.57"/>
 
