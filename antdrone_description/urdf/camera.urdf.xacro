@@ -59,7 +59,7 @@
       </sensor>
     </gazebo>
 
-    <link name="${camera_name}_depth_optical_frame">
+    <link name="${camera_name}_cam">
     </link>
 
     <joint
@@ -68,18 +68,18 @@
         xyz="${x} ${y} ${z}"
         rpy="${roll} ${pitch} ${yaw}" />
       <parent link="base_link" />
-      <child link="${camera_name}_depth_optical_frame" />
+      <child link="${camera_name}_cam" />
     </joint>
 
     <link name="${camera_name}_gazebo_camera_frame">
     </link>
 
     <joint
-      name="${camera_name}_depth_optical_frame_to_${camera_name}_gazebo_camera_frame" type="fixed">
+      name="${camera_name}_cam_to_${camera_name}_gazebo_camera_frame" type="fixed">
       <origin
         xyz="0 0 0"
         rpy="1.57 -1.57 0" />
-      <parent link="${camera_name}_depth_optical_frame" />
+      <parent link="${camera_name}_cam" />
       <child link="${camera_name}_gazebo_camera_frame" />
     </joint>
 

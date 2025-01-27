@@ -156,10 +156,11 @@ def generate_launch_description():
 
     ld.add_action(rviz)
     ld.add_action(bridge_out_tf)
-    ld.add_action(front_rs_tf)
-    ld.add_action(left_rs_tf)
-    ld.add_action(rear_rs_tf)
-    ld.add_action(right_rs_tf)
+    # Replaced static tf node with robot description node
+    # ld.add_action(front_rs_tf)
+    # ld.add_action(left_rs_tf)
+    # ld.add_action(rear_rs_tf)
+    # ld.add_action(right_rs_tf)
     
     
     return ld

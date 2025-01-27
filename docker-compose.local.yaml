@@ -78,6 +78,28 @@ services:
   #   ipc: host
   #   pid: host
 
+  antdrone0_description:
+    container_name: antdrone0_description
+    build:
+      context: .
+      dockerfile: ./docker/robot_description.dockerfile
+    healthcheck:
+      test: [ "CMD", "echo", "Healthy" ]
+      interval: 3s
+      timeout: 2s
+      retries: 10
+      start_period: 2s
+    environment:
+      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+      - DRONE_NAME=${DRONE0_NAME}
+      - use_sim_time=False
+    volumes:
+      - ./antdrone_bringup/:/home/humble_ws/src/antdrone_bringup/
+      - ./antdrone_description/:/home/humble_ws/src/antdrone_description
+    network_mode: host
+    ipc: host
+    pid: host
+
   antdrone0_apriltag:
     container_name: antdrone0_apriltag
     build:

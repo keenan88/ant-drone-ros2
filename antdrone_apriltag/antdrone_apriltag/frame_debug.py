@@ -23,7 +23,7 @@ class GoUnderWorker(Node):
     def get_transform(self):
 
         try:
-            tag_id = 1
+            tag_id = 0
             now = rclpy.time.Time()
             timeout = rclpy.duration.Duration(seconds=0.05)
             transform: TransformStamped = self.tf_buffer.lookup_transform(

@@ -6,9 +6,10 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /TF1
+        - /TF1/Frames1
         - /Camera1/Visibility1
         - /Camera1/Topic1
-        - /Image1
         - /Image1/Topic1
       Splitter Ratio: 0.3970189690589905
     Tree Height: 365
@@ -58,20 +59,40 @@ Visualization Manager:
         All Enabled: false
         apriltag_cam:
           Value: true
-        apriltag_cam_depth_optical_frame:
-          Value: true
+        apriltag_gazebo_camera_frame:
+          Value: false
+        attachment_point_L:
+          Value: false
+        attachment_point_R:
+          Value: false
         base_link:
           Value: true
-        odom:
-          Value: true
+        front_marker:
+          Value: false
+        front_rs_depth_optical_frame:
+          Value: false
+        front_rs_gazebo_camera_frame:
+          Value: false
+        left_rs_depth_optical_frame:
+          Value: false
+        left_rs_gazebo_camera_frame:
+          Value: false
+        rear_rs_depth_optical_frame:
+          Value: false
+        rear_rs_gazebo_camera_frame:
+          Value: false
+        right_rs_depth_optical_frame:
+          Value: false
+        right_rs_gazebo_camera_frame:
+          Value: false
         tag16h5:0:
           Value: true
-        tag16h5:1:
-          Value: true
+        tag16h5:14:
+          Value: false
         tag16h5:2:
           Value: true
-        tag16h5:21:
-          Value: true
+        tag16h5:27:
+          Value: false
       Marker Scale: 1
       Name: TF
       Show Arrows: false
@@ -80,17 +101,34 @@ Visualization Manager:
       Tree:
         base_link:
           apriltag_cam:
-            tag16h5:21:
+            apriltag_gazebo_camera_frame:
               {}
-          apriltag_cam_depth_optical_frame:
             tag16h5:0:
               {}
-            tag16h5:1:
+            tag16h5:14:
               {}
             tag16h5:2:
               {}
-        odom:
-          {}
+            tag16h5:27:
+              {}
+          attachment_point_L:
+            {}
+          attachment_point_R:
+            {}
+          front_marker:
+            {}
+          front_rs_depth_optical_frame:
+            front_rs_gazebo_camera_frame:
+              {}
+          left_rs_depth_optical_frame:
+            left_rs_gazebo_camera_frame:
+              {}
+          rear_rs_depth_optical_frame:
+            rear_rs_gazebo_camera_frame:
+              {}
+          right_rs_depth_optical_frame:
+            right_rs_gazebo_camera_frame:
+              {}
       Update Interval: 0
       Value: true
     - Class: rviz_default_plugins/Camera
@@ -187,10 +225,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.39979755878448486
+      Pitch: 0.5647972822189331
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.171743631362915
+      Yaw: 1.676737904548645
     Saved: ~
 Window Geometry:
   Camera:

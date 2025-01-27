@@ -69,19 +69,6 @@ def generate_launch_description():
         executable='go_under'
     )
 
-    base_link_tf = Node(
-        package="tf2_ros",
-        executable="static_transform_publisher",
-        name="base_link_to_camera",
-        output="log",
-        arguments = [
-            "0.0", "0.2", "0.3",
-            "1.57", "0", "0",
-            "base_link",
-            "apriltag_cam",
-        ],
-    )
-
     frame_debug = Node(
         package='antdrone_apriltag',
         executable='frame_debug'
@@ -91,9 +78,8 @@ def generate_launch_description():
     ld.add_action(antdrone_apriltag)
     ld.add_action(apriltag_cam)
     ld.add_action(rviz)
-    ld.add_action(base_link_tf)
-    # ld.add_action(frame_debug)
-    ld.add_action(go_under)    
+    ld.add_action(frame_debug)
+    # ld.add_action(go_under)    
 
 
 
