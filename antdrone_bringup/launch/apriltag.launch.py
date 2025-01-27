@@ -78,7 +78,7 @@ def generate_launch_description():
             "0.0", "0.2", "0.3",
             "1.57", "0", "0",
             "base_link",
-            "camera",
+            "apriltag_cam",
         ],
     )
 
