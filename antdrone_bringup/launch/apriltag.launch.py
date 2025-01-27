@@ -92,8 +92,8 @@ def generate_launch_description():
     ld.add_action(apriltag_cam)
     ld.add_action(rviz)
     ld.add_action(base_link_tf)
-    ld.add_action(frame_debug)
-    # ld.add_action(go_under)    
+    # ld.add_action(frame_debug)
+    ld.add_action(go_under)    
 
 
 
