@@ -12,22 +12,20 @@
 
     <gazebo reference="${camera_name}_gazebo_camera_frame">
 
-      <sensor type="depth" name="${camera_name}">
-        <update_rate>15.0</update_rate> <!-- Gazebo does not necessarily respect this update rate when publishing the camera data to ros2 -->
+      <sensor type="camera" name="${camera_name}">
+        <update_rate>10.0</update_rate> <!-- Gazebo does not necessarily respect this update rate when publishing the camera data to ros2, it may throttle performance -->
         
         <camera>
           <horizontal_fov>1.39</horizontal_fov>
           <!-- There is not a control for vertical FOV, it is set automatically as height / width * horizontal_fov -->
           <image>
-            <width>800</width>
-            <height>600</height>
+            <width>1200</width>
+            <height>900</height>
             <format>R8G8B8</format>
           </image>
           <clip>
             <near>0.1</near>
-            <!--  Be sure to set far clip greater than cropbox node's cutoff distance.
-              The camera generates a grey plane at this distance that will be interpreted in nav2 as an obstacle-->
-            <far>5</far> 
+            <far>2</far> 
           </clip>
           <noise>
             <type>gaussian</type>
@@ -43,9 +41,8 @@
           </ros>
         
           <alwaysOn>true</alwaysOn>
-          <updateRate>0.0</updateRate>
+          <updateRate>10.0</updateRate>
           <cameraName>${camera_name}</cameraName>
-          <pointsTopicName>points</pointsTopicName>
           <imageTopicName>image_raw</imageTopicName>
           <cameraInfoTopicName>camera_info</cameraInfoTopicName>
           <frameName>${camera_name}_gazebo_camera_frame</frameName>

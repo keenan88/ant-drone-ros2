@@ -4,12 +4,12 @@ apriltag:                 # node name
     image_transport: raw  # image format: "raw" or "compressed"
     family: 16h5         # tag family name: 16h5, 25h9, 36h11
     size: 0.106 #0.136             # Beware - tags included from https://github.com/koide3/gazebo_apriltag/tree/master have a white border, so the tag size is smaller than the image size.
-    profile: false        # print profiling information to stdout
+    profile: true        # print profiling information to stdout
 
     # tuning of detection (defaults)
-    max_hamming: 0        # maximum allowed hamming distance (corrected bits)
+    max_hamming: 1        # maximum allowed hamming distance (corrected bits)
     detector:
-      threads: 1          # number of threads
+      threads: 3          # number of threads
       decimate: 0.0       # decimate resolution for quad detection
       blur: 0.0           # sigma of Gaussian blur for quad detection
       refine: True           # snap to strong gradients

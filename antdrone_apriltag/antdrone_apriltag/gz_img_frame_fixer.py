@@ -10,18 +10,12 @@ from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
 class FrameFixer(Node):
     def __init__(self):
         super().__init__('frame_fixer')
-        
-        qos_profile = QoSProfile(
-            reliability=QoSReliabilityPolicy.BEST_EFFORT,
-            history=QoSHistoryPolicy.KEEP_LAST,
-            depth=10
-        )
 
         self.camera_info_sub = self.create_subscription(
             CameraInfo,
             'apriltag_cam/apriltag_cam/color/camera_info_wrong_frame',
             self.camera_info_cb,
-            qos_profile
+            10
         )
 
         self.camera_info_pub = self.create_publisher(
@@ -35,7 +29,7 @@ class FrameFixer(Node):
             Image,
             'apriltag_cam/apriltag_cam/color/image_raw_wrong_frame',
             self.color_img_cb,
-            qos_profile
+            10
         )
 
         self.color_img_pub = self.create_publisher(
