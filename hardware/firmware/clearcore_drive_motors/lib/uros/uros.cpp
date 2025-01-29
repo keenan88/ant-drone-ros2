@@ -7,7 +7,7 @@
 #include "constants.h"
 #include "macros.h"
 #include "uros_config.h"
-// #include "uros_pub_diagnostic.h"
+#include "uros_pub_diagnostic.h"
 #include "uros_pub_wheel_state.h"
 #include "uros_sub_motor_vel.h"
 #include <sensor_msgs/msg/joint_state.h>
@@ -102,8 +102,8 @@ bool CreateEntities() {
   RC_CHECK(rclc_executor_init(&ros_executor, &ros_support.context,
                               kNumberOfHandles, &ros_allocator));
 
-  // InitializeDiagnostics(&ros_support, &ros_node,
-  //                                        &ros_executor);
+  InitializeDiagnostics(&ros_support, &ros_node,
+                                         &ros_executor);
 
   InitSystemTimer();
   InitWheelVelPub(&ros_node);
@@ -118,7 +118,7 @@ void DestroyEntities() {
       rcl_context_get_rmw_context(&ros_support.context);
   (void)rmw_uros_set_context_entity_destroy_session_timeout(rmw_context, 0);
 
-  // DeinitializeDiagnostics(&ros_node);
+  DeinitializeDiagnostics(&ros_node);
   DeInitSystemTimer();
   DeInitWheelVelPub(&ros_node);
   DeInitWheelVelSub(&ros_node);

@@ -17,14 +17,7 @@ double cmd_wheel_radpers_rl;
 double cmd_wheel_radpers_rr;
 
 void MotorVelCallback(const void* msgin) {
-  previous_cmd_vel_time_ms = rmw_uros_epoch_nanos();
-
-  // const sensor_msgs__msg__JointState *msg = (const sensor_msgs__msg__JointState *)msgin;
-
-  // cmd_wheel_radpers_fl = msg->velocity.data[0];
-  // cmd_wheel_radpers_fr = msg->velocity.data[1];
-  // cmd_wheel_radpers_rl = msg->velocity.data[2];
-  // cmd_wheel_radpers_rr = msg->velocity.data[3];
+  previous_cmd_vel_time_ms = rmw_uros_epoch_millis();
 }
 
 void InitWheelVelSub(rcl_node_t* ros_node, rclc_executor_t* ros_executor) {

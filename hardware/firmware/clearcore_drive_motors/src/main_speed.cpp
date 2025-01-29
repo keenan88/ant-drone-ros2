@@ -67,7 +67,7 @@
 // // This is the commanded speed limit in RPM (must match the MSP value). This speed
 // // cannot actually be commanded, so use something slightly higher than your real
 // // max speed here and in MSP
-// double maxSpeed = 2000;
+// double maxSpeed = 671;
  
 // // Declares our user-defined helper function, which is used to command speed and
 // // direction. The definition/implementation of this function is at the bottom of
@@ -109,6 +109,32 @@
  
 //         // Move at the commanded velocity.
 //         CommandVelocity(commandedVelocity);    // See below for the detailed function definition.
+
+//         // Check the state of the HLFB.
+//         MotorDriver::HlfbStates hlfbState = motor.HlfbState();
+ 
+//         // Print the HLFB state.
+//         if (hlfbState == MotorDriver::HLFB_HAS_MEASUREMENT) {
+//             // Get the measured speed as a percent of Max Speed.
+//             float hlfbPercent = motor.HlfbPercent();
+            
+ 
+//             SerialPort.Send("Speed output: ");
+ 
+//             if (hlfbPercent == MotorDriver::HLFB_DUTY_UNKNOWN) {
+//                 SerialPort.SendLine("UNKNOWN");
+//             }
+//             else {
+//                 char hlfbPercentStr[10];
+//                 // Convert the floating point duty cycle into a string representation.
+//                 snprintf(hlfbPercentStr, sizeof(hlfbPercentStr), "%.0f%%", hlfbPercent);
+//                 SerialPort.Send(hlfbPercentStr);
+//                 SerialPort.SendLine(" of maximum speed");
+//             }
+//         }
+//         else if (hlfbState == MotorDriver::HLFB_DEASSERTED) {
+//             SerialPort.SendLine("Disabled or Shutdown");
+//         }
 //     }
 // }
  

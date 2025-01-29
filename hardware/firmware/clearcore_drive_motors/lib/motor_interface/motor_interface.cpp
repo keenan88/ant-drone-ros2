@@ -3,7 +3,7 @@
 #include "ClearCore.h"
 #include <Arduino.h>
 
-double maxSpeedRPM = 1342; // Max speed in RPM is set in Clearpath Motor Setup Program (https://teknic.com/downloads/ Clearpath -> MC -> Nema 23/24 -> Software -> motor_setup.zip)
+double maxSpeedRPM = 671; // Max speed in RPM is set in Clearpath Motor Setup Program (https://teknic.com/downloads/ Clearpath -> MC -> Nema 23/24 -> Software -> motor_setup.zip)
 #define INPUT_A_FILTER 20
 #define GEARBOX_REDUCTION 10.71
 #define RPM_PER_RADPERS 9.549297

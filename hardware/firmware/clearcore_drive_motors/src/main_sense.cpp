@@ -39,7 +39,7 @@
  
 // // Specify which motor to move.
 // // Options are: ConnectorM0, ConnectorM1, ConnectorM2, or ConnectorM3.
-// #define motor ConnectorM0
+// #define motor ConnectorM2
  
 // // Select the baud rate to match the target serial device
 // #define baudRate 9600
