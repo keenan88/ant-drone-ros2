@@ -121,6 +121,11 @@ void InitializeDiagnostics(rclc_support_t *ros_support,
 }
 
 void DeinitializeDiagnostics(rcl_node_t *ros_node) {
-  RC_CHECK(rcl_timer_fini(&diagnostics_publisher_timer));
   RC_CHECK(rcl_publisher_fini(&diagnostics_publisher, ros_node));
+  ConnectorUsb.SendLine("a");
+  delay(250);
+
+  RC_CHECK(rcl_timer_fini(&diagnostics_publisher_timer));
+  ConnectorUsb.SendLine("b");
+  delay(250);
 }

@@ -5,18 +5,10 @@
 {                                                                     \
   rcl_ret_t temp_rc = fn;                                             \
   char buffer[150];                                                   \
-  if (temp_rc == RCL_RET_INVALID_ARGUMENT) {                          \
+  if (temp_rc != RCL_RET_OK) {                          \
     snprintf(buffer, sizeof(buffer),                                  \
-              "RC_CHECK failed: null ptr arg in file: %s at line: %d. REBOOTING!", \
-              __FILE__, __LINE__);                                     \
-    ConnectorUsb.SendLine(buffer);                                        \
-    delay(1000);                                                      \
-    NVIC_SystemReset();                                               \
-  }                                                                   \
-  if (temp_rc == RCL_RET_ERROR) {                                     \
-    snprintf(buffer, sizeof(buffer),                                  \
-              "RC_CHECK failed in file: %s at line: %d. REBOOTING!",               \
-              __FILE__, __LINE__);                                     \
+              "RC_CHECK failed (code %d): in file: %s at line: %ld. REBOOTING!", \
+              temp_rc, __FILE__, __LINE__);                                     \
     ConnectorUsb.SendLine(buffer);                                        \
     delay(1000);                                                      \
     NVIC_SystemReset();                                               \
@@ -27,17 +19,10 @@
 {                                                                     \
   rcl_ret_t temp_rc = fn;                                             \
   char buffer[150];                                                   \
-  if (temp_rc == RCL_RET_INVALID_ARGUMENT) {                          \
+  if (temp_rc != RCL_RET_OK) {                          \
     snprintf(buffer, sizeof(buffer),                                  \
-              "RC_SOFT_CHECK failed: null ptr arg in file: %s at line: %d. Continuing program.", \
-              __FILE__, __LINE__);                                     \
-    ConnectorUsb.SendLine(buffer);                                        \
-    delay(1000);                                                      \
-  }                                                                   \
-  if (temp_rc == RCL_RET_ERROR) {                                     \
-    snprintf(buffer, sizeof(buffer),                                  \
-              "RC_SOFT_CHECK failed in file: %s at line: %d. Continuing program.",               \
-              __FILE__, __LINE__);                                     \
+              "RC_SOFT_CHECK failed (code %d): in file: %s at line: %ld. Continuing!", \
+              temp_rc, __FILE__, __LINE__);                                     \
     ConnectorUsb.SendLine(buffer);                                        \
     delay(1000);                                                      \
   }                                                                   \

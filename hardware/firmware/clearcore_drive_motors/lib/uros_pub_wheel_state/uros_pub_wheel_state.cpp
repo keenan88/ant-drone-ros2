@@ -83,7 +83,8 @@ void InitWheelVelPub(rcl_node_t *ros_node) {
   sensor_msgs__msg__JointState__init(&wheels_state_msg);
 
   wheels_state_msg.velocity.size = 4;
-  wheels_state_msg.velocity.data = wheel_speeds;
+  // wheels_state_msg.velocity.data = wheel_speeds;
+  wheels_state_msg.velocity.data = (double*) malloc(sizeof(double) * wheels_state_msg.velocity.size); // IMPORTANT!! Use Malloc (not a static array), so that sensor_msgs__msg__JointState__fini can free this memory!!
 
   RC_CHECK(rclc_publisher_init_default(
       &wheels_state_publisher, ros_node,
@@ -93,5 +94,11 @@ void InitWheelVelPub(rcl_node_t *ros_node) {
 
 void DeInitWheelVelPub(rcl_node_t *ros_node) {
   sensor_msgs__msg__JointState__fini(&wheels_state_msg);
+
+  ConnectorUsb.SendLine("c");
+  delay(250);
+
   RC_CHECK(rcl_publisher_fini(&wheels_state_publisher, ros_node));
+  ConnectorUsb.SendLine("d");
+  delay(250);
 }

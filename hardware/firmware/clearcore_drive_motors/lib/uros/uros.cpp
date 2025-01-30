@@ -71,14 +71,14 @@ void UpdateSystemStateCallback(rcl_timer_t *timer, int64_t last_call_time_ns) {
     }
     else
     {
-      // disable_motors();
+      // set_motors_0_vel();
     }
 
     PublishWheelState();
   }
   else
     {
-      // disable_motors();
+      // set_motors_0_vel();
     }
 }
 
@@ -106,32 +106,24 @@ bool CreateEntities() {
 
   ros_allocator = rcl_get_default_allocator();
   
+  // TODO - figure out why after 2-3 restarts of UROS agent, rclc_support_init_with_options fails.
   // ros_init_options = rcl_get_zero_initialized_init_options();
   // RC_CHECK(rcl_init_options_init(&ros_init_options, ros_allocator));
-  // ConnectorUsb.Send("1");
+  // ConnectorUsb.SendLine("0");
   // delay(250);
   // RC_CHECK(rcl_init_options_set_domain_id(&ros_init_options, kDomainId));
-  // ConnectorUsb.Send("2");
+  // ConnectorUsb.SendLine("1");
   // delay(250);
   // RC_CHECK(rclc_support_init_with_options(&ros_support, 0, NULL, &ros_init_options, &ros_allocator));
-  // ConnectorUsb.Send("3");
+  // ConnectorUsb.SendLine("1.5");
   // delay(250);
 
   // create init_options
   RC_CHECK(rclc_support_init(&ros_support, 0, NULL, &ros_allocator));
-  ConnectorUsb.SendLine("1");
-  delay(250);
-
   RC_CHECK(rclc_node_init_default(&ros_node, kNodeName, kNamespace, &ros_support));
-  ConnectorUsb.SendLine("2");
-  delay(250);
-
   ros_executor = rclc_executor_get_zero_initialized_executor();
   RC_CHECK(rclc_executor_init(&ros_executor, &ros_support.context,
                               kNumberOfHandles, &ros_allocator));
-
-  ConnectorUsb.SendLine("3");
-  delay(250);
   InitializeDiagnostics(&ros_support, &ros_node,
                                          &ros_executor);
   InitSystemTimer();
@@ -139,68 +131,60 @@ bool CreateEntities() {
   InitWheelVelSub(&ros_node, &ros_executor);
 
   UpdateTimeOffsetFromAgent();
+
+  // initialize_motors();
+
   return true;
 }
-
-// bool CreateEntities()
-// {
-//   ros_allocator = rcl_get_default_allocator();
-//   ConnectorUsb.Send("1");
-//   delay(250);
-
-//   // create init_options
-//   RC_CHECK(rclc_support_init(&ros_support, 0, NULL, &ros_allocator));
-//   ConnectorUsb.Send("2");
-//   delay(250);
-
-//   // create node
-//   RC_CHECK(rclc_node_init_default(&ros_node, "int32_publisher_rclc", "", &ros_support));
-//   ConnectorUsb.Send("3");
-//   delay(250);
-
-//   // create executor
-//   ros_executor = rclc_executor_get_zero_initialized_executor();
-//   RC_CHECK(rclc_executor_init(&ros_executor, &ros_support.context, 1, &ros_allocator));
-//   ConnectorUsb.Send("4");
-//   delay(250);
-
-//   return true;
-// }
 
 void DestroyEntities() {
   ConnectorUsb.SendLine("Destroying Entities");
   
-  rmw_context_t *rmw_context =
-      rcl_context_get_rmw_context(&ros_support.context);
-  (void)rmw_uros_set_context_entity_destroy_session_timeout(rmw_context, 0);
+  rmw_context_t *rmw_context = rcl_context_get_rmw_context(&ros_support.context);
 
+  
+  ConnectorUsb.SendLine("-2");
+  delay(250);
+  
+  RC_CHECK(rmw_uros_set_context_entity_destroy_session_timeout(rmw_context, 0));
+  ConnectorUsb.SendLine("-1");
+  delay(250);
+
+  DeinitializeDiagnostics(&ros_node);
+  
+  ConnectorUsb.SendLine("0");
+  delay(250);
+
+  DeInitWheelVelPub(&ros_node);
+  
   ConnectorUsb.SendLine("1");
   delay(250);
-  DeinitializeDiagnostics(&ros_node);
 
+  DeInitSystemTimer();
+  
   ConnectorUsb.SendLine("2");
   delay(250);
-  DeInitSystemTimer();
 
-  ConnectorUsb.SendLine("3");
-  delay(250);
-  DeInitWheelVelPub(&ros_node);
-
-  ConnectorUsb.SendLine("4");
-  delay(250);
   DeInitWheelVelSub(&ros_node);
   
+  ConnectorUsb.SendLine("3");
+  delay(250);
+  
+  RC_CHECK(rclc_executor_fini(&ros_executor));
+  
+  ConnectorUsb.SendLine("4");
+  delay(250);
+
+  RC_CHECK(rcl_node_fini(&ros_node));
+  
+  ConnectorUsb.SendLine("5");
+  delay(250);
+
+  RC_CHECK(rclc_support_fini(&ros_support));
+    
   ConnectorUsb.SendLine("6");
   delay(250);
-  RC_CHECK(rclc_executor_fini(&ros_executor));
-  ConnectorUsb.SendLine("7");
-  delay(250);
-  RC_CHECK(rcl_node_fini(&ros_node));
-  ConnectorUsb.SendLine("8");
-  delay(250);
-  RC_CHECK(rclc_support_fini(&ros_support));
-  ConnectorUsb.SendLine("9");
-  delay(250);
+  // set_motors_0_vel();
 }
 
 AgentStates prev_state = AgentStates::kDisconnected;
@@ -225,8 +209,14 @@ void ManageAgentLifecycle() {
       agent_state = (true == CreateEntities()) ? AgentStates::kConnected : AgentStates::kWaitingForConnection;
       if (agent_state == AgentStates::kWaitingForConnection) {
         DestroyEntities();
-      };
+      }
+      else if(agent_state == AgentStates::kConnected)
+      {
+        initialize_motors();
+      }
+
       break;
+
     case AgentStates::kConnected:
       EXECUTE_EVERY_N_MS(200, agent_state = (RMW_RET_OK == rmw_uros_ping_agent(100, 1)) ? AgentStates::kConnected : AgentStates::kDisconnected;);
       if (agent_state == AgentStates::kConnected) {
@@ -235,6 +225,7 @@ void ManageAgentLifecycle() {
       break;
     case AgentStates::kDisconnected:
       DestroyEntities();
+      // set_motors_0_vel();
       agent_state = AgentStates::kWaitingForConnection;
       break;
     default:

@@ -114,6 +114,14 @@ void disable_motors()
   ConnectorM3.EnableRequest(false);
 }
 
+// void enable_motors()
+// {
+//   ConnectorM0.EnableRequest(true);
+//   ConnectorM1.EnableRequest(true);
+//   ConnectorM2.EnableRequest(true);
+//   ConnectorM3.EnableRequest(true);
+// }
+
 void set_motors_0_vel()
 {
   CommandVelocity(FL_MOTOR, 0);
