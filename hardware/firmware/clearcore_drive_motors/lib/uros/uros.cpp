@@ -71,14 +71,14 @@ void UpdateSystemStateCallback(rcl_timer_t *timer, int64_t last_call_time_ns) {
     }
     else
     {
-      // set_motors_0_vel();
+      set_motors_0_vel();
     }
 
     PublishWheelState();
   }
   else
     {
-      // set_motors_0_vel();
+      set_motors_0_vel();
     }
 }
 
@@ -134,8 +134,6 @@ bool CreateEntities() {
 
   UpdateTimeOffsetFromAgent();
 
-  
-
   return true;
 }
 
@@ -154,8 +152,6 @@ void DestroyEntities() {
   RC_CHECK(rclc_executor_fini(&ros_executor));
   RC_CHECK(rcl_node_fini(&ros_node));
   RC_CHECK(rclc_support_fini(&ros_support));
-    
-  
 }
 
 AgentStates prev_state = AgentStates::kDisconnected;
@@ -198,7 +194,6 @@ void ManageAgentLifecycle() {
     case AgentStates::kDisconnected:
       disable_motors();
       DestroyEntities();
-      // set_motors_0_vel();
       agent_state = AgentStates::kWaitingForConnection;
       break;
     default:
