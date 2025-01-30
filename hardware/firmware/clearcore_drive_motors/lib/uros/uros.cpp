@@ -102,7 +102,7 @@ void UpdateTimeOffsetFromAgent() {
 
 bool CreateEntities() {
 
-  ConnectorUsb.SendLine("Creating entities: ");
+  ConnectorUsb.SendLine("Creating entities");
 
   ros_allocator = rcl_get_default_allocator();
   
@@ -118,12 +118,14 @@ bool CreateEntities() {
   // ConnectorUsb.SendLine("1.5");
   // delay(250);
 
+
   // create init_options
   RC_CHECK(rclc_support_init(&ros_support, 0, NULL, &ros_allocator));
   RC_CHECK(rclc_node_init_default(&ros_node, kNodeName, kNamespace, &ros_support));
   ros_executor = rclc_executor_get_zero_initialized_executor();
   RC_CHECK(rclc_executor_init(&ros_executor, &ros_support.context,
                               kNumberOfHandles, &ros_allocator));
+                              
   InitializeDiagnostics(&ros_support, &ros_node,
                                          &ros_executor);
   InitSystemTimer();
@@ -132,7 +134,7 @@ bool CreateEntities() {
 
   UpdateTimeOffsetFromAgent();
 
-  // initialize_motors();
+  
 
   return true;
 }
@@ -141,50 +143,19 @@ void DestroyEntities() {
   ConnectorUsb.SendLine("Destroying Entities");
   
   rmw_context_t *rmw_context = rcl_context_get_rmw_context(&ros_support.context);
-
-  
-  ConnectorUsb.SendLine("-2");
-  delay(250);
   
   RC_CHECK(rmw_uros_set_context_entity_destroy_session_timeout(rmw_context, 0));
-  ConnectorUsb.SendLine("-1");
-  delay(250);
 
   DeinitializeDiagnostics(&ros_node);
-  
-  ConnectorUsb.SendLine("0");
-  delay(250);
-
-  DeInitWheelVelPub(&ros_node);
-  
-  ConnectorUsb.SendLine("1");
-  delay(250);
-
   DeInitSystemTimer();
-  
-  ConnectorUsb.SendLine("2");
-  delay(250);
-
+  DeInitWheelVelPub(&ros_node);
   DeInitWheelVelSub(&ros_node);
   
-  ConnectorUsb.SendLine("3");
-  delay(250);
-  
   RC_CHECK(rclc_executor_fini(&ros_executor));
-  
-  ConnectorUsb.SendLine("4");
-  delay(250);
-
   RC_CHECK(rcl_node_fini(&ros_node));
-  
-  ConnectorUsb.SendLine("5");
-  delay(250);
-
   RC_CHECK(rclc_support_fini(&ros_support));
     
-  ConnectorUsb.SendLine("6");
-  delay(250);
-  // set_motors_0_vel();
+  
 }
 
 AgentStates prev_state = AgentStates::kDisconnected;
@@ -208,6 +179,7 @@ void ManageAgentLifecycle() {
     case AgentStates::kAvailable:
       agent_state = (true == CreateEntities()) ? AgentStates::kConnected : AgentStates::kWaitingForConnection;
       if (agent_state == AgentStates::kWaitingForConnection) {
+        disable_motors();
         DestroyEntities();
       }
       else if(agent_state == AgentStates::kConnected)
@@ -224,6 +196,7 @@ void ManageAgentLifecycle() {
       }
       break;
     case AgentStates::kDisconnected:
+      disable_motors();
       DestroyEntities();
       // set_motors_0_vel();
       agent_state = AgentStates::kWaitingForConnection;
