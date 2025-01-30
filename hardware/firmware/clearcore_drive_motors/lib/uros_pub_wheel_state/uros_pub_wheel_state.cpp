@@ -73,7 +73,7 @@ void PublishWheelState() {
       prev_rl_cmd_wheel_dir = rl_cmd_wheel_dir;
       prev_rr_cmd_wheel_dir = rr_cmd_wheel_dir;
 
-      RC_CHECK(rcl_publish(&wheels_state_publisher, &wheels_state_msg, NULL));
+      RC_SOFT_CHECK(rcl_publish(&wheels_state_publisher, &wheels_state_msg, NULL));
     }
 
     

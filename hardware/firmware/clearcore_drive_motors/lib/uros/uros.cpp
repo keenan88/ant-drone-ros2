@@ -14,6 +14,7 @@
 #include "motor_interface.h"
 
 
+
 enum class AgentStates {
   kWaitingForConnection,
   kAvailable,
@@ -28,19 +29,32 @@ enum AgentStates agent_state;
 rclc_support_t ros_support;
 rcl_node_t ros_node;
 rclc_executor_t ros_executor;
-static rcl_allocator_t ros_allocator;
+rcl_allocator_t ros_allocator;
 rcl_init_options_t ros_init_options;
 uint64_t agent_time_offset = 0;
 
 rcl_timer_t system_state_update_timer;
 
-
+bool CreateEntities();
 
 void InitializeMicroRosTransport() {
 
-  Serial.begin(kSerialBaudRate);
-  set_microros_serial_transports(Serial);
-  delay(2000);
+  IPAddress client_ip(10, 42,0,2);
+  IPAddress agent_ip(10, 42,0,1);
+  uint16_t agent_port = 8888;
+  byte mac[6] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; // Mac addr seems to not matter?
+
+  set_microros_native_ethernet_transports(mac, client_ip, agent_ip, agent_port);
+
+  ConnectorUsb.Mode(Connector::USB_CDC);
+  ConnectorUsb.Speed(115200);
+  uint32_t timeout = 5000;
+  uint32_t startTime = Milliseconds();
+  ConnectorUsb.PortOpen();
+  while (!ConnectorUsb && Milliseconds() - startTime < timeout) {
+      continue;
+  }
+
   agent_state = AgentStates::kWaitingForConnection;
 }
 
@@ -49,7 +63,6 @@ void InitializeMicroRosTransport() {
 void UpdateSystemStateCallback(rcl_timer_t *timer, int64_t last_call_time_ns) {
   if (timer != NULL) {
 
-    // Deadman switch works if clearcore unplugged from computer, but not if docker containers crash
     if (prev_wheel_cmd_within_timeout() && !digitalReadClearCore(E_STOP_INPUT)) {
       CommandVelocity(FL_MOTOR, get_cmd_wheel_radpers_fl());
       CommandVelocity(FR_MOTOR, get_cmd_wheel_radpers_fr());
@@ -58,14 +71,14 @@ void UpdateSystemStateCallback(rcl_timer_t *timer, int64_t last_call_time_ns) {
     }
     else
     {
-      stop_motors();
+      // disable_motors();
     }
 
     PublishWheelState();
   }
   else
     {
-      stop_motors();
+      // disable_motors();
     }
 }
 
@@ -88,23 +101,39 @@ void UpdateTimeOffsetFromAgent() {
 }
 
 bool CreateEntities() {
-  ros_allocator = rcl_get_default_allocator();
 
-  ros_init_options = rcl_get_zero_initialized_init_options();
-  RC_CHECK(rcl_init_options_init(&ros_init_options, ros_allocator));
-  RC_CHECK(rcl_init_options_set_domain_id(&ros_init_options, kDomainId));
-  rclc_support_init_with_options(&ros_support, 0, NULL, &ros_init_options,
-                                 &ros_allocator);
+  ConnectorUsb.SendLine("Creating entities: ");
+
+  ros_allocator = rcl_get_default_allocator();
+  
+  // ros_init_options = rcl_get_zero_initialized_init_options();
+  // RC_CHECK(rcl_init_options_init(&ros_init_options, ros_allocator));
+  // ConnectorUsb.Send("1");
+  // delay(250);
+  // RC_CHECK(rcl_init_options_set_domain_id(&ros_init_options, kDomainId));
+  // ConnectorUsb.Send("2");
+  // delay(250);
+  // RC_CHECK(rclc_support_init_with_options(&ros_support, 0, NULL, &ros_init_options, &ros_allocator));
+  // ConnectorUsb.Send("3");
+  // delay(250);
+
+  // create init_options
+  RC_CHECK(rclc_support_init(&ros_support, 0, NULL, &ros_allocator));
+  ConnectorUsb.SendLine("1");
+  delay(250);
 
   RC_CHECK(rclc_node_init_default(&ros_node, kNodeName, kNamespace, &ros_support));
+  ConnectorUsb.SendLine("2");
+  delay(250);
 
   ros_executor = rclc_executor_get_zero_initialized_executor();
   RC_CHECK(rclc_executor_init(&ros_executor, &ros_support.context,
                               kNumberOfHandles, &ros_allocator));
 
+  ConnectorUsb.SendLine("3");
+  delay(250);
   InitializeDiagnostics(&ros_support, &ros_node,
                                          &ros_executor);
-
   InitSystemTimer();
   InitWheelVelPub(&ros_node);
   InitWheelVelSub(&ros_node, &ros_executor);
@@ -113,59 +142,110 @@ bool CreateEntities() {
   return true;
 }
 
+// bool CreateEntities()
+// {
+//   ros_allocator = rcl_get_default_allocator();
+//   ConnectorUsb.Send("1");
+//   delay(250);
+
+//   // create init_options
+//   RC_CHECK(rclc_support_init(&ros_support, 0, NULL, &ros_allocator));
+//   ConnectorUsb.Send("2");
+//   delay(250);
+
+//   // create node
+//   RC_CHECK(rclc_node_init_default(&ros_node, "int32_publisher_rclc", "", &ros_support));
+//   ConnectorUsb.Send("3");
+//   delay(250);
+
+//   // create executor
+//   ros_executor = rclc_executor_get_zero_initialized_executor();
+//   RC_CHECK(rclc_executor_init(&ros_executor, &ros_support.context, 1, &ros_allocator));
+//   ConnectorUsb.Send("4");
+//   delay(250);
+
+//   return true;
+// }
+
 void DestroyEntities() {
+  ConnectorUsb.SendLine("Destroying Entities");
+  
   rmw_context_t *rmw_context =
       rcl_context_get_rmw_context(&ros_support.context);
   (void)rmw_uros_set_context_entity_destroy_session_timeout(rmw_context, 0);
 
+  ConnectorUsb.SendLine("1");
+  delay(250);
   DeinitializeDiagnostics(&ros_node);
-  DeInitSystemTimer();
-  DeInitWheelVelPub(&ros_node);
-  DeInitWheelVelSub(&ros_node);
 
-  rclc_executor_fini(&ros_executor);
+  ConnectorUsb.SendLine("2");
+  delay(250);
+  DeInitSystemTimer();
+
+  ConnectorUsb.SendLine("3");
+  delay(250);
+  DeInitWheelVelPub(&ros_node);
+
+  ConnectorUsb.SendLine("4");
+  delay(250);
+  DeInitWheelVelSub(&ros_node);
+  
+  ConnectorUsb.SendLine("6");
+  delay(250);
+  RC_CHECK(rclc_executor_fini(&ros_executor));
+  ConnectorUsb.SendLine("7");
+  delay(250);
   RC_CHECK(rcl_node_fini(&ros_node));
-  rclc_support_fini(&ros_support);
+  ConnectorUsb.SendLine("8");
+  delay(250);
+  RC_CHECK(rclc_support_fini(&ros_support));
+  ConnectorUsb.SendLine("9");
+  delay(250);
 }
 
+AgentStates prev_state = AgentStates::kDisconnected;
+unsigned long last_print_time = 0;
+bool entities_created = false;
+
 void ManageAgentLifecycle() {
-  // auto reconnect to agent
+  if(prev_state != agent_state or millis() > last_print_time + 250)
+  {
+    ConnectorUsb.Send("Agent agent_state: ");
+    char hlfbPercentStr[10];
+    snprintf(hlfbPercentStr, sizeof(hlfbPercentStr), "%d", agent_state);
+    ConnectorUsb.SendLine(hlfbPercentStr);
+    last_print_time = millis();
+  }
+
   switch (agent_state) {
     case AgentStates::kWaitingForConnection:
-      stop_motors();
-      EXECUTE_EVERY_N_MS(500, agent_state = (RMW_RET_OK == rmw_uros_ping_agent(100, 1))
-                                 ? AgentStates::kAvailable
-                                 : AgentStates::kWaitingForConnection;);
+      EXECUTE_EVERY_N_MS(500, agent_state = (RMW_RET_OK == rmw_uros_ping_agent(100, 1)) ? AgentStates::kAvailable : AgentStates::kWaitingForConnection;);
       break;
-
     case AgentStates::kAvailable:
-      stop_motors();
-      agent_state = CreateEntities() ? AgentStates::kConnected : AgentStates::kWaitingForConnection;
-
+      agent_state = (true == CreateEntities()) ? AgentStates::kConnected : AgentStates::kWaitingForConnection;
       if (agent_state == AgentStates::kWaitingForConnection) {
         DestroyEntities();
       };
-
       break;
-
     case AgentStates::kConnected:
-      EXECUTE_EVERY_N_MS(200, agent_state = (RMW_RET_OK == rmw_uros_ping_agent(100, 1))
-                                 ? AgentStates::kConnected
-                                 : AgentStates::kDisconnected;);
-
+      EXECUTE_EVERY_N_MS(200, agent_state = (RMW_RET_OK == rmw_uros_ping_agent(100, 1)) ? AgentStates::kConnected : AgentStates::kDisconnected;);
       if (agent_state == AgentStates::kConnected) {
         rclc_executor_spin_some(&ros_executor, RCL_MS_TO_NS(100));
       }
       break;
-
     case AgentStates::kDisconnected:
-      stop_motors();
       DestroyEntities();
       agent_state = AgentStates::kWaitingForConnection;
       break;
-
     default:
-      stop_motors();
       break;
   }
+
+  if (agent_state == AgentStates::kConnected) {
+    digitalWriteClearCore(CLEARCORE_PIN_LED, HIGH);
+  } else {
+    digitalWriteClearCore(CLEARCORE_PIN_LED, LOW);
+  }
+
+  prev_state = agent_state;
 }

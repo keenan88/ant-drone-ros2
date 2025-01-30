@@ -26,6 +26,8 @@ void initialize_motors(){
   ConnectorM2.EnableRequest(true);
   ConnectorM3.EnableRequest(true);
 
+  set_motors_0_vel();
+
   pinModeClearCore(E_STOP_INPUT, INPUT);
 }
 
@@ -43,10 +45,10 @@ bool CommandVelocity(MotorDriver motor, double cmdWheelRadPerS) {
       }
   
       // Check if an alert is currently preventing motion
-      // if (motor.StatusReg().bit.AlertsPresent) {
-      //     SerialPort.SendLine("Motor status: 'In Alert'. Move Canceled.");
-      //     return false;
-      // }
+      if (motor.StatusReg().bit.AlertsPresent) {
+          ConnectorUsb.SendLine("Motor status: 'In Alert'. Move Canceled.");
+          return false;
+      }
   
       if (commandedRPM >= 0) {
           motor.MotorInAState(false);
@@ -104,7 +106,15 @@ double get_wheel_abs_radpers(MotorDriver motor, bool is_fl_motor=false)
   return wheel_abs_radpers;
 }
 
-void stop_motors()
+void disable_motors()
+{
+  ConnectorM0.EnableRequest(false);
+  ConnectorM1.EnableRequest(false);
+  ConnectorM2.EnableRequest(false);
+  ConnectorM3.EnableRequest(false);
+}
+
+void set_motors_0_vel()
 {
   CommandVelocity(FL_MOTOR, 0);
   CommandVelocity(FR_MOTOR, 0);

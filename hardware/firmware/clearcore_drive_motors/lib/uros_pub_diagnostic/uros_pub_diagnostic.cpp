@@ -100,7 +100,7 @@ void PublishDiagnosticsCallback(rcl_timer_t *timer, int64_t last_call_time_ns) {
   (void)last_call_time_ns;
   if (timer != NULL) {
     UpdateDiagnosticsMessage();
-    RC_CHECK(rcl_publish(&diagnostics_publisher, &diagnostics_msg, NULL));
+    RC_SOFT_CHECK(rcl_publish(&diagnostics_publisher, &diagnostics_msg, NULL));
   }
 }
 
