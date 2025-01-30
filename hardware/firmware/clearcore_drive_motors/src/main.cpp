@@ -19,7 +19,7 @@ void setup() {
 void loop() { 
   if(digitalReadClearCore(E_STOP_INPUT))
   {
-    disable_motors();
+    set_motors_0_vel();
   }
   ManageAgentLifecycle(); 
 }

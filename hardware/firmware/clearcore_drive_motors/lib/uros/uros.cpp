@@ -175,7 +175,7 @@ void ManageAgentLifecycle() {
     case AgentStates::kAvailable:
       agent_state = (true == CreateEntities()) ? AgentStates::kConnected : AgentStates::kWaitingForConnection;
       if (agent_state == AgentStates::kWaitingForConnection) {
-        disable_motors();
+        set_motors_0_vel();
         DestroyEntities();
       }
       else if(agent_state == AgentStates::kConnected)
@@ -192,7 +192,7 @@ void ManageAgentLifecycle() {
       }
       break;
     case AgentStates::kDisconnected:
-      disable_motors();
+      set_motors_0_vel();
       DestroyEntities();
       agent_state = AgentStates::kWaitingForConnection;
       break;
