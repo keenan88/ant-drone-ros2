@@ -3,8 +3,8 @@
 #include <Preferences.h>
 #include <Encoder.h>
 
-#define ENC_P1 GPIO_NUM_23
-#define ENC_P2 GPIO_NUM_18
+#define ENC_P1 GPIO_NUM_39
+#define ENC_P2 GPIO_NUM_35
 
 int32_t jack_start_pos_ticks;
 int32_t jack_pos_ticks;
