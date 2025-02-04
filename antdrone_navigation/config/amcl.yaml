@@ -2,11 +2,12 @@
   ros__parameters:
     base_frame_id: base_link
     odom_frame_id: odom
-    alpha1: 0.05
-    alpha2: 0.025
-    alpha3: 0.05
-    alpha4: 0.025
-    alpha5: 0.05
+    # See what alpha params do for omni motion model: https://github.com/ros-navigation/navigation2/blob/f3ef5d4c18056f7e7715025d0e3a843c42258554/nav2_amcl/src/motion_model/omni_motion_model.cpp#L34
+    alpha1: 0.05 # Rotation is quite accurate but not perfect.
+    alpha2: 0.05 # Transverse movement doesnt cause much rotation at all
+    alpha3: 0.05 # Transverse movement is quite accurate but not perfect.
+    alpha4: 0.0 # Assume for now that rotating does not cause any strafing or transverse movement.
+    alpha5: 0.2 # Strafing is very noisy.
     beam_skip_distance: 0.5
     beam_skip_error_threshold: 0.9
     beam_skip_threshold: 0.3
@@ -14,8 +15,8 @@
     global_frame_id: map
     lambda_short: 0.1
     laser_likelihood_max_dist: 2.0
-    laser_max_range: 4.0
-    laser_min_range: 0.03
+    laser_max_range: -1.0
+    laser_min_range: -1.0
     laser_model_type: "likelihood_field"
     max_beams: 720
     max_particles: 2000
@@ -35,7 +36,7 @@
     z_hit: 0.5
     z_max: 0.05
     z_rand: 0.5
-    z_short: 0.05
+    z_short: 0.005
     scan_topic: /scan
 
 

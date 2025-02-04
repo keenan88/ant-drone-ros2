@@ -170,11 +170,35 @@ services:
     ipc: host
     pid: host
 
-  antdrone0_slam:
-    container_name: antdrone0_slam
+  # antdrone0_slam:
+  #   container_name: antdrone0_slam
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/slam.dockerfile
+  #   healthcheck:
+  #     # Lifecycle bringup of nav nodes can fail if too many other things start at the same time. Let nav start first.
+  #     test: [ "CMD", "echo", "Healthy" ]
+  #     interval: 3s
+  #     timeout: 2s
+  #     retries: 10
+  #     start_period: 5s
+  #   environment:
+  #     - DISPLAY=${DISPLAY}
+  #     - DRONE_NAME=${DRONE0_NAME}
+  #     # - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+  #     - USE_SIM_TIME=False
+  #   volumes:
+  #     - ./antdrone_slam:/home/humble_ws/src/antdrone_slam
+  #     - ./antdrone_localization:/home/humble_ws/src/antdrone_localization
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
+
+  antdrone0_nav:
+    container_name: antdrone0_nav
     build:
       context: .
-      dockerfile: ./docker/slam.dockerfile
+      dockerfile: ./docker/nav.dockerfile
     healthcheck:
       # Lifecycle bringup of nav nodes can fail if too many other things start at the same time. Let nav start first.
       test: [ "CMD", "echo", "Healthy" ]
@@ -185,16 +209,15 @@ services:
     environment:
       - DISPLAY=${DISPLAY}
       - DRONE_NAME=${DRONE0_NAME}
-      # - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
       - USE_SIM_TIME=False
+      - world_name=${world_name}
     volumes:
-      - ./antdrone_slam:/home/humble_ws/src/antdrone_slam
+      - ./antdrone_navigation:/home/humble_ws/src/antdrone_navigation
+      - ./antdrone_slam/maps:/home/humble_ws/src/antdrone_navigation/maps
       - ./antdrone_localization:/home/humble_ws/src/antdrone_localization
     network_mode: host
     ipc: host
     pid: host
-
-  
 
   
 

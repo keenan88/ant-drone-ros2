@@ -5,14 +5,17 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /Grid1
         - /Static Map1/Topic1
-        - /Particle Cloud1/Topic1
         - /Traffic Map1/Topic1
         - /Fleet Markers1/Topic1
         - /RobotModel1/Description Topic1
         - /PointCloud21/Topic1
+        - /PoseWithCovariance1
+        - /PoseArray1
+        - /PoseArray1/Topic1
       Splitter Ratio: 0.6287702918052673
-    Tree Height: 319
+    Tree Height: 871
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -38,7 +41,7 @@ Visualization Manager:
   Class: ""
   Displays:
     - Alpha: 0.20000000298023224
-      Cell Size: 0.25
+      Cell Size: 0.5
       Class: rviz_default_plugins/Grid
       Color: 0; 0; 0
       Enabled: true
@@ -60,39 +63,51 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        apriltag_cam_depth_optical_frame:
-          Value: false
-        apriltag_cam_gazebo_camera_frame:
-          Value: false
-        attachment_point_L:
-          Value: false
-        attachment_point_R:
-          Value: false
         base_link:
           Value: true
-        front_marker:
+        front_rs_color_frame:
+          Value: true
+        front_rs_color_optical_frame:
+          Value: true
+        front_rs_depth_frame:
           Value: true
         front_rs_depth_optical_frame:
           Value: false
-        front_rs_gazebo_camera_frame:
-          Value: false
+        front_rs_link:
+          Value: true
+        left_rs_color_frame:
+          Value: true
+        left_rs_color_optical_frame:
+          Value: true
+        left_rs_depth_frame:
+          Value: true
         left_rs_depth_optical_frame:
           Value: false
-        left_rs_gazebo_camera_frame:
-          Value: false
+        left_rs_link:
+          Value: true
         map:
           Value: true
         odom:
           Value: true
+        rear_rs_color_frame:
+          Value: true
+        rear_rs_color_optical_frame:
+          Value: true
+        rear_rs_depth_frame:
+          Value: true
         rear_rs_depth_optical_frame:
           Value: false
-        rear_rs_gazebo_camera_frame:
-          Value: false
+        rear_rs_link:
+          Value: true
+        right_rs_color_frame:
+          Value: true
+        right_rs_color_optical_frame:
+          Value: true
+        right_rs_depth_frame:
+          Value: true
         right_rs_depth_optical_frame:
           Value: false
-        right_rs_gazebo_camera_frame:
-          Value: false
-        tag36h11:1:
+        right_rs_link:
           Value: true
       Marker Scale: 0.75
       Name: TF
@@ -103,33 +118,34 @@ Visualization Manager:
         map:
           odom:
             base_link:
-              apriltag_cam_depth_optical_frame:
-                tag36h11:1:
-                  {}
-              apriltag_cam_gazebo_camera_frame:
-                {}
-              attachment_point_L:
-                {}
-              attachment_point_R:
-                {}
-              front_marker:
-                {}
-              front_rs_depth_optical_frame:
-                {}
-              front_rs_gazebo_camera_frame:
-                {}
-              left_rs_depth_optical_frame:
-                {}
-              left_rs_gazebo_camera_frame:
-                {}
-              rear_rs_depth_optical_frame:
-                {}
-              rear_rs_gazebo_camera_frame:
-                {}
-              right_rs_depth_optical_frame:
-                {}
-              right_rs_gazebo_camera_frame:
-                {}
+              front_rs_link:
+                front_rs_color_frame:
+                  front_rs_color_optical_frame:
+                    {}
+                front_rs_depth_frame:
+                  front_rs_depth_optical_frame:
+                    {}
+              left_rs_link:
+                left_rs_color_frame:
+                  left_rs_color_optical_frame:
+                    {}
+                left_rs_depth_frame:
+                  left_rs_depth_optical_frame:
+                    {}
+              rear_rs_link:
+                rear_rs_color_frame:
+                  rear_rs_color_optical_frame:
+                    {}
+                rear_rs_depth_frame:
+                  rear_rs_depth_optical_frame:
+                    {}
+              right_rs_link:
+                right_rs_color_frame:
+                  right_rs_color_optical_frame:
+                    {}
+                right_rs_depth_frame:
+                  right_rs_depth_optical_frame:
+                    {}
       Update Interval: 0
       Value: true
     - Alpha: 0.4000000059604645
@@ -178,7 +194,7 @@ Visualization Manager:
       Class: rviz_default_plugins/Map
       Color Scheme: costmap
       Draw Behind: false
-      Enabled: true
+      Enabled: false
       Name: Local Costmap
       Topic:
         Depth: 5
@@ -194,7 +210,7 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: local_costmap/costmap_updates
       Use Timestamp: false
-      Value: true
+      Value: false
     - Alpha: 0.5
       Class: rviz_default_plugins/Map
       Color Scheme: map
@@ -254,27 +270,6 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /trajectories
       Value: false
-    - Alpha: 1
-      Arrow Length: 0.07500000298023224
-      Axes Length: 0.30000001192092896
-      Axes Radius: 0.009999999776482582
-      Class: rviz_default_plugins/PoseArray
-      Color: 0; 85; 127
-      Enabled: false
-      Head Length: 0.07000000029802322
-      Head Radius: 0.029999999329447746
-      Name: Particle Cloud
-      Shaft Length: 0.23000000417232513
-      Shaft Radius: 0.009999999776482582
-      Shape: Arrow (Flat)
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Best Effort
-        Value: particle_cloud_pose_array
-      Value: false
     - Alpha: 0.5
       Class: rviz_default_plugins/Map
       Color Scheme: map
@@ -324,9 +319,7 @@ Visualization Manager:
       Enabled: true
       Name: Map Markers
       Namespaces:
-        drone_fleet/labels/L1: true
-        drone_fleet/lanes/L1: true
-        drone_fleet/waypoints/L1: true
+        {}
       Topic:
         Depth: 5
         Durability Policy: Transient Local
@@ -724,64 +717,6 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        apriltag_cam_depth_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        apriltag_cam_gazebo_camera_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        attachment_point_L:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        attachment_point_R:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        front_marker:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        front_rs_depth_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        front_rs_gazebo_camera_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        left_rs_depth_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        left_rs_gazebo_camera_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rear_rs_depth_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rear_rs_gazebo_camera_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        right_rs_depth_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        right_rs_gazebo_camera_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
       Mass Properties:
         Inertia: false
         Mass: false
@@ -824,6 +759,62 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: false
+    - Alpha: 1
+      Axes Length: 1
+      Axes Radius: 0.10000000149011612
+      Class: rviz_default_plugins/PoseWithCovariance
+      Color: 255; 25; 0
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
+      Enabled: true
+      Head Length: 0.30000001192092896
+      Head Radius: 0.10000000149011612
+      Name: PoseWithCovariance
+      Shaft Length: 1
+      Shaft Radius: 0.05000000074505806
+      Shape: Arrow
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /amcl_pose
+      Value: true
+    - Alpha: 1
+      Arrow Length: 0.30000001192092896
+      Axes Length: 0.30000001192092896
+      Axes Radius: 0.009999999776482582
+      Class: rviz_default_plugins/PoseArray
+      Color: 255; 25; 0
+      Enabled: true
+      Head Length: 0.07000000029802322
+      Head Radius: 0.029999999329447746
+      Name: PoseArray
+      Shaft Length: 0.23000000417232513
+      Shaft Radius: 0.009999999776482582
+      Shape: Arrow (Flat)
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /pose_array
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 117; 135; 133
@@ -870,41 +861,41 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/XYOrbit
-      Distance: 5.839172840118408
+      Distance: 7.250471115112305
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.39541494846343994
-        Y: -2.0796701908111572
-        Z: -2.3653807147638872e-05
+        X: -2.1472723484039307
+        Y: -0.5399856567382812
+        Z: 6.386933819158003e-06
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.3597965240478516
+      Pitch: 1.5047963857650757
       Target Frame: base_link
       Value: XYOrbit (rviz_default_plugins)
-      Yaw: 4.71742057800293
+      Yaw: 3.142423391342163
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 464
+  Height: 1016
   Hide Left Dock: false
   Hide Right Dock: true
   Navigation 2:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000400000000000001560000017afc020000000ffb0000001200530065006c0065006300740069006f006e000000003b000000840000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b0000017a000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001e005200650061006c00730065006e0073006500430061006d0065007200610000000000ffffffff0000000000000000fb00000018004e0061007600690067006100740069006f006e002000320000000108000001230000012300fffffffb000000100044006900730070006c00610079007300000002b500000128000000c700fffffffb0000000a0049006d00610067006500000002510000018c0000000000000000fb0000000a0049006d0061006700650000000312000000cb0000000000000000fb0000000a0049006d0061006700650100000312000000cb0000000000000000fb0000000a0049006d0061006700650000000162000000a500000000000000000000000100000190000003a2fc020000000bfb0000001000460072006f006e0074005200470042000000003b000000b60000000000000000fc0000003b000000d80000000000fffffffa000000000100000002fb00000010005200690067006800740052004700420000000000ffffffff0000000000000000fb0000000e004c00650066007400520047004200000005f0000001900000000000000000fb000000100052006900670068007400520047004200000001710000008a0000000000000000fc0000003b000000ec0000000000fffffffa000000000100000002fb0000000c00430061006d0065007200610000000000ffffffff0000000000000000fb0000001000460072006f006e007400520047004201000005f0000001900000000000000000fb0000000e004c006500660074005200470042010000012d000000dc0000000000000000fb0000001000520069006700680074005200470042010000020f000000e20000000000000000fb0000000e0052006500610072005200470042000000003b000001650000000000000000fb0000000e005200650061007200520047004200000002b5000001280000000000000000fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003b000003a2000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000780000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000003030000017a00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000156000003a2fc020000000ffb0000001200530065006c0065006300740069006f006e000000003b000000840000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b000003a2000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001e005200650061006c00730065006e0073006500430061006d0065007200610000000000ffffffff0000000000000000fb00000018004e0061007600690067006100740069006f006e002000320000000108000001230000012300fffffffb000000100044006900730070006c00610079007300000002b500000128000000c700fffffffb0000000a0049006d00610067006500000002510000018c0000000000000000fb0000000a0049006d0061006700650000000312000000cb0000000000000000fb0000000a0049006d0061006700650100000312000000cb0000000000000000fb0000000a0049006d0061006700650000000162000000a500000000000000000000000100000190000003a2fc020000000bfb0000001000460072006f006e0074005200470042000000003b000000b60000000000000000fc0000003b000000d80000000000fffffffa000000000100000002fb00000010005200690067006800740052004700420000000000ffffffff0000000000000000fb0000000e004c00650066007400520047004200000005f0000001900000000000000000fb000000100052006900670068007400520047004200000001710000008a0000000000000000fc0000003b000000ec0000000000fffffffa000000000100000002fb0000000c00430061006d0065007200610000000000ffffffff0000000000000000fb0000001000460072006f006e007400520047004201000005f0000001900000000000000000fb0000000e004c006500660074005200470042010000012d000000dc0000000000000000fb0000001000520069006700680074005200470042010000020f000000e20000000000000000fb0000000e0052006500610072005200470042000000003b000001650000000000000000fb0000000e005200650061007200520047004200000002b5000001280000000000000000fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003b000003a2000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000780000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d0065010000000000000450000000000000000000000624000003a200000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Tool Properties:
     collapsed: false
   Views:
     collapsed: true
-  Width: 1119
-  X: 801
+  Width: 1920
+  X: 0
   Y: 27

@@ -111,7 +111,7 @@ def generate_launch_description():
             '/home/humble_ws/src/antdrone_navigation/config/amcl.yaml',
             {
                 'use_sim_time': LaunchConfiguration("USE_SIM_TIME"),
-                "set_initial_pose": True,
+                "set_initial_pose": LaunchConfiguration("USE_SIM_TIME"),
                 "initial_pose": {
                     'x': start_pos["x0"], 
                     'y': start_pos["y0"], 
@@ -147,20 +147,26 @@ def generate_launch_description():
         ]
     )
 
+    amcl_pose_debugger = Node(
+        package='antdrone_navigation',
+        executable='amcl_pose_debugger'
+    )
+
     ld = LaunchDescription()
+    ld.add_action(amcl_pose_debugger)
 
-    # ld.add_action(keepout_filter_map_server)
-    # ld.add_action(keepout_filter_mask_server)
+    ld.add_action(keepout_filter_map_server)
+    ld.add_action(keepout_filter_mask_server)
 
-    # ld.add_action(controller)
-    # ld.add_action(planner)
-    # ld.add_action(behaviors)
-    # ld.add_action(bt)
-    # ld.add_action(map_server)
-    # ld.add_action(lifecycle_manager)
-    # ld.add_action(rviz)
+    ld.add_action(controller)
+    ld.add_action(planner)
+    ld.add_action(behaviors)
+    ld.add_action(bt)
+    ld.add_action(map_server)
+    ld.add_action(lifecycle_manager)
+    ld.add_action(rviz)
     ld.add_action(odometry)
-    # ld.add_action(amcl)
+    ld.add_action(amcl)
 
     return ld
 

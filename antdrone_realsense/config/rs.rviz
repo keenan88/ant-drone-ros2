@@ -30,7 +30,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: Rear Cropped
+    SyncSource: Merged Scan
 Visualization Manager:
   Class: ""
   Displays:
@@ -73,7 +73,6 @@ Visualization Manager:
         Left Cropped: true
         Map: true
         Merged Scan: true
-        PointCloud2: true
         Rear Cropped: true
         Rear Left: true
         Rear Right: true
@@ -103,7 +102,6 @@ Visualization Manager:
         Left Cropped: true
         Map: true
         Merged Scan: true
-        PointCloud2: true
         Rear: true
         Rear Cropped: true
         Rear Left: true
@@ -134,7 +132,6 @@ Visualization Manager:
         Left Cropped: true
         Map: true
         Merged Scan: true
-        PointCloud2: true
         Rear: true
         Rear Cropped: true
         Rear Left: true
@@ -165,7 +162,6 @@ Visualization Manager:
         Left Cropped: true
         Map: false
         Merged Scan: false
-        PointCloud2: true
         Rear: false
         Rear Cropped: true
         Rear Left: true
@@ -277,7 +273,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
@@ -298,7 +294,7 @@ Visualization Manager:
         Value: /front_rs/pointcloud_cropped
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -311,7 +307,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
@@ -332,7 +328,7 @@ Visualization Manager:
         Value: /left_rs/pointcloud_cropped
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -345,7 +341,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
@@ -366,7 +362,7 @@ Visualization Manager:
         Value: /rear_rs/pointcloud_cropped
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -379,7 +375,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
@@ -400,7 +396,7 @@ Visualization Manager:
         Value: /right_rs/pointcloud_cropped
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -549,7 +545,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: AxisColor
       Decay Time: 0
-      Enabled: false
+      Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
@@ -570,12 +566,12 @@ Visualization Manager:
         Value: /scan
       Use Fixed Frame: true
       Use rainbow: true
-      Value: false
+      Value: true
     - Alpha: 0.699999988079071
       Class: rviz_default_plugins/Map
       Color Scheme: map
       Draw Behind: false
-      Enabled: false
+      Enabled: true
       Name: Map
       Topic:
         Depth: 5
@@ -591,41 +587,7 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /map_updates
       Use Timestamp: false
-      Value: false
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz_default_plugins/PointCloud2
-      Color: 255; 255; 255
-      Color Transformer: RGB8
-      Decay Time: 0
-      Enabled: false
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 4096
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: PointCloud2
-      Position Transformer: XYZ
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.009999999776482582
-      Style: Flat Squares
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /left_rs/left_rs/depth/color/points
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -672,25 +634,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 3.1453142166137695
+      Distance: 7.78768253326416
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.5806115865707397
-        Y: -0.3608969449996948
-        Z: -0.25056105852127075
+        X: -1.1676758527755737
+        Y: -0.18941062688827515
+        Z: -0.7060803174972534
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.8047969341278076
+      Pitch: 1.0847965478897095
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.615365982055664
+      Yaw: 3.4403741359710693
     Saved: ~
 Window Geometry:
   Displays:
