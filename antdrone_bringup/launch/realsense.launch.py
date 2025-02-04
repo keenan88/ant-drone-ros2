@@ -28,6 +28,8 @@ def generate_launch_description():
             'rgb_camera.color_profile' : color_profile,
             'depth_module.depth_profile' : depth_profile,
             'depth_module.infra_profile': infra_profile,
+            # 'enable_accel': 'True',
+            # 'enable_gyro': 'True'
         }.items()
     )
 
@@ -58,6 +60,9 @@ def generate_launch_description():
             'rgb_camera.color_profile' : color_profile,
             'depth_module.depth_profile' : depth_profile,
             'depth_module.infra_profile': infra_profile,
+            # 'enable_accel': 'True',
+            # 'enable_gyro': 'True',
+            # 'unite_imu_method': '2'
         }.items()
     )
 
