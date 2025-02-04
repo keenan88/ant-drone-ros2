@@ -8,9 +8,10 @@ import os
 
 def generate_launch_description():
 
-    color_profile = '424x240x30' #'640x480x15'
-    depth_profile = '480x270x30' #'640x480x15'
-    infra_profile = '480x270x30' #'640x480x15'
+    # Realsenses freeze up if FPS or resolution too high. Depends on USB ports used.
+    color_profile = '424x240x15' #'640x480x15'
+    depth_profile = '480x270x15' #'640x480x15'
+    infra_profile = '480x270x15' #'640x480x15'
 
     
     
@@ -156,11 +157,10 @@ def generate_launch_description():
 
     ld.add_action(rviz)
     ld.add_action(bridge_out_tf)
-    # Replaced static tf node with robot description node
-    # ld.add_action(front_rs_tf)
-    # ld.add_action(left_rs_tf)
-    # ld.add_action(rear_rs_tf)
-    # ld.add_action(right_rs_tf)
+    ld.add_action(front_rs_tf)
+    ld.add_action(left_rs_tf)
+    ld.add_action(rear_rs_tf)
+    ld.add_action(right_rs_tf)
     
     
     return ld

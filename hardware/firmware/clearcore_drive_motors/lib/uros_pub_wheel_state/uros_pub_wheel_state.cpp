@@ -82,7 +82,7 @@ void InitWheelVelPub(rcl_node_t *ros_node) {
   wheels_state_msg.velocity.size = 4;
   wheels_state_msg.velocity.data = (double*) malloc(sizeof(double) * wheels_state_msg.velocity.size); // IMPORTANT!! Use Malloc (not a static array), so that sensor_msgs__msg__JointState__fini can free this memory!!
 
-  RC_CHECK(rclc_publisher_init_default(
+  RC_CHECK(rclc_publisher_init_best_effort(
       &wheels_state_publisher, ros_node,
       ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, JointState),
       "wheel_joint_states"));

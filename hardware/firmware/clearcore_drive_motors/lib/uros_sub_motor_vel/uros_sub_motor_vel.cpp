@@ -31,8 +31,9 @@ void InitWheelVelSub(rcl_node_t* ros_node, rclc_executor_t* ros_executor) {
   motor_vels_msg.velocity.data = asdf;
   motor_vels_msg.velocity.size = 0;
 
+
   RC_CHECK(
-    rclc_subscription_init_default(
+    rclc_subscription_init_best_effort(
       &motor_vel_subscriber, 
       ros_node,
       ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, JointState), 

@@ -101,7 +101,7 @@
       />
 
       <!-- Re-enable lateral and rotational velocity, re-set tighter goal tolerance -->
-      <SetNav2ControllerParams vy_max="0.5" wz_max="1.9" xy_goal_tolerance="0.075" yaw_goal_tolerance="0.05"/>
+      <SetNav2ControllerParams vy_max="0.25" wz_max="0.25" xy_goal_tolerance="0.075" yaw_goal_tolerance="0.05"/>
 
       <ClearLocalCostmap/>
       <ClearGlobalCostmap/>

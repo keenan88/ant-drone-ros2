@@ -50,7 +50,7 @@ def generate_launch_description():
             name = realsense_placement + "_pointcloud_downsampler",
             output='screen',
             parameters=[
-                '/home/humble_ws/src/antdrone_pcl/config/pcl_downsample_filter.yaml',
+                # '/home/humble_ws/src/antdrone_pcl/config/pcl_downsample_filter.yaml',
                 {'use_sim_time' : LaunchConfiguration("USE_SIM_TIME")}
             ],
             remappings=[
@@ -60,7 +60,7 @@ def generate_launch_description():
         )
 
         ld.add_action(pointcloud_cropper)
-        ld.add_action(pointcloud_downsampler)
+        # ld.add_action(pointcloud_downsampler)
         ld.add_action(gz_pcl_frame_fixer)
 
     

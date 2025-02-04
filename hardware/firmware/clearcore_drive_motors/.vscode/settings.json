@@ -3,6 +3,17 @@
         "array": "cpp",
         "string": "cpp",
         "string_view": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "atomic": "c",
+        "*.tcc": "c",
+        "bitset": "c",
+        "vector": "c",
+        "optional": "c",
+        "random": "c",
+        "fstream": "c",
+        "functional": "c",
+        "regex": "c",
+        "tuple": "c",
+        "type_traits": "c"
     }
 }

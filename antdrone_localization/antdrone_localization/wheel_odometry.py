@@ -6,6 +6,8 @@ import math
 import numpy as np
 from tf2_ros.static_transform_broadcaster import StaticTransformBroadcaster
 from geometry_msgs.msg import TransformStamped
+from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
+
 
 # Kinematics source: https://www.researchgate.net/publication/308570348_Inverse_kinematic_implementation_of_four-wheels_mecanum_drive_mobile_robot_using_stepper_motors
         
@@ -24,12 +26,20 @@ class MecanumStateEstimator(Node):
         self.vy = 0.0
         self.vtheta = 0.0
 
+        qos_best_effort = QoSProfile(
+            reliability=QoSReliabilityPolicy.BEST_EFFORT,
+            history=QoSHistoryPolicy.KEEP_LAST,
+            depth=10
+        )
+
         self.subscription = self.create_subscription(
             JointState,
             'wheel_joint_states',
             self.joint_state_callback,
-            10
+            qos_best_effort
         )
+
+        self.odom_publish_timer = self.create_timer(1, self.publish_odometry)
 
         self.tf_static_broadcaster = StaticTransformBroadcaster(self)
 
@@ -54,11 +64,13 @@ class MecanumStateEstimator(Node):
             # Assuming joint names are ordered: front_left, front_right, back_left, back_right
             wheels_rad_vels = np.array(msg.velocity[0:4])
 
-            
-            
+            # Deadband
+            if np.all(np.abs(wheels_rad_vels) < 0.05):
+                wheels_rad_vels = np.array([0,0,0,0])
+        
             self.vx, self.vy, self.vtheta = self.inverse_kinematics(wheels_rad_vels)
 
-            self.get_logger().info(f"vx: {round(self.vx, 2)}, vy: {round(self.vy, 2)}, wz: {round(self.vtheta, 2)}, x: {round(self.x, 2)}, y: {round(self.y, 2)}, yaw: {round(self.theta, 2)}")
+            # self.get_logger().info(f"vx: {round(self.vx, 2)}, vy: {round(self.vy, 2)}, wz: {round(self.vtheta, 2)}, x: {round(self.x, 2)}, y: {round(self.y, 2)}, yaw: {round(self.theta, 2)}")
 
             # Integrate velocities to update position
             curr_ns = self.get_clock().now().nanoseconds
@@ -84,7 +96,7 @@ class MecanumStateEstimator(Node):
             self.y += delta_y
             self.theta += delta_theta
 
-            self.publish_odometry()
+            
 
     def inverse_kinematics(self, wheels_rad_vels):
         fl, fr, bl, br = wheels_rad_vels

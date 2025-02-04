@@ -6,6 +6,9 @@
 
 /**: # Apply same params to all downsample nodes that use this config file
   ros__parameters:
+    filter_field_name: x
+    filter_limit_max: 5.0
+    filter_limit_min: -5.0
     approximate_sync: false
     filter_limit_negative: true
     leaf_size: 0.01

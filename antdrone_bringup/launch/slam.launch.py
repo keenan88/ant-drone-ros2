@@ -44,6 +44,6 @@ def generate_launch_description():
     ld.add_action(slam_toolbox)
     ld.add_action(odometry)
     
-    ld.add_action(rviz)
+    # ld.add_action(rviz)
 
     return ld

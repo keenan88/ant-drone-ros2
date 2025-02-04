@@ -24,7 +24,6 @@
               "RC_SOFT_CHECK failed (code %d): in file: %s at line: %ld. Continuing!", \
               temp_rc, __FILE__, __LINE__);                                     \
     ConnectorUsb.SendLine(buffer);                                        \
-    delay(1000);                                                      \
   }                                                                   \
 }
 

@@ -6,8 +6,11 @@ Panels:
       Expanded:
         - /Global Options1
         - /Rear1/Topic1
+        - /Right1/Visibility1
+        - /TF1/Frames1
         - /TF1/Tree1
         - /Front2/Topic1
+        - /Map1/Topic1
       Splitter Ratio: 0.5
     Tree Height: 542
   - Class: rviz_common/Selection
@@ -27,7 +30,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: Right Downsampled
+    SyncSource: Merged Scan
 Visualization Manager:
   Class: ""
   Displays:
@@ -35,7 +38,7 @@ Visualization Manager:
       Cell Size: 1
       Class: rviz_default_plugins/Grid
       Color: 160; 160; 164
-      Enabled: true
+      Enabled: false
       Line Style:
         Line Width: 0.029999999329447746
         Value: Lines
@@ -48,7 +51,7 @@ Visualization Manager:
       Plane: XY
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
-      Value: true
+      Value: false
     - Class: rviz_default_plugins/Camera
       Enabled: true
       Far Plane Distance: 100
@@ -64,16 +67,17 @@ Visualization Manager:
       Value: true
       Visibility:
         Front: true
-        Front Downsampled: true
+        Front Cropped: true
         Grid: false
         Left: true
-        Left Downsampled: true
+        Left Cropped: true
+        Map: true
         Merged Scan: true
-        Rear Downsampled: true
+        Rear Cropped: true
         Rear Left: true
         Rear Right: true
         Right: true
-        Right Downsampled: true
+        Right Cropped: true
         TF: false
         Value: true
       Zoom Factor: 1
@@ -92,17 +96,18 @@ Visualization Manager:
       Value: true
       Visibility:
         Front: true
-        Front Downsampled: true
+        Front Cropped: true
         Grid: true
         Left: true
-        Left Downsampled: true
+        Left Cropped: true
+        Map: true
         Merged Scan: true
         Rear: true
-        Rear Downsampled: true
+        Rear Cropped: true
         Rear Left: true
         Rear Right: true
         Right: true
-        Right Downsampled: true
+        Right Cropped: true
         TF: true
         Value: false
       Zoom Factor: 1
@@ -121,27 +126,27 @@ Visualization Manager:
       Value: true
       Visibility:
         Front: true
-        Front Downsampled: true
+        Front Cropped: true
         Grid: true
         Left: true
-        Left Downsampled: true
+        Left Cropped: true
+        Map: true
         Merged Scan: true
         Rear: true
-        Rear Downsampled: true
+        Rear Cropped: true
         Rear Left: true
         Rear Right: true
         Right: true
-        Right Downsampled: true
+        Right Cropped: true
         TF: true
         Value: false
       Zoom Factor: 1
-    - Class: rviz_default_plugins/Image
+    - Class: rviz_default_plugins/Camera
       Enabled: true
-      Max Value: 1
-      Median window: 5
-      Min Value: 0
+      Far Plane Distance: 100
+      Image Rendering: background and overlay
       Name: Right
-      Normalize Range: true
+      Overlay Alpha: 0.5
       Topic:
         Depth: 5
         Durability Policy: Volatile
@@ -149,6 +154,22 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /right_rs/right_rs/color/image_raw
       Value: true
+      Visibility:
+        Front: true
+        Front Cropped: true
+        Grid: true
+        Left: true
+        Left Cropped: true
+        Map: false
+        Merged Scan: false
+        Rear: false
+        Rear Cropped: true
+        Rear Left: true
+        Rear Right: true
+        Right Cropped: true
+        TF: false
+        Value: true
+      Zoom Factor: 1
     - Class: rviz_default_plugins/TF
       Enabled: true
       Frame Timeout: 15
@@ -176,6 +197,10 @@ Visualization Manager:
           Value: true
         left_rs_link:
           Value: false
+        map:
+          Value: true
+        odom:
+          Value: true
         rear_rs_color_frame:
           Value: false
         rear_rs_color_optical_frame:
@@ -231,6 +256,10 @@ Visualization Manager:
             right_rs_depth_frame:
               right_rs_depth_optical_frame:
                 {}
+        map:
+          {}
+        odom:
+          {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -245,13 +274,13 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
       Min Color: 0; 0; 0
       Min Intensity: 0
-      Name: Front Downsampled
+      Name: Front Cropped
       Position Transformer: XYZ
       Selectable: true
       Size (Pixels): 3
@@ -263,10 +292,10 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /front_rs/pointcloud_downsampled
+        Value: /front_rs/pointcloud_cropped
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -279,13 +308,13 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
       Min Color: 0; 0; 0
       Min Intensity: 0
-      Name: Left Downsampled
+      Name: Left Cropped
       Position Transformer: XYZ
       Selectable: true
       Size (Pixels): 3
@@ -297,10 +326,10 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /left_rs/pointcloud_downsampled
+        Value: /left_rs/pointcloud_cropped
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -313,13 +342,13 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
       Min Color: 0; 0; 0
       Min Intensity: 0
-      Name: Rear Downsampled
+      Name: Rear Cropped
       Position Transformer: XYZ
       Selectable: true
       Size (Pixels): 3
@@ -331,10 +360,10 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /rear_rs/pointcloud_downsampled
+        Value: /rear_rs/pointcloud_cropped
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -347,13 +376,13 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
       Min Color: 0; 0; 0
       Min Intensity: 0
-      Name: Right Downsampled
+      Name: Right Cropped
       Position Transformer: XYZ
       Selectable: true
       Size (Pixels): 3
@@ -365,10 +394,10 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /right_rs/pointcloud_downsampled
+        Value: /right_rs/pointcloud_cropped
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -539,6 +568,27 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Alpha: 0.699999988079071
+      Class: rviz_default_plugins/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Map
+      Topic:
+        Depth: 5
+        Durability Policy: Transient Local
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map
+      Update Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map_updates
+      Use Timestamp: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -585,25 +635,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 8.709991455078125
+      Distance: 4.409370422363281
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.9124067425727844
-        Y: -0.705494225025177
-        Z: -1.4833767414093018
+        X: 0.036735985428094864
+        Y: 0.15375453233718872
+        Z: -0.41262415051460266
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.8547962307929993
+      Pitch: 1.0547963380813599
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.765402317047119
+      Yaw: 6.035377502441406
     Saved: ~
 Window Geometry:
   Displays:
@@ -615,7 +665,7 @@ Window Geometry:
   Hide Right Dock: true
   Left:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000400000000000001ec00000259fc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000014000000259000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d00650072006101000002d2000000c70000000000000000fb0000000c00430061006d006500720061010000032d0000006c0000000000000000000000010000010f000002b4fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003b000002b4000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000780000000fffc0100000005fb00000008004c0065006600740100000000000002f90000004b00fffffffb00000008005200650061007201000002ff000001f80000005000fffffffb0000000a00460072006f006e007401000004fd000001710000005300fffffffb0000000a0052006900670068007401000006740000010c0000005400fffffffb0000000a00560069006500770073030000004e00000080000002e10000019700000003000007800000003efc0100000002fb0000000800540069006d00650100000000000007800000025300fffffffb0000000800540069006d006501000000000000045000000000000000000000058e0000025900000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000400000000000001ec00000259fc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000014000000259000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d00650072006101000002d2000000c70000000000000000fb0000000c00430061006d006500720061010000032d0000006c0000000000000000000000010000010f000002b4fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003b000002b4000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000780000000fffc0100000006fb00000008004c0065006600740100000000000001e40000004b00fffffffb00000008005200650061007201000001ea000001b30000005000fffffffb0000000a00460072006f006e007401000003a3000001e50000005300fffffffb0000000a00520069006700680074010000058e000001f20000005400fffffffb0000000a0052006900670068007401000005d0000001b00000000000000000fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000007800000003efc0100000002fb0000000800540069006d00650100000000000007800000025300fffffffb0000000800540069006d006501000000000000045000000000000000000000058e0000025900000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Rear:
     collapsed: false
   Right:

@@ -108,7 +108,7 @@ void InitializeDiagnostics(rclc_support_t *ros_support,
                                             rcl_node_t *ros_node,
                                             rclc_executor_t *ros_executor) {
   InitializeDiagnosticMessages();                                            
-  RC_CHECK(rclc_publisher_init_default(
+  RC_CHECK(rclc_publisher_init_best_effort(
       &diagnostics_publisher, ros_node,
       ROSIDL_GET_MSG_TYPE_SUPPORT(diagnostic_msgs, msg, DiagnosticStatus),
       "diagnostics"));

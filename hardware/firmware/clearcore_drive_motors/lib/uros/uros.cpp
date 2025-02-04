@@ -35,7 +35,6 @@ uint64_t agent_time_offset = 0;
 
 rcl_timer_t system_state_update_timer;
 
-bool CreateEntities();
 
 void InitializeMicroRosTransport() {
 
@@ -158,10 +157,12 @@ AgentStates prev_state = AgentStates::kDisconnected;
 unsigned long last_print_time = 0;
 bool entities_created = false;
 
+int successful_pings = 0;
+
 void ManageAgentLifecycle() {
   if(prev_state != agent_state or millis() > last_print_time + 250)
   {
-    ConnectorUsb.Send("Agent agent_state: ");
+    ConnectorUsb.Send("agent_state: ");
     char hlfbPercentStr[10];
     snprintf(hlfbPercentStr, sizeof(hlfbPercentStr), "%d", agent_state);
     ConnectorUsb.SendLine(hlfbPercentStr);
@@ -170,27 +171,39 @@ void ManageAgentLifecycle() {
 
   switch (agent_state) {
     case AgentStates::kWaitingForConnection:
+      successful_pings = 0;
       EXECUTE_EVERY_N_MS(500, agent_state = (RMW_RET_OK == rmw_uros_ping_agent(100, 1)) ? AgentStates::kAvailable : AgentStates::kWaitingForConnection;);
+
       break;
     case AgentStates::kAvailable:
-      agent_state = (true == CreateEntities()) ? AgentStates::kConnected : AgentStates::kWaitingForConnection;
-      if (agent_state == AgentStates::kWaitingForConnection) {
-        set_motors_0_vel();
-        DestroyEntities();
-      }
-      else if(agent_state == AgentStates::kConnected)
+      EXECUTE_EVERY_N_MS(500, successful_pings = (RMW_RET_OK == rmw_uros_ping_agent(100, 1)) ? successful_pings + 1 : 0);
+
+      ConnectorUsb.Send("succesful pings: ");
+      char asdf[10];
+      snprintf(asdf, sizeof(asdf), "%d", successful_pings);
+      ConnectorUsb.SendLine(asdf);
+
+      if(successful_pings >= 3)
       {
-        initialize_motors();
+        CreateEntities();
+        agent_state = AgentStates::kConnected;
       }
 
       break;
 
     case AgentStates::kConnected:
-      EXECUTE_EVERY_N_MS(200, agent_state = (RMW_RET_OK == rmw_uros_ping_agent(100, 1)) ? AgentStates::kConnected : AgentStates::kDisconnected;);
+      EXECUTE_EVERY_N_MS(2000, agent_state = (RMW_RET_OK == rmw_uros_ping_agent(500, 3)) ? AgentStates::kConnected : AgentStates::kDisconnected;);
+
       if (agent_state == AgentStates::kConnected) {
         rclc_executor_spin_some(&ros_executor, RCL_MS_TO_NS(100));
       }
+      else
+      {
+        set_motors_0_vel();
+      }
+
       break;
+
     case AgentStates::kDisconnected:
       set_motors_0_vel();
       DestroyEntities();

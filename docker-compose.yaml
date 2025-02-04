@@ -2,35 +2,73 @@
 
 services:
 
-  # antdrone_clearcore_uros_agent:
+  antdrone_clearcore_uros_agent:
+    image: microros/micro-ros-agent:humble
+    container_name: antdrone0_clearcore_uros_agent
+    stdin_open: true
+    tty: true
+    ports:
+      - 8888:8888/udp
+    # environment:
+      # - ROS_DOMAIN_ID=0
+    command: udp4 --port 8888 --verbose 6
+    privileged: true
+    network_mode: host
+    restart: "no"
+    ipc: host
+    pid: host
+
+  # antdrone_espevb_uros_agent:
   #   image: microros/micro-ros-agent:humble
-  #   container_name: antdrone_clearcore_uros_agent
+  #   container_name: antdrone0_espevb_uros_agent
   #   stdin_open: true
   #   tty: true
   #   ports:
   #     - 8888:8888/udp
   #   environment:
   #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-  #   command: serial --dev /dev/ttyACM0 -v2 
+  #   command: serial --dev /dev/ttyUSB0 -v2 
   #   privileged: true
   #   network_mode: host
   #   ipc: host
   #   pid: host
 
-  antdrone_espevb_uros_agent:
-    image: microros/micro-ros-agent:humble
-    container_name: antdrone_espevb_uros_agent
-    stdin_open: true
-    tty: true
-    ports:
-      - 8888:8888/udp
+  antdrone0_joystick:
+    container_name: antdrone0_joystick
+    build:
+      context: .
+      dockerfile: ./docker/joystick.dockerfile
     environment:
-      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-    command: serial --dev /dev/ttyUSB0 -v2 
+      - DRONE_NAME=${DRONE0_NAME}
+      # - ROS_DOMAIN_ID=0
+      - USE_SIM_TIME=false
+    volumes:
+      - ./antdrone_joystick:/home/humble_ws/src/antdrone_joystick:rw
+      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
+    working_dir: /home/humble_ws/src/antdrone_joystick/antdrone_joystick
     privileged: true
     network_mode: host
     ipc: host
     pid: host
+
+  # antdrone0_apriltag:
+  #   container_name: antdrone0_apriltag
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/apriltag.dockerfile
+  #   environment:
+  #     - DRONE_NAME=${DRONE0_NAME}
+  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+  #     - USE_SIM_TIME=False
+  #     - DISPLAY=${DISPLAY}
+  #   volumes:
+  #     - ./antdrone_apriltag:/home/humble_ws/src/antdrone_apriltag:rw
+  #     - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
+  #     - /dev:/dev
+  #   privileged: true
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
   
   # antdrone0_joystick:
   #   container_name: antdrone0_joystick
@@ -49,21 +87,21 @@ services:
   #   ipc: host
   #   pid: host
 
-  # antdrone_realsense:
-  #   container_name: antdrone_realsense
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/realsense.dockerfile
-  #   environment:
-  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-  #     - DISPLAY=${DISPLAY}
-  #   # volumes:
-  #   #   - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
-  #   #   - ./antdrone_realsense:/home/humble_ws/src/antdrone_realsense
-  #   privileged: True
-  #   network_mode: host
-  #   ipc: host
-  #   pid: host
+  antdrone_realsense:
+    container_name: antdrone0_realsense
+    build:
+      context: .
+      dockerfile: ./docker/realsense.dockerfile
+    environment:
+      # - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
+      - ./antdrone_realsense:/home/humble_ws/src/antdrone_realsense
+    privileged: True
+    network_mode: host
+    ipc: host
+    pid: host
 
   # antdrone0_apriltag:
   #   container_name: antdrone0_apriltag
@@ -100,61 +138,61 @@ services:
   #   pid: host
     # command: sleep infinity
 
-  # antdrone0_pcl:
-  #   container_name: antdrone0_pcl
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/pointcloud.dockerfile
-  #   environment:
-  #     - DRONE_NAME=${DRONE0_NAME}
-  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-  #     - USE_SIM_TIME=False
-  #   # volumes:
-  #   #   - ./antdrone_pcl:/home/humble_ws/src/antdrone_pcl:rw
-  #   #   - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
-  #   network_mode: host
-  #   ipc: host
-  #   pid: host
-  #   privileged: true
+  antdrone0_pcl:
+    container_name: antdrone0_pcl
+    build:
+      context: .
+      dockerfile: ./docker/pointcloud.dockerfile
+    environment:
+      - DRONE_NAME=${DRONE0_NAME}
+      # - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+      - USE_SIM_TIME=False
+    volumes:
+      - ./antdrone_pcl:/home/humble_ws/src/antdrone_pcl:rw
+      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
+    network_mode: host
+    ipc: host
+    pid: host
+    privileged: true
 
-  # antdrone0_laserscan:
-  #   container_name: antdrone0_laserscan
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/laserscan.Dockerfile
-  #   # volumes:
-  #   #   - ./antdrone_laserscan:/home/humble_ws/src/antdrone_laserscan
-  #   environment:
-  #     - DRONE_NAME=${DRONE0_NAME}
-  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-  #     - USE_SIM_TIME=${USE_SIM_TIME}
-  #   network_mode: host
-  #   ipc: host
-  #   pid: host
+  antdrone0_laserscan:
+    container_name: antdrone0_laserscan
+    build:
+      context: .
+      dockerfile: ./docker/laserscan.Dockerfile
+    volumes:
+      - ./antdrone_laserscan:/home/humble_ws/src/antdrone_laserscan
+    environment:
+      - DRONE_NAME=${DRONE0_NAME}
+      # - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+      - USE_SIM_TIME=false
+    network_mode: host
+    ipc: host
+    pid: host
 
-  # antdrone0_slam:
-  #   container_name: antdrone0_slam
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/slam.dockerfile
-  #   healthcheck:
-  #     # Lifecycle bringup of nav nodes can fail if too many other things start at the same time. Let nav start first.
-  #     test: [ "CMD", "echo", "Healthy" ]
-  #     interval: 3s
-  #     timeout: 2s
-  #     retries: 10
-  #     start_period: 5s
-  #   environment:
-  #     - DISPLAY=${DISPLAY}
-  #     - DRONE_NAME=${DRONE0_NAME}
-  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-  #     - USE_SIM_TIME=${USE_SIM_TIME}
-  #   volumes:
-  #     - ./antdrone_slam:/home/humble_ws/src/antdrone_slam
-  #     - ./antdrone_localization:/home/humble_ws/src/antdrone_localization
-  #   network_mode: host
-  #   ipc: host
-  #   pid: host
+  antdrone0_slam:
+    container_name: antdrone0_slam
+    build:
+      context: .
+      dockerfile: ./docker/slam.dockerfile
+    healthcheck:
+      # Lifecycle bringup of nav nodes can fail if too many other things start at the same time. Let nav start first.
+      test: [ "CMD", "echo", "Healthy" ]
+      interval: 3s
+      timeout: 2s
+      retries: 10
+      start_period: 5s
+    environment:
+      - DISPLAY=${DISPLAY}
+      - DRONE_NAME=${DRONE0_NAME}
+      # - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+      - USE_SIM_TIME=False
+    volumes:
+      - ./antdrone_slam:/home/humble_ws/src/antdrone_slam
+      - ./antdrone_localization:/home/humble_ws/src/antdrone_localization
+    network_mode: host
+    ipc: host
+    pid: host
 
   
 
