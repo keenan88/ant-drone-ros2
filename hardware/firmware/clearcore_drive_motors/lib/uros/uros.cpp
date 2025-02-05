@@ -38,15 +38,21 @@ rcl_timer_t system_state_update_timer;
 
 void InitializeMicroRosTransport() {
 
+  // IPAddress client_ip(11, 11,0,2);
+  // IPAddress agent_ip(11, 11,0,55);
+
   IPAddress client_ip(10, 42,0,2);
-  IPAddress agent_ip(10, 42,0,1);
+  IPAddress agent_ip(10, 42,0, 3); // NUC ethernet IP is set to 10.42.0.3 in balena system connections folder
   uint16_t agent_port = 8888;
   byte mac[6] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; // Mac addr seems to not matter?
-
   set_microros_native_ethernet_transports(mac, client_ip, agent_ip, agent_port);
 
+  // Using Serial comms between Clearcore & Nuc since I dont know how to setup firewall / IP settings on Nuc when its running balena
   ConnectorUsb.Mode(Connector::USB_CDC);
   ConnectorUsb.Speed(115200);
+  // set_microros_serial_transports(Serial);
+
+  
   uint32_t timeout = 5000;
   uint32_t startTime = Milliseconds();
   ConnectorUsb.PortOpen();
@@ -108,13 +114,10 @@ bool CreateEntities() {
   // TODO - figure out why after 2-3 restarts of UROS agent, rclc_support_init_with_options fails.
   // ros_init_options = rcl_get_zero_initialized_init_options();
   // RC_CHECK(rcl_init_options_init(&ros_init_options, ros_allocator));
-  // ConnectorUsb.SendLine("0");
   // delay(250);
   // RC_CHECK(rcl_init_options_set_domain_id(&ros_init_options, kDomainId));
-  // ConnectorUsb.SendLine("1");
   // delay(250);
   // RC_CHECK(rclc_support_init_with_options(&ros_support, 0, NULL, &ros_init_options, &ros_allocator));
-  // ConnectorUsb.SendLine("1.5");
   // delay(250);
 
 

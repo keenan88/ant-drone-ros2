@@ -46,7 +46,7 @@ bool CommandVelocity(MotorDriver motor, double cmdWheelRadPerS) {
   
       // Check if an alert is currently preventing motion
       if (motor.StatusReg().bit.AlertsPresent) {
-          ConnectorUsb.SendLine("Motor status: 'In Alert'.");
+          // ConnectorUsb.SendLine("Motor status: 'In Alert'.");
           // return false;
       }
   

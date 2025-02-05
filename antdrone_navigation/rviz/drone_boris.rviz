@@ -11,8 +11,6 @@ Panels:
         - /Fleet Markers1/Topic1
         - /RobotModel1/Description Topic1
         - /PointCloud21/Topic1
-        - /PoseWithCovariance1
-        - /PoseArray1
         - /PoseArray1/Topic1
       Splitter Ratio: 0.6287702918052673
     Tree Height: 871
@@ -194,7 +192,7 @@ Visualization Manager:
       Class: rviz_default_plugins/Map
       Color Scheme: costmap
       Draw Behind: false
-      Enabled: false
+      Enabled: true
       Name: Local Costmap
       Topic:
         Depth: 5
@@ -210,7 +208,7 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: local_costmap/costmap_updates
       Use Timestamp: false
-      Value: false
+      Value: true
     - Alpha: 0.5
       Class: rviz_default_plugins/Map
       Color Scheme: map
@@ -779,7 +777,7 @@ Visualization Manager:
           Scale: 1
           Value: true
         Value: true
-      Enabled: true
+      Enabled: false
       Head Length: 0.30000001192092896
       Head Radius: 0.10000000149011612
       Name: PoseWithCovariance
@@ -793,14 +791,14 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /amcl_pose
-      Value: true
+      Value: false
     - Alpha: 1
       Arrow Length: 0.30000001192092896
       Axes Length: 0.30000001192092896
       Axes Radius: 0.009999999776482582
       Class: rviz_default_plugins/PoseArray
       Color: 255; 25; 0
-      Enabled: true
+      Enabled: false
       Head Length: 0.07000000029802322
       Head Radius: 0.029999999329447746
       Name: PoseArray
@@ -814,7 +812,7 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Best Effort
         Value: /pose_array
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 117; 135; 133
@@ -861,25 +859,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/XYOrbit
-      Distance: 7.250471115112305
+      Distance: 5.848614692687988
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -2.1472723484039307
-        Y: -0.5399856567382812
-        Z: 6.386933819158003e-06
+        X: -1.2066590785980225
+        Y: 0.4680976867675781
+        Z: 9.247956768376753e-06
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5047963857650757
+      Pitch: 1.3347965478897095
       Target Frame: base_link
       Value: XYOrbit (rviz_default_plugins)
-      Yaw: 3.142423391342163
+      Yaw: 3.132422685623169
     Saved: ~
 Window Geometry:
   Displays:

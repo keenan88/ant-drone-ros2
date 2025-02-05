@@ -7,7 +7,7 @@
     alpha2: 0.05 # Transverse movement doesnt cause much rotation at all
     alpha3: 0.05 # Transverse movement is quite accurate but not perfect.
     alpha4: 0.0 # Assume for now that rotating does not cause any strafing or transverse movement.
-    alpha5: 0.2 # Strafing is very noisy.
+    alpha5: 0.1 # Strafing is noisy.
     beam_skip_distance: 0.5
     beam_skip_error_threshold: 0.9
     beam_skip_threshold: 0.3

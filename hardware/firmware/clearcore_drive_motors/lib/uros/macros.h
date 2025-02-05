@@ -9,7 +9,7 @@
     snprintf(buffer, sizeof(buffer),                                  \
               "RC_CHECK failed (code %d): in file: %s at line: %ld. REBOOTING!", \
               temp_rc, __FILE__, __LINE__);                                     \
-    ConnectorUsb.SendLine(buffer);                                        \
+    ConnectorUsb.SendLine(buffer); \
     delay(1000);                                                      \
     NVIC_SystemReset();                                               \
   }                                                                   \
@@ -23,7 +23,7 @@
     snprintf(buffer, sizeof(buffer),                                  \
               "RC_SOFT_CHECK failed (code %d): in file: %s at line: %ld. Continuing!", \
               temp_rc, __FILE__, __LINE__);                                     \
-    ConnectorUsb.SendLine(buffer);                                        \
+    ConnectorUsb.SendLine(buffer); \
   }                                                                   \
 }
 

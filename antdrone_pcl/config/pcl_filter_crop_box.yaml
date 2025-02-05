@@ -17,7 +17,7 @@
 
     
     # For generating scans used for localization, limit pointcloud height since different pixels in a physical column can be populated differently when viewed from differing angles.
-    max_y: 0.10 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
+    max_y: 0.12 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
     min_y: 0.08 # Set min_y so that only a thin slice of pointcloud is used for generating scans
 
     max_z: 2.75 # Physical realsense starts to get noisy past 3m.

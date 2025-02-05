@@ -1,4 +1,7 @@
-# version: '2.4' # Version 2.4 is compatable with belena
+version: '2.4' # Version 2.4 is compatable with belena
+
+
+
 
 services:
 
@@ -8,10 +11,11 @@ services:
     stdin_open: true
     tty: true
     ports:
-      - 8888:8888/udp
+      - 8888:8888/udp 
     # environment:
       # - ROS_DOMAIN_ID=0
     command: udp4 --port 8888 --verbose 6
+    # command: serial --dev /dev/ttyACM0 -v6 
     privileged: true
     network_mode: host
     restart: "no"
@@ -33,23 +37,7 @@ services:
   #   ipc: host
   #   pid: host
 
-  antdrone0_joystick:
-    container_name: antdrone0_joystick
-    build:
-      context: .
-      dockerfile: ./docker/joystick.dockerfile
-    environment:
-      - DRONE_NAME=${DRONE0_NAME}
-      # - ROS_DOMAIN_ID=0
-      - USE_SIM_TIME=false
-    volumes:
-      - ./antdrone_joystick:/home/humble_ws/src/antdrone_joystick:rw
-      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
-    working_dir: /home/humble_ws/src/antdrone_joystick/antdrone_joystick
-    privileged: true
-    network_mode: host
-    ipc: host
-    pid: host
+
 
   # antdrone0_apriltag:
   #   container_name: antdrone0_apriltag
@@ -87,21 +75,21 @@ services:
   #   ipc: host
   #   pid: host
 
-  antdrone_realsense:
-    container_name: antdrone0_realsense
-    build:
-      context: .
-      dockerfile: ./docker/realsense.dockerfile
-    environment:
-      # - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-      - DISPLAY=${DISPLAY}
-    volumes:
-      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
-      - ./antdrone_realsense:/home/humble_ws/src/antdrone_realsense
-    privileged: True
-    network_mode: host
-    ipc: host
-    pid: host
+  # antdrone_realsense:
+  #   container_name: antdrone0_realsense
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/realsense.dockerfile
+  #   environment:
+  #     # - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+  #     - DISPLAY=${DISPLAY}
+  #   # volumes:
+  #   #   - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
+  #   #   - ./antdrone_realsense:/home/humble_ws/src/antdrone_realsense
+  #   privileged: True
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
 
   # antdrone0_apriltag:
   #   container_name: antdrone0_apriltag
@@ -138,38 +126,6 @@ services:
   #   pid: host
     # command: sleep infinity
 
-  antdrone0_pcl:
-    container_name: antdrone0_pcl
-    build:
-      context: .
-      dockerfile: ./docker/pointcloud.dockerfile
-    environment:
-      - DRONE_NAME=${DRONE0_NAME}
-      # - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-      - USE_SIM_TIME=False
-    volumes:
-      - ./antdrone_pcl:/home/humble_ws/src/antdrone_pcl:rw
-      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
-    network_mode: host
-    ipc: host
-    pid: host
-    privileged: true
-
-  antdrone0_laserscan:
-    container_name: antdrone0_laserscan
-    build:
-      context: .
-      dockerfile: ./docker/laserscan.Dockerfile
-    volumes:
-      - ./antdrone_laserscan:/home/humble_ws/src/antdrone_laserscan
-    environment:
-      - DRONE_NAME=${DRONE0_NAME}
-      # - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-      - USE_SIM_TIME=false
-    network_mode: host
-    ipc: host
-    pid: host
-
   # antdrone0_slam:
   #   container_name: antdrone0_slam
   #   build:
@@ -193,31 +149,6 @@ services:
   #   network_mode: host
   #   ipc: host
   #   pid: host
-
-  antdrone0_nav:
-    container_name: antdrone0_nav
-    build:
-      context: .
-      dockerfile: ./docker/nav.dockerfile
-    healthcheck:
-      # Lifecycle bringup of nav nodes can fail if too many other things start at the same time. Let nav start first.
-      test: [ "CMD", "echo", "Healthy" ]
-      interval: 3s
-      timeout: 2s
-      retries: 10
-      start_period: 5s
-    environment:
-      - DISPLAY=${DISPLAY}
-      - DRONE_NAME=${DRONE0_NAME}
-      - USE_SIM_TIME=False
-      - world_name=${world_name}
-    volumes:
-      - ./antdrone_navigation:/home/humble_ws/src/antdrone_navigation
-      - ./antdrone_slam/maps:/home/humble_ws/src/antdrone_navigation/maps
-      - ./antdrone_localization:/home/humble_ws/src/antdrone_localization
-    network_mode: host
-    ipc: host
-    pid: host
 
   
 
