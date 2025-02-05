@@ -5,22 +5,22 @@ version: '2.4' # Version 2.4 is compatable with belena
 
 services:
 
-  antdrone_clearcore_uros_agent:
-    image: microros/micro-ros-agent:humble
-    container_name: antdrone0_clearcore_uros_agent
-    stdin_open: true
-    tty: true
-    ports:
-      - 8888:8888/udp 
-    # environment:
-      # - ROS_DOMAIN_ID=0
-    command: udp4 --port 8888 --verbose 6
-    # command: serial --dev /dev/ttyACM0 -v6 
-    privileged: true
-    network_mode: host
-    restart: "no"
-    ipc: host
-    pid: host
+  # antdrone_clearcore_uros_agent:
+  #   image: microros/micro-ros-agent:humble
+  #   container_name: antdrone0_clearcore_uros_agent
+  #   stdin_open: true
+  #   tty: true
+  #   ports:
+  #     - 8888:8888/udp 
+  #   # environment:
+  #     # - ROS_DOMAIN_ID=0
+  #   command: udp4 --port 8888 --verbose 6
+  #   # command: serial --dev /dev/ttyACM0 -v6 
+  #   privileged: true
+  #   network_mode: host
+  #   restart: "no"
+  #   ipc: host
+  #   pid: host
 
   # antdrone_espevb_uros_agent:
   #   image: microros/micro-ros-agent:humble
@@ -75,21 +75,22 @@ services:
   #   ipc: host
   #   pid: host
 
-  # antdrone_realsense:
-  #   container_name: antdrone0_realsense
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/realsense.dockerfile
-  #   environment:
-  #     # - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-  #     - DISPLAY=${DISPLAY}
-  #   # volumes:
-  #   #   - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
-  #   #   - ./antdrone_realsense:/home/humble_ws/src/antdrone_realsense
-  #   privileged: True
-  #   network_mode: host
-  #   ipc: host
-  #   pid: host
+  antdrone_realsense:
+    container_name: antdrone0_realsense
+    build:
+      context: .
+      dockerfile: ./docker/realsense.dockerfile
+    # environment:
+      # - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+      # - DISPLAY=${DISPLAY}
+    # volumes:
+    #   - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
+    #   - ./antdrone_realsense:/home/humble_ws/src/antdrone_realsense
+    privileged: True
+    network_mode: host
+    ipc: host
+    pid: host
+    command: ros2 launch antdrone_bringup realsense.launch.py
 
   # antdrone0_apriltag:
   #   container_name: antdrone0_apriltag

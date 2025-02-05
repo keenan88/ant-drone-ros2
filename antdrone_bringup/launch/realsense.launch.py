@@ -75,6 +75,7 @@ def generate_launch_description():
             'camera_name':'right_rs',
             'camera_namespace':'right_rs',
             'pointcloud.enable':'True',
+            'initial_reset': 'True',
             'rgb_camera.color_profile' : color_profile,
             'depth_module.depth_profile' : depth_profile,
             'depth_module.infra_profile': infra_profile,
@@ -155,16 +156,17 @@ def generate_launch_description():
     
     ld = launch.LaunchDescription()
 
-    ld.add_action(front_rs_launch)
-    ld.add_action(left_rs_launch)
-    ld.add_action(rear_rs_launch)
+    # ld.add_action(front_rs_launch)
+    # ld.add_action(left_rs_launch)
+    # ld.add_action(rear_rs_launch)
     ld.add_action(right_rs_launch)
 
     # ld.add_action(rviz)
-    ld.add_action(bridge_out_tf)
-    ld.add_action(front_rs_tf)
-    ld.add_action(left_rs_tf)
-    ld.add_action(rear_rs_tf)
+
+    # ld.add_action(bridge_out_tf)
+    # ld.add_action(front_rs_tf)
+    # ld.add_action(left_rs_tf)
+    # ld.add_action(rear_rs_tf)
     ld.add_action(right_rs_tf)
     
     
