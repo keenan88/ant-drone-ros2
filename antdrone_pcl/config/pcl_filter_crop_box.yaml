@@ -17,7 +17,7 @@
 
     # For generating scans used for localization, limit pointcloud height since different pixels in a physical column can be populated differently when viewed from differing angles.
     max_y: 0.12 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
-    min_y: 0.08 # Set min_y so that only a thin slice of pointcloud is used for generating scans
+    min_y: 0.1 # Set min_y so that only a thin slice of pointcloud is used for generating scans
 
     max_z: 3.0 # Clipping is done in realsense, this is irrelevant as long as it is past realsense hardware clip_distance.
     min_z: 0.0 # Included closest possible points to camera.

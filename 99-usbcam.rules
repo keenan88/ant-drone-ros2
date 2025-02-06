@@ -1,1 +1,1 @@
-SUBSYSTEM=="video4linux", ATTR{name}="Arducam OV2311 USB Camera: Ardu", ATTR{index}=="0", SYMLINK+="apriltag_cam"
+SUBSYSTEM=="video4linux", ATTR{name}=="Arducam OV2311 USB Camera: Ardu", ATTRS{idVendor}=="0c45", ATTRS{idProduct}=="6366", SYMLINK+="apriltag_cam"

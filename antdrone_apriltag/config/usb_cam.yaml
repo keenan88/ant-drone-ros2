@@ -1,12 +1,12 @@
 /**:
     ros__parameters:
-      framerate: 25.0
+      framerate: 5.0
       io_method: "mmap"
       frame_id: "apriltag_cam"
       pixel_format: "mjpeg2rgb"  # see usb_cam/supported_formats for list of supported formats
       av_device_format: "YUV422P"
-      image_width: 1600
-      image_height: 1200
+      image_width: 800
+      image_height: 600
       camera_name: "apriltag_cam"
       camera_info_url: "package://antdrone_apriltag/config/usb_cam_info.yaml" 
       brightness: -1
