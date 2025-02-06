@@ -9,83 +9,57 @@ import os
 def generate_launch_description():
 
     # Realsenses freeze up if FPS or resolution too high. Depends on USB ports used.
-    color_profile = '424x240x15' #'640x480x15'
-    depth_profile = '480x270x15' #'640x480x15'
-    infra_profile = '480x270x15' #'640x480x15'
 
-    
-    
+    rs_common_settings = {
+        'pointcloud.enable':'True',
+        'rgb_camera.color_profile' : '424x240x15',
+        'depth_module.depth_profile' : '480x270x15',
+        'depth_module.infra_profile': '480x270x15',
+        'decimation_filter.enable': 'True', # Decimation filter in realsense hardware allows pointcloud FPS to keep up with RGB & depth FPS
+        'decimation_filter.filter_magnitude': '3', # Filter magnitude appears stuck at 2.. that is fine for now
+        'clip_distance': '3.0'
+    }
+
+    rs_launch = PythonLaunchDescriptionSource(
+        os.path.join(get_package_share_directory('realsense2_camera'), 'launch', 'rs_launch.py')
+    )
+
 
     front_rs_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(get_package_share_directory('realsense2_camera'), 'launch', 'rs_launch.py')
-        ),
-        launch_arguments={
-            'serial_no': "'017322073475'", #207522073816
+        rs_launch,
+        launch_arguments=(rs_common_settings | {
+            'serial_no': "'207522073816'",
             'camera_name':'front_rs',
             'camera_namespace':'front_rs',
-            'pointcloud.enable':'True',
-            'rgb_camera.color_profile' : color_profile,
-            'depth_module.depth_profile' : depth_profile,
-            'depth_module.infra_profile': infra_profile,
-            'decimation_filter.enable': 'True', # Decimation filter in realsense hardware allows pointcloud FPS to keep up with RGB & depth FPS
-            'decimation_filter.filter_magnitude': '3', # Filter magnitude appears stuck at 2.. that is fine for now
-            'clip_distance': '3.0'
-        }.items()
+        }).items()
     )
 
     rear_rs_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(get_package_share_directory('realsense2_camera'), 'launch', 'rs_launch.py')
-        ),
-        launch_arguments={
+        rs_launch,
+        launch_arguments=(rs_common_settings | {
             'serial_no': "'207122078912'",
             'camera_name':'rear_rs',
-            'camera_namespace':'rear_rs',
-            'pointcloud.enable':'True',
-            'rgb_camera.color_profile' : color_profile,
-            'depth_module.depth_profile' : depth_profile,
-            'depth_module.infra_profile': infra_profile,
-        }.items()
+            'camera_namespace':'rear_rs'
+        }).items()
     )
 
     left_rs_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(get_package_share_directory('realsense2_camera'), 'launch', 'rs_launch.py')
-        ),
-        launch_arguments={
+        rs_launch,
+        launch_arguments=(rs_common_settings | {
             'serial_no': "'109122070837'",
             'camera_name':'left_rs',
-            'camera_namespace':'left_rs',
-            'pointcloud.enable':'True',
-            'rgb_camera.color_profile' : color_profile,
-            'depth_module.depth_profile' : depth_profile,
-            'depth_module.infra_profile': infra_profile,
-            # 'enable_accel': 'True',
-            # 'enable_gyro': 'True',
-            # 'unite_imu_method': '2'
-        }.items()
+            'camera_namespace':'left_rs'
+        }).items()
     )
 
     right_rs_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(get_package_share_directory('realsense2_camera'), 'launch', 'rs_launch.py')
-        ),
-        launch_arguments={
-            'serial_no': "'207522073046'", #
+        rs_launch,
+        launch_arguments=(rs_common_settings | {
+            'serial_no': "'207522073046'",
             'camera_name':'right_rs',
-            'camera_namespace':'right_rs',
-            'pointcloud.enable':'True',
-            'initial_reset': 'True',
-            'rgb_camera.color_profile' : color_profile,
-            'depth_module.depth_profile' : depth_profile,
-            'depth_module.infra_profile': infra_profile,
-        }.items()
+            'camera_namespace':'right_rs'
+        }).items()
     )
-
-
-
-
 
     front_rs_tf = Node(
         package="tf2_ros",
@@ -143,16 +117,16 @@ def generate_launch_description():
     ld = launch.LaunchDescription()
 
     ld.add_action(front_rs_launch)
-    # ld.add_action(left_rs_launch)
-    # ld.add_action(rear_rs_launch)
-    # ld.add_action(right_rs_launch)
+    ld.add_action(left_rs_launch)
+    ld.add_action(rear_rs_launch)
+    ld.add_action(right_rs_launch)
 
 
     
-    # ld.add_action(front_rs_tf)
-    # ld.add_action(left_rs_tf)
-    # ld.add_action(rear_rs_tf)
-    # ld.add_action(right_rs_tf)
+    ld.add_action(front_rs_tf)
+    ld.add_action(left_rs_tf)
+    ld.add_action(rear_rs_tf)
+    ld.add_action(right_rs_tf)
     
     
     return ld

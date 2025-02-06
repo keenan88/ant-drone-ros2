@@ -23,8 +23,7 @@ def generate_launch_description():
 
         input_topic = realsense_placement + '/' + realsense_placement + '/depth/color/points', 
         crop_topic = realsense_placement + '/pointcloud_cropped'
-        downsample_topic = realsense_placement + '/pointcloud_downsampled'
-
+        
         pointcloud_cropper = Node(
             package='pcl_ros',
             executable='filter_crop_box_node',
@@ -44,23 +43,8 @@ def generate_launch_description():
             ]
         )
 
-        pointcloud_downsampler = Node(
-            package='pcl_ros',
-            executable='filter_voxel_grid_node',
-            name = realsense_placement + "_pointcloud_downsampler",
-            output='screen',
-            parameters=[
-                # '/home/humble_ws/src/antdrone_pcl/config/pcl_downsample_filter.yaml',
-                {'use_sim_time' : LaunchConfiguration("USE_SIM_TIME")}
-            ],
-            remappings=[
-                ('input', crop_topic),
-                ('output', downsample_topic)
-            ]
-        )
 
         ld.add_action(pointcloud_cropper)
-        # ld.add_action(pointcloud_downsampler)
         ld.add_action(gz_pcl_frame_fixer)
 
     

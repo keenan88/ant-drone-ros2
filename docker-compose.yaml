@@ -1,21 +1,21 @@
 services:
 
-  # antdrone_clearcore_uros_agent:
-  #   image: microros/micro-ros-agent:humble
-  #   container_name: antdrone0_clearcore_uros_agent
-  #   stdin_open: true
-  #   tty: true
-  #   ports:
-  #     - 8888:8888/udp 
-  #   # environment:
-  #     # - ROS_DOMAIN_ID=0
-  #   command: udp4 --port 8888 --verbose 6
-  #   # command: serial --dev /dev/ttyACM0 -v6 
-  #   privileged: true
-  #   network_mode: host
-  #   restart: "no"
-  #   ipc: host
-  #   pid: host
+  antdrone_clearcore_uros_agent:
+    image: microros/micro-ros-agent:humble
+    container_name: antdrone0_clearcore_uros_agent
+    stdin_open: true
+    tty: true
+    ports:
+      - 8888:8888/udp 
+    # environment:
+      # - ROS_DOMAIN_ID=0
+    command: udp4 --port 8888 --verbose 6
+    # command: serial --dev /dev/ttyACM0 -v6 
+    privileged: true
+    network_mode: host
+    restart: "no"
+    ipc: host
+    pid: host
 
   # antdrone_espevb_uros_agent:
   #   image: microros/micro-ros-agent:humble
@@ -75,8 +75,8 @@ services:
     build:
       context: .
       dockerfile: ./docker/realsense.dockerfile
-    environment:
-      - ROS_DOMAIN_ID=10
+    # environment:
+    #   - ROS_DOMAIN_ID=10
     volumes:
       - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
       - ./antdrone_realsense:/home/humble_ws/src/antdrone_realsense
@@ -86,22 +86,20 @@ services:
     pid: host
     command: ros2 launch antdrone_bringup realsense.launch.py
 
-  # antdrone0_pcl:
-  #   container_name: antdrone0_pcl
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/pointcloud.dockerfile
-  #   environment:
-  #     - DRONE_NAME=${DRONE0_NAME}
-  #     - ROS_DOMAIN_ID=10
-  #     - USE_SIM_TIME=False
-  #   volumes:
-  #     - ./antdrone_pcl:/home/humble_ws/src/antdrone_pcl:rw
-  #     - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
-  #   network_mode: host
-  #   ipc: host
-  #   pid: host
-  #   privileged: true
+  antdrone0_pcl:
+    container_name: antdrone0_pcl
+    build:
+      context: .
+      dockerfile: ./docker/pointcloud.dockerfile
+    environment:
+      - DRONE_NAME=${DRONE0_NAME}
+      - USE_SIM_TIME=False
+    volumes:
+      - ./antdrone_pcl:/home/humble_ws/src/antdrone_pcl:rw
+      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup
+    network_mode: host
+    ipc: host
+    pid: host
 
   antdrone0_apriltag:
     container_name: antdrone0_apriltag

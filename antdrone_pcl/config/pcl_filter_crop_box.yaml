@@ -3,7 +3,7 @@
 # positive y is facing down (with gravity)
 # positive z is facing out toward the object in view
 
-/front_rs_pointcloud_cropper:
+/**:
   ros__parameters:
     approximate_sync: false
     keep_organized: false
@@ -15,12 +15,11 @@
     # max_y: 0.10 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
     # min_y: -0.5 # Set min_y low enough to see all of worker
 
-    
     # For generating scans used for localization, limit pointcloud height since different pixels in a physical column can be populated differently when viewed from differing angles.
     max_y: 0.12 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
     min_y: 0.08 # Set min_y so that only a thin slice of pointcloud is used for generating scans
 
-    max_z: 2.75 # Physical realsense starts to get noisy past 3m.
+    max_z: 3.0 # Clipping is done in realsense, this is irrelevant as long as it is past realsense hardware clip_distance.
     min_z: 0.0 # Included closest possible points to camera.
 
     negative: false
@@ -28,80 +27,80 @@
     filter_limit_negative: false
     use_indices: false
 
-/left_rs_pointcloud_cropper:
-  ros__parameters:
-    approximate_sync: false
-    keep_organized: false
-    max_queue_size: 3
+# /left_rs_pointcloud_cropper:
+#   ros__parameters:
+#     approximate_sync: false
+#     keep_organized: false
+#     max_queue_size: 3
     
-    max_x: 3.0 # Set max_x large enough to cover view in front of robot
-    min_x: -3.0 # Set min_x large enough to cover view in front of robot
+#     max_x: 3.0 # Set max_x large enough to cover view in front of robot
+#     min_x: -3.0 # Set min_x large enough to cover view in front of robot
 
-    # max_y: 0.10 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
-    # min_y: -0.5 # Set min_y low enough to see all of worker
-
-    
-    # For generating scans used for localization, limit pointcloud height since different pixels in a physical column can be populated differently when viewed from differing angles.
-    max_y: 0.13 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
-    min_y: 0.10 # Set min_y so that only a thin slice of pointcloud is used for generating scans
-
-    # Left and right realsenses have slight pitch mounting error and are pointed slightly toward ground.
-    # Cannot reduce max_y or would not see pipe rails, so must decrease distance.
-    max_z: 2.75 
-    min_z: 0.0 # Included closest possible points to camera.
-
-    negative: false
-    transient_local_indices: false
-    filter_limit_negative: false
-    use_indices: false
-
-
-/rear_rs_pointcloud_cropper:
-  ros__parameters:
-    approximate_sync: false
-    keep_organized: false
-    max_queue_size: 3
-    
-    max_x: 3.0 # Set max_x large enough to cover view in front of robot
-    min_x: -3.0 # Set min_x large enough to cover view in front of robot
-
-    # max_y: 0.10 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
-    # min_y: -0.5 # Set min_y low enough to see all of worker
+#     # max_y: 0.10 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
+#     # min_y: -0.5 # Set min_y low enough to see all of worker
 
     
-    # For generating scans used for localization, limit pointcloud height since different pixels in a physical column can be populated differently when viewed from differing angles.
-    max_y: 0.11 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
-    min_y: 0.07 # Set min_y so that only a thin slice of pointcloud is used for generating scans
+#     # For generating scans used for localization, limit pointcloud height since different pixels in a physical column can be populated differently when viewed from differing angles.
+#     max_y: 0.13 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
+#     min_y: 0.10 # Set min_y so that only a thin slice of pointcloud is used for generating scans
 
-    max_z: 2.75 # Physical realsense starts to get noisy past 3m.
-    min_z: 0.0 # Included closest possible points to camera.
+#     # Left and right realsenses have slight pitch mounting error and are pointed slightly toward ground.
+#     # Cannot reduce max_y or would not see pipe rails, so must decrease distance.
+#     max_z: 2.75 
+#     min_z: 0.0 # Included closest possible points to camera.
 
-    negative: false
-    transient_local_indices: false
-    filter_limit_negative: false
-    use_indices: false
+#     negative: false
+#     transient_local_indices: false
+#     filter_limit_negative: false
+#     use_indices: false
 
-/right_rs_pointcloud_cropper:
-  ros__parameters:
-    approximate_sync: false
-    keep_organized: false
-    max_queue_size: 3
+
+# /rear_rs_pointcloud_cropper:
+#   ros__parameters:
+#     approximate_sync: false
+#     keep_organized: false
+#     max_queue_size: 3
     
-    max_x: 3.0 # Set max_x large enough to cover view in front of robot
-    min_x: -3.0 # Set min_x large enough to cover view in front of robot
+#     max_x: 3.0 # Set max_x large enough to cover view in front of robot
+#     min_x: -3.0 # Set min_x large enough to cover view in front of robot
 
-    # max_y: 0.10 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
-    # min_y: -0.5 # Set min_y low enough to see all of worker
+#     # max_y: 0.10 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
+#     # min_y: -0.5 # Set min_y low enough to see all of worker
 
     
-    # For generating scans used for localization, limit pointcloud height since different pixels in a physical column can be populated differently when viewed from differing angles.
-    max_y: 0.13 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
-    min_y: 0.10 # Set min_y so that only a thin slice of pointcloud is used for generating scans
+#     # For generating scans used for localization, limit pointcloud height since different pixels in a physical column can be populated differently when viewed from differing angles.
+#     max_y: 0.11 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
+#     min_y: 0.07 # Set min_y so that only a thin slice of pointcloud is used for generating scans
 
-    max_z: 2.75  # Physical realsense starts to get noisy past 3m.
-    min_z: 0.0 # Included closest possible points to camera.
+#     max_z: 2.75 # Physical realsense starts to get noisy past 3m.
+#     min_z: 0.0 # Included closest possible points to camera.
 
-    negative: false
-    transient_local_indices: false
-    filter_limit_negative: false
-    use_indices: false
+#     negative: false
+#     transient_local_indices: false
+#     filter_limit_negative: false
+#     use_indices: false
+
+# /right_rs_pointcloud_cropper:
+#   ros__parameters:
+#     approximate_sync: false
+#     keep_organized: false
+#     max_queue_size: 3
+    
+#     max_x: 3.0 # Set max_x large enough to cover view in front of robot
+#     min_x: -3.0 # Set min_x large enough to cover view in front of robot
+
+#     # max_y: 0.10 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
+#     # min_y: -0.5 # Set min_y low enough to see all of worker
+
+    
+#     # For generating scans used for localization, limit pointcloud height since different pixels in a physical column can be populated differently when viewed from differing angles.
+#     max_y: 0.13 # Set max_y low enough to remove floor, but high enough to still include pipe rails. 
+#     min_y: 0.10 # Set min_y so that only a thin slice of pointcloud is used for generating scans
+
+#     max_z: 2.75  # Physical realsense starts to get noisy past 3m.
+#     min_z: 0.0 # Included closest possible points to camera.
+
+#     negative: false
+#     transient_local_indices: false
+#     filter_limit_negative: false
+#     use_indices: false
