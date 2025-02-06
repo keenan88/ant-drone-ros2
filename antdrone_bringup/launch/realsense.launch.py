@@ -21,15 +21,16 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('realsense2_camera'), 'launch', 'rs_launch.py')
         ),
         launch_arguments={
-            'serial_no': "'207522073816'",
+            'serial_no': "'017322073475'", #207522073816
             'camera_name':'front_rs',
             'camera_namespace':'front_rs',
             'pointcloud.enable':'True',
             'rgb_camera.color_profile' : color_profile,
             'depth_module.depth_profile' : depth_profile,
             'depth_module.infra_profile': infra_profile,
-            # 'enable_accel': 'True',
-            # 'enable_gyro': 'True'
+            'decimation_filter.enable': 'True', # Decimation filter in realsense hardware allows pointcloud FPS to keep up with RGB & depth FPS
+            'decimation_filter.filter_magnitude': '3', # Filter magnitude appears stuck at 2.. that is fine for now
+            'clip_distance': '3.0'
         }.items()
     )
 
@@ -71,7 +72,7 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('realsense2_camera'), 'launch', 'rs_launch.py')
         ),
         launch_arguments={
-            'serial_no': "'207522073046'",
+            'serial_no': "'207522073046'", #
             'camera_name':'right_rs',
             'camera_namespace':'right_rs',
             'pointcloud.enable':'True',
@@ -84,12 +85,7 @@ def generate_launch_description():
 
 
 
-    bridge_out_tf = Node(
-        package="domain_bridge",
-        executable="domain_bridge",
-        name = "bridge_out_tf",
-        arguments = ['/home/humble_ws/src/antworker_realsense/config/bridge_out_tf.yaml']
-    )
+
 
     front_rs_tf = Node(
         package="tf2_ros",
@@ -144,30 +140,19 @@ def generate_launch_description():
     )
 
     
-
-    rviz = Node(
-        package='rviz2',
-        executable='rviz2',
-        arguments=['-d', '/home/humble_ws/src/antdrone_realsense/config/rs.rviz'],
-        parameters=[
-            {'use_sim_time': False}, 
-        ]
-    )
-    
     ld = launch.LaunchDescription()
 
-    # ld.add_action(front_rs_launch)
+    ld.add_action(front_rs_launch)
     # ld.add_action(left_rs_launch)
     # ld.add_action(rear_rs_launch)
-    ld.add_action(right_rs_launch)
+    # ld.add_action(right_rs_launch)
 
-    # ld.add_action(rviz)
 
-    # ld.add_action(bridge_out_tf)
+    
     # ld.add_action(front_rs_tf)
     # ld.add_action(left_rs_tf)
     # ld.add_action(rear_rs_tf)
-    ld.add_action(right_rs_tf)
+    # ld.add_action(right_rs_tf)
     
     
     return ld

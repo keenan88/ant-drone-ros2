@@ -9,6 +9,8 @@ Panels:
         - /Static Map1/Topic1
         - /Traffic Map1/Topic1
         - /Fleet Markers1/Topic1
+        - /Scans1
+        - /Scans1/front scan1
         - /RobotModel1/Description Topic1
         - /PointCloud21/Topic1
         - /PoseArray1/Topic1
@@ -83,8 +85,6 @@ Visualization Manager:
           Value: false
         left_rs_link:
           Value: true
-        map:
-          Value: true
         odom:
           Value: true
         rear_rs_color_frame:
@@ -113,37 +113,36 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        map:
-          odom:
-            base_link:
-              front_rs_link:
-                front_rs_color_frame:
-                  front_rs_color_optical_frame:
-                    {}
-                front_rs_depth_frame:
-                  front_rs_depth_optical_frame:
-                    {}
-              left_rs_link:
-                left_rs_color_frame:
-                  left_rs_color_optical_frame:
-                    {}
-                left_rs_depth_frame:
-                  left_rs_depth_optical_frame:
-                    {}
-              rear_rs_link:
-                rear_rs_color_frame:
-                  rear_rs_color_optical_frame:
-                    {}
-                rear_rs_depth_frame:
-                  rear_rs_depth_optical_frame:
-                    {}
-              right_rs_link:
-                right_rs_color_frame:
-                  right_rs_color_optical_frame:
-                    {}
-                right_rs_depth_frame:
-                  right_rs_depth_optical_frame:
-                    {}
+        odom:
+          base_link:
+            front_rs_link:
+              front_rs_color_frame:
+                front_rs_color_optical_frame:
+                  {}
+              front_rs_depth_frame:
+                front_rs_depth_optical_frame:
+                  {}
+            left_rs_link:
+              left_rs_color_frame:
+                left_rs_color_optical_frame:
+                  {}
+              left_rs_depth_frame:
+                left_rs_depth_optical_frame:
+                  {}
+            rear_rs_link:
+              rear_rs_color_frame:
+                rear_rs_color_optical_frame:
+                  {}
+              rear_rs_depth_frame:
+                rear_rs_depth_optical_frame:
+                  {}
+            right_rs_link:
+              right_rs_color_frame:
+                right_rs_color_optical_frame:
+                  {}
+              right_rs_depth_frame:
+                right_rs_depth_optical_frame:
+                  {}
       Update Interval: 0
       Value: true
     - Alpha: 0.4000000059604645
@@ -419,7 +418,7 @@ Visualization Manager:
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Best Effort
-            Value: front_rs/scan
+            Value: /front_rs/scan
           Use Fixed Frame: true
           Use rainbow: true
           Value: true
@@ -816,7 +815,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 117; 135; 133
-    Fixed Frame: map
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:
@@ -859,25 +858,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/XYOrbit
-      Distance: 5.848614692687988
+      Distance: 6.524198055267334
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -1.2066590785980225
-        Y: 0.4680976867675781
-        Z: 9.247956768376753e-06
+        X: -0.5608549118041992
+        Y: -0.5748965740203857
+        Z: 9.91619162959978e-06
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.3347965478897095
+      Pitch: 0.604796826839447
       Target Frame: base_link
       Value: XYOrbit (rviz_default_plugins)
-      Yaw: 3.132422685623169
+      Yaw: 5.382421970367432
     Saved: ~
 Window Geometry:
   Displays:

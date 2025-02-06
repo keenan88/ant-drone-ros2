@@ -85,41 +85,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 SHELL ["/bin/bash", "-c"]
 ENV DEBIAN_FRONTEND=noninteractive
 
-
-# RUN mkdir -p /etc/apt/keyrings \
-#     && curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | tee /etc/apt/keyrings/librealsense.pgp > /dev/null \
-#     && apt-get update  && apt-get install apt-transport-https \
-#     && echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main" | tee /etc/apt/sources.list.d/librealsense.list \
-#     && apt-get update 
     
-# RUN apt-get install -y git libssl-dev libusb-1.0-0-dev pkg-config libgtk-3-dev \
-#     libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev \
-#     cmake g++
-
-# RUN apt-get install --yes librealsense2-dkms=2.54.1
-# RUN apt-get install --yes librealsense2-utils
-# RUN apt-get install --yes librealsense2-dev
-# RUN apt-get install --yes librealsense2-dbg
-
-RUN apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y
-RUN apt-get install -y libssl-dev libusb-1.0-0-dev libudev-dev pkg-config libgtk-3-dev \
-                       git wget cmake build-essential \
-                       libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev at \
-                       libudev-dev v4l-utils
-
-RUN git clone https://github.com/IntelRealSense/librealsense.git /librealsense
-WORKDIR /librealsense
-RUN scripts/setup_udev_rules.sh
-# RUN scripts/patch-realsense-ubuntu-lts-hwe.sh
-
-RUN mkdir build
-WORKDIR /librealsense/build
-RUN cmake ../
-RUN make uninstall && make clean && make && make install
-
-
 RUN sudo apt-get update && \
     sudo apt-get install -y \
+    # ros-humble-librealsense2* \
+    # ros-humble-realsense2-* \
     ros-humble-realsense2-camera \ 
     ros-humble-realsense2-description \
     && rm -rf /var/lib/apt/lists/*
