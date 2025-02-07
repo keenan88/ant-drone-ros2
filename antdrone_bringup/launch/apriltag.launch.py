@@ -27,8 +27,8 @@ def generate_launch_description():
             '/home/humble_ws/src/antdrone_apriltag/config/apriltag.yaml'
         ],
         remappings = [
-            ('/camera_info', '/apriltag_cam/apriltag_cam/color/camera_info'),
-            ('/image_rect',  '/apriltag_cam/apriltag_cam/color/image_raw')
+            ('/camera_info', '/apriltag_cam/image_rect/camera_info'),
+            ('/image_rect/compressed',  '/apriltag_cam/image_rect/compressed')
         ]
     )
 
@@ -47,6 +47,8 @@ def generate_launch_description():
         package='antdrone_apriltag',
         executable='frame_debug'
     )
+
+    
 
 
     ld.add_action(gz_img_frame_fixer)

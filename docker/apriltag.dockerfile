@@ -14,7 +14,7 @@ RUN apt-get update && \
     ros-humble-ament-cmake-clang-format \
     && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install numpy scipy setuptools==58.2.0
+RUN python3 -m pip install numpy scipy transformations setuptools==58.2.0
 
 WORKDIR /home/humble_ws/src
 RUN git clone https://github.com/christianrauch/apriltag_ros.git

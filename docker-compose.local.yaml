@@ -27,23 +27,22 @@ services:
   #   ipc: host
   #   pid: host
 
-  antdrone0_joystick:
-    container_name: antdrone0_joystick
-    build:
-      context: .
-      dockerfile: ./docker/joystick.dockerfile
-    environment:
-      - DRONE_NAME=${DRONE0_NAME}
-      # - ROS_DOMAIN_ID=0
-      - USE_SIM_TIME=false
-    # volumes:
-    #   - ./antdrone_joystick:/home/humble_ws/src/antdrone_joystick:rw
-    #   - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
-    working_dir: /home/humble_ws/src/antdrone_joystick/antdrone_joystick
-    privileged: true
-    network_mode: host
-    ipc: host
-    pid: host
+  # antdrone0_joystick:
+  #   container_name: antdrone0_joystick
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/joystick.dockerfile
+  #   environment:
+  #     - DRONE_NAME=${DRONE0_NAME}
+  #     - USE_SIM_TIME=false
+  #   # volumes:
+  #   #   - ./antdrone_joystick:/home/humble_ws/src/antdrone_joystick:rw
+  #   #   - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
+  #   working_dir: /home/humble_ws/src/antdrone_joystick/antdrone_joystick
+  #   privileged: true
+  #   network_mode: host
+  #   ipc: host
+  #   pid: host
 
   antdrone0_apriltag:
     container_name: antdrone0_apriltag
@@ -52,7 +51,6 @@ services:
       dockerfile: ./docker/apriltag.dockerfile
     environment:
       - DRONE_NAME=${DRONE0_NAME}
-      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
       - USE_SIM_TIME=False
       - DISPLAY=${DISPLAY}
     volumes:
@@ -79,7 +77,6 @@ services:
   #   environment:
   #     - DISPLAY=${DISPLAY}
   #     - DRONE_NAME=${DRONE0_NAME}
-  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
   #     - USE_SIM_TIME=${USE_SIM_TIME}
   #   volumes:
   #     - ./antdrone_slam:/home/humble_ws/src/antdrone_slam
