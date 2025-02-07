@@ -55,13 +55,19 @@ Visualization Manager:
       Frame Timeout: 1
       Frames:
         All Enabled: false
+        apriltag_cam:
+          Value: true
+        base_link:
+          Value: true
         tag16h5:0:
           Value: true
         tag16h5:1:
           Value: true
         tag16h5:2:
           Value: true
-        worker_pickup_link:
+        tag16h5:3:
+          Value: true
+        worker_pickup_frame:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -69,13 +75,17 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        worker_pickup_link:
-          tag16h5:0:
-            {}
-          tag16h5:1:
-            {}
-          tag16h5:2:
-            {}
+        base_link:
+          apriltag_cam:
+            tag16h5:0:
+              {}
+            tag16h5:1:
+              {}
+            tag16h5:2:
+              worker_pickup_frame:
+                {}
+            tag16h5:3:
+              {}
       Update Interval: 0
       Value: true
     - Class: rviz_default_plugins/Camera
@@ -99,7 +109,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: worker_pickup_link
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:
@@ -142,7 +152,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 4.282418251037598
+      Distance: 4.86217737197876
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -157,10 +167,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5697967410087585
+      Pitch: 0.33479684591293335
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.546741247177124
+      Yaw: 2.7017300128936768
     Saved: ~
 Window Geometry:
   Camera:

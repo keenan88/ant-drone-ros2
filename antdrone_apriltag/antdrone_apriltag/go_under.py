@@ -17,6 +17,7 @@ from time import sleep
 
 
 
+
 class GoUnderWorker(Node):
     def __init__(self):
         super().__init__('go_under')
@@ -27,15 +28,15 @@ class GoUnderWorker(Node):
         self.go_under_service = self.create_service(GoUnder, 'go_under_worker', self.go_under_worker)
 
 
-        asdf = StaticTransformBroadcaster(self)        
+        self.asdf = StaticTransformBroadcaster(self)        
         # Do not publish these tags! They are for internal use of the go-under algorithm only. Publishing will confuse Ros2 TF system.
         # These allow us to transform worker tags to the base link for comparison to drone base link, without having to send 
         # TF frames from the actual worker to the drone.
         # worker pickup link is -90 degrees yaw rotated from worker base link. This aligns it with drone base link when drone is driving at side of worker.
-        self.worker_base_to_tag_static_tfs = [
+        self.worker_pickup_frame_to_tag_tfs = [
             # Tag 0 is facing down in the middle of the worker
             TransformStamped(
-                header = Header(stamp=Time(seconds=0).to_msg(), frame_id='worker_pickup_link'),
+                header = Header(stamp=Time(seconds=0).to_msg(), frame_id='worker_pickup_frame'),
                 child_frame_id='tag16h5:0',
                 transform=Transform(
                     translation = Vector3(x=0.0, y=0.22, z=-0.01),
@@ -45,7 +46,7 @@ class GoUnderWorker(Node):
 
             # Tag 1 is facing down on the far side of the worker
             TransformStamped(
-                header = Header(stamp=Time(seconds=0).to_msg(), frame_id='worker_pickup_link'),
+                header = Header(stamp=Time(seconds=0).to_msg(), frame_id='worker_pickup_frame'),
                 child_frame_id='tag16h5:1',
                 transform=Transform(
                     translation = Vector3(x=0.34, y=0.22, z=-0.05),
@@ -55,24 +56,24 @@ class GoUnderWorker(Node):
 
             # Tag 2 is outward facing
             TransformStamped(
-                header = Header(stamp=Time(seconds=0).to_msg(), frame_id='worker_pickup_link'),
-                child_frame_id='tag16h5:2',
+                header = Header(stamp=Time(seconds=0).to_msg(), frame_id='tag16h5:2'),
+                child_frame_id='worker_pickup_frame',
                 transform=Transform(
-                    translation = Vector3(x=-0.4, y=0.34, z=-0.06),
-                    rotation = Quaternion(x=-0.707, y=0.0, z=0.707, w=0.0)
+                    translation = Vector3(x=0.34, y=0.06, z=-0.4),
+                    rotation = Quaternion(x=0.5, y=-0.5, z=-0.5, w=-0.5)
                 )
             ),
         ]
 
-        while 1:
+        # while 1:
 
-            for tf in self.worker_base_to_tag_static_tfs:
+        #     for tf in self.worker_pickup_frame_to_tag_tfs:
 
-                asdf.sendTransform(tf)
+        #         self.asdf.sendTransform(tf)
 
 
 
-        self.drone_base_link_to_worker_base_link_tfs = [
+        self.drone_base_link_to_worker_pickup_frame_tfs = [
             None,
             None,
             None,
@@ -98,30 +99,24 @@ class GoUnderWorker(Node):
     def get_transform(self, tag_id):
 
         try:
+            # Read drone base link to tag on worker, TF published by apriltag node.
             now = rclpy.time.Time()
             timeout = rclpy.duration.Duration(seconds=0.05)
-            transform: TransformStamped = self.tf_buffer.lookup_transform(
+            drone_base_link_to_tag: TransformStamped = self.tf_buffer.lookup_transform(
                 'base_link', 'tag16h5:' + str(tag_id), now, timeout
             )
 
-            # self.get_logger().info(f"tag_id: {tag_id}, tf: {transform}")
+            drone_base_link_to_worker_pickup_frame = self.get_transform_a_to_c(
+                transform_a_b = drone_base_link_to_tag, 
+                transform_b_c = self.worker_pickup_frame_to_tag_tfs[tag_id]
+            ) 
 
-            drone_base_link_to_tag_matrix = self.transform_to_matrix(transform)
-            tag_to_worker_base_link_matrix = self.transform_to_matrix(self.worker_base_to_tag_static_tfs[tag_id])
-            drone_base_link_to_worker_base_link_matrix = np.dot(drone_base_link_to_tag_matrix, tag_to_worker_base_link_matrix)
-
-            # self.get_logger().info(f"matrix: {drone_base_link_to_worker_base_link_matrix}")
-
-
-            drone_to_worker_tf = self.matrix_to_transform(drone_base_link_to_worker_base_link_matrix, "base_link", "worker_base_link")
-
-            # self.get_logger().info(f"net tf: {drone_to_worker_tf}")
-
-            self.drone_base_link_to_worker_base_link_tfs[tag_id] = drone_to_worker_tf
+            self.drone_base_link_to_worker_pickup_frame_tfs[tag_id] = drone_base_link_to_worker_pickup_frame
                 
 
         except Exception as e:
-            # self.get_logger().info(f"Coudl not get transform for tag {tag_id}: {e}")
+            self.get_logger().info(f"Coudl not get transform for tag {tag_id}: {e}")
+            self.drone_base_link_to_worker_pickup_frame_tfs[tag_id] = None
             pass
 
 
@@ -157,13 +152,13 @@ class GoUnderWorker(Node):
 
     def determine_worker_approach_side(self):
 
-        self.get_logger().info(f"Transforms at count time {self.drone_base_link_to_worker_base_link_tfs}")
+        self.get_logger().info(f"Transforms at count time {self.drone_base_link_to_worker_pickup_frame_tfs}")
 
         left_tag_ids =  [0, 1, 2]
         right_tag_ids = [3, 4, 5]
 
-        left_tags_visible_cnt =  sum(1 for key in left_tag_ids if self.drone_base_link_to_worker_base_link_tfs[key] is not None)
-        right_tags_visible_cnt = sum(1 for key in right_tag_ids if self.drone_base_link_to_worker_base_link_tfs[key] is not None)
+        left_tags_visible_cnt =  sum(1 for key in left_tag_ids if self.drone_base_link_to_worker_pickup_frame_tfs[key] is not None)
+        right_tags_visible_cnt = sum(1 for key in right_tag_ids if self.drone_base_link_to_worker_pickup_frame_tfs[key] is not None)
 
         approach_side = 'N'
         useable_tags = []
@@ -187,9 +182,9 @@ class GoUnderWorker(Node):
 
         for tag_id in useable_tags:
 
-            if self.drone_base_link_to_worker_base_link_tfs[tag_id] != None:
+            if self.drone_base_link_to_worker_pickup_frame_tfs[tag_id] != None:
 
-                transform = self.drone_base_link_to_worker_base_link_tfs[tag_id]
+                transform = self.drone_base_link_to_worker_pickup_frame_tfs[tag_id]
 
                 qx = transform.transform.rotation.x
                 qy = transform.transform.rotation.y
@@ -205,22 +200,28 @@ class GoUnderWorker(Node):
                 roll = euler_angles[2]
                 x = transform.transform.translation.x
                 y = transform.transform.translation.y
-
-                if tag_id == 2:
-
-                    self.get_logger().info(f"tag_id: {tag_id}, x: {round(x, 2)}, y: {round(y, 2)}, roll: {round(roll, 2)}, pitch: {round(pitch, 2)}, yaw: {round(yaw, 2)}")
+                z = transform.transform.translation.z
 
                 angular_outlier = abs(pitch) >= 15/180*3.14 or abs(roll)  <= 170/180*3.14
                 
-                linear_outlier = abs(x) >= 2.0 or abs(y) >= 1.0
+                linear_outlier = abs(x) >= 2.0 or abs(y) >= 1.0 or abs(z) >= 1.0
 
-                if not (angular_outlier or linear_outlier):
+                if not ( linear_outlier): #angular_outlier or
+                    
+                    if tag_id == 2:
+
+                        self.get_logger().info(f"tag_id: {tag_id}, x: {round(x, 2)}, y: {round(y, 2)}, roll: {round(roll, 2)}, pitch: {round(pitch, 2)}, yaw: {round(yaw, 2)}")
+
+                        # self.asdf.sendTransform(self.drone_base_link_to_worker_pickup_frame_tfs[tag_id])
+                        self.asdf.sendTransform(self.worker_pickup_frame_to_tag_tfs[tag_id])
+
                     x_avg_err += x
                     y_avg_err += y
                     yaw_avg_err += yaw
                     found_tags_cnt += 1
                 else:
-                    pass
+                    if tag_id == 2:
+                        self.get_logger().info(f"tag_id: {tag_id}, OUTLIER x: {round(x, 2)}, y: {round(y, 2)}, roll: {round(roll, 2)}, pitch: {round(pitch, 2)}, yaw: {round(yaw, 2)}")
 
         if found_tags_cnt > 0:
             x_avg_err /= found_tags_cnt
@@ -239,7 +240,7 @@ class GoUnderWorker(Node):
         # # Clear buffer & transforms
         self.tf_buffer = Buffer() 
         self.tf_listener = TransformListener(self.tf_buffer, self)
-        self.drone_base_link_to_worker_base_link_tfs = [
+        self.drone_base_link_to_worker_pickup_frame_tfs = [
             None,
             None,
             None,
@@ -248,7 +249,7 @@ class GoUnderWorker(Node):
             None
         ]
         time.sleep(3) # Allow a few seconds to find tags after clearing
-        self.update_transforms([1,2,3,4,5,6])
+        self.update_transforms([0,1,2,3,4,5])
         
         # Determine if left or right side tags on worker will be visible/used during go under operation
         useable_tags, approach_side = self.determine_worker_approach_side()
@@ -301,44 +302,60 @@ class GoUnderWorker(Node):
 
         return res
 
-    def transform_to_matrix(self, ts: TransformStamped) -> np.ndarray:
-        """
-        Convert a TransformStamped message to a 4x4 homogeneous transformation matrix.
-        """
-        # Get translation and quaternion from the message
-        t = ts.transform.translation
-        q = ts.transform.rotation
-        translation = [t.x, t.y, t.z]
-        quat = [q.x, q.y, q.z, q.w]
-        
-        # Build the transformation matrix from the quaternion
-        mat = transformations.quaternion_matrix(quat)
-        # Insert the translation
-        mat[0:3, 3] = translation
-        return mat
+    def get_transform_a_to_c(self, transform_a_b: TransformStamped, 
+                            transform_b_c: TransformStamped) -> TransformStamped:
+        # Extract translation and quaternion from T_{A -> B}
+        t_ab = np.array([
+            transform_a_b.transform.translation.x,
+            transform_a_b.transform.translation.y,
+            transform_a_b.transform.translation.z
+        ])
+        q_ab = np.array([
+            transform_a_b.transform.rotation.x,
+            transform_a_b.transform.rotation.y,
+            transform_a_b.transform.rotation.z,
+            transform_a_b.transform.rotation.w
+        ])
 
-    def matrix_to_transform(self, mat: np.ndarray, parent_frame: str, child_frame: str) -> TransformStamped:
-        """
-        Convert a 4x4 homogeneous transformation matrix into a TransformStamped message.
-        """
-        ts = TransformStamped()
-        # (You would normally fill in the timestamp here)
-        ts.header.frame_id = parent_frame
-        ts.child_frame_id = child_frame
+        # Extract translation and quaternion from T_{B -> C}
+        t_bc = np.array([
+            transform_b_c.transform.translation.x,
+            transform_b_c.transform.translation.y,
+            transform_b_c.transform.translation.z
+        ])
+        q_bc = np.array([
+            transform_b_c.transform.rotation.x,
+            transform_b_c.transform.rotation.y,
+            transform_b_c.transform.rotation.z,
+            transform_b_c.transform.rotation.w
+        ])
 
-        # Extract translation
-        t = mat[0:3, 3]
-        ts.transform.translation.x = t[0]
-        ts.transform.translation.y = t[1]
-        ts.transform.translation.z = t[2]
+        # Compose T_{A -> C} = T_{A -> B} * T_{B -> C}
+        # New rotation: q_ac = q_ab * q_bc
+        q_ac = transformations.quaternion_multiply(q_ab, q_bc)
+        # New translation: t_ac = t_ab + R(q_ab) * t_bc
+        R_ab = transformations.quaternion_matrix(q_ab)[:3, :3]
+        t_ac = t_ab + np.dot(R_ab, t_bc)
 
-        # Extract quaternion
-        q = transformations.quaternion_from_matrix(mat)
-        ts.transform.rotation.x = q[0]
-        ts.transform.rotation.y = q[1]
-        ts.transform.rotation.z = q[2]
-        ts.transform.rotation.w = q[3]
-        return ts
+        # Build the new TransformStamped message.
+        transform_a_c = TransformStamped()
+        transform_a_c.header.stamp = transform_a_b.header.stamp  # Use an appropriate timestamp
+        transform_a_c.header.frame_id = transform_a_b.header.frame_id  # frame A (parent)
+        transform_a_c.child_frame_id = transform_b_c.child_frame_id      # frame C (child)
+
+        transform_a_c.transform.translation.x = t_ac[0]
+        transform_a_c.transform.translation.y = t_ac[1]
+        transform_a_c.transform.translation.z = t_ac[2]
+        transform_a_c.transform.rotation.x = q_ac[0]
+        transform_a_c.transform.rotation.y = q_ac[1]
+        transform_a_c.transform.rotation.z = q_ac[2]
+        transform_a_c.transform.rotation.w = q_ac[3]
+
+        return transform_a_c
+
+
+
+
 
 
 def main(args=None):
