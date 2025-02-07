@@ -48,7 +48,7 @@ class MecanumRobotController(Node):
             vx = deadband_vx
 
         vy = msg.linear.y
-        deadband_vy = 0.05
+        deadband_vy = 0.01
 
         if vy > -deadband_vy and vy < 0:
             vy = -deadband_vy
