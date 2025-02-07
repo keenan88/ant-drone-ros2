@@ -80,8 +80,7 @@
  
 //     // Sets all motor connectors to the correct mode for Follow Digital
 //     // Velocity, Unipolar PWM mode.
-//     MotorMgr.MotorModeSet(MotorManager::MOTOR_ALL,
-//                           Connector::CPM_MODE_A_DIRECT_B_PWM);
+//     MotorMgr.MotorModeSet(MotorManager::MOTOR_ALL, Connector::CPM_MODE_A_DIRECT_B_PWM);
  
 //     // Sets up serial communication and waits up to 5 seconds for a port to open.
 //     // Serial communication is not required for this example to run.
@@ -102,6 +101,7 @@
 //     SerialPort.SendLine("Motor Enabled");
  
 //     while (true) {
+
 //         // Read the voltage on the analog sensor (0-10V).
 //         // Convert the voltage measured to a velocity within the valid range.
 //         int32_t commandedVelocity =

@@ -45,40 +45,21 @@ services:
     ipc: host
     pid: host
 
-  
-
-  # antdrone0_apriltag:
-  #   container_name: antdrone0_apriltag
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/apriltag.dockerfile
-  #   environment:
-  #     - DRONE_NAME=${DRONE0_NAME}
-  #     - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-  #     - USE_SIM_TIME=False
-  #     - DISPLAY=${DISPLAY}
-  #   volumes:
-  #     - ./antdrone_apriltag:/home/humble_ws/src/antdrone_apriltag:rw
-  #     - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
-  #     - /dev:/dev
-  #   privileged: true
-  #   network_mode: host
-  #   ipc: host
-  #   pid: host
-
-  
-
-  antdrone0_laserscan:
-    container_name: antdrone0_laserscan
+  antdrone0_apriltag:
+    container_name: antdrone0_apriltag
     build:
       context: .
-      dockerfile: ./docker/laserscan.Dockerfile
-    volumes:
-      - ./antdrone_laserscan:/home/humble_ws/src/antdrone_laserscan
+      dockerfile: ./docker/apriltag.dockerfile
     environment:
       - DRONE_NAME=${DRONE0_NAME}
-      # - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
-      - USE_SIM_TIME=${USE_SIM_TIME}
+      - ROS_DOMAIN_ID=${DRONE0_ROS_DOMAIN_ID}
+      - USE_SIM_TIME=False
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - ./antdrone_apriltag:/home/humble_ws/src/antdrone_apriltag:rw
+      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
+      - /dev:/dev
+    privileged: true
     network_mode: host
     ipc: host
     pid: host

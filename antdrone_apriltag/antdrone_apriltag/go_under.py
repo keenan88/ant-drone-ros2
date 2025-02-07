@@ -223,13 +223,12 @@ class GoUnderWorker(Node):
 
                     twist.linear.y = self.get_corrective_y_vel(y_err)
 
-                    self.get_logger().info(f"{n_tags_found, round(y_err, 2), round(twist.linear.y, 2)}")
+                    self.get_logger().info(f"{n_tags_found, round(x_err, 2), round(y_err, 2), round(yaw_err, 2)}")
 
                     # Only go forward if well-aligned
                     if abs(yaw_err) <= self.angle_tol:
                         if abs(y_err) <= self.y_tol: 
-                            pass
-                            # twist.linear.x = self.get_x_vel(x_err)
+                            twist.linear.x = self.get_x_vel(x_err)
 
                     in_position = (abs(x_err) <= self.x_tol) and (abs(yaw_err) <= self.angle_tol) and (abs(y_err) <= self.y_tol)
 
@@ -239,12 +238,12 @@ class GoUnderWorker(Node):
                     # TODO - trigger recovery behaviors
                     pass
 
-                self.cmd_vel_pub.publish(twist)
+                # self.cmd_vel_pub.publish(twist)
                 time.sleep(0.01)
 
             # Send stop command
             twist = Twist()
-            self.cmd_vel_pub.publish(twist)
+            # self.cmd_vel_pub.publish(twist)
 
             res.success = True
             res.side_entered = approach_side

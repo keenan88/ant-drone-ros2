@@ -1,21 +1,36 @@
 services:
 
-  # antdrone_clearcore_uros_agent:
-  #   image: microros/micro-ros-agent:humble
-  #   container_name: antdrone0_clearcore_uros_agent
-  #   stdin_open: true
-  #   tty: true
-  #   ports:
-  #     - 8888:8888/udp 
-  #   # environment:
-  #     # - ROS_DOMAIN_ID=0
-  #   command: udp4 --port 8888 --verbose 6
-  #   # command: serial --dev /dev/ttyACM0 -v6 
-  #   privileged: true
-  #   network_mode: host
-  #   restart: "no"
-  #   ipc: host
-  #   pid: host
+  antdrone_clearcore_uros_agent:
+    image: microros/micro-ros-agent:humble
+    container_name: antdrone0_clearcore_uros_agent
+    stdin_open: true
+    tty: true
+    ports:
+      - 8888:8888/udp 
+    # environment:
+      # - ROS_DOMAIN_ID=0
+    command: udp4 --port 8888 --verbose 6
+    # command: serial --dev /dev/ttyACM0 -v6 
+    privileged: true
+    network_mode: host
+    restart: "no"
+    ipc: host
+    pid: host
+
+  antdrone0_usbcam:
+    container_name: antdrone0_usbcam
+    build:
+      context: .
+      dockerfile: ./docker/usbcam.dockerfile
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
+      # - /dev:/dev
+    network_mode: host
+    privileged: true
+    ipc: host
+    pid: host
 
   # antdrone_espevb_uros_agent:
   #   image: microros/micro-ros-agent:humble
@@ -61,21 +76,4 @@ services:
   #   ipc: host
   #   pid: host
 
-
-
-  antdrone0_usbcam:
-    container_name: antdrone0_usbcam
-    build:
-      context: .
-      dockerfile: ./docker/apriltag.dockerfile
-    environment:
-      - USE_SIM_TIME=False
-      - DISPLAY=${DISPLAY}
-    volumes:
-      - ./antdrone_bringup:/home/humble_ws/src/antdrone_bringup:rw
-      - /dev:/dev
-    network_mode: host
-    privileged: true
-    ipc: host
-    pid: host
-    command: sleep infinity
+  
