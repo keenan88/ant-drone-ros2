@@ -12,6 +12,7 @@ RUN apt-get update && \
     ros-humble-usb-cam \
     ros-humble-camera-calibration \
     ros-humble-ament-cmake-clang-format \
+    ros-humble-nav2-msgs \
     && rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m pip install numpy scipy transformations setuptools==58.2.0

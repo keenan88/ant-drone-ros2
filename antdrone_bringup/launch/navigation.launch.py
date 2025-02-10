@@ -153,20 +153,20 @@ def generate_launch_description():
     )
 
     ld = LaunchDescription()
-    ld.add_action(amcl_pose_debugger)
+    # ld.add_action(amcl_pose_debugger)
 
-    ld.add_action(keepout_filter_map_server)
-    ld.add_action(keepout_filter_mask_server)
+    # ld.add_action(keepout_filter_map_server)
+    # ld.add_action(keepout_filter_mask_server)
 
-    ld.add_action(controller)
-    ld.add_action(planner)
-    ld.add_action(behaviors)
-    ld.add_action(bt)
-    ld.add_action(map_server)
-    ld.add_action(lifecycle_manager)
-    ld.add_action(rviz)
+    # ld.add_action(controller)
+    # ld.add_action(planner)
+    # ld.add_action(behaviors)
+    # ld.add_action(bt)
+    # ld.add_action(map_server)
+    # ld.add_action(lifecycle_manager)
+    # ld.add_action(rviz)
     ld.add_action(odometry)
-    ld.add_action(amcl)
+    # ld.add_action(amcl)
 
     return ld
 
