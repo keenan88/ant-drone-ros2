@@ -26,6 +26,7 @@ class GoUnderWorker(Node):
         self.tf_listener = TransformListener(self.tf_buffer, self)
         self.cmd_vel_pub = self.create_publisher(Twist, 'cmd_vel', 10)
         self.go_under_service = self.create_service(GoUnder, 'go_under_worker', self.go_under_worker)
+        self.update_tag_pos_timer = self.create_timer(0.2, self.update_transforms) # Regularly check for transforms to tags. Frequency must be faster than update timeout tolerance.
 
 
         self.asdf = StaticTransformBroadcaster(self)        
@@ -34,24 +35,24 @@ class GoUnderWorker(Node):
         # TF frames from the actual worker to the drone.
         # worker pickup link is -90 degrees yaw rotated from worker base link. This aligns it with drone base link when drone is driving at side of worker.
         # worker_pickup_frame_x (x=1,2,3) are all the same frame IRL, but TF2 cant handle closed loops, so one frame per tag.
-        self.worker_to_tag_tfs = [
+        self.worker_to_tag_static_tfs = [
             # Tag 0 is facing down in the middle of the worker
             TransformStamped(
-                header = Header(stamp=Time(seconds=0).to_msg(), frame_id='worker_pickup_frame_0'),
-                child_frame_id='tag16h5:0',
+                header = Header(stamp=Time(seconds=0).to_msg(), frame_id='tag16h5:0'),
+                child_frame_id='worker_pickup_frame_0',
                 transform=Transform(
                     translation = Vector3(x=0.0, y=0.22, z=-0.01),
-                    rotation = Quaternion(x=1.0, y=0.0, z=0.0, w=0.0)
+                    rotation = Quaternion(x=-1.0, y=0.0, z=0.0, w=0.0)
                 )
             ),
 
             # Tag 1 is facing down on the far side of the worker
             TransformStamped(
-                header = Header(stamp=Time(seconds=0).to_msg(), frame_id='worker_pickup_frame_1'),
-                child_frame_id='tag16h5:1',
+                header = Header(stamp=Time(seconds=0).to_msg(), frame_id='tag16h5:1'),
+                child_frame_id='worker_pickup_frame_1',
                 transform=Transform(
-                    translation = Vector3(x=0.34, y=0.22, z=-0.05),
-                    rotation = Quaternion(x=1.0, y=0.0, z=0.0, w=0.0)
+                    translation = Vector3(x=-0.34, y=0.22, z=-0.05),
+                    rotation = Quaternion(x=-1.0, y=0.0, z=0.0, w=0.0)
                 )
             ),
 
@@ -67,13 +68,15 @@ class GoUnderWorker(Node):
         ]
 
         self.drone_to_worker_tfs = [
-            None,
-            None,
-            None,
-            None,
-            None,
-            None
+            TransformStamped(),
+            TransformStamped(),
+            TransformStamped(),
+            TransformStamped(),
+            TransformStamped(),
+            TransformStamped()
         ]
+
+        self.drone_to_worker_avg_tf = TransformStamped()
 
 
         self.x_tol = 0.03
@@ -84,19 +87,22 @@ class GoUnderWorker(Node):
         self.vx_max = 0.05
         self.vyaw_max = 5 / 180 * 3.14
 
-    def update_transforms(self, useable_tags):
+    def update_transforms(self):
 
-        for tag_id in useable_tags:
+        for tag_id in range(3):
             
             self.get_transform(tag_id)
 
+        self.get_goal_err()
+
     def get_transform(self, tag_id):
 
-        if tag_id == 2:
+        if tag_id in [2]:
 
             try:
                 # Publish transform from worker pickup frame to tag to keep it fresh
-                self.asdf.sendTransform(self.worker_to_tag_tfs[tag_id])
+                self.worker_to_tag_static_tfs[tag_id].header.stamp = self.get_clock().now().to_msg()
+                self.asdf.sendTransform(self.worker_to_tag_static_tfs[tag_id])
                 
                 # Read Full transform from drone -> tag -> worker. tag -> worker TF is published by apriltag node.
                 now = rclpy.time.Time()
@@ -104,15 +110,36 @@ class GoUnderWorker(Node):
                 drone_to_worker: TransformStamped = self.tf_buffer.lookup_transform(
                     'base_link', 'worker_pickup_frame_' + str(tag_id), now, timeout
                 )
+
+                qx = drone_to_worker.transform.rotation.x
+                qy = drone_to_worker.transform.rotation.y
+                qz = drone_to_worker.transform.rotation.z
+                qw = drone_to_worker.transform.rotation.w
+
+                rotation = R.from_quat([qx, qy, qz, qw])
+
+                euler_angles = rotation.as_euler('xyz', degrees=False)
+
+                roll = euler_angles[0]
+                pitch = euler_angles[1]
+                yaw = euler_angles[2]
+                x = drone_to_worker.transform.translation.x
+                y = drone_to_worker.transform.translation.y
+                z = drone_to_worker.transform.translation.z
+
+                angular_outlier = abs(pitch) >= 15/180*3.14 or abs(roll)  <= 170/180*3.14
                 
-                # self.get_logger().info(f"Transform:: {drone_to_worker}")
+                linear_outlier = abs(x) >= 2.0 or abs(y) >= 1.0 or abs(z) >= 1.0
 
-                self.drone_to_worker_tfs[tag_id] = drone_to_worker
-                    
-
+                if not ( linear_outlier): #angular_outlier or
+                    self.get_logger().info(f"tag_id: {tag_id}, x: {round(x, 2)}, y: {round(y, 2)}, roll: {round(roll, 2)}, pitch: {round(pitch, 2)}, yaw: {round(yaw, 2)}")
+                    self.drone_to_worker_tfs[tag_id] = drone_to_worker
+                
+                else:
+                    self.get_logger().info(f"tag_id: {tag_id}, OUTLIER x: {round(x, 2)}, y: {round(y, 2)}, roll: {round(roll, 2)}, pitch: {round(pitch, 2)}, yaw: {round(yaw, 2)}")
+            
             except Exception as e:
-                self.get_logger().info(f"Coudl not get transform for tag {tag_id}: {e}")
-                self.drone_to_worker_tfs[tag_id] = None
+                self.get_logger().info(f"Could not get transform for tag {tag_id}: {e}")
                 pass
 
     def get_corrective_angle_vel(self, yaw):
@@ -140,7 +167,7 @@ class GoUnderWorker(Node):
         x_vel = 0.0
     
         if x_err > self.x_tol:
-            x_vel = 0.15 * np.sqrt(abs(x_err))
+            x_vel = 0.05 * np.sqrt(abs(x_err))
 
         return float(x_vel)
 
@@ -151,6 +178,7 @@ class GoUnderWorker(Node):
         left_tag_ids =  [0, 1, 2]
         right_tag_ids = [3, 4, 5]
 
+        # TODO - update to check recency of TFs instead of None check
         left_tags_visible_cnt =  sum(1 for key in left_tag_ids if self.drone_to_worker_tfs[key] is not None)
         right_tags_visible_cnt = sum(1 for key in right_tag_ids if self.drone_to_worker_tfs[key] is not None)
 
@@ -167,16 +195,20 @@ class GoUnderWorker(Node):
 
         return useable_tags, approach_side
     
-    def get_goal_err(self, useable_tags):
+    def get_goal_err(self):
 
         x_avg_err = 0.0
         y_avg_err = 0.0
         yaw_avg_err = 0.0
         found_tags_cnt = 0
 
-        for tag_id in useable_tags:
+        curr_ns = self.get_clock().now().nanoseconds
 
-            if self.drone_to_worker_tfs[tag_id] != None:
+        for tf in self.drone_to_worker_tfs:
+
+            tf_ns = tf.header.stamp.sec * 1e9 + tf.header.stamp.nanosec
+
+            if curr_ns < tf_ns + 0.5e9:
 
                 transform = self.drone_to_worker_tfs[tag_id]
 
@@ -196,29 +228,23 @@ class GoUnderWorker(Node):
                 y = transform.transform.translation.y
                 z = transform.transform.translation.z
 
-                angular_outlier = abs(pitch) >= 15/180*3.14 or abs(roll)  <= 170/180*3.14
-                
-                linear_outlier = abs(x) >= 2.0 or abs(y) >= 1.0 or abs(z) >= 1.0
+                x_avg_err += x
+                y_avg_err += y
+                yaw_avg_err += yaw
+                found_tags_cnt += 1
 
-                if not ( linear_outlier): #angular_outlier or
-
-                    if tag_id == 2:
-                        self.get_logger().info(f"tag_id: {tag_id}, x: {round(x, 2)}, y: {round(y, 2)}, roll: {round(roll, 2)}, pitch: {round(pitch, 2)}, yaw: {round(yaw, 2)}")
-                
-                    x_avg_err += x
-                    y_avg_err += y
-                    yaw_avg_err += yaw
-                    found_tags_cnt += 1
-                else:
-                    if tag_id == 2:
-                        self.get_logger().info(f"tag_id: {tag_id}, OUTLIER x: {round(x, 2)}, y: {round(y, 2)}, roll: {round(roll, 2)}, pitch: {round(pitch, 2)}, yaw: {round(yaw, 2)}")
+        self.drone_to_worker_avg_tf.header.stamp = self.get_clock().now().to_msg()
 
         if found_tags_cnt > 0:
             x_avg_err /= found_tags_cnt
             y_avg_err /= found_tags_cnt
             yaw_avg_err /= found_tags_cnt
+            
+            self.drone_to_worker_avg_tf.transform.translation.x = x_avg_err
+            self.drone_to_worker_avg_tf.transform.translation.y = y_avg_err
+            self.drone_to_worker_avg_tf.transform.translation.z = yaw_avg_err # Using z translation as yaw rotation, avoiding quaternion in internal use.
 
-        return found_tags_cnt, x_avg_err, y_avg_err, yaw_avg_err
+        return found_tags_cnt
 
         
 
@@ -226,24 +252,9 @@ class GoUnderWorker(Node):
         # Assumes an apriltag is visible in apriltag cam FOV when called
 
         res.success = False
-
-        # # Clear buffer & transforms
-        self.tf_buffer = Buffer() 
-        self.tf_listener = TransformListener(self.tf_buffer, self)
-        self.drone_to_worker_tfs = [
-            None,
-            None,
-            None,
-            None,
-            None,
-            None
-        ]
-        time.sleep(3) # Allow a few seconds to find tags after clearing
-        self.update_transforms([0,1,2,3,4,5])
-        
+    
         # Determine if left or right side tags on worker will be visible/used during go under operation
         useable_tags, approach_side = self.determine_worker_approach_side()
-        useable_tags = [0, 1, 2] # Only have rear-side tags mounted right now
 
         if approach_side != 'N':
 
@@ -251,10 +262,7 @@ class GoUnderWorker(Node):
             while not in_position:
 
                 # Update transforms each iteration. I tried using a timer, it is blocked by this loop.
-                self.update_transforms(useable_tags)
-
-                n_tags_found, x_err, y_err, yaw_err = self.get_goal_err(useable_tags)
- 
+            
                 twist = Twist() # Refresh twist every time
 
                 if n_tags_found > 0:
@@ -279,7 +287,7 @@ class GoUnderWorker(Node):
                     # TODO - trigger recovery behaviors
                     pass
 
-                self.cmd_vel_pub.publish(twist)
+                # self.cmd_vel_pub.publish(twist)
                 time.sleep(0.01)
 
             # Send stop command
