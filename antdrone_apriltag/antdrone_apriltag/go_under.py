@@ -155,11 +155,7 @@ class GoUnderWorker(Node):
                     
                     self.drone_to_worker_tfs[tag_id] = drone_to_worker_tf
                     self.drone_to_worker_tfs[tag_id].transform.translation.z = yaw # Using z coord for yaw to avoid transforming between RPY and Quaternion all the time
-                    
-
                 
-
-
     def record_odom(self, odom: Odometry):
 
         # Record drone poses in odom frame. 
@@ -238,7 +234,7 @@ class GoUnderWorker(Node):
     def determine_worker_approach_side(self):
 
         left_tag_ids =  [0, 1, 2]
-        right_tag_ids = [3,4]
+        right_tag_ids =   [3, 4, 5]
 
         # TODO - update to check recency of TFs instead of None check
         left_tags_visible_cnt =  sum(1 for key in left_tag_ids if self.drone_to_worker_tfs[key] is not None)
@@ -318,6 +314,9 @@ class GoUnderWorker(Node):
 
             self.get_logger().info(f"tags {tags}, x: {round(self.drone_to_worker_avg_tf.transform.translation.x, 3)}, y: {round(self.drone_to_worker_avg_tf.transform.translation.y, 3)}, yaw: {round(self.drone_to_worker_avg_tf.transform.translation.z, 3)}")
             
+        else:
+            self.get_logger().info("No Tags found within 0.1s timeout")
+
         return found_tags_cnt
 
         
@@ -340,45 +339,60 @@ class GoUnderWorker(Node):
         if approach_side != 'N':
 
             in_position = False
-            while not in_position:
+            no_tags_cnt = 0
 
-                self.get_goal_err()
+            while not in_position and no_tags_cnt < 50:
+
+                found_tags_cnt = self.get_goal_err()
+
+                if found_tags_cnt > 0:
+                    no_tags_cnt = 0
             
-                twist = Twist() # reset twist every time
+                    twist = Twist() # reset twist every time
 
-                yaw_err = self.drone_to_worker_avg_tf.transform.translation.z
-                x_err = self.drone_to_worker_avg_tf.transform.translation.x
-                y_err = self.drone_to_worker_avg_tf.transform.translation.y
+                    yaw_err = self.drone_to_worker_avg_tf.transform.translation.z
+                    x_err = self.drone_to_worker_avg_tf.transform.translation.x
+                    y_err = self.drone_to_worker_avg_tf.transform.translation.y
 
-                twist.angular.z = self.get_corrective_angle_vel(yaw_err)
+                    twist.angular.z = self.get_corrective_angle_vel(yaw_err)
 
-                twist.linear.y = self.get_corrective_y_vel(y_err)
+                    twist.linear.y = self.get_corrective_y_vel(y_err)
 
-                well_aligned = abs(y_err) <= self.y_tol and abs(yaw_err) <= self.yaw_tolerance
-                front_under_worker = x_err <=  0.7
-                far_away = x_err >= 0.9
-                if well_aligned or front_under_worker or far_away:
-                    pass
-                    twist.linear.x = self.get_x_vel(x_err)
+                    well_aligned = abs(y_err) <= self.y_tol and abs(yaw_err) <= self.yaw_tolerance
+                    front_under_worker = x_err <=  0.7
+                    far_away = x_err >= 0.9
+                    if well_aligned or front_under_worker or far_away:
+                        pass
+                        twist.linear.x = self.get_x_vel(x_err)
 
-                in_position = (abs(x_err) <= self.x_tol) and (abs(yaw_err) <= self.yaw_tolerance) and (abs(y_err) <= self.y_tol)
+                    in_position = (abs(x_err) <= self.x_tol) and (abs(yaw_err) <= self.yaw_tolerance) and (abs(y_err) <= self.y_tol)
 
-                curr_t = self.get_clock().now().to_msg()
-                curr_s = curr_t.sec + curr_t.nanosec / 1e9
+                    curr_t = self.get_clock().now().to_msg()
+                    curr_s = curr_t.sec + curr_t.nanosec / 1e9
 
-                if curr_s - last_publish_s >= 0.016: # Throttle publishing to max 60hz
-                    last_publish_s = curr_s
-                    self.cmd_vel_pub.publish(twist)                 
+                    if curr_s - last_publish_s >= 0.016: # Throttle publishing to max 60hz
+                        last_publish_s = curr_s
+                        self.cmd_vel_pub.publish(twist)       
+
+                else:
+                    no_tags_cnt += 1
+                    sleep(0.1)
 
 
             # Send stop command
             twist = Twist()
             self.cmd_vel_pub.publish(twist)
 
-            goal_handle.succeed()
             
-            result.success = True
-            result.side_entered = approach_side
+
+            if in_position and no_tags_cnt < 50:
+                goal_handle.succeed()
+                result.success = True
+                result.side_entered = approach_side
+            else:
+                goal_handle.abort()
+                result.success = False
+
 
         return result
 
