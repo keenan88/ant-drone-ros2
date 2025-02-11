@@ -3,7 +3,7 @@ apriltag:                 # node name
     # setup (defaults)
     image_transport: compressed  # image format: "raw" or "compressed"
     family: 16h5         # tag family name: 16h5, 25h9, 36h11
-    size: 0.106 #0.136             # Beware - tags included from https://github.com/koide3/gazebo_apriltag/tree/master have a white border, so the tag size is smaller than the image size.
+    size: 0.14 #0.136             # Beware - tags included from https://github.com/koide3/gazebo_apriltag/tree/master have a white border, so the tag size is smaller than the image size.
     profile: false        # print profiling information to stdout
 
     # tuning of detection (defaults)
@@ -19,6 +19,6 @@ apriltag:                 # node name
     # (optional) list of tags
     # If defined, 'frames' and 'sizes' must have the same length as 'ids'.
     tag:
-      ids:    [0,1,2,3,4,5]         # tag IDs for which to publish transform
-      frames: [tag16h5:0, tag16h5:1, tag16h5:2, tag16h5:3, tag16h5:4, tag16h5:5]   # frame names
-      sizes:  [0.106, 0.106, 0.106, 0.106, 0.106, 0.106]     # tag-specific edge size, overrides the default 'size'
+      ids:    [0,1, 2]         # tag IDs for which to publish transform
+      frames: [tag16h5:0, tag16h5:1, tag16h5:2]   # frame names
+      sizes:  [0.14, 0.14, 0.14]     # tag-specific edge size, overrides the default 'size'

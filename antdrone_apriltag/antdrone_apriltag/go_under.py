@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 from tf2_ros import Buffer, TransformListener
 from geometry_msgs.msg import TransformStamped, Twist, Transform
-from geometry_msgs.msg import Vector3, Quaternion
+from geometry_msgs.msg import Vector3, Quaternion, Point
 from nav_msgs.msg import Odometry
 from rclpy.time import Time
 from std_msgs.msg import Header
@@ -43,35 +43,39 @@ class GoUnderWorker(Node):
         # worker pickup link is -90 degrees yaw rotated from worker base link. This aligns it with drone base link when drone is driving at side of worker.
         # worker_pickup_frame_x (x=1,2,3) are all the same frame IRL, but TF2 cant handle closed loops, so one frame per tag.
         self.worker_to_tag_static_tfs = [
-            # Tag 0 is facing down in the middle of the worker
+
+            # Tag 0 is outward facing
             TransformStamped(
                 header = Header(stamp=Time(seconds=0).to_msg(), frame_id='tag16h5:0'),
                 child_frame_id='worker_pickup_frame_0',
                 transform=Transform(
-                    translation = Vector3(x=0.0, y=0.215, z=-0.01),
-                    rotation = Quaternion(x=-1.0, y=0.0, z=0.0, w=0.0)
+                    translation = Vector3(x=0.385 + 0.02, y=0.124+0.01, z=-0.4),
+                    rotation = Quaternion(x=0.5, y=-0.5, z=-0.5, w=-0.5)
                 )
             ),
+
 
             # Tag 1 is facing down on the far side of the worker
             TransformStamped(
                 header = Header(stamp=Time(seconds=0).to_msg(), frame_id='tag16h5:1'),
                 child_frame_id='worker_pickup_frame_1',
                 transform=Transform(
-                    translation = Vector3(x=-0.34, y=0.225, z=-0.05),
-                    rotation = Quaternion(x=-1.0, y=0.0, z=0.0, w=0.0)
+                    translation = Vector3(x=0.21, y=0.205, z=-0.05),
+                    rotation = Quaternion(x=-0.707, y=0.707, z=0.0, w=0.0)
                 )
             ),
 
-            # Tag 2 is outward facing
+            # Tag 2 is facing down in the middle of the worker
             TransformStamped(
                 header = Header(stamp=Time(seconds=0).to_msg(), frame_id='tag16h5:2'),
                 child_frame_id='worker_pickup_frame_2',
                 transform=Transform(
-                    translation = Vector3(x=0.345, y=0.06, z=-0.4),
-                    rotation = Quaternion(x=0.5, y=-0.5, z=-0.5, w=-0.5)
+                    translation = Vector3(x=0.21, y= 0.0, z=-0.05),
+                    rotation = Quaternion(x=-0.707, y=0.707, z=0.0, w=0.0)
                 )
             ),
+
+            
         ]
 
         self.drone_to_worker_tfs = [
@@ -80,28 +84,61 @@ class GoUnderWorker(Node):
             TransformStamped(),
             TransformStamped(),
             TransformStamped(),
-            TransformStamped()
         ]
 
         self.drone_to_worker_avg_tf = TransformStamped()
-        self.prev_odom_poses = [] 
+        
+        self.pose_chain = [
+            Odometry(
+                header = Header(stamp=self.get_clock().now().to_msg(), frame_id='previous drone position')
+            )
+        ] 
         self.prev_odom_ns = self.get_clock().now().nanoseconds
 
 
-        self.x_tol = 0.03
+        self.x_tol = 0.01
         self.y_tol = 0.01
-        self.yaw_tolerance = 0.05
+        self.yaw_tolerance = 2 / 180*3.14
 
-        self.vy_max = 0.01
+        self.vy_max = 0.05
         self.vx_max = 0.05
-        self.vyaw_max = 5 / 180 * 3.14
+        self.vyaw_max = 5.0 / 180 * 3.14
 
-    def record_odom(self, wheel_odom: Odometry):
+    def record_odom(self, odom: Odometry):
 
-        self.prev_odom_poses.append(wheel_odom) # Append newest odom message to end of list
+        # Localize with velocity since velocity is always in robot frame. Position in odometry message is odometry frame, which may not be aligned with worker frame
+    
+        last_pos = self.pose_chain[-1]
+        
+        prev_t_ns = last_pos.header.stamp.sec + last_pos.header.stamp.nanosec / 1e9
+        curr_t_ns = odom.header.stamp.sec + odom.header.stamp.nanosec / 1e9
 
-        if len(self.prev_odom_poses) > 500:
-            self.prev_odom_poses.pop(0) # Remove oldest TF from start of list
+        dt = curr_t_ns - prev_t_ns
+        vyaw = odom.twist.twist.angular.z
+        dyaw = vyaw * dt
+        
+        z_rot_matrix = np.array([
+            [np.cos(dyaw), -np.sin(dyaw),    0],
+            [np.sin(dyaw),  np.cos(dyaw),    0],
+            [0,             0,               1]
+        ])
+
+        vx = odom.twist.twist.linear.x
+        vy = odom.twist.twist.linear.y
+        velocity_vector = np.array([vx, vy, vyaw])
+
+        delta_x, delta_y, delta_theta = np.dot(z_rot_matrix, velocity_vector) * dt
+
+        new_pos_rel_to_last_pos = Odometry(header = Header(stamp=self.get_clock().now().to_msg(), frame_id='previous drone position'))
+        new_pos_rel_to_last_pos.pose.pose.position.x = last_pos.pose.pose.position.x + delta_x
+        new_pos_rel_to_last_pos.pose.pose.position.y = last_pos.pose.pose.position.x + delta_y
+        new_pos_rel_to_last_pos.pose.pose.position.z = last_pos.pose.pose.position.x + delta_z
+
+
+        self.pose_chain.append(new_pos_rel_to_last_pos) # Append newest odom message to end of list
+
+        if len(self.pose_chain) > 500:
+            self.pose_chain.pop(0) # Remove oldest TF from start of list
 
     def update_tag_transforms(self):
 
@@ -152,10 +189,40 @@ class GoUnderWorker(Node):
             linear_outlier = abs(x) >= 2.0 or abs(y) >= 1.0 or abs(z) >= 1.0
 
             if not (angular_outlier or linear_outlier):
-                self.drone_to_worker_tfs[tag_id].header.stamp = drone_to_worker.header.stamp
-                self.drone_to_worker_tfs[tag_id].transform.translation.x = x
-                self.drone_to_worker_tfs[tag_id].transform.translation.y = y
-                self.drone_to_worker_tfs[tag_id].transform.translation.z = yaw
+                
+                tf_ns = tf.header.stamp.sec * 1e9 + tf.header.stamp.nanosec
+
+                for odom_msg in self.pose_chain:
+
+                    msg_ns = odom_msg.header.stamp.sec * 1e9 + odom_msg.header.stamp.nanosec
+                    dt = abs(msg_ns - tf_ns) / 1e9
+
+                    if dt < 0.1:
+
+                        # odom_pos_last = self.pose_chain[-1].pose.pose
+                        odom_pos_at_tf = odom_msg.pose.pose
+
+                        # x_since_tf = odom_pos_at_tf.position.x - odom_pos_last.position.x
+                        # y_since_tf = odom_pos_at_tf.position.y - odom_pos_last.position.y
+
+                        # _, _, yaw0 = self.euler_from_quat(odom_pos_at_tf.orientation)
+                        # _, _, yaw1 = self.euler_from_quat(odom_pos_last.orientation)
+                        # yaw_since_tf = yaw0 - yaw1
+
+                        # x_updated_time = tf.transform.translation.x  + x_since_tf
+                        # y_updated_time = tf.transform.translation.y  + y_since_tf
+                        # z_updated_time = tf.transform.translation.z  + yaw_since_tf
+
+                        # x_avg_err += x_updated_time
+                        # y_avg_err += y_updated_time
+                        # yaw_avg_err += z_updated_time
+
+                        # found_tags_cnt += 1
+                        self.drone_to_worker_tfs[tag_id].header.stamp = drone_to_worker.header.stamp
+                        self.drone_to_worker_tfs[tag_id].transform.translation.x = x
+                        self.drone_to_worker_tfs[tag_id].transform.translation.y = y
+                        self.drone_to_worker_tfs[tag_id].transform.translation.z = yaw
+                        break
         
         except Exception as e:
             pass
@@ -174,9 +241,9 @@ class GoUnderWorker(Node):
         y_vel = 0.0
 
         if y_err > self.y_tol:
-            y_vel = min(self.vy_max, 0.1 * y_err)
+            y_vel = min(self.vy_max, y_err)
         elif y_err < -self.y_tol:
-            y_vel = max(-self.vy_max, 0.1 * y_err)
+            y_vel = max(-self.vy_max, y_err)
 
         return float(y_vel)
     
@@ -184,15 +251,18 @@ class GoUnderWorker(Node):
 
         x_vel = 0.0
     
-        if x_err > self.x_tol:
-            x_vel = 0.05 * np.sqrt(abs(x_err))
+        if abs(x_err) > 0:
+            x_vel = min(self.vx_max, np.sqrt(abs(x_err)))
+
+        if x_err < 0:
+            x_vel *= -1
 
         return float(x_vel)
 
     def determine_worker_approach_side(self):
 
         left_tag_ids =  [0, 1, 2]
-        right_tag_ids = [3, 4, 5]
+        right_tag_ids = [3,4]
 
         # TODO - update to check recency of TFs instead of None check
         left_tags_visible_cnt =  sum(1 for key in left_tag_ids if self.drone_to_worker_tfs[key] is not None)
@@ -224,14 +294,14 @@ class GoUnderWorker(Node):
 
             tf_ns = tf.header.stamp.sec * 1e9 + tf.header.stamp.nanosec
 
-            for odom_msg in self.prev_odom_poses:
+            for odom_msg in self.pose_chain:
 
                 msg_ns = odom_msg.header.stamp.sec * 1e9 + odom_msg.header.stamp.nanosec
                 dt = abs(msg_ns - tf_ns) / 1e9
 
                 if dt < 0.1:
 
-                    odom_pos_last = self.prev_odom_poses[-1].pose.pose
+                    odom_pos_last = self.pose_chain[-1].pose.pose
                     odom_pos_at_tf = odom_msg.pose.pose
 
                     x_since_tf = odom_pos_at_tf.position.x - odom_pos_last.position.x
@@ -295,16 +365,17 @@ class GoUnderWorker(Node):
                 twist.angular.z = self.get_corrective_angle_vel(yaw_err)
 
                 twist.linear.y = self.get_corrective_y_vel(y_err)
-                # Only go forward if well-aligned
-                if abs(yaw_err) <= self.yaw_tolerance:
-                    if abs(y_err) <= self.y_tol: 
-                        pass
-                        # twist.linear.x = self.get_x_vel(x_err)
+
+                well_aligned = abs(y_err) <= self.y_tol and abs(yaw_err) <= self.yaw_tolerance
+                front_under_worker = x_err <=  0.7
+                far_away = x_err >= 1.1
+                if well_aligned or front_under_worker or far_away:
+                    twist.linear.x = self.get_x_vel(x_err)
 
                 in_position = (abs(x_err) <= self.x_tol) and (abs(yaw_err) <= self.yaw_tolerance) and (abs(y_err) <= self.y_tol)
 
                 self.cmd_vel_pub.publish(twist) 
-                sleep(1)
+                sleep(0.05) # Throttle to max 20hz
 
             # Send stop command
             twist = Twist()

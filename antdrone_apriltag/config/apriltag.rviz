@@ -8,8 +8,8 @@ Panels:
         - /Status1
         - /TF1
         - /TF1/Frames1
-        - /TF1/Frames1/worker_pickup_frame_01
         - /Camera1
+        - /Camera1/Visibility1
       Splitter Ratio: 0.5747572779655457
     Tree Height: 458
   - Class: rviz_common/Selection
@@ -68,18 +68,12 @@ Visualization Manager:
           Value: true
         tag16h5:2:
           Value: true
-        tag16h5:3:
-          Value: true
-        tag16h5:4:
-          Value: true
-        tag16h5:5:
-          Value: true
         worker_pickup_frame_0:
-          Value: true
+          Value: false
         worker_pickup_frame_1:
-          Value: true
+          Value: false
         worker_pickup_frame_2:
-          Value: true
+          Value: false
       Marker Scale: 1
       Name: TF
       Show Arrows: false
@@ -97,12 +91,6 @@ Visualization Manager:
             tag16h5:2:
               worker_pickup_frame_2:
                 {}
-            tag16h5:3:
-              {}
-            tag16h5:4:
-              {}
-            tag16h5:5:
-              {}
         odom:
           {}
       Update Interval: 0
@@ -171,7 +159,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 5.6309380531311035
+      Distance: 3.826606273651123
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -186,10 +174,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7147949934005737
+      Pitch: 1.1947945356369019
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.201724052429199
+      Yaw: 2.5667223930358887
     Saved: ~
 Window Geometry:
   Camera:
