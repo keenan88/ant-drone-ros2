@@ -28,7 +28,8 @@ def generate_launch_description():
         ],
         remappings = [
             ('/camera_info', '/apriltag_cam/image_rect/camera_info'),
-            ('/image_rect/compressed',  '/apriltag_cam/image_rect/compressed')
+            ('/image_rect/compressed',  '/apriltag_cam/image_rect/compressed'),
+            ('/tf', '/tf_apriltag')
         ]
     )
 

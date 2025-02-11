@@ -39,8 +39,6 @@ class MecanumStateEstimator(Node):
             qos_best_effort
         )
 
-        self.odom_publish_timer = self.create_timer(0.1, self.publish_odometry)
-
         self.tf_static_broadcaster = StaticTransformBroadcaster(self)
 
         self.odom_base_link_tf = TransformStamped()
@@ -95,6 +93,8 @@ class MecanumStateEstimator(Node):
             self.x += delta_x
             self.y += delta_y
             self.theta += delta_theta
+
+            self.publish_odometry()
 
             
 
