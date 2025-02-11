@@ -32,27 +32,16 @@ class GoUnderWorker(Node):
         )
 
         self.sub_callback_group = ReentrantCallbackGroup()
-        self.sub_callback_group2 = ReentrantCallbackGroup()
         self.action_callback_group = ReentrantCallbackGroup()
 
-        # Using subscription instead of TFListener allows us to get transforms instantly (like an interrupt instead of polling with TF Listener on a timer)
+        # Using subscription instead of TFListener allows us to get transforms instantly and without missing TFs (like an interrupt instead of polling with TF Listener on a timer)
         self.tf_apriltag_sub = self.create_subscription(TFMessage, '/tf', self.record_tag_tf, 10, callback_group=self.sub_callback_group)
-        # self.wheel_odom_subscriber = self.create_subscription(Odometry, '/odom', self.record_odom, 10, callback_group=self.sub_callback_group2)
 
         self.go_under_action = ActionServer(self, GoUnder, 'go_under_worker', self.go_under_worker, callback_group=self.action_callback_group)
         self.cmd_vel_pub = self.create_publisher(Twist, 'cmd_vel', 10)
 
-        # List of drone's previous odom -> base link TFs, subtract recent from current to get displacement since last tag capture.
-        self.pose_chain = [] 
-        self.poses_at_tag_capture = [ # Holds odom -> base link TF at capture time for each tag, to be used in extrapolation.
-            TransformStamped(),
-            TransformStamped(),
-            TransformStamped(),
-            TransformStamped(),
-            TransformStamped(),
-            TransformStamped()
-        ]
 
+        # Transforms needed to get full transform from drone base link to worker pickup link
         self.base_link_to_cam_tf = TransformStamped(
             header = Header(stamp=Time(seconds=0).to_msg(), frame_id='base_link'),
             child_frame_id='apriltag_cam',
@@ -62,14 +51,9 @@ class GoUnderWorker(Node):
             )
         )
 
-        # Do not publish these tags! They are for internal use of the go-under algorithm only. Publishing will confuse Ros2 TF system.
-        # These allow us to transform worker tags to the base link for comparison to drone base link, without having to send 
-        # TF frames from the actual worker to the drone.
-        # worker pickup link is -90 degrees yaw rotated from worker base link. This aligns it with drone base link when drone is driving at side of worker.
-        # worker_pickup_frame_x (x=1,2,3) are all the same frame IRL, but TF2 cant handle closed loops, so one frame per tag.
         self.worker_to_tag_static_tfs = [
 
-            # Tag 0 is outward facing
+            # Tag 0 is outward facing on worker
             TransformStamped(
                 header = Header(stamp=Time(seconds=0).to_msg(), frame_id='tag16h5:0'),
                 child_frame_id='worker_pickup_frame_0',
@@ -111,7 +95,7 @@ class GoUnderWorker(Node):
 
         self.drone_to_worker_avg_tf = TransformStamped()
 
-        self.asdf = StaticTransformBroadcaster(self)     
+        self.tf_broadcaster = StaticTransformBroadcaster(self)     
 
         # Tolerances
         self.x_tol = 0.04
@@ -135,11 +119,11 @@ class GoUnderWorker(Node):
                 tag_to_worker.header.stamp = self.get_clock().now().to_msg()
                 self.base_link_to_cam_tf.header.stamp = self.get_clock().now().to_msg()
 
-                # self.asdf.sendTransform(self.base_link_to_cam_tf)
-                # self.asdf.sendTransform(drone_cam_to_tag)
+                # self.tf_broadcaster.sendTransform(self.base_link_to_cam_tf)
+                # self.tf_broadcaster.sendTransform(drone_cam_to_tag)
                 base_link_to_tag = self.get_transform_a_to_c(self.base_link_to_cam_tf, tf)
                 drone_to_worker_tf = self.get_transform_a_to_c(base_link_to_tag, tag_to_worker)
-                self.asdf.sendTransform(drone_to_worker_tf)
+                self.tf_broadcaster.sendTransform(drone_to_worker_tf)
 
                 roll, pitch, yaw = self.euler_from_quat(drone_to_worker_tf.transform.rotation)
                 
@@ -156,29 +140,6 @@ class GoUnderWorker(Node):
                     self.drone_to_worker_tfs[tag_id] = drone_to_worker_tf
                     self.drone_to_worker_tfs[tag_id].transform.translation.z = yaw # Using z coord for yaw to avoid transforming between RPY and Quaternion all the time
                 
-    def record_odom(self, odom: Odometry):
-
-        # Record drone poses in odom frame. 
-        # We will subtract poses in odom frame at tag capture time from poses in odom frame at current time to extrapolate robot position until next tag capture.
-
-        pos_in_odom_frame = TransformStamped()
-        pos_in_odom_frame.child_frame_id = 'base_link'
-        pos_in_odom_frame.header.frame_id = 'odom'
-        pos_in_odom_frame.header.stamp = odom.header.stamp
-        
-        pos_in_odom_frame.transform.translation.x = odom.pose.pose.position.x
-        pos_in_odom_frame.transform.translation.y = odom.pose.pose.position.y
-        pos_in_odom_frame.transform.translation.z = odom.pose.pose.position.z
-
-        pos_in_odom_frame.transform.rotation.x = odom.pose.pose.orientation.x
-        pos_in_odom_frame.transform.rotation.y = odom.pose.pose.orientation.y
-        pos_in_odom_frame.transform.rotation.z = odom.pose.pose.orientation.z
-        pos_in_odom_frame.transform.rotation.w = odom.pose.pose.orientation.w
-
-        self.pose_chain.append(pos_in_odom_frame) # Append newest odom message to end of list
-
-        if len(self.pose_chain) > 50:
-            self.pose_chain.pop(0) # Remove oldest TF from start of list
 
     def euler_from_quat(self, quat):
 
@@ -196,8 +157,6 @@ class GoUnderWorker(Node):
         yaw = euler_angles[2]
 
         return roll, pitch, yaw
-
-
 
     def get_corrective_angle_vel(self, yaw):
         angle_vel = 0.0
@@ -224,7 +183,7 @@ class GoUnderWorker(Node):
         x_vel = 0.0
     
         if abs(x_err) > 0:
-            x_vel = min(self.vx_max, np.sqrt(abs(x_err)))
+            x_vel = min(self.vx_max, x_err)
 
         if x_err < 0:
             x_vel *= -1
@@ -236,9 +195,9 @@ class GoUnderWorker(Node):
         left_tag_ids =  [0, 1, 2]
         right_tag_ids =   [3, 4, 5]
 
-        # TODO - update to check recency of TFs instead of None check
-        left_tags_visible_cnt =  sum(1 for key in left_tag_ids if self.drone_to_worker_tfs[key] is not None)
-        right_tags_visible_cnt = sum(1 for key in right_tag_ids if self.drone_to_worker_tfs[key] is not None)
+        curr_s = self.get_clock().now().to_msg().sec
+        left_tags_visible_cnt =  sum(1 for key in left_tag_ids if curr_s - self.drone_to_worker_tfs[key].header.stamp.sec < 3)
+        right_tags_visible_cnt = sum(1 for key in right_tag_ids if curr_s - self.drone_to_worker_tfs[key].header.stamp.sec < 3)
 
         approach_side = 'N'
         useable_tags = []
@@ -264,7 +223,6 @@ class GoUnderWorker(Node):
         for tag_id in range(len(self.drone_to_worker_tfs)):
 
             drone_to_worker_tf = self.drone_to_worker_tfs[tag_id]
-            # odom_to_drone_at_tag_capture_tf = self.poses_at_tag_capture[tag_id]
 
             curr_t = self.get_clock().now().to_msg()
             curr_s = curr_t.sec + curr_t.nanosec / 1e9
@@ -276,18 +234,9 @@ class GoUnderWorker(Node):
 
             if tag_life_length_s <= 0.1: # Only use fairly recent tag captures for extrapolation.
 
-                # odom_pos_last = self.pose_chain[-1]
-
-                # dx = odom_pos_last.transform.translation.x - odom_to_drone_at_tag_capture_tf.transform.translation.x
-                # dy = odom_pos_last.transform.translation.y - odom_to_drone_at_tag_capture_tf.transform.translation.y
-
-                # _, _, yaw0 = self.euler_from_quat(odom_to_drone_at_tag_capture_tf.transform.rotation)
-                # _, _, yaw1 = self.euler_from_quat(odom_pos_last.transform.rotation)
-                # dyaw = yaw1 - yaw0
-
-                x_extrapolated = drone_to_worker_tf.transform.translation.x  #- dx
-                y_extrapolated = drone_to_worker_tf.transform.translation.y  #- dy
-                z_extrapolated = drone_to_worker_tf.transform.translation.z  #- dyaw # Subtract to work with the frames
+                x_extrapolated = drone_to_worker_tf.transform.translation.x
+                y_extrapolated = drone_to_worker_tf.transform.translation.y
+                z_extrapolated = drone_to_worker_tf.transform.translation.z
 
                 x_avg_err += x_extrapolated
                 y_avg_err += y_extrapolated
@@ -472,12 +421,6 @@ class GoUnderWorker(Node):
 
 
 def main(args=None):
-    # rclpy.init(args=args)
-    # go_under = GoUnderWorker()
-    # rclpy.spin(go_under)
-    # go_under.destroy_node()
-    # rclpy.shutdown()
-
     rclpy.init(args=args)
     executor = MultiThreadedExecutor(num_threads = 3) # 3 threads are needed to run subscribers & timers while action callback is running
     executor.add_node(GoUnderWorker())
